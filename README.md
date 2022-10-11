@@ -12,7 +12,7 @@ Svelte actions and data bindings for Semantic UI components
 
         <select class="ui dropdown selection" use:dropdown={{...}}>
             <Data
-                bind:selected={selValue}
+                bind:selected={country}
                 validate={["empty", "not[USA]"]}
             />
             ...
