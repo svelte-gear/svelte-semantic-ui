@@ -1,8 +1,7 @@
 # svelte-semantic-ui
 Svelte actions and data bindings for Semantic UI components
 
-# example
-
+## example
 ```svelte
     <form class="ui form" use:formValidation={{...}}>
         <FormValidationData
