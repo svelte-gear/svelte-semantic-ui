@@ -1,0 +1,13 @@
+.DS_Store
+node_modules
+build
+public/build
+public/semantic-ui
+
+# ignore files for PNPM, NPM and YARN
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# don't touch package.json
+package.json
