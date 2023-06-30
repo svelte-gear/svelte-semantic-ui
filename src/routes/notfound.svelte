@@ -1,6 +1,6 @@
 <main>
-   <h1>404</h1>
+    <h1>404</h1>
 
-   <p>looking bad</p>
-   <a href="https://google.com">Google</a>
+    <p>looking bad</p>
+    <a href="https://google.com">Google</a>
 </main>

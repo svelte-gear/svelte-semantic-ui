@@ -22,77 +22,76 @@ import { spawn } from "node:child_process";
 const production = !process.env.ROLLUP_WATCH;
 
 function serve() {
-   let server;
+    let server;
 
-   function toExit() {
-      if (server) server.kill(0);
-   }
+    function toExit() {
+        if (server) server.kill(0);
+    }
 
-   return {
-      writeBundle() {
-         if (server) return;
-         server = spawn("npm", ["run", "start", "--", "--dev"], {
-            stdio: ["ignore", "inherit", "inherit"],
-            shell: true
-         });
+    return {
+        writeBundle() {
+            if (server) return;
+            server = spawn("npm", ["run", "start", "--", "--dev"], {
+                stdio: ["ignore", "inherit", "inherit"],
+                shell: true,
+            });
 
-         process.on("SIGTERM", toExit);
-         process.on("exit", toExit);
-      }
-   };
+            process.on("SIGTERM", toExit);
+            process.on("exit", toExit);
+        },
+    };
 }
 
 export default {
-   input: "src/main.ts",
-   output: {
-      // change sourcemap parameter based on environment
-      sourcemap: !production,
-      format: "iife",
-      name: "app",
-      file: "public/build/bundle.js"
-   },
-   plugins: [
-      svelte({
-         preprocess: sveltePreprocess({
-            // duplicate sourcemap parametr for the preprocess
-            sourceMap: !production
-         }),
-         compilerOptions: {
-            // enable run-time checks when not in production
-            dev: !production
-         }
-      }),
-      // we'll extract any component CSS out into a separate file - better for performance
-      css({ output: "bundle.css" }),
+    input: "src/main.ts",
+    output: {
+        sourcemap: !production, // change sourcemap parameter based on environment
+        format: "iife",
+        name: "app",
+        file: "public/build/bundle.js",
+    },
+    plugins: [
+        svelte({
+            preprocess: sveltePreprocess({
+                sourceMap: !production, // duplicate sourcemap parameter for the preprocess
+            }),
+            compilerOptions: {
+                dev: !production, // enable run-time checks when not in production
+            },
+        }),
+        css({ output: "bundle.css" }), // extract any component CSS out into a separate file - for performance
 
-      // If you have external dependencies installed from npm, you'll most likely need these
-      // plugins. https://github.com/rollup/plugins/tree/master/packages/commonjs
-      resolve({
-         browser: true,
-         dedupe: ["svelte"]
-      }),
-      commonjs(),
-      typescript({
-         sourceMap: !production,
-         inlineSources: !production
-      }),
+        // to resolve external dependencies installed from npm
+        // https://github.com/rollup/plugins/tree/master/packages/commonjs
+        resolve({
+            browser: true,
+            dedupe: ["svelte"],
+        }),
+        commonjs(),
+        typescript({
+            sourceMap: !production,
+            inlineSources: !production,
+        }),
 
-      // In dev mode, call `npm run start` once the bundle has been generated
-      !production && serve(),
+        !production && serve(), // in dev mode, call `npm run start` once the bundle has been generated
 
-      // Watch the `public` directory and refresh the browser on changes when not in production
-      !production && livereload("public"),
+        !production && livereload("public"), // watch the `public` directory and refresh the browser on changes
 
-      // output package sizes
-      production && sizes(),
-      // visualizer templates: sunburst, treemap, network, raw-data, list
-      production && visualizer({ template: "treemap", filename: "stats-tree.html", title: "treemap" }),
-      production && visualizer({ template: "network", filename: "stats-net.html", title: "network" }),
+        production && sizes(), // output package sizes
+        production &&
+            visualizer({
+                template: "network",
+                filename: "stats-net.html",
+                title: "network",
+            }),
+        production &&
+            visualizer({ template: "treemap", filename: "stats-tree.html", title: "treemap" }),
+        production &&
+            visualizer({ template: "sunburst", filename: "stats-pie.html", title: "piechart" }),
 
-      // If we're building for production (npm run build instead of npm run dev), minify
-      production && terser()
-   ],
-   watch: {
-      clearScreen: false
-   }
+        production && terser(), // when building for production, minify
+    ],
+    watch: {
+        clearScreen: false,
+    },
 };

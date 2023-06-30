@@ -4,7 +4,7 @@ import type { JQueryApi } from "./common";
 import { jQueryElem } from "./common";
 
 type PopupSettings = {
-   [key: string]: unknown;
+    [key: string]: unknown;
 };
 
 export const popupDefaults: PopupSettings = {};
@@ -26,15 +26,15 @@ export const popupDefaults: PopupSettings = {};
 ```
 */
 export function popup(node: Element, settings?: PopupSettings): void {
-   type PopupInitializer = {
-      popup(settings?: PopupSettings): void;
-   };
-   const elem = jQueryElem(node) as JQueryApi & PopupInitializer;
-   if (!elem.popup) {
-      throw new Error("Semantic popup is not initialized");
-   }
-   elem.popup({
-      ...popupDefaults,
-      ...settings
-   });
+    type PopupInitializer = {
+        popup(settings?: PopupSettings): void;
+    };
+    const elem = jQueryElem(node) as JQueryApi & PopupInitializer;
+    if (!elem.popup) {
+        throw new Error("Semantic popup is not initialized");
+    }
+    elem.popup({
+        ...popupDefaults,
+        ...settings,
+    });
 }

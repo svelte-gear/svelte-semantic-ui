@@ -1,28 +1,29 @@
 // use-calendar.ts
 
 import { get, writable } from "svelte/store";
+
 import type { ActionReturnType, JQueryApi, DataController } from "./common";
 import { jQueryElem, calendarIsoFmt, equalDataTypes, uid, SVELTE_DATA_STORE } from "./common";
 
 export type CalendarTranslation = {
-   days: string[];
-   months: string[];
-   monthsShort: string[];
-   today: string;
-   now: string;
-   am: string;
-   pm: string;
+    days: string[];
+    months: string[];
+    monthsShort: string[];
+    today: string;
+    now: string;
+    am: string;
+    pm: string;
 };
 
 export type CalendarSettings = {
-   [key: string]: unknown;
+    [key: string]: unknown;
 };
 
 export const calendarDefaults: CalendarSettings = {};
 
 type CalendarApi = {
-   calendar(settings: CalendarSettings): void;
-   calendar(command: string, arg1?: unknown): unknown;
+    calendar(settings: CalendarSettings): void;
+    calendar(command: string, arg1?: unknown): unknown;
 };
 
 /**
@@ -44,18 +45,18 @@ type CalendarApi = {
 ```
 */
 export function calendar(node: Element, settings?: CalendarSettings): ActionReturnType {
-   const elem = jQueryElem(node) as JQueryApi & CalendarApi;
-   if (!elem.calendar) {
-      throw new Error("Semantic UI is not initialized");
-   }
+    const elem = jQueryElem(node) as JQueryApi & CalendarApi;
+    if (!elem.calendar) {
+        throw new Error("Semantic UI is not initialized");
+    }
 
-   /** Format as date, time, or datetime depending on type */
-   function format(d: Date | undefined): string {
-      const cType = settings && settings.type ? (settings.type as string) : "date";
-      return calendarIsoFmt[cType](d);
-   }
+    /** Format as date, time, or datetime depending on type */
+    function format(d: Date | undefined): string {
+        const cType = settings && settings.type ? (settings.type as string) : "date";
+        return calendarIsoFmt[cType](d);
+    }
 
-   /*
+    /*
             dP
             88
  .d8888b. d8888P .d8888b. 88d888b. .d8888b.
@@ -65,33 +66,33 @@ export function calendar(node: Element, settings?: CalendarSettings): ActionRetu
 
     */
 
-   // create store to push data back to the binder
-   const ctrl: DataController<Date> = {
-      uid: uid(),
-      mode: "calendar",
-      store: writable(),
+    // create store to push data back to the binder
+    const ctrl: DataController<Date> = {
+        uid: uid(),
+        mode: "calendar",
+        store: writable(),
 
-      /** Push value into the calendar */
-      doUpdate(value: Date) {
-         const curValue = elem.calendar("get date") as Date;
-         if (!equalDataTypes(curValue, value)) {
-            console.debug(`  update(${this.uid}) -> calendar = ${format(value)}`);
-            elem.calendar("set date", value);
-         }
-      },
+        /** Push value into the calendar */
+        doUpdate(value: Date) {
+            const curValue = elem.calendar("get date") as Date;
+            if (!equalDataTypes(curValue, value)) {
+                console.debug(`  update(${this.uid}) -> calendar = ${format(value)}`);
+                elem.calendar("set date", value);
+            }
+        },
 
-      /** Return updated value from the calendar */
-      onChange(newValue: Date) {
-         console.debug(`  onChange(${this.uid}) = ${format(newValue)}`);
-         const value = get(this.store);
-         if (!equalDataTypes(value, newValue)) {
-            console.debug(`  store(${this.uid}) <- calendar = ${format(newValue)}`);
-            this.store.set(newValue);
-         }
-      }
-   };
+        /** Return updated value from the calendar */
+        onChange(newValue: Date) {
+            console.debug(`  onChange(${this.uid}) = ${format(newValue)}`);
+            const value = get(this.store);
+            if (!equalDataTypes(value, newValue)) {
+                console.debug(`  store(${this.uid}) <- calendar = ${format(newValue)}`);
+                this.store.set(newValue);
+            }
+        },
+    };
 
-   /*
+    /*
                                        dP
                                        88
  .d8888b. dP   .dP .d8888b. 88d888b. d8888P
@@ -101,31 +102,31 @@ export function calendar(node: Element, settings?: CalendarSettings): ActionRetu
 
     */
 
-   type OnChangeFn = (newValue: Date) => void;
-   type OnHiddenFn = () => void;
+    type OnChangeFn = (newValue: Date) => void;
+    type OnHiddenFn = () => void;
 
-   function onCalendarChange(newValue: Date) {
-      if (calendarDefaults.onChange) {
-         (calendarDefaults.onChange as OnChangeFn)(newValue);
-      }
-      if (settings && settings.onChange) {
-         (settings.onChange as OnChangeFn)(newValue);
-      }
-      ctrl.onChange(newValue);
-   }
+    function onCalendarChange(newValue: Date) {
+        if (calendarDefaults.onChange) {
+            (calendarDefaults.onChange as OnChangeFn)(newValue);
+        }
+        if (settings && settings.onChange) {
+            (settings.onChange as OnChangeFn)(newValue);
+        }
+        ctrl.onChange(newValue);
+    }
 
-   function onCalendarHidden() {
-      if (calendarDefaults.onHidden) {
-         (calendarDefaults.onHidden as OnHiddenFn)();
-      }
-      if (settings && settings.onHidden) {
-         (settings.onHidden as OnHiddenFn)();
-      }
-      const value = elem.calendar("get date") as Date;
-      ctrl.onChange(value);
-   }
+    function onCalendarHidden() {
+        if (calendarDefaults.onHidden) {
+            (calendarDefaults.onHidden as OnHiddenFn)();
+        }
+        if (settings && settings.onHidden) {
+            (settings.onHidden as OnHiddenFn)();
+        }
+        const value = elem.calendar("get date") as Date;
+        ctrl.onChange(value);
+    }
 
-   /*
+    /*
  oo          oo   dP
                   88
  dP 88d888b. dP d8888P
@@ -135,40 +136,40 @@ export function calendar(node: Element, settings?: CalendarSettings): ActionRetu
 
     */
 
-   // Initialize Semantic component
-   elem.calendar({
-      ...calendarDefaults,
-      ...settings,
-      onChange: onCalendarChange,
-      onHidden: onCalendarHidden
-   });
+    // Initialize Semantic component
+    elem.calendar({
+        ...calendarDefaults,
+        ...settings,
+        onChange: onCalendarChange,
+        onHidden: onCalendarHidden,
+    });
 
-   // Attach store holder to jQuery element
-   console.debug(`  store(${ctrl.uid}) - ${ctrl.mode} created`);
-   elem.data(SVELTE_DATA_STORE, ctrl);
+    // Attach store holder to jQuery element
+    console.debug(`  store(${ctrl.uid}) - ${ctrl.mode} created`);
+    elem.data(SVELTE_DATA_STORE, ctrl);
 
-   // show calendar on label click, if for="_"
-   function handleClick() {
-      elem.calendar("focus");
-   }
-   const field = elem.parent().filter(".field");
-   const labelFor = field.find("label").prop("for");
-   if (labelFor === "_") {
-      field.on("click", "label", handleClick);
-      return {
-         destroy() {
-            field.off("click", "label", handleClick);
-         }
-      };
-   }
-   // return {
-   //     destroy() {
-   //         console.debug("  action - destroy");
-   //         const field = elem.parent().filter(".field");
-   //         const labelFor = field.find("label").prop("for");
-   //         if (labelFor === "_") {
-   //             field.off("click", "label", handleClick);
-   //         }
-   //     },
-   // };
+    // show calendar on label click, if for="_"
+    function handleClick() {
+        elem.calendar("focus");
+    }
+    const field = elem.parent().filter(".field");
+    const labelFor = field.find("label").prop("for");
+    if (labelFor === "_") {
+        field.on("click", "label", handleClick);
+        return {
+            destroy() {
+                field.off("click", "label", handleClick);
+            },
+        };
+    }
+    // return {
+    //     destroy() {
+    //         console.debug("  action - destroy");
+    //         const field = elem.parent().filter(".field");
+    //         const labelFor = field.find("label").prop("for");
+    //         if (labelFor === "_") {
+    //             field.off("click", "label", handleClick);
+    //         }
+    //     },
+    // };
 }

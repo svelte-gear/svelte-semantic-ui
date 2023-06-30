@@ -2,11 +2,19 @@
 // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/parser/README.md#configuration
 
 {
-   // extend your base config so you don't have to redefine your "compilerOptions"
-   "extends": "./tsconfig.json",
+    // extend your base config so you don't have to redefine your "compilerOptions"
+    "extends": "./tsconfig.json",
 
-   // let eslint parse config files (not processed by ts)
-   // "include" completely overrides "include" from the extended configuration
-   "include": ["src/**/*.js", "src/**/*.json", "src/**/*.ts", "src/**/*.svelte", "*.?js", ".*.?js"],
-   "exclude": ["node_modules/**/*", "public/**/*"]
+    // let eslint parse config files (not processed by ts)
+    // "include" completely overrides "include" from the extended configuration
+    "include": [
+        "src/**/*.js",
+        "src/**/*.json",
+        "src/**/*.ts",
+        "src/**/*.svelte",
+        "*.?js",
+        ".*.?js",
+        "*.js"
+    ],
+    "exclude": ["node_modules/**/*", "public/**/*"]
 }

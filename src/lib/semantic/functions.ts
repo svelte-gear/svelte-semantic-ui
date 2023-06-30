@@ -14,8 +14,8 @@ import { jQueryElem } from "./common";
 */
 
 type ToastSettings = {
-   message?: string;
-   [key: string]: unknown;
+    message?: string;
+    [key: string]: unknown;
 };
 
 export const toastDefaults: ToastSettings = {};
@@ -37,16 +37,16 @@ export const toastDefaults: ToastSettings = {};
 ```
 */
 export function toast(settings?: ToastSettings): void {
-   console.debug("toast - created");
-   type ToastInitializer = {
-      toast(settings?: ToastSettings): void;
-   };
-   const body = jQueryElem(document.body) as JQueryApi & ToastInitializer;
-   if (!body.toast) {
-      throw new Error("Semantic toast is not initialized");
-   }
-   body.toast({
-      ...toastDefaults,
-      ...settings
-   });
+    console.debug("toast - created");
+    type ToastInitializer = {
+        toast(settings?: ToastSettings): void;
+    };
+    const body = jQueryElem(document.body) as JQueryApi & ToastInitializer;
+    if (!body.toast) {
+        throw new Error("Semantic toast is not initialized");
+    }
+    body.toast({
+        ...toastDefaults,
+        ...settings,
+    });
 }

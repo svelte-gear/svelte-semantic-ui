@@ -4,7 +4,7 @@ import type { JQueryApi } from "./common";
 import { jQueryElem } from "./common";
 
 type StickySettings = {
-   [key: string]: unknown;
+    [key: string]: unknown;
 };
 
 export const stickyDefaults: StickySettings = {};
@@ -29,15 +29,15 @@ export const stickyDefaults: StickySettings = {};
 ```
 */
 export function sticky(node: Element, settings?: StickySettings): void {
-   type StickyInitializer = {
-      sticky(settings?: StickySettings): void;
-   };
-   const elem = jQueryElem(node) as JQueryApi & StickyInitializer;
-   if (!elem.sticky) {
-      throw new Error("Semantic sticky is not initialized");
-   }
-   elem.sticky({
-      ...stickyDefaults,
-      ...settings
-   });
+    type StickyInitializer = {
+        sticky(settings?: StickySettings): void;
+    };
+    const elem = jQueryElem(node) as JQueryApi & StickyInitializer;
+    if (!elem.sticky) {
+        throw new Error("Semantic sticky is not initialized");
+    }
+    elem.sticky({
+        ...stickyDefaults,
+        ...settings,
+    });
 }

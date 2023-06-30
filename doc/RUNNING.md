@@ -61,4 +61,23 @@ we recommend installing the official extension
 
 ## Back
 
--   [Readme](../README)
+-  [Readme](../README)
+
+# Rollup Visualizer
+
+Fixing visoal layout:
+
+```js
+            const simulation = forceSimulation()
+                .force("collision", forceCollide().radius((node) => node.radius*1.25))
+                .force("charge", forceManyBody().strength(-300))
+                .force("link", forceLink(links)
+                .strength((link) => {
+                if (nodeGroups[link.source.uid] === nodeGroups[link.target.uid]) {
+                    return 1;
+                }
+                else {
+                    return 0.1;
+                }
+            })
+```

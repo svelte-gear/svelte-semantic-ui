@@ -21,30 +21,31 @@ Example:
 ```
 -->
 <script lang="ts">
-   import type { Unsubscriber } from "svelte/store";
-   import { onMount, afterUpdate, onDestroy } from "svelte";
-   import type { FormController } from "./common";
-   import { equalDataTypes, jQueryElem, SVELTE_FORM_STORE } from "./common";
+    import type { Unsubscriber } from "svelte/store";
+    import { onMount, afterUpdate, onDestroy } from "svelte";
 
-   /** Determines if any field change will cause form re-validation. */
-   export let active: boolean;
+    import type { FormController } from "./common";
+    import { equalDataTypes, jQueryElem, SVELTE_FORM_STORE } from "./common";
 
-   /** Read-only binding indicating validation result. */
-   export let valid: boolean | undefined = undefined;
+    /** Determines if any field change will cause form re-validation. */
+    export let active: boolean;
 
-   /** Read-only binding for validation error messages. */
-   export let errors: string[] | undefined = undefined;
+    /** Read-only binding indicating validation result. */
+    export let valid: boolean | undefined = undefined;
 
-   /** Invisible dom element created by this component. */
-   let span: Element;
+    /** Read-only binding for validation error messages. */
+    export let errors: string[] | undefined = undefined;
 
-   /** Object containing svelte store and update function. */
-   let watcher: FormController;
+    /** Invisible dom element created by this component. */
+    let span: Element;
 
-   /** Unsubscriber function */
-   let subscribed: Unsubscriber[] = [];
+    /** Object containing svelte store and update function. */
+    let watcher: FormController;
 
-   /*
+    /** Unsubscriber function */
+    let subscribed: Unsubscriber[] = [];
+
+    /*
                                          dP
                                          88
  88d8b.d8b. .d8888b. dP    dP 88d888b. d8888P
@@ -54,25 +55,28 @@ Example:
 
     */
 
-   /** Validate that component's parent is a ```dropdown```.
-    * extract ```elem``` and ```holder```. */
-   onMount(() => {
-      // extract the value watcher (store and controller) from the parent's jQuery data
-      const elem = jQueryElem(span).parent();
-      watcher = elem.data(SVELTE_FORM_STORE) as FormController;
-      if (!watcher) {
-         throw new Error(
-            "Parent element of 'FormValidationData' must be a form " + "initalized with 'use:formValidation'"
-         );
-      }
-      // validate the store type
-      if (!["sui-form", "yup-form"].includes(watcher.mode)) {
-         throw new Error(`Unrecognized parent for 'FormValidationData' component: ${watcher.mode}`);
-      }
-      console.debug(`form : ${watcher.mode} - mount(${watcher.uid})`);
-   });
+    /** Validate that component's parent is a ```dropdown```.
+     * extract ```elem``` and ```holder```. */
+    onMount(() => {
+        // extract the value watcher (store and controller) from the parent's jQuery data
+        const elem = jQueryElem(span).parent();
+        watcher = elem.data(SVELTE_FORM_STORE) as FormController;
+        if (!watcher) {
+            throw new Error(
+                "Parent element of 'FormValidationData' must be a form " +
+                    "initalized with 'use:formValidation'"
+            );
+        }
+        // validate the store type
+        if (!["sui-form", "yup-form"].includes(watcher.mode)) {
+            throw new Error(
+                `Unrecognized parent for 'FormValidationData' component: ${watcher.mode}`
+            );
+        }
+        console.debug(`form : ${watcher.mode} - mount(${watcher.uid})`);
+    });
 
-   /*
+    /*
                    dP
                    88
  .d8888b. dP    dP 88d888b. .d8888b. .d8888b. 88d888b.
@@ -82,23 +86,23 @@ Example:
 
     */
 
-   /** When store value changes, modify the corresponding prop.*/
-   function onValidChange(storeValue: boolean) {
-      if (storeValue !== valid) {
-         console.debug(`form : ${watcher.mode} <- store(${watcher.uid}).valid = ${storeValue}`);
-         valid = storeValue;
-      }
-   }
+    /** When store value changes, modify the corresponding prop.*/
+    function onValidChange(storeValue: boolean) {
+        if (storeValue !== valid) {
+            console.debug(`form : ${watcher.mode} <- store(${watcher.uid}).valid = ${storeValue}`);
+            valid = storeValue;
+        }
+    }
 
-   /** When store value changes, modify the corresponding prop.*/
-   function onErrorsChange(storeValue: string[]) {
-      if (!equalDataTypes(storeValue, errors)) {
-         console.debug(`form : ${watcher.mode} <- store(${watcher.uid}).errs = [${storeValue}]`);
-         errors = storeValue;
-      }
-   }
+    /** When store value changes, modify the corresponding prop.*/
+    function onErrorsChange(storeValue: string[]) {
+        if (!equalDataTypes(storeValue, errors)) {
+            console.debug(`form : ${watcher.mode} <- store(${watcher.uid}).errs = [${storeValue}]`);
+            errors = storeValue;
+        }
+    }
 
-   /*
+    /*
                          dP            dP
                          88            88
  dP    dP 88d888b. .d888b88 .d8888b. d8888P .d8888b.
@@ -109,23 +113,23 @@ Example:
           dP
     */
 
-   /** When 'value' prop changes, update the element and start listening to store changes. */
-   afterUpdate(() => {
-      // update Semantic component
-      if (watcher.getActive() !== active) {
-         console.debug(`form : ${watcher.mode} -> update(${watcher.uid}).active = ${active}`);
-         watcher.setActive(active);
-      }
+    /** When 'value' prop changes, update the element and start listening to store changes. */
+    afterUpdate(() => {
+        // update Semantic component
+        if (watcher.getActive() !== active) {
+            console.debug(`form : ${watcher.mode} -> update(${watcher.uid}).active = ${active}`);
+            watcher.setActive(active);
+        }
 
-      // subsribe after the update to avoid initial 'undefined' push from the store
-      if (!subscribed.length) {
-         console.debug(`form : ${watcher.mode} - subscribe(${watcher.uid})`);
-         subscribed.push(watcher.valid.subscribe(onValidChange));
-         subscribed.push(watcher.errors.subscribe(onErrorsChange));
-      }
-   });
+        // subsribe after the update to avoid initial 'undefined' push from the store
+        if (!subscribed.length) {
+            console.debug(`form : ${watcher.mode} - subscribe(${watcher.uid})`);
+            subscribed.push(watcher.valid.subscribe(onValidChange));
+            subscribed.push(watcher.errors.subscribe(onErrorsChange));
+        }
+    });
 
-   /*
+    /*
        dP                     dP
        88                     88
  .d888b88 .d8888b. .d8888b. d8888P 88d888b. .d8888b. dP    dP
@@ -136,17 +140,17 @@ Example:
                                                       d8888P
     */
 
-   /** Remove the subscripion */
-   onDestroy(() => {
-      if (subscribed.length > 0) {
-         // unsubscribe
-         console.debug(`data : ${watcher.mode} - unsubscribe(${watcher.uid})`);
-         subscribed.forEach((unsubscribe) => {
-            unsubscribe();
-         });
-      }
-      subscribed = [];
-   });
+    /** Remove the subscripion */
+    onDestroy(() => {
+        if (subscribed.length > 0) {
+            // unsubscribe
+            console.debug(`data : ${watcher.mode} - unsubscribe(${watcher.uid})`);
+            subscribed.forEach((unsubscribe) => {
+                unsubscribe();
+            });
+        }
+        subscribed = [];
+    });
 </script>
 
 <!--
@@ -162,7 +166,7 @@ Example:
 <span class="data-binder" bind:this={span} />
 
 <style>
-   .data-binder {
-      display: none;
-   }
+    .data-binder {
+        display: none;
+    }
 </style>

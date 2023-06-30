@@ -8,6 +8,8 @@ import type { FormController, JQueryApi } from "./common";
 import { jQueryElem, uid, equalDataTypes, SVELTE_FORM_STORE } from "./common";
 import type { RuleDefinition } from "./data-validate";
 
+// TODO: import form from here, data-validate or both ?
+
 /*
  .8888b
  88   "
@@ -20,60 +22,60 @@ import type { RuleDefinition } from "./data-validate";
 
 // TODO: Use Fomantic UI validator which is calendar-aware.
 export type ValidatorPrompt = {
-   empty: string;
-   checked: string;
-   email: string;
-   url: string;
-   regExp: string;
-   integer: string;
-   decimal: string;
-   number: string;
-   is: string;
-   isExactly: string;
-   not: string;
-   notExactly: string;
-   contain: string;
-   containExactly: string;
-   doesntContain: string;
-   doesntContainExactly: string;
-   minLength: string;
-   length: string;
-   exactLength: string;
-   maxLength: string;
-   match: string;
-   different: string;
-   creditCard: string;
-   minCount: string;
-   exactCount: string;
-   maxCount: string;
+    empty: string;
+    checked: string;
+    email: string;
+    url: string;
+    regExp: string;
+    integer: string;
+    decimal: string;
+    number: string;
+    is: string;
+    isExactly: string;
+    not: string;
+    notExactly: string;
+    contain: string;
+    containExactly: string;
+    doesntContain: string;
+    doesntContainExactly: string;
+    minLength: string;
+    length: string;
+    exactLength: string;
+    maxLength: string;
+    match: string;
+    different: string;
+    creditCard: string;
+    minCount: string;
+    exactCount: string;
+    maxCount: string;
 };
 
 export type ValidatorText = {
-   unspecifiedRule: string;
-   unspecifiedField: string;
+    unspecifiedRule: string;
+    unspecifiedField: string;
 };
 
 export type ValidatorSettings = {
-   fields?: {
-      [key: string]: unknown;
-   };
-   keyboardShortcuts?: boolean;
-   on?: "submit" | "blur" | "change";
-   revalidate?: boolean;
-   delay?: boolean;
-   inline?: boolean;
-   transition?: "scale" | "fade" | "slide down";
-   duration?: number;
-   prompt?: ValidatorPrompt;
-   text?: ValidatorText;
-   onValid?(): void;
-   onInvalid?(): void;
-   onSuccess?(event: unknown, fields: unknown): void;
-   onFailure?(errors: unknown, fields: unknown): void;
+    fields?: {
+        [key: string]: unknown;
+    };
+    keyboardShortcuts?: boolean;
+    on?: "submit" | "blur" | "change";
+    revalidate?: boolean;
+    delay?: boolean;
+    inline?: boolean;
+    transition?: "scale" | "fade" | "slide down";
+    duration?: number;
+    prompt?: ValidatorPrompt;
+    text?: ValidatorText;
+    onValid?(): void;
+    onInvalid?(): void;
+    onSuccess?(event: unknown, fields: unknown): void;
+    onFailure?(errors: unknown, fields: unknown): void;
 };
 
 export const validatorDefaults: ValidatorSettings = {
-   keyboardShortcuts: false
+    keyboardShortcuts: false,
 };
 
 /** Svelte action to initialize Semantic UI Form component with validation.
@@ -95,51 +97,51 @@ export const validatorDefaults: ValidatorSettings = {
  * For Calendar, use id of the innermost input.
 */
 export function formValidation(node: Element, settings?: ValidatorSettings): void {
-   type FormApi = {
-      form(settings?: ValidatorSettings): void;
-      form(command: string, arg1?: unknown, arg2?: unknown): unknown;
-   };
-   const elem = jQueryElem(node) as JQueryApi & FormApi;
-   if (!elem.form) {
-      throw new Error("Semantic form is not initialized");
-   }
-   const msg = elem.find(".ui.message.error");
+    type FormApi = {
+        form(settings?: ValidatorSettings): void;
+        form(command: string, arg1?: unknown, arg2?: unknown): unknown;
+    };
+    const elem = jQueryElem(node) as JQueryApi & FormApi;
+    if (!elem.form) {
+        throw new Error("Semantic form is not initialized");
+    }
+    const msg = elem.find(".ui.message.error");
 
-   function getFormErrors(): string[] {
-      const errors: string[] = [];
-      msg.find("ul li").each((_idx, item) => {
-         errors.push(jQueryElem(item).text());
-      });
-      return errors;
-   }
+    function getFormErrors(): string[] {
+        const errors: string[] = [];
+        msg.find("ul li").each((_idx, item) => {
+            errors.push(jQueryElem(item).text());
+        });
+        return errors;
+    }
 
-   // function getFieldByKey(key: string): JQueryApi {
-   //     let field = elem.find(`#${key}`);
-   //     if (field.length > 0) {
-   //         return field;
-   //     }
-   //     field = elem.find(`[name=${key}]`);
-   //     if (field.length > 0) {
-   //         return field;
-   //     }
-   //     field = elem.find(`[data-validate=${key}]`);
-   //     if (field.length > 0) {
-   //         return field;
-   //     }
-   //     throw new Error(`Field not found for key=${key}`);
-   // }
+    // function getFieldByKey(key: string): JQueryApi {
+    //     let field = elem.find(`#${key}`);
+    //     if (field.length > 0) {
+    //         return field;
+    //     }
+    //     field = elem.find(`[name=${key}]`);
+    //     if (field.length > 0) {
+    //         return field;
+    //     }
+    //     field = elem.find(`[data-validate=${key}]`);
+    //     if (field.length > 0) {
+    //         return field;
+    //     }
+    //     throw new Error(`Field not found for key=${key}`);
+    // }
 
-   // function getFieldPrompt(key: string): string {
-   //     const field = getFieldByKey(key);
-   //     const prompt = field.parent().find(".prompt");
-   //     if (prompt.length > 0) {
-   //         return prompt.text();
-   //     } else {
-   //         return "";
-   //     }
-   // }
+    // function getFieldPrompt(key: string): string {
+    //     const field = getFieldByKey(key);
+    //     const prompt = field.parent().find(".prompt");
+    //     if (prompt.length > 0) {
+    //         return prompt.text();
+    //     } else {
+    //         return "";
+    //     }
+    // }
 
-   /*
+    /*
             dP
             88
  .d8888b. d8888P .d8888b. 88d888b. .d8888b.
@@ -149,83 +151,83 @@ export function formValidation(node: Element, settings?: ValidatorSettings): voi
 
     */
 
-   /**
-    * `fieldChange()` function is called by `validator` action when any of the fileds changes.
-    * `validateForm()` function is performs form validation.
-    */
-   const ctrl: FormController & { active: boolean } = {
-      uid: uid(),
-      mode: "sui-form",
-      valid: writable<boolean>(),
-      errors: writable<string[]>([]),
+    /**
+     * `fieldChange()` function is called by `validator` action when any of the fileds changes.
+     * `validateForm()` function is performs form validation.
+     */
+    const ctrl: FormController & { active: boolean } = {
+        uid: uid(),
+        mode: "sui-form",
+        valid: writable<boolean>(),
+        errors: writable<string[]>([]),
 
-      active: true,
+        active: true,
 
-      getActive(): boolean {
-         return this.active;
-      },
-      setActive(newValue: boolean): void {
-         console.log("SET ACTIVE", this.active, "->", newValue);
-         if (this.active == false && newValue == true) {
-            // start validating
-            this.doValidateForm();
-         }
-         if (this.active == true && newValue == false) {
-            // remove validation highlights
-            elem.find(".field.error").removeClass("error");
-            elem.find(".message.error").html("");
-            elem.find(".prompt").remove();
-         }
-         this.active = newValue;
-      },
-
-      addRule(key: string, rules: RuleDefinition): void {
-         // if (rules instanceof BaseSchema) {
-         //     throw new Error(`Got yup rule in SUI validator ${key}`);
-         // }
-         console.log(`ADD_RULE ${key} : ${rules}`);
-         elem.form("add rule", key, rules);
-      },
-
-      doValidateField(key: string): void {
-         elem.form("validate field", key);
-      },
-
-      doValidateForm(): void {
-         elem.form("validate form");
-         const res = elem.form("is valid") as boolean;
-         // update 'valid' binding
-         if (get(this.valid) !== res) {
-            this.valid.set(res);
-         }
-         // get errors from message and update 'errors' binding
-         if (msg.length) {
-            const curr = get(this.errors);
-            const errors = getFormErrors();
-            if (!equalDataTypes(curr, errors)) {
-               this.errors.set(errors);
+        getActive(): boolean {
+            return this.active;
+        },
+        setActive(newValue: boolean): void {
+            console.log("SET ACTIVE", this.active, "->", newValue);
+            if (this.active == false && newValue == true) {
+                // start validating
+                this.doValidateForm();
             }
-         }
-      },
+            if (this.active == true && newValue == false) {
+                // remove validation highlights
+                elem.find(".field.error").removeClass("error");
+                elem.find(".message.error").html("");
+                elem.find(".prompt").remove();
+            }
+            this.active = newValue;
+        },
 
-      onFieldChange(key: string): void {
-         void key;
-         // console.log("ON", key);
+        addRule(key: string, rules: RuleDefinition): void {
+            // if (rules instanceof BaseSchema) {
+            //     throw new Error(`Got yup rule in SUI validator ${key}`);
+            // }
+            console.log(`ADD_RULE ${key} : ${rules}`);
+            elem.form("add rule", key, rules);
+        },
 
-         if (this.active) {
-            // console.log("IF", this.active);
-            this.doValidateForm();
-         }
-      }
-   };
+        doValidateField(key: string): void {
+            elem.form("validate field", key);
+        },
 
-   // Initialize Semantic compponent
-   elem.form({
-      ...validatorDefaults,
-      ...settings
-   });
+        doValidateForm(): void {
+            elem.form("validate form");
+            const res = elem.form("is valid") as boolean;
+            // update 'valid' binding
+            if (get(this.valid) !== res) {
+                this.valid.set(res);
+            }
+            // get errors from message and update 'errors' binding
+            if (msg.length) {
+                const curr = get(this.errors);
+                const errors = getFormErrors();
+                if (!equalDataTypes(curr, errors)) {
+                    this.errors.set(errors);
+                }
+            }
+        },
 
-   // Attach store holder to jQuery element
-   console.debug(`  store(${ctrl.uid}) - ${ctrl.mode} created`);
-   elem.data(SVELTE_FORM_STORE, ctrl);
+        onFieldChange(key: string): void {
+            void key;
+            // console.log("ON", key);
+
+            if (this.active) {
+                // console.log("IF", this.active);
+                this.doValidateForm();
+            }
+        },
+    };
+
+    // Initialize Semantic compponent
+    elem.form({
+        ...validatorDefaults,
+        ...settings,
+    });
+
+    // Attach store holder to jQuery element
+    console.debug(`  store(${ctrl.uid}) - ${ctrl.mode} created`);
+    elem.data(SVELTE_FORM_STORE, ctrl);
 }

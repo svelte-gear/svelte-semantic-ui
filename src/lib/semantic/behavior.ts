@@ -8,16 +8,16 @@ import type { RuleDefinition } from "./data-validate";
 
 /** Possible behaviour extensions for Semntic UI components. */
 type SemanticBehavior = {
-   checkbox?: SemanticCommand;
-   dropdown?: SemanticCommand;
-   modal?: SemanticCommand;
-   popup?: SemanticCommand;
-   sticky?: SemanticCommand;
+    checkbox?: SemanticCommand;
+    dropdown?: SemanticCommand;
+    modal?: SemanticCommand;
+    popup?: SemanticCommand;
+    sticky?: SemanticCommand;
 
-   calendar?: SemanticCommand;
-   slider?: SemanticCommand;
+    calendar?: SemanticCommand;
+    slider?: SemanticCommand;
 
-   form?: SemanticCommand;
+    form?: SemanticCommand;
 };
 
 /*
@@ -54,49 +54,49 @@ type SemanticBehavior = {
 ```
  */
 export function behavior(node: Element, bhv: SemanticBehavior): void {
-   const elem = jQueryElem(node) as SemanticBehavior & JQueryApi;
-   let bound = false;
+    const elem = jQueryElem(node) as SemanticBehavior & JQueryApi;
+    let bound = false;
 
-   if (elem.checkbox && elem.hasClass("checkbox")) {
-      bhv.checkbox = elem.checkbox.bind(elem);
-      bound = true;
-   }
-   if (elem.dropdown && elem.hasClass("dropdown")) {
-      bhv.dropdown = elem.dropdown.bind(elem);
-      bound = true;
-   }
-   if (elem.modal && elem.hasClass("modal")) {
-      bhv.modal = elem.modal.bind(elem);
-      bound = true;
-   }
-   if (elem.popup && elem.hasClass("popup")) {
-      bhv.popup = elem.popup.bind(elem);
-      bound = true;
-   }
-   if (elem.sticky && elem.hasClass("sticky")) {
-      bhv.sticky = elem.sticky.bind(elem);
-      bound = true;
-   }
+    if (elem.checkbox && elem.hasClass("checkbox")) {
+        bhv.checkbox = elem.checkbox.bind(elem);
+        bound = true;
+    }
+    if (elem.dropdown && elem.hasClass("dropdown")) {
+        bhv.dropdown = elem.dropdown.bind(elem);
+        bound = true;
+    }
+    if (elem.modal && elem.hasClass("modal")) {
+        bhv.modal = elem.modal.bind(elem);
+        bound = true;
+    }
+    if (elem.popup && elem.hasClass("popup")) {
+        bhv.popup = elem.popup.bind(elem);
+        bound = true;
+    }
+    if (elem.sticky && elem.hasClass("sticky")) {
+        bhv.sticky = elem.sticky.bind(elem);
+        bound = true;
+    }
 
-   if (elem.calendar && elem.hasClass("calendar")) {
-      bhv.calendar = elem.calendar.bind(elem);
-      bound = true;
-   }
-   if (elem.slider && elem.hasClass("slider")) {
-      bhv.slider = elem.slider.bind(elem);
-      bound = true;
-   }
+    if (elem.calendar && elem.hasClass("calendar")) {
+        bhv.calendar = elem.calendar.bind(elem);
+        bound = true;
+    }
+    if (elem.slider && elem.hasClass("slider")) {
+        bhv.slider = elem.slider.bind(elem);
+        bound = true;
+    }
 
-   if (elem.form && elem.hasClass("form")) {
-      bhv.form = elem.form.bind(elem);
-      bound = true;
-   }
+    if (elem.form && elem.hasClass("form")) {
+        bhv.form = elem.form.bind(elem);
+        bound = true;
+    }
 
-   if (!bound) {
-      throw new Error(
-         "'use:behavior' can only be called on one of the following components: 'checkbox', 'dropdown', 'modal', 'popup', 'sticky', 'calendar', 'slider', 'form'"
-      );
-   }
+    if (!bound) {
+        throw new Error(
+            "'use:behavior' can only be called on one of the following components: 'checkbox', 'dropdown', 'modal', 'popup', 'sticky', 'calendar', 'slider', 'form'"
+        );
+    }
 }
 /*
           dP
@@ -116,27 +116,27 @@ export function behavior(node: Element, bhv: SemanticBehavior): void {
  * which appear to not work.
  */ /* prettier-ignore */
 export class CheckboxBehavior {
-   checkbox: SemanticCommand = () => {
-      throw new Error("Initialize CheckboxBehavior with use:behavior");
-   };
+    checkbox: SemanticCommand = () => {
+        throw new Error("Initialize CheckboxBehavior with use:behavior");
+    };
 
-   toggle()  { this.checkbox("toggle"); }
-   check()   { this.checkbox("check"); }
-   uncheck() { this.checkbox("uncheck"); }
-   enable()  { this.checkbox("enable"); }
-   disable() { this.checkbox("disable"); }
+    toggle()  { this.checkbox("toggle"); }
+    check()   { this.checkbox("check"); }
+    uncheck() { this.checkbox("uncheck"); }
+    enable()  { this.checkbox("enable"); }
+    disable() { this.checkbox("disable"); }
 
-   isRadio()     { return this.checkbox("is radio") as boolean; }
-   isChecked()   { return this.checkbox("is checked") as boolean; }
-   isUnchecked() { return this.checkbox("is unchecked") as boolean; }
-   isEnabled()   { return this.checkbox("is enabled") as boolean; }
-   isDisabled()  { return this.checkbox("is disabled") as boolean; }
+    isRadio()     { return this.checkbox("is radio") as boolean; }
+    isChecked()   { return this.checkbox("is checked") as boolean; }
+    isUnchecked() { return this.checkbox("is unchecked") as boolean; }
+    isEnabled()   { return this.checkbox("is enabled") as boolean; }
+    isDisabled()  { return this.checkbox("is disabled") as boolean; }
 }
 
 export class DropdownBehavior {
-   dropdown: SemanticCommand = () => {
-      throw new Error("Initialize DropdownBehavior with use:behavior");
-   };
+    dropdown: SemanticCommand = () => {
+        throw new Error("Initialize DropdownBehavior with use:behavior");
+    };
 }
 
 /** Modal behaviour class.
@@ -146,38 +146,38 @@ export class DropdownBehavior {
  * as well as `setActive()` which doesn't work as expected
  */ /* prettier-ignore */
 export class ModalBehavior {
-   modal: SemanticCommand = () => {
-      throw new Error("Initialize ModalBehavior with use:behavior");
-   };
+    modal: SemanticCommand = () => {
+        throw new Error("Initialize ModalBehavior with use:behavior");
+    };
 
-   show()     { this.modal("show"); }
-   hide()     { this.modal("hide"); }
-   toggle()   { this.modal("toggle"); }
-   isActive() { return this.modal("is active"); }
+    show()     { this.modal("show"); }
+    hide()     { this.modal("hide"); }
+    toggle()   { this.modal("toggle"); }
+    isActive() { return this.modal("is active"); }
 }
 
 export class PopupBehavior {
-   popup: SemanticCommand = () => {
-      throw new Error("Initialize PopupBehavior with use:behavior");
-   };
+    popup: SemanticCommand = () => {
+        throw new Error("Initialize PopupBehavior with use:behavior");
+    };
 }
 
 export class StickyBehavior {
-   sticky: SemanticCommand = () => {
-      throw new Error("Initialize StickyBehavior with use:behavior");
-   };
+    sticky: SemanticCommand = () => {
+        throw new Error("Initialize StickyBehavior with use:behavior");
+    };
 }
 
 export class CalendarBehavior {
-   calendar: SemanticCommand = () => {
-      throw new Error("Initialize CalendarBehavior with use:behavior");
-   };
+    calendar: SemanticCommand = () => {
+        throw new Error("Initialize CalendarBehavior with use:behavior");
+    };
 }
 
 export class SliderBehavior {
-   slider: SemanticCommand = () => {
-      throw new Error("Initialize SliderBehavior with use:behavior");
-   };
+    slider: SemanticCommand = () => {
+        throw new Error("Initialize SliderBehavior with use:behavior");
+    };
 }
 
 /*
@@ -199,19 +199,19 @@ export class SliderBehavior {
  * Doesn't implement data manipulation (submit, reset, clear) and get/set field/value functions.
  */ /* prettier-ignore */
 export class FormBehavior {
-   form: SemanticCommand = () => {
-      throw new Error("Initialize FormBehavior with use:behavior");
-   };
+    form: SemanticCommand = () => {
+        throw new Error("Initialize FormBehavior with use:behavior");
+    };
 
-   addRule(key: string, rules: RuleDefinition): void    { this.form("add rule", key, rules); }
-   removeRule(key: string, rules: RuleDefinition): void { this.form("remove rule", key, rules); }
-   setPrompt(key: string, error: string): void          { this.form("add prompt", key, error);  }
-   setErrors(errors: string[]): void                    { this.form("add errors", errors); }
+    addRule(key: string, rules: RuleDefinition): void    { this.form("add rule", key, rules); }
+    removeRule(key: string, rules: RuleDefinition): void { this.form("remove rule", key, rules); }
+    setPrompt(key: string, error: string): void          { this.form("add prompt", key, error);  }
+    setErrors(errors: string[]): void                    { this.form("add errors", errors); }
 
-   isFormValid(): boolean             { return this.form("is valid") as boolean; }
-   ifFieldValid(key: string): boolean { return this.form("is valid", key) as boolean; }
-   validateForm(): void               { this.form("validate form"); }
-   validateField(key: string): void   { this.form("validate field", key); }
+    isFormValid(): boolean             { return this.form("is valid") as boolean; }
+    ifFieldValid(key: string): boolean { return this.form("is valid", key) as boolean; }
+    validateForm(): void               { this.form("validate form"); }
+    validateField(key: string): void   { this.form("validate field", key); }
 
-   hasField(key: string): boolean     { return this.form("has field", key) as boolean; }
+    hasField(key: string): boolean     { return this.form("has field", key) as boolean; }
 }

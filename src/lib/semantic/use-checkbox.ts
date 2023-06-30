@@ -4,7 +4,7 @@ import type { JQueryApi } from "./common";
 import { jQueryElem } from "./common";
 
 type CheckboxSettings = {
-   [key: string]: unknown;
+    [key: string]: unknown;
 };
 
 export const checkboxDefaults: CheckboxSettings = {};
@@ -24,15 +24,15 @@ export const checkboxDefaults: CheckboxSettings = {};
 ```
 */
 export function checkbox(node: Element, settings?: CheckboxSettings): void {
-   type CheckboxInitializer = {
-      checkbox(settings?: CheckboxSettings): void;
-   };
-   const elem = jQueryElem(node) as JQueryApi & CheckboxInitializer;
-   if (!elem.checkbox) {
-      throw new Error("Semantic checkbox is not initialized");
-   }
-   elem.checkbox({
-      ...checkboxDefaults,
-      ...settings
-   });
+    type CheckboxInitializer = {
+        checkbox(settings?: CheckboxSettings): void;
+    };
+    const elem = jQueryElem(node) as JQueryApi & CheckboxInitializer;
+    if (!elem.checkbox) {
+        throw new Error("Semantic checkbox is not initialized");
+    }
+    elem.checkbox({
+        ...checkboxDefaults,
+        ...settings,
+    });
 }

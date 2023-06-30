@@ -46,43 +46,43 @@ export { default as FormValidationData } from "./form-validation-data.svelte";
 validatorDefaults.keyboardShortcuts = false;
 
 export function translateValidator(prompt: ValidatorPrompt, text: ValidatorText) {
-   validatorDefaults.prompt = prompt;
-   validatorDefaults.text = text;
+    validatorDefaults.prompt = prompt;
+    validatorDefaults.text = text;
 }
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const validatorPrompt_en: ValidatorPrompt = {
-   empty: "{name} must have a value",
-   checked: "{name} must be checked",
-   email: "{name} must be a valid e-mail",
-   url: "{name} must be a valid url",
-   regExp: "{name} is not formatted correctly",
-   integer: "{name} must be an integer",
-   decimal: "{name} must be a decimal number",
-   number: "{name} must be set to a number",
-   is: "{name} must be '{ruleValue}'",
-   isExactly: "{name} must be exactly '{ruleValue}'",
-   not: "{name} cannot be set to '{ruleValue}'",
-   notExactly: "{name} cannot be set to exactly '{ruleValue}'",
-   contain: "{name} cannot contain '{ruleValue}'",
-   containExactly: "{name} cannot contain exactly '{ruleValue}'",
-   doesntContain: "{name} must contain  '{ruleValue}'",
-   doesntContainExactly: "{name} must contain exactly '{ruleValue}'",
-   minLength: "{name} must be at least {ruleValue} characters",
-   length: "{name} must be at least {ruleValue} characters",
-   exactLength: "{name} must be exactly {ruleValue} characters",
-   maxLength: "{name} cannot be longer than {ruleValue} characters",
-   match: "{name} must match {ruleValue} field",
-   different: "{name} must have a different value than {ruleValue} field",
-   creditCard: "{name} must be a valid credit card number",
-   minCount: "{name} must have at least {ruleValue} choices",
-   exactCount: "{name} must have exactly {ruleValue} choices",
-   maxCount: "{name} must have {ruleValue} or less choices"
+    empty: "{name} must have a value",
+    checked: "{name} must be checked",
+    email: "{name} must be a valid e-mail",
+    url: "{name} must be a valid url",
+    regExp: "{name} is not formatted correctly",
+    integer: "{name} must be an integer",
+    decimal: "{name} must be a decimal number",
+    number: "{name} must be set to a number",
+    is: "{name} must be '{ruleValue}'",
+    isExactly: "{name} must be exactly '{ruleValue}'",
+    not: "{name} cannot be set to '{ruleValue}'",
+    notExactly: "{name} cannot be set to exactly '{ruleValue}'",
+    contain: "{name} cannot contain '{ruleValue}'",
+    containExactly: "{name} cannot contain exactly '{ruleValue}'",
+    doesntContain: "{name} must contain  '{ruleValue}'",
+    doesntContainExactly: "{name} must contain exactly '{ruleValue}'",
+    minLength: "{name} must be at least {ruleValue} characters",
+    length: "{name} must be at least {ruleValue} characters",
+    exactLength: "{name} must be exactly {ruleValue} characters",
+    maxLength: "{name} cannot be longer than {ruleValue} characters",
+    match: "{name} must match {ruleValue} field",
+    different: "{name} must have a different value than {ruleValue} field",
+    creditCard: "{name} must be a valid credit card number",
+    minCount: "{name} must have at least {ruleValue} choices",
+    exactCount: "{name} must have exactly {ruleValue} choices",
+    maxCount: "{name} must have {ruleValue} or less choices",
 };
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const validatorText_en: ValidatorText = {
-   unspecifiedRule: "Please enter a valid value",
-   unspecifiedField: "This field"
+    unspecifiedRule: "Please enter a valid value",
+    unspecifiedField: "This field",
 };
 translateValidator(validatorPrompt_en, validatorText_en);
 
@@ -100,13 +100,13 @@ calendarDefaults.type = "date";
 calendarDefaults.ampm = false;
 calendarDefaults.touchReadonly = false;
 calendarDefaults.formatter = {
-   date: calendarIsoFmt.date,
-   time: calendarIsoFmt.time
+    date: calendarIsoFmt.date,
+    time: calendarIsoFmt.time,
 };
 calendarDefaults.firstDayOfWeek = 1;
 
 export function translateCalendar(text: CalendarTranslation) {
-   calendarDefaults.text = text;
+    calendarDefaults.text = text;
 }
 
 // CAL.DAY.SU = "Su"
@@ -116,25 +116,38 @@ export function translateCalendar(text: CalendarTranslation) {
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const calendarText_en: CalendarTranslation = {
-   days: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
-   months: [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
-   ],
-   monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-   today: "Today",
-   now: "Now",
-   am: "AM",
-   pm: "PM"
+    days: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+    months: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ],
+    monthsShort: [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+    ],
+    today: "Today",
+    now: "Now",
+    am: "AM",
+    pm: "PM",
 };
 translateCalendar(calendarText_en);

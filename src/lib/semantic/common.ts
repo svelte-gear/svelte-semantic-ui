@@ -18,7 +18,7 @@ import type { RuleDefinition } from "./data-validate";
 
 /** Return type for actions without update. */
 export type ActionReturnType = {
-   destroy: () => void;
+    destroy: () => void;
 } | void;
 
 /*
@@ -33,32 +33,32 @@ dP       dP                             d8888P
 
 /** Small subset of jQuery functions used in this library. */
 export type JQueryApi = {
-   parent(): JQueryApi;
-   filter(selector: string): JQueryApi;
-   find(selector: string): JQueryApi;
-   prev(selector: string): JQueryApi;
-   remove(): void;
+    parent(): JQueryApi;
+    filter(selector: string): JQueryApi;
+    find(selector: string): JQueryApi;
+    prev(selector: string): JQueryApi;
+    remove(): void;
 
-   prop(name: string): string;
-   attr(name: string): string;
-   attr(name: string, value: string): void;
-   hasClass(className: string): boolean;
-   removeClass(className: string): void;
-   length: number;
+    prop(name: string): string;
+    attr(name: string): string;
+    attr(name: string, value: string): void;
+    hasClass(className: string): boolean;
+    removeClass(className: string): void;
+    length: number;
 
-   on(event: string, selector: string | null, handler: () => void): void;
-   off(event: string, selector: string | null, handler: () => void): void;
-   data(key: string, value: unknown): void;
-   data(key: string): unknown;
+    on(event: string, selector: string | null, handler: () => void): void;
+    off(event: string, selector: string | null, handler: () => void): void;
+    data(key: string, value: unknown): void;
+    data(key: string): unknown;
 
-   each(fn: (idx: number, elem: Element) => void): void;
-   text(): string;
-   html(val: string): void;
-   append(html: string): void;
+    each(fn: (idx: number, elem: Element) => void): void;
+    text(): string;
+    html(val: string): void;
+    append(html: string): void;
 
-   get(inx: number): Element;
-   val(): string;
-   val(val: string): void;
+    get(inx: number): Element;
+    val(): string;
+    val(val: string): void;
 };
 
 // /** Returns jQuery element by id attribute. */
@@ -73,14 +73,14 @@ export type JQueryApi = {
 
 /** Returns jQuery element by dom node. */
 export function jQueryElem(node: Element): JQueryApi {
-   type WithJQuery = { jQuery(node: Element): JQueryApi };
+    type WithJQuery = { jQuery(node: Element): JQueryApi };
 
-   // eslint-disable-next-line @typescript-eslint/unbound-method
-   const jQuery = (window as unknown as WithJQuery).jQuery;
-   if (!jQuery) {
-      throw new Error("jQuery is not initialized");
-   }
-   return jQuery(node);
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    const jQuery = (window as unknown as WithJQuery).jQuery;
+    if (!jQuery) {
+        throw new Error("jQuery is not initialized");
+    }
+    return jQuery(node);
 }
 
 /*
@@ -103,31 +103,36 @@ export type DataTypes = string | string[] | boolean | Date | number | undefined;
  * event handlers, and `uid` for debuggin purposes.
  */
 export type DataController<T extends DataTypes> = {
-   uid: string;
-   mode: "dropdown" | "modal" | "calendar" | "slider" | "input";
-   store: Writable<T>;
-   doUpdate: (val: T) => void;
-   onChange: (value: T) => void;
+    uid: string;
+    mode: "dropdown" | "modal" | "calendar" | "slider" | "input";
+    store: Writable<T>;
+    doUpdate: (val: T) => void;
+    onChange: (value: T) => void;
 
-   // Yup integration
-   setValid?: (value: boolean) => void;
-   setPrompt?: (value: string | null) => void;
+    // Yup integration
+    setValid?: (value: boolean) => void;
+    setPrompt?: (value: string | null) => void;
 };
 
 /** Semantic UI component behaviour API */
-export type SemanticCommand = (command: string, v1?: unknown, v2?: unknown, v3?: unknown) => unknown;
+export type SemanticCommand = (
+    command: string,
+    v1?: unknown,
+    v2?: unknown,
+    v3?: unknown
+) => unknown;
 
 export type FormController = {
-   uid: string;
-   mode: "sui-form" | "yup-form";
-   valid: Writable<boolean>;
-   errors: Writable<string[]>;
-   getActive(): boolean;
-   setActive(val: boolean): void;
-   addRule: (key: string, rules: RuleDefinition) => void;
-   doValidateField: (key: string) => void;
-   doValidateForm: () => void;
-   onFieldChange: (key: string) => void;
+    uid: string;
+    mode: "sui-form" | "yup-form";
+    valid: Writable<boolean>;
+    errors: Writable<string[]>;
+    getActive(): boolean;
+    setActive(val: boolean): void;
+    addRule: (key: string, rules: RuleDefinition) => void;
+    doValidateField: (key: string) => void;
+    doValidateForm: () => void;
+    onFieldChange: (key: string) => void;
 };
 
 /*
@@ -144,10 +149,10 @@ let unum = 100;
 
 /** Three random numbers based on curretn time */
 export function uid() {
-   // const num = new Date().getTime();
-   // const num = Math.round(window.performance.now());
-   unum = unum + 1;
-   return `000000${unum % 1000}`.slice(-3);
+    // const num = new Date().getTime();
+    // const num = Math.round(window.performance.now());
+    unum = unum + 1;
+    return `000000${unum % 1000}`.slice(-3);
 }
 
 // /** Compare two Date values */
@@ -179,21 +184,21 @@ export function uid() {
 
 /** Compare two arrays element-by-element */
 export function equalDataTypes(a1: DataTypes | undefined, a2: DataTypes | undefined): boolean {
-   if (Array.isArray(a1) && Array.isArray(a2)) {
-      if (a1.length != a2.length) {
-         return false;
-      }
-      for (let i = 0; i < a1.length; i++) {
-         if (a1[i] !== a2[i]) {
+    if (Array.isArray(a1) && Array.isArray(a2)) {
+        if (a1.length != a2.length) {
             return false;
-         }
-      }
-      return true;
-   }
-   if (a1 instanceof Date && a2 instanceof Date) {
-      return a1.getTime() == a2.getTime();
-   }
-   return a1 === a2;
+        }
+        for (let i = 0; i < a1.length; i++) {
+            if (a1[i] !== a2[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    if (a1 instanceof Date && a2 instanceof Date) {
+        return a1.getTime() == a2.getTime();
+    }
+    return a1 === a2;
 }
 
 /*
@@ -207,40 +212,40 @@ export function equalDataTypes(a1: DataTypes | undefined, a2: DataTypes | undefi
 */
 
 function pad(n: number, size: number): string {
-   let str = n.toString();
-   while (str.length < size) {
-      str = "0" + str;
-   }
-   return str;
+    let str = n.toString();
+    while (str.length < size) {
+        str = "0" + str;
+    }
+    return str;
 }
 
 type CalendarFmt = {
-   [key: string]: (d: Date | undefined) => string;
+    [key: string]: (d: Date | undefined) => string;
 };
 
 /** Display date and/or time differently depeding on type */
 export const calendarIsoFmt: CalendarFmt = {
-   date(d: Date | undefined) {
-      if (!d || !d.getDate) {
-         return "";
-      }
-      const day = pad(d.getDate(), 2);
-      const month = pad(d.getMonth() + 1, 2);
-      const year = pad(d.getFullYear(), 4);
-      return `${year}-${month}-${day}`;
-   },
-   time(d: Date | undefined) {
-      if (!d || !d.getDate) {
-         return "";
-      }
-      const hour = pad(d.getHours(), 2);
-      const minute = pad(d.getMinutes(), 2);
-      return `${hour}:${minute}`;
-   },
-   datetime(d: Date | undefined) {
-      if (!d || !d.getDate) {
-         return "";
-      }
-      return `${this.date(d)} ${this.time(d)}`;
-   }
+    date(d: Date | undefined) {
+        if (!d || !d.getDate) {
+            return "";
+        }
+        const day = pad(d.getDate(), 2);
+        const month = pad(d.getMonth() + 1, 2);
+        const year = pad(d.getFullYear(), 4);
+        return `${year}-${month}-${day}`;
+    },
+    time(d: Date | undefined) {
+        if (!d || !d.getDate) {
+            return "";
+        }
+        const hour = pad(d.getHours(), 2);
+        const minute = pad(d.getMinutes(), 2);
+        return `${hour}:${minute}`;
+    },
+    datetime(d: Date | undefined) {
+        if (!d || !d.getDate) {
+            return "";
+        }
+        return `${this.date(d)} ${this.time(d)}`;
+    },
 };
