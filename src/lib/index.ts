@@ -1,12 +1,12 @@
 // index.ts
 
-import type { CalendarTranslation } from "./use-calendar";
-import { calendarDefaults } from "./use-calendar";
-import { calendarIsoFmt } from "./common";
-import type { ValidatorPrompt, ValidatorText } from "./form-validation";
-import { validatorDefaults } from "./form-validation";
+import type { CalendarTranslation } from "./semantic/use-calendar";
+import { calendarDefaults } from "./semantic/use-calendar";
+import { calendarIsoFmt } from "./semantic/common";
+import type { ValidatorPrompt, ValidatorText } from "./semantic/form-validation";
+import { validatorDefaults } from "./semantic/form-validation";
 
-import "./import-modules";
+import "./semantic/import-modules"; // TODO: move outside library
 
 /*
                                                 dP
@@ -19,19 +19,19 @@ import "./import-modules";
                    dP
 */
 
-export { calendar } from "./use-calendar";
-export { checkbox } from "./use-checkbox";
-export { dropdown } from "./use-dropdown";
-export { modal } from "./use-modal";
-export { popup } from "./use-popup";
-export { slider } from "./use-slider";
-export { sticky } from "./use-sticky";
-export { validate } from "./data-validate";
+export { calendar } from "./semantic/use-calendar";
+export { checkbox } from "./semantic/use-checkbox";
+export { dropdown } from "./semantic/use-dropdown";
+export { modal } from "./semantic/use-modal";
+export { popup } from "./semantic/use-popup";
+export { slider } from "./semantic/use-slider";
+export { sticky } from "./semantic/use-sticky";
+export { validate } from "./semantic/data-validate";
 
-export { formValidation } from "./form-validation";
-export { toast } from "./functions";
-export { default as Data } from "./data-bind.svelte";
-export { default as FormValidationData } from "./form-validation-data.svelte";
+export { formValidation } from "./semantic/form-validation";
+export { toast } from "./semantic/functions";
+export { default as Data } from "./semantic/data-bind.svelte";
+export { default as FormValidationData } from "./semantic/form-validation-data.svelte";
 
 /*
                    dP oo       dP            dP

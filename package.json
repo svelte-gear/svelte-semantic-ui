@@ -2,15 +2,26 @@
     "name":    "svelte-app",
     "version": "0.1.0",
     "private": true,
+    "license": "MIT",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "svelte": "./dist/index.js"
+        }
+    },
+    "files": [
+        "dist"
+    ],
     "scripts": {
         "dev":    "rollup -c -w",
         "prod":   "run-s svelte lint build",
-        "build":  "rollup -c && mv stats-*.* doc/",
+        "build":  "rollup -c && mv stats-*.html doc/",
         "start":  "sirv public --no-clear --host 0.0.0.0",
         "svelte": "svelte-check --tsconfig ./tsconfig.json",
         "lint":   "prettier --check --plugin-search-dir=. ./src && echo Checking ESLint rules... && eslint ./src",
         "format": "prettier --write --plugin-search-dir=. ./src",
-        "check2": "run-s svelte lint"
+        "package": "svelte-package",
+        "prepublishOnly": "npm run package"
     },
     "_altDependencies": {
         "rollup-plugin-terser": "7.0.2",
@@ -52,6 +63,7 @@
         "prettier": "2.8.8",
         "prettier-plugin-svelte": "2.10.1",
 
+        "@sveltejs/package": "2.1.0",
         "svelte-check": "3.4.4",
         "svelte-preprocess": "5.0.4",
         "typescript": "5.1.3",

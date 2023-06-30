@@ -12,7 +12,7 @@
         formValidation,
         Data,
         FormValidationData,
-    } from "../lib/semantic";
+    } from "../lib";
     import { calendarIsoFmt } from "../lib/semantic/common";
     // import { format, numberFormatter } from "../lib/semantic/data-format";
 

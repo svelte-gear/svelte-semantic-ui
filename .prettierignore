@@ -3,6 +3,7 @@ node_modules
 build
 public/build
 public/semantic-ui
+dist
 
 # ignore files for PNPM, NPM and YARN
 pnpm-lock.yaml
