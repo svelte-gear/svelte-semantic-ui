@@ -6,8 +6,6 @@ import { calendarIsoFmt } from "./semantic/common";
 import type { ValidatorPrompt, ValidatorText } from "./semantic/form-validation";
 import { validatorDefaults } from "./semantic/form-validation";
 
-import "./semantic/import-modules"; // TODO: move outside library
-
 /*
                                                 dP
                                                 88
@@ -32,6 +30,9 @@ export { formValidation } from "./semantic/form-validation";
 export { toast } from "./semantic/functions";
 export { default as Data } from "./semantic/data-bind.svelte";
 export { default as FormValidationData } from "./semantic/form-validation-data.svelte";
+
+export { calendarIsoFmt } from "./semantic/common";
+// TODO: how to export other routines?
 
 /*
                    dP oo       dP            dP

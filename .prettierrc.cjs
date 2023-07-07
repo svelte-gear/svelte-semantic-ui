@@ -2,8 +2,8 @@
 // default value are commented
 
 module.exports = {
-    printWidth: 100,
-    tabWidth: 4,
+    tabWidth: 4, // 2
+    printWidth: 100, // 80
     // useTabs: false,
     // semi: true,
     // singleQuote: false,
@@ -20,9 +20,13 @@ module.exports = {
     // singleAttributePerLine: false,
 
     plugins: ["prettier-plugin-svelte"],
+    svelteAllowShorthand: false, // true
     // svelteSortOrder: "options-scripts-markup-styles",
     // svelteStrictMode: false,
-    svelteAllowShorthand: false,
     // svelteBracketNewLine: true,
     // svelteIndentScriptAndStyle: true,
+
+    // new code below, no difference observed - is it required?
+    pluginSearchDirs: ["."],
+    overrides: [{ files: "*.svelte", options: { parser: "svelte" } }],
 };

@@ -1,9 +1,13 @@
 .DS_Store
 node_modules
-build
-public/build
-public/semantic-ui
-dist
+/.svelte-kit
+/.vscode
+/build
+/dist
+/static
+.env
+.env.*
+!.env.example
 
 # ignore files for PNPM, NPM and YARN
 pnpm-lock.yaml

@@ -1,34 +1,28 @@
 <script lang="ts">
-    // app.svelte
+    // routes/+layout.svelte
 
-    import Router, { location } from "svelte-spa-router";
-    import active from "svelte-spa-router/active";
+    // eslint-disable-next-line import/extensions
+    import { page } from "$app/stores";
 
-    import Form from "./routes/form.svelte";
-    import Home from "./routes/home.svelte";
-    import NotFound from "./routes/notfound.svelte";
-
-    const routes = {
-        "/": Home,
-        "/form": Form,
-        // '/author/:first/:last?': Author,
-        // '/book/*': Book,
-        "*": NotFound,
-    };
+    // import "../utils/import-modules"; // individual components from semantic-ui and fomantic-ui
+    // import "../utils/import-semantic"; // full semantic-ui + some fomantic components
+    // import "../utils/import-fomantic"; // full fomantic-ui library
 </script>
 
 <div class="app-layout">
     <nav class="ui buttons">
-        <a href="#/" use:active class="ui button basic">Home</a>
-        <a href="#/form" use:active class="ui button basic">Form</a>
-        <a href="#/xxx" class="ui button basic">Wrong</a>
+        <a href="/" class="ui button basic">Home</a>
+        <a href="/dialog" class="ui button basic">Dialog</a>
+        <a href="/form" class="ui button basic">Form</a>
+        <a href="/about" class="ui button basic">About</a>
+        <a href="/xxx" class="ui button basic">Wrong</a>
     </nav>
     <div class="ui divider" />
 
-    <Router routes={routes} />
+    <slot />
 
     <div class="ui divider" />
-    <p class="footer">Sample App, &nbsp; <i>location</i> = {$location}</p>
+    <p class="footer">Sample App, &nbsp; <i>location</i> = {$page.route.id}</p>
 </div>
 
 <style>

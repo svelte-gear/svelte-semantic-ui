@@ -14,7 +14,8 @@
         "src/**/*.svelte",
         "*.?js",
         ".*.?js",
-        "*.js"
+        "*.js",
+        "*.ts"
     ],
-    "exclude": ["node_modules/**/*", "public/**/*"]
+    "exclude": ["node_modules/**/*", "static/**/*"]
 }

@@ -1,4 +1,6 @@
 <script lang="ts">
+    // routes/form/+page.svelte
+
     // import { number, reach } from "yup";
     import {
         checkbox,
@@ -12,9 +14,9 @@
         formValidation,
         Data,
         FormValidationData,
-    } from "../lib";
-    import { calendarIsoFmt } from "../lib/semantic/common";
-    // import { format, numberFormatter } from "../lib/semantic/data-format";
+    } from "$lib";
+    import { calendarIsoFmt } from "../../lib/semantic/common";
+    // import { format, numberFormatter } from "../../lib/semantic/data-format";
 
     const options = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
@@ -160,8 +162,8 @@
                     }}
                 >
                     <Data bind:selected={num} />
-                    {#each options as n}
-                        <option value={n}>Number {n}</option>
+                    {#each options as m}
+                        <option value={m}>Number {m}</option>
                     {/each}
                 </select>
             </div>
@@ -179,8 +181,8 @@
                     use:validate={"empty"}
                 >
                     <Data bind:selected={nums} />
-                    {#each options as n}
-                        <option value={n}>Num {n}</option>
+                    {#each options as m}
+                        <option value={m}>Num {m}</option>
                     {/each}
                 </select>
             </div>

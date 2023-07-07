@@ -3,6 +3,7 @@
 // https://www.typescriptlang.org/tsconfig
 
 {
+    "extends": "./.svelte-kit/tsconfig.json",
     "compilerOptions": {
         // type checking
         "allowUnreachableCode": false,
@@ -30,9 +31,8 @@
         // language
         "allowJs": true,
         "checkJs": true,
-        // "lib": ["es2021", "DOM"] /*   default for es2021 target */,
+        // "lib": ["es2020", "DOM"] /*   default for es2021 target */,
         "sourceMap": true /*             to have Svelte warnings/errors at the correct position */,
-        "target": "es2021"
-    },
-    "include": ["src/**/*.ts", "src/**/*.svelte"]
+        "target": "es2020"
+    }
 }

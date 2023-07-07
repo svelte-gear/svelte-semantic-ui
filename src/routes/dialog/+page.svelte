@@ -1,6 +1,8 @@
 <script lang="ts">
-    import { modal, Data } from "../lib";
-    import { behavior, ModalBehavior } from "../lib/semantic/behavior";
+    // routes/dialog/+page.svelte
+
+    import { modal, Data } from "$lib";
+    import { behavior, ModalBehavior } from "../../lib/semantic/behavior";
 
     let show: boolean = true;
 
