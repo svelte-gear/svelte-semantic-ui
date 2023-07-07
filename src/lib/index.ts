@@ -27,7 +27,7 @@ export { sticky } from "./semantic/use-sticky";
 export { validate } from "./semantic/data-validate";
 
 export { formValidation } from "./semantic/form-validation";
-export { toast } from "./semantic/functions";
+export { toast } from "./semantic/fun-toast";
 export { default as Data } from "./semantic/data-bind.svelte";
 export { default as FormValidationData } from "./semantic/form-validation-data.svelte";
 

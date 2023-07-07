@@ -61,7 +61,7 @@ we recommend installing the official extension
 
 ## Back
 
--  [Readme](../README)
+-   [Readme](../README)
 
 # Rollup Visualizer
 

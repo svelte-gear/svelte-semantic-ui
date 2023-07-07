@@ -2,14 +2,14 @@
 // default value are commented
 
 module.exports = {
-    tabWidth: 4, // 2
-    printWidth: 100, // 80
+    tabWidth: 4,                        // default: 2
+    printWidth: 100,                    // default: 80
     // useTabs: false,
     // semi: true,
     // singleQuote: false,
-    // quoteProps: "as-needed", // suggested: "consistent"
+    // quoteProps: "as-needed",         // suggested: "consistent"
     // jsxSingleQuote: false,
-    // trailingComma: "es5", // suggested: "none"
+    // trailingComma: "es5",            // suggested: "none"
     // bracketSpacing: true,
     // bracketSameLine: false,
     // arrowParens: "always",
@@ -20,13 +20,10 @@ module.exports = {
     // singleAttributePerLine: false,
 
     plugins: ["prettier-plugin-svelte"],
-    svelteAllowShorthand: false, // true
+    svelteAllowShorthand: false,        // default: true
     // svelteSortOrder: "options-scripts-markup-styles",
     // svelteStrictMode: false,
     // svelteBracketNewLine: true,
     // svelteIndentScriptAndStyle: true,
-
-    // new code below, no difference observed - is it required?
-    pluginSearchDirs: ["."],
     overrides: [{ files: "*.svelte", options: { parser: "svelte" } }],
 };
