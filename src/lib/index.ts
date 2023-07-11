@@ -1,10 +1,10 @@
 // index.ts
 
-import type { CalendarTranslation } from "./semantic/use-calendar";
-import { calendarDefaults } from "./semantic/use-calendar";
-import { calendarIsoFmt } from "./semantic/common";
-import type { ValidatorPrompt, ValidatorText } from "./semantic/form-validation";
-import { validatorDefaults } from "./semantic/form-validation";
+import type { CalendarTranslation } from "./components/use-calendar";
+import { calendarDefaults } from "./components/use-calendar";
+import { calendarIsoFmt } from "./data/common";
+import type { ValidatorPrompt, ValidatorText } from "./data/form-validation";
+import { validatorDefaults } from "./data/form-validation";
 
 /*
                                                 dP
@@ -17,21 +17,21 @@ import { validatorDefaults } from "./semantic/form-validation";
                    dP
 */
 
-export { calendar } from "./semantic/use-calendar";
-export { checkbox } from "./semantic/use-checkbox";
-export { dropdown } from "./semantic/use-dropdown";
-export { modal } from "./semantic/use-modal";
-export { popup } from "./semantic/use-popup";
-export { slider } from "./semantic/use-slider";
-export { sticky } from "./semantic/use-sticky";
-export { validate } from "./semantic/data-validate";
+export { calendar } from "./components/use-calendar";
+export { checkbox } from "./components/use-checkbox";
+export { dropdown } from "./components/use-dropdown";
+export { modal } from "./components/use-modal";
+export { popup } from "./components/use-popup";
+export { slider } from "./components/use-slider";
+export { sticky } from "./components/use-sticky";
+export { validate } from "./data/use-validate";
+export { toast } from "./components/fun-toast";
 
-export { formValidation } from "./semantic/form-validation";
-export { toast } from "./semantic/fun-toast";
-export { default as Data } from "./semantic/data-bind.svelte";
-export { default as FormValidationData } from "./semantic/form-validation-data.svelte";
+export { formValidation } from "./data/form-validation";
+export { default as Data } from "./data/data-bind.svelte";
+export { default as FormValidationData } from "./data/form-validation-data.svelte";
 
-export { calendarIsoFmt } from "./semantic/common";
+export { calendarIsoFmt } from "./data/common";
 // TODO: how to export other routines?
 
 /*

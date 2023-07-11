@@ -14,5 +14,6 @@ pnpm-lock.yaml
 package-lock.json
 yarn.lock
 
-# don't touch package.json
+# don't touch config files
 package.json
+tsconfig.json

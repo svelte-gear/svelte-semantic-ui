@@ -15,7 +15,7 @@
         Data,
         FormValidationData,
     } from "$lib";
-    import { calendarIsoFmt } from "../../lib/semantic/common";
+    import { calendarIsoFmt } from "../../lib/data/common";
     // import { format, numberFormatter } from "../../lib/semantic/data-format";
 
     const options = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
@@ -65,7 +65,7 @@
             time: calendarIsoFmt.time(tim),
         })
             .replace(" ", "_")
-            .replaceAll(',"', ', "') // replaceAll allows spaces
+            .replace(/,"/g, ', "')
             .replace("{", "{ ")
             .replace("}", " }");
     }

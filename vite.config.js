@@ -1,3 +1,5 @@
+// vite.config.js
+
 /* eslint-disable import/no-extraneous-dependencies */
 
 import { sveltekit } from "@sveltejs/kit/vite";

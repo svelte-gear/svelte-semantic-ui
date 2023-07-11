@@ -2,7 +2,7 @@
     // routes/dialog/+page.svelte
 
     import { modal, Data } from "$lib";
-    import { behavior, ModalBehavior } from "../../lib/semantic/behavior";
+    import { behavior, ModalBehavior } from "../../lib/behavior";
 
     let show: boolean = true;
 

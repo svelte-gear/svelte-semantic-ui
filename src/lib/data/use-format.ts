@@ -115,9 +115,8 @@ export const blankFormatter: Formatter = {
 const THOUSAND_SEPARATOR = ",";
 
 function parseNumber(val: string): number | undefined {
-    for (const rem of [THOUSAND_SEPARATOR, " "]) {
-        val = val.replaceAll(rem, "");
-    }
+    val = val.replace(/\s/g, ""); // remove whitespace
+    val = val.split(THOUSAND_SEPARATOR).join(""); // replace all
     const num = parseInt(val);
     if (Number.isNaN(num)) {
         return undefined;
@@ -144,7 +143,7 @@ export const numberFormatter: Formatter = {
 };
 
 function removeDollar(val: string): string {
-    return val.replaceAll(/^s*$/, "");
+    return val.replace(/^\s*\$/, ""); // remove whitespace and "$" at the beginning
 }
 
 export const moneyFormatter: Formatter = {

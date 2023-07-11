@@ -2,8 +2,8 @@
 
 import { get, writable } from "svelte/store";
 
-import type { ActionReturnType, JQueryApi, DataController } from "./common";
-import { jQueryElem, equalDataTypes, uid, SVELTE_DATA_STORE } from "./common";
+import type { ActionReturnType, JQueryApi, DataController } from "../data/common";
+import { jQueryElem, equalDataTypes, uid, SVELTE_DATA_STORE } from "../data/common";
 
 const DROPDOWN_PREVENT_CLEARING_BAD_DATA = false;
 

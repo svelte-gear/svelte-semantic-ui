@@ -14,7 +14,7 @@ export const SVELTE_FORM_STORE = "svelte_form_store";
 // This maybe because 'modal' component moves the element up in dom...
 
 import type { Writable } from "svelte/store";
-import type { RuleDefinition } from "./data-validate";
+import type { RuleDefinition } from "./use-validate";
 
 /** Return type for actions without update. */
 export type ActionReturnType = {

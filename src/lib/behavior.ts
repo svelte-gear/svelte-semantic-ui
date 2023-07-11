@@ -2,9 +2,9 @@
 
 /* eslint-disable @typescript-eslint/lines-between-class-members */
 
-import type { JQueryApi, SemanticCommand } from "./common";
-import { jQueryElem } from "./common";
-import type { RuleDefinition } from "./data-validate";
+import type { JQueryApi, SemanticCommand } from "./data/common";
+import { jQueryElem } from "./data/common";
+import type { RuleDefinition } from "./data/use-validate";
 
 /** Possible behaviour extensions for Semntic UI components. */
 type SemanticBehavior = {

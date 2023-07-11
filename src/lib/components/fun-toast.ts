@@ -1,7 +1,7 @@
 // functions.ts
 
-import type { JQueryApi } from "./common";
-import { jQueryElem } from "./common";
+import type { JQueryApi } from "../data/common";
+import { jQueryElem } from "../data/common";
 
 /*
    dP                                dP

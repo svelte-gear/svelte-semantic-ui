@@ -6,7 +6,7 @@ import { writable } from "svelte/store";
 
 import type { FormController, JQueryApi } from "./common";
 import { jQueryElem, uid, equalDataTypes, SVELTE_FORM_STORE } from "./common";
-import type { RuleDefinition } from "./data-validate";
+import type { RuleDefinition } from "./use-validate";
 
 // TODO: import form from here, data-validate or both ?
 

@@ -49,9 +49,9 @@ Example:
 
     import type { DataController, DataTypes } from "./common";
     import { equalDataTypes, calendarIsoFmt, jQueryElem, SVELTE_DATA_STORE } from "./common";
-    import type { RuleDefinition } from "./data-validate";
-    import { validate as validateAction } from "./data-validate";
-    import { blankFormatter, format as formatAction } from "./data-format";
+    import type { RuleDefinition } from "./use-validate";
+    import { validate as validateAction } from "./use-validate";
+    import { blankFormatter, format as formatAction } from "./use-format";
 
     /** Two-way binding for controlling and reading the Dropdown selection. */
     export let selected: string | string[] | undefined = undefined; // dropdown

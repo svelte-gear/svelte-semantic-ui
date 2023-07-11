@@ -1,4 +1,6 @@
 // .eslintrc.cjs
+// https://typescript-eslint.io/linting/typed-linting/
+
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
@@ -8,8 +10,8 @@ module.exports = {
     parserOptions: {
         sourceType: "module",
         ecmaVersion: 2020,
-        tsconfigRootDir: __dirname, // current folder in node
         project: ["tsconfig.eslint.json"],
+        tsconfigRootDir: __dirname, // current folder in node
         extraFileExtensions: [".svelte"],
     },
     plugins: ["@typescript-eslint", "react", "import", "jsx-a11y", "promise"],
