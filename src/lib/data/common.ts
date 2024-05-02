@@ -14,21 +14,64 @@ export const SVELTE_FORM_STORE = "svelte_form_store";
 // This maybe because 'modal' component moves the element up in dom...
 
 import type { Writable } from "svelte/store";
-import type { RuleDefinition } from "./use-validate";
 
 /** Return type for actions without update. */
 export type ActionReturnType = {
     destroy: () => void;
 } | void;
 
+/** Shortform validation rule */
+type RuleName =
+    // empty
+    | "empty"
+    | "checked"
+    // content type
+    | "email"
+    | "url"
+    | "integer"
+    | "integer[1..10]"
+    | "decimal"
+    | "number"
+    | "regExp[//^[a-z]{2,3}$//]"
+    | "creditCard"
+    // content
+    | "is[foo]"
+    | "isExactly[foo]"
+    | "not[foo]"
+    | "notExactly[foo]"
+    | "contain[foo]"
+    | "containExactly[foo]"
+    | "doesntContain[foo]"
+    | "doesntContainExactly[foo]"
+    | "match[field]"
+    | "different[field]"
+    // length
+    | "minLength[8]"
+    | "exactLength[16]"
+    | "maxLength[32]"
+    | "minCount[3]"
+    | "exactCount[3]"
+    | "maxCount[3]"
+    // allow any string, force the first character to be lowercase
+    // keeps autocomplete working by preventing flattening RuleType to string
+    | Uncapitalize<string>;
+
+/** Validation rule object */
+type RuleObj = {
+    type: RuleName;
+    prompt?: string;
+};
+
+export type RuleDefinition = RuleName | RuleName[] | RuleObj | RuleObj[]; // | BaseSchema;
+
 /*
-oo
-dP .d8888b. dP    dP .d8888b. 88d888b. dP    dP
-88 88'  `88 88    88 88ooood8 88'  `88 88    88
-88 88.  .88 88.  .88 88.  ... 88       88.  .88
-88 `8888P88 `88888P' `88888P' dP       `8888P88
-88       88                                 .88
-dP       dP                             d8888P
+ oo
+ dP .d8888b. dP    dP .d8888b. 88d888b. dP    dP
+ 88 88'  `88 88    88 88ooood8 88'  `88 88    88
+ 88 88.  .88 88.  .88 88.  ... 88       88.  .88
+ 88 `8888P88 `88888P' `88888P' dP       `8888P88
+ 88       88                                 .88
+ dP       dP                             d8888P
 */
 
 /** Small subset of jQuery functions used in this library. */
@@ -61,22 +104,22 @@ export type JQueryApi = {
     val(val: string): void;
 };
 
-// /** Returns jQuery element by id attribute. */
-// export function jQueryElemById(id: string): JqueryApi {
-//     // eslint-disable-next-line @typescript-eslint/unbound-method
-//     const jQuery = (window as unknown as WithJQuery).$;
-//     if (!jQuery) {
-//         throw new Error("jQuery is not initialized");
-//     }
-//     return jQuery(`#${id}`);
-// }
+/** Returns jQuery element by id attribute. */
+export function jQueryElemById(id: string): JQueryApi {
+    type WithJQuerySelector = { jQuery(selector: string): JQueryApi };
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    const jQuery = (window as unknown as WithJQuerySelector).jQuery;
+    if (!jQuery) {
+        throw new Error("jQuery is not initialized");
+    }
+    return jQuery(`#${id}`);
+}
 
 /** Returns jQuery element by dom node. */
 export function jQueryElem(node: Element): JQueryApi {
-    type WithJQuery = { jQuery(node: Element): JQueryApi };
-
+    type WithJQueryNode = { jQuery(node: Element): JQueryApi };
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    const jQuery = (window as unknown as WithJQuery).jQuery;
+    const jQuery = (window as unknown as WithJQueryNode).jQuery;
     if (!jQuery) {
         throw new Error("jQuery is not initialized");
     }
@@ -122,6 +165,7 @@ export type SemanticCommand = (
     v3?: unknown
 ) => unknown;
 
+/** description */ // TODO: description
 export type FormController = {
     uid: string;
     mode: "sui-form" | "yup-form";
@@ -211,7 +255,7 @@ export function equalDataTypes(a1: DataTypes | undefined, a2: DataTypes | undefi
 
 */
 
-function pad(n: number, size: number): string {
+export function pad(n: number, size: number): string {
     let str = n.toString();
     while (str.length < size) {
         str = "0" + str;
@@ -219,33 +263,29 @@ function pad(n: number, size: number): string {
     return str;
 }
 
-type CalendarFmt = {
-    [key: string]: (d: Date | undefined) => string;
-};
-
 /** Display date and/or time differently depeding on type */
-export const calendarIsoFmt: CalendarFmt = {
-    date(d: Date | undefined) {
-        if (!d || !d.getDate) {
-            return "";
-        }
-        const day = pad(d.getDate(), 2);
-        const month = pad(d.getMonth() + 1, 2);
-        const year = pad(d.getFullYear(), 4);
-        return `${year}-${month}-${day}`;
-    },
-    time(d: Date | undefined) {
-        if (!d || !d.getDate) {
-            return "";
-        }
-        const hour = pad(d.getHours(), 2);
-        const minute = pad(d.getMinutes(), 2);
-        return `${hour}:${minute}`;
-    },
-    datetime(d: Date | undefined) {
-        if (!d || !d.getDate) {
-            return "";
-        }
-        return `${this.date(d)} ${this.time(d)}`;
-    },
-};
+export function isoDate(d: Date | undefined) {
+    if (!d || !d.getDate) {
+        return "";
+    }
+    const day = pad(d.getDate(), 2);
+    const month = pad(d.getMonth() + 1, 2);
+    const year = pad(d.getFullYear(), 4);
+    return `${year}-${month}-${day}`;
+}
+
+export function isoTime(d: Date | undefined) {
+    if (!d || !d.getDate) {
+        return "";
+    }
+    const hour = pad(d.getHours(), 2);
+    const minute = pad(d.getMinutes(), 2);
+    return `${hour}:${minute}`;
+}
+
+export function isoDatetime(d: Date | undefined) {
+    if (!d || !d.getDate) {
+        return "";
+    }
+    return `${isoDate(d)} ${isoTime(d)}`;
+}

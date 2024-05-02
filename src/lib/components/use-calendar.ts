@@ -2,8 +2,16 @@
 
 import { get, writable } from "svelte/store";
 
-import type { ActionReturnType, JQueryApi, DataController } from "../data/common";
-import { jQueryElem, calendarIsoFmt, equalDataTypes, uid, SVELTE_DATA_STORE } from "../data/common";
+import type { ActionReturnType, JQueryApi, DataController, DataTypes } from "../data/common";
+import {
+    jQueryElem,
+    equalDataTypes,
+    uid,
+    SVELTE_DATA_STORE,
+    isoDate,
+    isoTime,
+    isoDatetime,
+} from "../data/common";
 
 export type CalendarTranslation = {
     days: string[];
@@ -15,11 +23,35 @@ export type CalendarTranslation = {
     pm: string;
 };
 
-export type CalendarSettings = {
-    [key: string]: unknown;
-};
+type DateFormatFunction = (val: Date | undefined) => string;
+type OnChangeFn = (newValue: Date) => void;
+type OnHiddenFn = () => void;
 
-export const calendarDefaults: CalendarSettings = {};
+export type CalendarSettings = {
+    type?: string;
+    touchReadonly?: boolean;
+    ampm?: boolean;
+    firstDayOfWeek?: number;
+    monthFirst?: boolean;
+
+    maxDate?: Date;
+    startMode?: string;
+
+    formatter?: {
+        date?: DateFormatFunction;
+        time?: DateFormatFunction;
+    };
+    text?: CalendarTranslation;
+    onChange?: OnChangeFn;
+    onHidden?: OnHiddenFn;
+    // [key: string]: unknown;
+};
+// TODO: fix all settings
+
+export const calendarDefaults: CalendarSettings = {
+    type: "date",
+    touchReadonly: false,
+};
 
 type CalendarApi = {
     calendar(settings: CalendarSettings): void;
@@ -52,8 +84,17 @@ export function calendar(node: Element, settings?: CalendarSettings): ActionRetu
 
     /** Format as date, time, or datetime depending on type */
     function format(d: Date | undefined): string {
-        const cType = settings && settings.type ? (settings.type as string) : "date";
-        return calendarIsoFmt[cType](d);
+        const cType = settings && settings.type ? settings.type : "date";
+        switch (cType) {
+            case "date":
+                return isoDate(d);
+            case "time":
+                return isoTime(d);
+            case "datetime":
+                return isoDatetime(d);
+            default:
+                throw new Error(`Unrecognized calendar type setting: ${cType}`);
+        }
     }
 
     /*
@@ -102,25 +143,22 @@ export function calendar(node: Element, settings?: CalendarSettings): ActionRetu
 
     */
 
-    type OnChangeFn = (newValue: Date) => void;
-    type OnHiddenFn = () => void;
-
     function onCalendarChange(newValue: Date) {
         if (calendarDefaults.onChange) {
-            (calendarDefaults.onChange as OnChangeFn)(newValue);
+            calendarDefaults.onChange(newValue);
         }
         if (settings && settings.onChange) {
-            (settings.onChange as OnChangeFn)(newValue);
+            settings.onChange(newValue);
         }
         ctrl.onChange(newValue);
     }
 
     function onCalendarHidden() {
         if (calendarDefaults.onHidden) {
-            (calendarDefaults.onHidden as OnHiddenFn)();
+            calendarDefaults.onHidden();
         }
         if (settings && settings.onHidden) {
-            (settings.onHidden as OnHiddenFn)();
+            settings.onHidden();
         }
         const value = elem.calendar("get date") as Date;
         ctrl.onChange(value);
@@ -135,6 +173,8 @@ export function calendar(node: Element, settings?: CalendarSettings): ActionRetu
  dP dP    dP dP   dP
 
     */
+
+    console.log("calendarDefaults", calendarDefaults);
 
     // Initialize Semantic component
     elem.calendar({
@@ -172,4 +212,61 @@ export function calendar(node: Element, settings?: CalendarSettings): ActionRetu
     //         }
     //     },
     // };
+}
+
+/*
+ .8888b                                         dP
+ 88   "                                         88
+ 88aaa  .d8888b. 88d888b. 88d8b.d8b. .d8888b. d8888P
+ 88     88'  `88 88'  `88 88'`88'`88 88'  `88   88
+ 88     88.  .88 88       88  88  88 88.  .88   88
+ dP     `88888P' dP       dP  dP  dP `88888P8   dP
+
+*/
+
+export function parseDate(val: string): Date | undefined {
+    if (!val) {
+        return undefined;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
+    const jQuery = (window as any).jQuery;
+    if (!jQuery) {
+        throw new Error("jQuery in not initialized");
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const dateParser = jQuery.fn.calendar.settings.parser.date as (
+        val: string,
+        opt: object
+    ) => Date;
+    if (!dateParser) {
+        throw new Error("Semantic UI calendar in not initialized");
+    }
+    return dateParser(val, { type: "date" });
+}
+
+export function formatDate(val: DataTypes): string {
+    if (val === undefined) {
+        return "";
+    }
+    if (!(val instanceof Date)) {
+        throw new Error("numberFormatter expects Date as data type, got " + typeof val);
+    }
+    if (calendarDefaults.formatter?.date) {
+        return calendarDefaults.formatter?.date(val);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
+    const jQuery = (window as any).jQuery;
+    if (!jQuery) {
+        throw new Error("jQuery in not initialized");
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const dateFormatter = jQuery.fn.calendar.settings.formatter.date as (
+        val: Date | undefined,
+        opt: object
+    ) => string;
+    if (!dateFormatter) {
+        throw new Error("Semantic UI calendar in not initialized");
+    }
+    return dateFormatter(val, { type: "date" });
 }

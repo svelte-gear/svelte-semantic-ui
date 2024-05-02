@@ -1,12 +1,8 @@
 <script lang="ts">
-    // routes/+layout.svelte
+// routes/+layout.svelte
 
-    // eslint-disable-next-line import/extensions
-    import { page } from "$app/stores";
-
-    // import "../utils/import-modules"; // individual components from semantic-ui and fomantic-ui
-    // import "../utils/import-semantic"; // full semantic-ui + some fomantic components
-    // import "../utils/import-fomantic"; // full fomantic-ui library
+// eslint-disable-next-line import/extensions
+import { page } from "$app/stores";
 </script>
 
 <div class="app-layout">
@@ -26,41 +22,42 @@
 </div>
 
 <style>
-    :global(body) {
-        padding: 0 !important;
-    }
+/* FIXME: move global to css file */
+:global(body) {
+    padding: 0 !important;
+}
 
-    :global(main) {
-        min-height: 200px;
-    }
+:global(main) {
+    min-height: 200px;
+}
 
-    /* hide LastPass icons*/
-    :global(#__lpform_input_idx_1_icon),
-    :global(#__lpform_input_idx_2_icon),
-    :global(#__lpform_input_idx_3_icon),
-    :global(#__lpform_input_idx_4_icon),
-    :global(#__lpform_input_idx_5_icon) {
-        display: none;
-    }
+/* hide LastPass icons*/
+:global(#__lpform_input_idx_1_icon),
+:global(#__lpform_input_idx_2_icon),
+:global(#__lpform_input_idx_3_icon),
+:global(#__lpform_input_idx_4_icon),
+:global(#__lpform_input_idx_5_icon) {
+    display: none;
+}
 
+div.app-layout {
+    text-align: center;
+    /* padding: 1rem; */
+    /* margin: 0 auto; */
+    max-width: 360px;
+    width: 100%;
+    /* background-color: antiquewhite; */
+}
+
+/* :global prevent removal of "unused" .active */
+nav :global(a.active) {
+    font-weight: bold !important;
+    color: black;
+}
+
+@media (max-width: 639px) {
     div.app-layout {
-        text-align: center;
-        /* padding: 1rem; */
-        /* margin: 0 auto; */
-        max-width: 360px;
-        width: 100%;
-        /* background-color: antiquewhite; */
+        min-width: 240px;
     }
-
-    /* :global prevent removal of "unused" .active */
-    nav :global(a.active) {
-        font-weight: bold !important;
-        color: black;
-    }
-
-    @media (max-width: 639px) {
-        div.app-layout {
-            min-width: 240px;
-        }
-    }
+}
 </style>

@@ -24,7 +24,7 @@ module.exports = {
     // svelteSortOrder: "options-scripts-markup-styles",
     // svelteStrictMode: false,
     // svelteBracketNewLine: true,
-    // svelteIndentScriptAndStyle: true,
+    svelteIndentScriptAndStyle: false, // default: true,
     overrides: [
         {
             files: "*.svelte",

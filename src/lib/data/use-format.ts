@@ -5,20 +5,39 @@ import { get, writable } from "svelte/store";
 import type { ActionReturnType, DataController, DataTypes } from "./common";
 import { equalDataTypes, SVELTE_DATA_STORE, uid } from "./common";
 import { jQueryElem } from "./common";
+import { parseDate, formatDate } from "../components/use-calendar";
 
 /** Format function, must return null if cannot parse value and doesn't want to override it. */
 export type Formatter = {
-    format: (val: DataTypes) => string | undefined;
-    parse?: (val: string) => DataTypes | undefined;
+    format: (val: DataTypes) => string;
+    parse?: (val: string) => DataTypes | undefined; // FIXME: use null instead?
+};
+
+type FormatSettings = {
+    decimal: string;
+    thousandSeparator: string;
+    listSeparator: string;
+    moneyPrefix: string;
+    moneySuffix: string;
+    moneyPrecision: number;
+};
+
+export const formatDefaults: FormatSettings = {
+    decimal: ".", //                   TODO: implement decimal
+    thousandSeparator: " ",
+    listSeparator: ", ",
+    moneyPrefix: "$",
+    moneySuffix: "",
+    moneyPrecision: 2,
 };
 
 /*
-                     dP   oo
-                     88
- .d8888b. .d8888b. d8888P dP .d8888b. 88d888b.
- 88'  `88 88'  `""   88   88 88'  `88 88'  `88
- 88.  .88 88.  ...   88   88 88.  .88 88    88
- `88888P8 `88888P'   dP   dP `88888P' dP    dP
+ .8888b                                         dP
+ 88   "                                         88
+ 88aaa  .d8888b. 88d888b. 88d8b.d8b. .d8888b. d8888P
+ 88     88'  `88 88'  `88 88'`88'`88 88'  `88   88
+ 88     88.  .88 88       88  88  88 88.  .88   88
+ dP     `88888P' dP       dP  dP  dP `88888P8   dP
 
 */
 
@@ -58,9 +77,9 @@ export function format(node: Element, fmt: Formatter): ActionReturnType {
             }
             const curValue = elem.val();
             const newValue = fmt.format(value);
-            if (newValue && newValue !== curValue) {
+            if (/*newValue &&*/ newValue !== curValue) {
                 console.debug(`  update(${this.uid}) -> input = ${newValue}`);
-                elem.val(newValue);
+                elem.val(newValue ?? "");
             }
         },
 
@@ -97,107 +116,210 @@ export function format(node: Element, fmt: Formatter): ActionReturnType {
 }
 
 /*
- .8888b                                         dP     dP
- 88   "                                         88     88
- 88aaa  .d8888b. 88d888b. 88d8b.d8b. .d8888b. d8888P d8888P .d8888b. 88d888b. .d8888b.
- 88     88'  `88 88'  `88 88'`88'`88 88'  `88   88     88   88ooood8 88'  `88 Y8ooooo.
- 88     88.  .88 88       88  88  88 88.  .88   88     88   88.  ... 88             88
- dP     `88888P' dP       dP  dP  dP `88888P8   dP     dP   `88888P' dP       `88888P'
+                              dP
+                              88
+ 88d888b. dP    dP 88d8b.d8b. 88d888b. .d8888b. 88d888b.
+ 88'  `88 88    88 88'`88'`88 88'  `88 88ooood8 88'  `88
+ 88    88 88.  .88 88  88  88 88.  .88 88.  ... 88
+ dP    dP `88888P' dP  dP  dP 88Y8888' `88888P' dP
 
 */
 
-export const blankFormatter: Formatter = {
-    format(val: DataTypes): string {
-        return val as string;
-    },
-};
+export class NumberFormatter implements Formatter {
+    precision: number;
 
-const THOUSAND_SEPARATOR = ",";
+    separator: string;
 
-function parseNumber(val: string): number | undefined {
-    val = val.replace(/\s/g, ""); // remove whitespace
-    val = val.split(THOUSAND_SEPARATOR).join(""); // replace all
-    const num = parseInt(val);
-    if (Number.isNaN(num)) {
-        return undefined;
-    }
-    return num;
-}
-
-export const numberFormatter: Formatter = {
-    parse: parseNumber,
-    format(val: DataTypes): string | undefined {
-        if (typeof val !== "number") {
-            throw new Error("numberFormatter expects number as data type");
+    constructor(prec?: number, sep?: string) {
+        if (!prec) {
+            this.precision = 0;
+        } else {
+            if (Math.abs(prec) > 6) {
+                throw new Error(`Unsupported precision number ${prec}`);
+            }
+            this.precision = prec;
         }
-        if (val === undefined) {
+        this.separator = sep !== undefined ? sep : formatDefaults.thousandSeparator;
+    }
+
+    parse(val: string): number | undefined {
+        val = val.replace(/\s/g, ""); // remove whitespace
+        val = val.split(this.separator).join(""); // replace all
+        const num = parseFloat(val);
+        if (Number.isNaN(num)) {
             return undefined;
         }
-        let str = `${val}`;
+        const pwr = 10.0 ** -this.precision;
+        console.log("PWR", pwr, val, num, Math.round(num / pwr) * pwr);
+        return Math.round(num / pwr) * pwr;
+    }
+
+    format(val: DataTypes): string {
+        if (val === undefined) {
+            return "";
+        }
+        if (typeof val !== "number") {
+            throw new Error("numberFormatter expects number as data type, got " + typeof val);
+        }
+        let str = val.toFixed(Math.max(this.precision, 0)); // `${val}`;
         const len = str.length;
-        for (let n = 3; n < len; n += 3) {
-            str = str.substring(0, len - n) + THOUSAND_SEPARATOR + str.substring(len - n);
+        const firstPos = this.precision > 0 ? this.precision + 1 : 0;
+        for (let n = 3 + firstPos; n < len; n += 3) {
+            str = str.substring(0, len - n) + this.separator + str.substring(len - n);
         }
         return str;
-    },
-};
-
-function removeDollar(val: string): string {
-    return val.replace(/^\s*\$/, ""); // remove whitespace and "$" at the beginning
+    }
 }
 
-export const moneyFormatter: Formatter = {
+/*
+
+ 88d8b.d8b. .d8888b. 88d888b. .d8888b. dP    dP
+ 88'`88'`88 88'  `88 88'  `88 88ooood8 88    88
+ 88  88  88 88.  .88 88    88 88.  ... 88.  .88
+ dP  dP  dP `88888P' dP    dP `88888P' `8888P88
+                                            .88
+                                        d8888P
+*/
+
+/** Encode . * + ? ^ $ { } ( ) | [ ] \ to do litral match in regex */
+function escapeRegExp(val: string): string {
+    return val.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").trim();
+}
+
+export class MoneyFormatter implements Formatter {
+    numFormatter: NumberFormatter;
+
+    /** For exmaple: '$' */
+    prefix: string;
+
+    /** For example 'CAD' */
+    suffix: string;
+
+    prefixRegex: RegExp;
+
+    suffixRegex: RegExp;
+
+    constructor(prec?: number, pref?: string, suff?: string) {
+        const moneyPrec = prec !== undefined ? prec : formatDefaults.moneyPrecision;
+        this.numFormatter = new NumberFormatter(moneyPrec);
+        this.prefix = pref !== undefined ? pref : formatDefaults.moneyPrefix;
+        this.suffix = suff !== undefined ? suff : formatDefaults.moneySuffix;
+        this.prefixRegex = new RegExp("^\\s*" + escapeRegExp(this.prefix) + "\\s*");
+        this.suffixRegex = new RegExp("\\s*" + escapeRegExp(this.suffix) + "\\s*$");
+    }
+
+    // TODO: add precision
     parse(val: string): number | undefined {
-        return parseNumber(removeDollar(val));
-    },
-    format(val: DataTypes): string | undefined {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const fmt = numberFormatter.format(val);
-        if (fmt === undefined) {
-            return undefined;
-        }
-        return "$" + fmt;
-    },
-};
+        const numStr = val.replace(this.prefixRegex, "").replace(this.suffixRegex, "");
+        return this.numFormatter.parse(numStr);
+    }
 
-export const uppercaseFormatter: Formatter = {
+    format(val: DataTypes): string {
+        const fmt = this.numFormatter.format(val);
+        console.log("fmt", fmt);
+        if (!fmt) {
+            return "";
+        }
+        return this.prefix + fmt + this.suffix;
+    }
+}
+
+/*
+
+.d8888b. .d8888b. .d8888b. .d8888b.
+ 88'  `"" 88'  `88 Y8ooooo. 88ooood8
+ 88.  ... 88.  .88       88 88.  ...
+ `88888P' `88888P8 `88888P' `88888P'
+
+*/
+
+type CaseMode = "upper" | "lower" | "title";
+
+export class CaseFormatter implements Formatter {
+    mode: CaseMode;
+
+    constructor(mode: CaseMode) {
+        this.mode = mode;
+    }
+
     format(val: DataTypes): string {
         if (typeof val !== "string") {
-            throw new Error("uppercaseFormatter expects string as data type");
+            throw new Error("CaseFormatter expects string as data type");
         }
-        return val.toUpperCase().trim();
-    },
-};
-
-export const lowercaseFormatter: Formatter = {
-    format(val: DataTypes): string {
-        if (typeof val !== "string") {
-            throw new Error("lowercaseFormatter expects string as data type");
+        switch (this.mode) {
+            case "upper":
+                return val.trim().toUpperCase();
+            case "lower":
+                return val.trim().toLowerCase();
+            case "title":
+                return val
+                    .trim()
+                    .split(" ")
+                    .map((s: string) => s.charAt(0).toUpperCase() + s.substring(1).toLowerCase())
+                    .join(" ");
         }
-        return val.toLowerCase().trim();
-    },
-};
+    }
+}
 
-const LIST_SEPARATOR = ",";
+/*
+ dP oo            dP
+ 88               88
+ 88 dP .d8888b. d8888P
+ 88 88 Y8ooooo.   88
+ 88 88       88   88
+ dP dP `88888P'   dP
 
-export const listFormatter: Formatter = {
+*/
+
+export class ListFormatter implements Formatter {
+    separator: string;
+
+    constructor(sep?: string) {
+        if (sep === "") {
+            throw new Error("List separator can't be empty");
+        }
+        this.separator = sep !== undefined ? sep : formatDefaults.listSeparator;
+    }
+
     parse(val: string): string[] {
         if (!val) {
             return [];
         }
-        return val.split(LIST_SEPARATOR).map((item: string) => item.trim());
-    },
-    format(val: DataTypes): string | undefined {
-        if (!Array.isArray(val)) {
-            throw new Error("listFormatter expects string[] as data type");
+        let sep = this.separator.trim();
+        if (sep === "") {
+            sep = " ";
         }
-        const str = val.reduce(
-            (res: string, curr: string) => res + LIST_SEPARATOR + " " + curr,
-            ""
-        );
+        return val.split(this.separator).map((item: string) => item.trim());
+    }
+
+    format(val: DataTypes): string {
+        if (!Array.isArray(val)) {
+            throw new Error("listFormatter expects string[] as data type, got " + typeof val);
+        }
+        const str = val.reduce((res: string, curr: string) => res + this.separator + curr, "");
         if (str === "") {
             return "";
         }
-        return str.substring(LIST_SEPARATOR.length + 1);
-    },
-};
+        return str.substring(this.separator.length);
+    }
+}
+
+/*
+       dP            dP
+       88            88
+ .d888b88 .d8888b. d8888P .d8888b.
+ 88'  `88 88'  `88   88   88ooood8
+ 88.  .88 88.  .88   88   88.  ...
+ `88888P8 `88888P8   dP   `88888P'
+
+*/
+
+export class DateFormatter implements Formatter {
+    parse(val: string): Date | undefined {
+        return parseDate(val);
+    }
+
+    format(val: DataTypes): string {
+        return formatDate(val);
+    }
+}

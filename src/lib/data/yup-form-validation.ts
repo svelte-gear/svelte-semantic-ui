@@ -1,14 +1,28 @@
 // form-controller.ts
 
-import { get } from "svelte/store";
-import { writable } from "svelte/store";
+import { get, writable } from "svelte/store";
+import type { RuleDefinition } from "./common";
 // import { BaseSchema } from "yup";
 
 import type { FormController, JQueryApi } from "./common";
 import { jQueryElem, uid, equalDataTypes, SVELTE_FORM_STORE } from "./common";
-import type { RuleDefinition } from "./use-validate";
 
-// TODO: import form from here, data-validate or both ?
+export type YupValidationSettings = {
+    schema?: unknown;
+    // TODO: desing, implement
+    on?: "submit" | "blur" | "change";
+    revalidate?: boolean;
+    delay?: boolean;
+    inline?: boolean;
+};
+
+export const yupValidationDefaults: YupValidationSettings = {
+    schema: {},
+};
+
+// how to use yup for form validation?
+// can i validate only one field in the yup schema?
+// how to add new field to the schema?
 
 /*
  .8888b
@@ -20,85 +34,31 @@ import type { RuleDefinition } from "./use-validate";
 
  */
 
-// TODO: Use Fomantic UI validator which is calendar-aware.
-export type ValidatorPrompt = {
-    empty: string;
-    checked: string;
-    email: string;
-    url: string;
-    regExp: string;
-    integer: string;
-    decimal: string;
-    number: string;
-    is: string;
-    isExactly: string;
-    not: string;
-    notExactly: string;
-    contain: string;
-    containExactly: string;
-    doesntContain: string;
-    doesntContainExactly: string;
-    minLength: string;
-    length: string;
-    exactLength: string;
-    maxLength: string;
-    match: string;
-    different: string;
-    creditCard: string;
-    minCount: string;
-    exactCount: string;
-    maxCount: string;
-};
-
-export type ValidatorText = {
-    unspecifiedRule: string;
-    unspecifiedField: string;
-};
-
-export type ValidatorSettings = {
-    fields?: {
-        [key: string]: unknown;
-    };
-    keyboardShortcuts?: boolean;
-    on?: "submit" | "blur" | "change";
-    revalidate?: boolean;
-    delay?: boolean;
-    inline?: boolean;
-    transition?: "scale" | "fade" | "slide down";
-    duration?: number;
-    prompt?: ValidatorPrompt;
-    text?: ValidatorText;
-    onValid?(): void;
-    onInvalid?(): void;
-    onSuccess?(event: unknown, fields: unknown): void;
-    onFailure?(errors: unknown, fields: unknown): void;
-};
-
-export const validatorDefaults: ValidatorSettings = {
-    keyboardShortcuts: false,
-};
-
 /** Svelte action to initialize Semantic UI Form component with validation.
  *
  * https://semantic-ui.com/behaviors/form.html
  *
  * Example:
 ```
-    <form class="ui form" use:formValidation={{ inline: true }} />
-        <input class="ui input" bind:value={name} use:validate={"empty"} />
+    <form class="ui form" use:suiFormValidation={{ inline: true }} />
+        <input class="ui input"  />
+        <Data
+            bind:value={name}
+            validate={yup.string().email('Invalid email').required('Email is required')}
+        />
         ...
         <div class="ui message error" />
     </div>
 ```
- * Fields are matched bu 'id', 'name', or 'data-validate' attribute.
+ * Fields are matched by 'id', 'name', or 'data-validate' attribute.
  * Create `<div class="ui message error" />` to display the messages.
  *
  * For Dropdown, use id of the select or inner input.
  * For Calendar, use id of the innermost input.
 */
-export function formValidation(node: Element, settings?: ValidatorSettings): void {
+export function formValidation(node: Element, settings?: YupValidationSettings): void {
     type FormApi = {
-        form(settings?: ValidatorSettings): void;
+        form(settings?: YupValidationSettings): void;
         form(command: string, arg1?: unknown, arg2?: unknown): unknown;
     };
     const elem = jQueryElem(node) as JQueryApi & FormApi;
@@ -223,7 +183,7 @@ export function formValidation(node: Element, settings?: ValidatorSettings): voi
 
     // Initialize Semantic compponent
     elem.form({
-        ...validatorDefaults,
+        ...yupValidationDefaults,
         ...settings,
     });
 

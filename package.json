@@ -1,12 +1,12 @@
 {
     "name":        "svelte-semantic-ui",
-    "version":     "0.0.3",
+    "version":     "0.0.2",
     "type":        "module",
     "private":     true,
     "license":     "MIT",
     "description": "svelte actions and bindings for semantic-ui or fomantic-ui",
 
-    "_files": "file to be included when your package is installed as a dependency",
+    "_files": "files to be included when is installed as a dependency",
     "files": [
         "dist",
         "!dist/**/*.spec.*"
@@ -19,32 +19,27 @@
             "svelte": "./dist/index.js"
         },
         "./behavior": {
-            "types":  "./dist/behavior.d.ts",
-            "svelte": "./dist/behavior.js"
+            "types":  "./dist/use-behavior.d.ts",
+            "svelte": "./dist/use-behavior.js"
         }
     },
-    "_svelte": "./dist/index.js",
-    "_types":  "./dist/index.d.ts",
 
     "_scripts": {
-        "check:watch":    "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
         "prepublishOnly": "runs before 'npm publish'"
     },
     "scripts": {
         "dev":     "vite dev",
         "build":   "vite build",
         "preview": "vite preview",
-        "package":
-            "eslint . && vite build > /dev/null && echo Packing... && svelte-kit sync && svelte-package && publint",
-        "check":   "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-        "lint":    "prettier --plugin-search-dir . --check . && echo Linting... && eslint .",
         "format":  "prettier --plugin-search-dir . --write .",
-
+        "lint":    "prettier --plugin-search-dir . --check . && echo Linting... && eslint .",
+        "check":   "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+        "package": "eslint . && vite build > /dev/null && echo Packaging... && svelte-kit sync && svelte-package && publint",
         "prepublishOnly": "svelte-kit sync && svelte-package && publint"
     },
 
     "_peerDependencies": {
-        "svelte":          "see app.html and /routes folder for examples, the library can be used without svelte-kit",
+        "svelte":          "see app.html and /routes folder for examples, but the library can be used without svelte-kit",
         "jquery":          "jQuery must be staticly loaded in DOM for semantic ui to work",
         "fomantic-ui-css": "works with semantic-ui or fomantic-ui, packages may be imported or loaded in DOM",
         "semantic-ui-css": "for semantic-ui, add optional fomantic modules: calendar, slider, toast, and form"
@@ -57,7 +52,7 @@
     },
 
     "_dependencies": {
-        "none":  "the library has no npm dependencies, but jQuery and senamtic-ui must be present at runtime",
+        "_none":  "the library has no npm dependencies, but jQuery and senamtic-ui must be present at runtime",
         "tslib": "2.9.0 - would be required if importHelpers is set to true in tsconfig.json",
         "yup":   "1.2.0 - plan to support yup validation, now it uses semantic-ui form"
     },
@@ -70,6 +65,9 @@
         "_airbnb-typescript": "linter presets / rules",
         "_prettier":          "code formatter",
         "_svelte":            "svelte, typescript, and packager tools",
+
+        "parcel": "2.9.3",
+        "@plasmohq/parcel-transformer-svelte3": "0.4.11",
 
         "eslint-config-prettier": "8.8.0 - create equivivalent eslint rules instead of disabling them",
         "prettier":               "3.0.0 - is not compartible with prettier-plugin-svelte: 2.10.1",
@@ -90,9 +88,6 @@
         "eslint-plugin-jsx-a11y":          "6.7.1",
         "eslint-plugin-promise":           "6.1.1",
         "eslint-plugin-react":             "7.32.2",
-
-        "parcel": "2.9.3",
-        "@plasmohq/parcel-transformer-svelte3": "0.4.11",
 
         "prettier": "2.8.8",
         "prettier-plugin-svelte": "2.10.1",

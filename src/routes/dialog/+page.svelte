@@ -1,22 +1,22 @@
 <script lang="ts">
-    // routes/dialog/+page.svelte
+// routes/dialog/+page.svelte
 
-    import { modal, Data } from "$lib";
-    import { behavior, ModalBehavior } from "../../lib/behavior";
+import { modal, Data } from "$lib";
+import { behavior, ModalBehavior } from "../../lib/use-behavior";
 
-    let show: boolean = true;
+let show: boolean = true;
 
-    // const ctrl = {} as { modal: SemanticCommand };
-    const ctrl = new ModalBehavior();
+// const ctrl = {} as { modal: SemanticCommand };
+const ctrl = new ModalBehavior();
 
-    function okFn() {
-        console.log("ok");
-    }
-    function noFn() {
-        console.log("no");
-    }
+function okFn() {
+    console.log("ok");
+}
+function noFn() {
+    console.log("no");
+}
 
-    $: console.log(`SHOW : ${show}`);
+$: console.log(`SHOW : ${show}`);
 </script>
 
 <main>

@@ -1,12 +1,12 @@
 <script lang="ts">
-    // routes/+page.svelte
+// routes/+page.svelte
 
-    import { dropdown, Data } from "$lib";
-    let s = "2";
+import { dropdown, Data } from "$lib";
+let s = "2";
 
-    $: {
-        console.log("s = " + s);
-    }
+$: {
+    console.log("s = " + s);
+}
 </script>
 
 <h1>Welcome to your library project</h1>

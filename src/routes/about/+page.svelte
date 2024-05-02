@@ -1,5 +1,5 @@
 <script lang="ts">
-    // routes/about/+page.svelte
+// routes/about/+page.svelte
 </script>
 
 <svelte:head>

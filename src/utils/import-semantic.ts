@@ -1,7 +1,8 @@
 // import-fomantic.ts
 /* eslint-disable import/extensions */
 
-// add "semantic-ui-css": "2.5.0" to "dependencies" section on package.json
+// add "semantic-ui-css": "2.5.0" to "dependencies" section in package.json
+// add "fomantic-ui-css": "2.9.2" to "dependencies" section in package.json
 // keep jquery script tag in the app.html
 
 import "semantic-ui-css/semantic.min.css";

@@ -1,82 +1,88 @@
 <script lang="ts">
-    // routes/form/+page.svelte
+// routes/form/+page.svelte
 
-    // import { number, reach } from "yup";
-    import {
-        checkbox,
-        popup,
-        sticky,
-        dropdown,
-        calendar,
-        slider,
-        toast,
-        validate,
-        formValidation,
-        Data,
-        FormValidationData,
-    } from "$lib";
-    import { calendarIsoFmt } from "../../lib/data/common";
-    // import { format, numberFormatter } from "../../lib/semantic/data-format";
+// import { number, reach } from "yup";
+import {
+    checkbox,
+    popup,
+    sticky,
+    dropdown,
+    calendar,
+    slider,
+    toast,
+    formValidation,
+    Data,
+    FormValidator,
+    MoneyFormatter,
+    DateFormatter,
+    format,
+    isoTime,
+    isoDatetime,
+} from "$lib";
 
-    const options = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+const options = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
-    let n = 3;
-    let num = "5";
-    let nums = ["1", "2", "3"];
-    let country = "ar";
-    let gender = "male";
-    let name = "";
-    let chb = true;
-    let dat = new Date("2022-01-01 12:00");
-    let tim: Date;
+let rank: string;
+let teams: string[];
+let country: string;
+let gender: string;
+let income: number | undefined;
+let chb: boolean;
+let dat: Date | undefined;
+let tim: Date | undefined;
+let rating: number;
 
-    function reset() {
-        n = 3;
-        num = "5";
-        nums = ["1", "2", "3"];
-        country = "ar";
-        gender = "male";
-        name = "12345";
-        chb = true;
-        dat = new Date("2022-01-01 12:00");
-        tim = undefined as unknown as Date;
+function init() {
+    rank = "5";
+    teams = ["1", "2", "3"];
+    country = "ar";
+    gender = "";
+    income = 12345;
+    chb = true;
+    dat = new Date("2022-02-01 13:00");
+    tim = undefined;
+    rating = 3;
+}
+init();
 
-        toast({
-            class: "success",
-            title: "Better?",
-            message: "You're using the good framework!",
-            displayTime: 5000,
-            closeIcon: true,
-        });
-    }
+function reset() {
+    init();
+    toast({
+        class: "success",
+        title: "Better?",
+        message: "You're using the good framework!",
+        displayTime: 3000,
+        closeIcon: true,
+    });
+}
 
-    let json: string;
+let json: string;
 
-    $: {
-        json = JSON.stringify({
-            n: n,
-            num: num,
-            nums: nums,
-            country: country,
-            gender: gender,
-            name: name,
-            agree: chb,
-            date: calendarIsoFmt.datetime(dat),
-            time: calendarIsoFmt.time(tim),
-        })
-            .replace(" ", "_")
-            .replace(/,"/g, ', "')
-            .replace("{", "{ ")
-            .replace("}", " }");
-    }
+$: {
+    json = JSON.stringify({
+        rank: rank,
+        teams: teams,
+        country: country,
+        gender: gender,
+        income: income !== undefined ? income : "",
+        agree: chb,
+        date: isoDatetime(dat),
+        time: isoTime(tim),
+        rating: rating,
+    })
+        .replace(" ", "_")
+        .replace(/,"/g, ', "')
+        .replace("{", "{ ")
+        .replace("}", " }");
+}
 
-    $: console.log(`nums [${nums.toString()}]`);
+$: console.log(`nums [${teams.toString()}]`);
 
-    let active = false;
-    function toggleActive() {
-        active = !active;
-    }
-    let valid = false;
+let active = false;
+function toggleActive() {
+    active = !active;
+}
+let valid = false;
 </script>
 
 <main>
@@ -102,7 +108,7 @@
                 inline: true,
             }}
         >
-            <FormValidationData active={active} bind:valid={valid} />
+            <FormValidator active={active} bind:valid={valid} />
 
             <!--
             dP   oo          dP
@@ -152,7 +158,7 @@
 
             <div class="field">
                 <label for="numb3">
-                    Select <span class="explain">(single)</span>
+                    Rank <span class="explain">(single select)</span>
                 </label>
                 <select
                     id="numb3"
@@ -161,26 +167,19 @@
                         clearable: true,
                     }}
                 >
-                    <Data bind:selected={num} />
+                    <Data bind:selected={rank} />
                     {#each options as m}
                         <option value={m}>Number {m}</option>
                     {/each}
                 </select>
             </div>
 
-            <!-- Dropdown wrapper around select, bind value to wrapper -->
             <div class="field" id="x">
                 <label for="numb2">
-                    Select <span class="explain">(multiple)</span>
+                    Teams <span class="explain">(multi-select)</span>
                 </label>
-                <select
-                    id="numb2"
-                    class="ui selection dropdown fluid"
-                    multiple
-                    use:dropdown
-                    use:validate={"empty"}
-                >
-                    <Data bind:selected={nums} />
+                <select id="numb2" class="ui selection dropdown fluid" multiple use:dropdown>
+                    <Data bind:selected={teams} validate={"empty"} />
                     {#each options as m}
                         <option value={m}>Num {m}</option>
                     {/each}
@@ -201,7 +200,7 @@
             <div class="field">
                 <!-- the label doesn't work -->
                 <label for="_">
-                    Dropdown <span class="explain">(decorated, with search)</span>
+                    Country <span class="explain">(decorated dropdown with search)</span>
                 </label>
 
                 <!-- dropdown with full text search uses Dropdown component wrapper -->
@@ -239,7 +238,7 @@
             <div class="field">
                 <!-- class:error={gender == "male"} -->
                 <label for="_">
-                    Dropdown <span class="explain">(data from js)</span>
+                    Gender <span class="explain">(dropdown data from js)</span>
                 </label>
                 <div
                     class="ui selection dropdown"
@@ -250,7 +249,6 @@
                         ],
                     }}
                 >
-                    <!-- use:validate={["not[male]"]} -->
                     <Data bind:selected={gender} validate={["not[male]"]} />
                     <input type="hidden" id="gend" />
                     <i class="dropdown icon" />
@@ -270,7 +268,6 @@
 
             -->
 
-            <!-- don't know how to bind yet -->
             <div class="field" id="y">
                 <label for="_">
                     Relative date <span class="explain">(not in future)</span>
@@ -292,7 +289,7 @@
 
             <div class="two fields">
                 <div class="field">
-                    <label for="_">Absolute date</label>
+                    <label for="_">Absolute date <span class="explain">(year first)</span></label>
                     <div
                         class="ui calendar"
                         use:calendar={{
@@ -309,16 +306,15 @@
                 </div>
 
                 <div class="field">
-                    <label for="_">Time</label>
+                    <label for="_">Time <span class="explain">(required, not 00:00)</span></label>
                     <div
                         id="x15"
                         class="ui calendar"
                         use:calendar={{
                             type: "time",
                         }}
-                        use:validate={["empty", "not[00:00]"]}
                     >
-                        <Data bind:date={tim} />
+                        <Data bind:date={tim} validate={["empty", "not[00:00]"]} />
                         <div class="ui input right icon" id="x16">
                             <i class="clock outline icon" />
                             <input type="text" placeholder="Time" />
@@ -339,61 +335,126 @@
              88
              dP
             -->
+            <!--
+<input type="text" elements may use <Data bind:value component or direct <input bind:value
+<input type="checkbox" and <input type="radio" must use <input bind:checked and <input bind:group
 
-            <!-- bind 'value' on input -->
-            <!-- <div class="field" class:error={!name || name.length > 16}>
-                <label for="fn">
-                    First Name <span class="explain">(manual)</span>
+Don't use <input bind:value with formatter, as you would get the string value before formatting.
+<Data bind:value returns parsed value (Date, string, or number) instead of formatted string.
+
+<Data validate allows to add validation rules. If formatter and validate are used at the same
+time, keep in mind that validator sees the formatted string, and not the parsed value.
+
+Validator complaints about the wrong input, but leaves it unchanged.
+Formatter replaces you input with correct string or empties it.
+            -->
+            <div class="field">
+                <label for="z1">
+                    Date Input <span class="explain">(format)</span>
+                </label>
+                <input
+                    type="text"
+                    name="calendar-date"
+                    placeholder="date"
+                    id="z1"
+                    use:format={new DateFormatter()}
+                />
+                <Data bind:value={dat} validate={["empty"]} />
+            </div>
+
+            <div class="field">
+                <label for="fn2">
+                    Income <span class="explain">(formatted & required)</span>
                 </label>
                 <input
                     type="text"
                     name="first-name"
-                    placeholder="First Name"
-                    id="fn"
-                    bind:value={name}
+                    placeholder="money"
+                    id="fn2"
+                    use:format={new MoneyFormatter()}
                 />
-                {#if !name}
-                    <div class="ui pointing up red basic label">Please enter a value</div>
-                {/if}
-            </div> -->
-
-            <div class="field">
-                <label for="fn2">
-                    First Name <span class="explain">(validated)</span>
-                </label>
-                <input type="text" name="first-name" placeholder="First Name" id="fn2" />
-                <Data bind:value={name} validate={["integer"]} />
+                <Data bind:value={income} validate={["empty"]} />
             </div>
 
-            <!-- custom popup on input -->
+            <!-- direct <input bind:value may be used for simple string value -->
             <div class="field">
                 <label for="ln">
-                    Last Name <span class="explain">(with popup)</span>
+                    Rank <span class="explain">(with popup)</span>
                 </label>
                 <input
                     id="ln"
                     type="text"
                     name="last-name"
                     placeholder="Last Name"
-                    bind:value={num}
+                    bind:value={rank}
                     use:popup={{
-                        content: "actually this is bound to 'number'",
+                        content: "this input is bound to 'Rank'",
                         position: "bottom right",
                     }}
                 />
             </div>
+            <!--
+          dP                         dP       dP
+          88                         88       88
+ .d8888b. 88d888b. .d8888b. .d8888b. 88  .dP  88d888b. .d8888b. dP.  .dP
+ 88'  `"" 88'  `88 88ooood8 88'  `"" 88888"   88'  `88 88'  `88  `8bd8'
+ 88.  ... 88    88 88.  ... 88.  ... 88  `8b. 88.  .88 88.  .88  .d88b.
+ `88888P' dP    dP `88888P' `88888P' dP   `YP 88Y8888' `88888P' dP'  `dP
 
-            <!-- bind 'checked' on input -->
+-->
+            <!-- direct <input bind:checked may be used for boolean -->
             <div class="field">
                 <div class="ui checkbox" use:checkbox>
                     <input type="checkbox" id="ch" bind:checked={chb} />
                     <label for="ch">
-                        <u>{name}</u>
-                        <b>{chb ? "agrees" : "does not agree"}</b>
-                        to the Terms and Conditions
+                        <u>"income of {income}"</u>
+                        <b>{chb ? "agreed" : "did not agree"}</b>
+                        to the Terms
                     </label>
                 </div>
             </div>
+
+            <!-- TODO: bind:group on input -->
+            <div class="field">
+                <div class="ui radio checkbox" use:checkbox>
+                    <input type="radio" id="ch1" bind:group={gender} value="male" />
+                    <label for="ch1">Male</label>
+                </div>
+                &nbsp;
+                <div class="ui radio checkbox" use:checkbox>
+                    <input type="radio" id="ch2" bind:group={gender} value="female" />
+                    <label for="ch2">Female</label>
+                </div>
+            </div>
+
+            <!-- TODO: bind:group on checkbox, javascript initialization is optional -->
+            <div class="field">
+                <div class="ui checkbox">
+                    <input type="checkbox" id="ch21" bind:group={teams} value="1" />
+                    <label for="ch21">1</label>
+                </div>
+                &nbsp; &nbsp;
+                <div class="ui checkbox">
+                    <input type="checkbox" id="ch22" bind:group={teams} value="2" />
+                    <label for="ch22">2</label>
+                </div>
+                &nbsp; &nbsp;
+                <div class="ui checkbox">
+                    <input type="checkbox" id="ch23" bind:group={teams} value="3" />
+                    <label for="ch23">3</label>
+                </div>
+                &nbsp; &nbsp;
+                <div class="ui checkbox">
+                    <input type="checkbox" id="ch24" bind:group={teams} value="4" />
+                    <label for="ch24">4</label>
+                </div>
+                &nbsp; &nbsp;
+                <div class="ui checkbox">
+                    <input type="checkbox" id="ch25" bind:group={teams} value="5" />
+                    <label for="ch25">5</label>
+                </div>
+            </div>
+
             <!--
           dP oo       dP
           88          88
@@ -405,17 +466,15 @@
             -->
             <div class="field">
                 <label for="sl">
-                    Slider <span class="explain">(number)</span>
+                    Rating <span class="explain">(number with slider)</span>
                 </label>
                 <div
                     id="sl"
                     class="ui labeled ticked slider bottom aligned"
                     use:slider={{ min: 0, max: 10 }}
-                    use:validate={["not[0]", "not[1]"]}
                 >
-                    <!-- use:validate={yup.number().required()} -->
-                    <!-- use:validate={["not[0]", "not[1]"]} -->
-                    <Data bind:position={n} />
+                    <!-- validate={yup.number().required()} -->
+                    <Data forId="sl" bind:position={rating} validate={["not[0]", "not[1]"]} />
                 </div>
             </div>
 
@@ -425,13 +484,13 @@
 </main>
 
 <style>
-    .explain {
-        font-weight: 300;
-        font-style: italic;
-    }
+.explain {
+    font-weight: 300;
+    font-style: italic;
+}
 
-    form {
-        padding: 0.75rem;
-        background-color: #f7f7f7;
-    }
+form {
+    padding: 0.75rem;
+    background-color: #f7f7f7;
+}
 </style>
