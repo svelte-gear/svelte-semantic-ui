@@ -1,7 +1,7 @@
-// use-actions.ts
+// use-popup.ts
 
-import type { JQueryApi } from "../data/common";
-import { jQueryElem } from "../data/common";
+import type { JQueryApi } from "../data/_common";
+import { jQueryElem } from "../data/_common";
 
 type PopupSettings = {
     [key: string]: unknown;

@@ -1,4 +1,4 @@
-// common.ts
+// _common.ts
 // Commonly used types and functions.
 
 /***

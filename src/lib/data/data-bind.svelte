@@ -57,17 +57,17 @@ Example:
 import type { Unsubscriber } from "svelte/store";
 import { onMount, afterUpdate, onDestroy } from "svelte";
 
-import type { DataController, DataTypes, JQueryApi, RuleDefinition } from "./common";
+import type { DataController, DataTypes, JQueryApi, RuleDefinition } from "./_common";
 import {
     equalDataTypes,
     jQueryElem,
     jQueryElemById,
     SVELTE_DATA_STORE,
     isoDatetime,
-} from "./common";
-import { validateField } from "./validate-field";
-import type { Formatter } from "./use-format";
-import { format as formatAction } from "./use-format";
+} from "./_common";
+import { validateField } from "./_validate-field";
+import type { Formatter } from "../components/use-format";
+import { format as formatAction } from "../components/use-format";
 
 /** Two-way binding for controlling and reading the Dropdown selection. */
 export let selected: string | string[] | undefined = undefined; // dropdown

@@ -1,9 +1,9 @@
-// i18n/en-US.ts
+// en-US.ts
 
 // import { suiValidationDefaults } from "../data/sui-form-validation";
-import { pad } from "../data/common";
+import { pad } from "../data/_common";
 import { calendarDefaults } from "../components/use-calendar";
-import { formatDefaults } from "../data/use-format";
+import { formatDefaults } from "../components/use-format";
 
 import "./en";
 

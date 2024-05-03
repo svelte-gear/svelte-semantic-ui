@@ -1,10 +1,9 @@
-// behavior.ts
+// _behavior.ts
 
 /* eslint-disable @typescript-eslint/lines-between-class-members */
 
-import type { JQueryApi, SemanticCommand } from "./data/common";
-import { jQueryElem } from "./data/common";
-import type { RuleDefinition } from "./data/use-validate";
+import type { JQueryApi, RuleDefinition, SemanticCommand } from "./_common";
+import { jQueryElem } from "./_common";
 
 /** Possible behaviour extensions for Semntic UI components. */
 type SemanticBehavior = {

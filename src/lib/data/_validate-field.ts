@@ -1,4 +1,4 @@
-// validate.ts
+// validate-field.ts
 
 import type { Unsubscriber } from "svelte/store";
 
@@ -11,8 +11,8 @@ import type {
     JQueryApi,
     RuleDefinition,
     SemanticCommand,
-} from "./common";
-import { jQueryElem, uid, SVELTE_DATA_STORE, SVELTE_FORM_STORE } from "./common";
+} from "./_common";
+import { jQueryElem, uid, SVELTE_DATA_STORE, SVELTE_FORM_STORE } from "./_common";
 
 /** Iterate through ancestors till `form` if found. */
 function getParentForm(elem: JQueryApi): JQueryApi {

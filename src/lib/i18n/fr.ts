@@ -1,4 +1,4 @@
-// i18n/fr.ts
+// fr.ts
 
 import { suiValidationDefaults } from "../data/sui-form-validation";
 import { calendarDefaults } from "../components/use-calendar";

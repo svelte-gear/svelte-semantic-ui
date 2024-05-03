@@ -1,8 +1,8 @@
-// i18n/en.ts
+// en.ts
 
 import { suiValidationDefaults } from "../data/sui-form-validation";
 import { calendarDefaults } from "../components/use-calendar";
-// import { formatDefaults } from "$lib/data/use-format";
+// import { formatDefaults } from "$lib/components/use-format";
 
 /*
                    dP oo       dP            dP

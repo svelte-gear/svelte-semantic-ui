@@ -1,9 +1,9 @@
-// i18n/en-GB.ts
+// en-GB.ts
 
 // import { suiValidationDefaults } from "../data/sui-form-validation";
-import { isoTime, pad } from "../data/common";
+import { isoTime, pad } from "../data/_common";
 import { calendarDefaults } from "../components/use-calendar";
-import { formatDefaults } from "../data/use-format";
+import { formatDefaults } from "../components/use-format";
 
 import "./en";
 

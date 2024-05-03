@@ -2,7 +2,7 @@
 
 import { get, writable } from "svelte/store";
 
-import type { ActionReturnType, JQueryApi, DataController, DataTypes } from "../data/common";
+import type { ActionReturnType, JQueryApi, DataController, DataTypes } from "../data/_common";
 import {
     jQueryElem,
     equalDataTypes,
@@ -11,7 +11,7 @@ import {
     isoDate,
     isoTime,
     isoDatetime,
-} from "../data/common";
+} from "../data/_common";
 
 export type CalendarTranslation = {
     days: string[];
@@ -223,6 +223,8 @@ export function calendar(node: Element, settings?: CalendarSettings): ActionRetu
  dP     `88888P' dP       dP  dP  dP `88888P8   dP
 
 */
+
+// TODO: move to use-format.ts - try calendar, try date formatter, default to ISO date
 
 export function parseDate(val: string): Date | undefined {
     if (!val) {

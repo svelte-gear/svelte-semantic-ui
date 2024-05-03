@@ -1,11 +1,11 @@
-// form-controller.ts
+// sui-form-validation.ts
 
 import { get, writable } from "svelte/store";
-import type { RuleDefinition } from "./common";
+import type { RuleDefinition } from "./_common";
 // import { BaseSchema } from "yup";
 
-import type { FormController, JQueryApi } from "./common";
-import { jQueryElem, uid, equalDataTypes, SVELTE_FORM_STORE } from "./common";
+import type { FormController, JQueryApi } from "./_common";
+import { jQueryElem, uid, equalDataTypes, SVELTE_FORM_STORE } from "./_common";
 
 // semantic-ui 2.4
 export type SuiValidationPrompt = {

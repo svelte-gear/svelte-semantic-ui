@@ -1,10 +1,10 @@
-// format.ts
+// use-format.ts
 
 import { get, writable } from "svelte/store";
 
-import type { ActionReturnType, DataController, DataTypes } from "./common";
-import { equalDataTypes, SVELTE_DATA_STORE, uid } from "./common";
-import { jQueryElem } from "./common";
+import type { ActionReturnType, DataController, DataTypes } from "../data/_common";
+import { equalDataTypes, SVELTE_DATA_STORE, uid } from "../data/_common";
+import { jQueryElem } from "../data/_common";
 import { parseDate, formatDate } from "../components/use-calendar";
 
 /** Format function, must return null if cannot parse value and doesn't want to override it. */

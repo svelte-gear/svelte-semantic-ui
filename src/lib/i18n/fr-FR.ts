@@ -1,8 +1,8 @@
-// i18n/fr-FR.ts
+// fr-FR.ts
 
-import { isoTime, pad } from "../data/common";
+import { isoTime, pad } from "../data/_common";
 import { calendarDefaults } from "../components/use-calendar";
-import { formatDefaults } from "../data/use-format";
+import { formatDefaults } from "../components/use-format";
 
 import "./fr";
 
