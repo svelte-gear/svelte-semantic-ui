@@ -4,12 +4,12 @@ import type { Unsubscriber } from "svelte/store";
 
 // import type { BaseSchema } from "yup";
 
+import type { RuleDefinition } from "./_validation-rules";
 import type {
     DataController,
     DataTypes,
     FormController,
     JQueryApi,
-    RuleDefinition,
     SemanticCommand,
 } from "./_common";
 import { jQueryElem, uid, SVELTE_DATA_STORE, SVELTE_FORM_STORE } from "./_common";
@@ -119,6 +119,7 @@ export function validateField(node: Element, rules: RuleDefinition) {
                     elem.off("change", null, revalidate);
                 }
             }
+            // TODO: formCtrl.removeRule()
         },
     };
 }

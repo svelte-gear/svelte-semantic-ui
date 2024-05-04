@@ -11,7 +11,7 @@
                    dP
 */
 
-export { calendar } from "./components/use-calendar";
+export { calendar, DateFormatter } from "./components/use-calendar";
 export { checkbox } from "./components/use-checkbox";
 export { dropdown } from "./components/use-dropdown";
 export { modal } from "./components/use-modal";
@@ -31,5 +31,4 @@ export {
     MoneyFormatter,
     CaseFormatter,
     ListFormatter,
-    DateFormatter,
 } from "./components/use-format";

@@ -2,7 +2,8 @@
 
 /* eslint-disable @typescript-eslint/lines-between-class-members */
 
-import type { JQueryApi, RuleDefinition, SemanticCommand } from "./_common";
+import type { RuleDefinition } from "./_validation-rules";
+import type { JQueryApi, SemanticCommand } from "./_common";
 import { jQueryElem } from "./_common";
 
 /** Possible behaviour extensions for Semntic UI components. */

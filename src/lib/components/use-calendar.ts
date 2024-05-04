@@ -2,7 +2,13 @@
 
 import { get, writable } from "svelte/store";
 
-import type { ActionReturnType, JQueryApi, DataController, DataTypes } from "../data/_common";
+import type {
+    ActionReturnType,
+    JQueryApi,
+    DataController,
+    DataTypes,
+    Formatter,
+} from "../data/_common";
 import {
     jQueryElem,
     equalDataTypes,
@@ -271,4 +277,14 @@ export function formatDate(val: DataTypes): string {
         throw new Error("Semantic UI calendar in not initialized");
     }
     return dateFormatter(val, { type: "date" });
+}
+
+export class DateFormatter implements Formatter {
+    parse(val: string): Date | undefined {
+        return parseDate(val);
+    }
+
+    format(val: DataTypes): string {
+        return formatDate(val);
+    }
 }

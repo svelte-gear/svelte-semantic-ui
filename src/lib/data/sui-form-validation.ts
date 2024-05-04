@@ -1,56 +1,11 @@
 // sui-form-validation.ts
 
 import { get, writable } from "svelte/store";
-import type { RuleDefinition } from "./_common";
+import type { RuleDefinition, ValidationPrompt, ValidationText } from "./_validation-rules";
 // import { BaseSchema } from "yup";
 
 import type { FormController, JQueryApi } from "./_common";
 import { jQueryElem, uid, equalDataTypes, SVELTE_FORM_STORE } from "./_common";
-
-// semantic-ui 2.4
-export type SuiValidationPrompt = {
-    empty: string;
-    checked: string;
-    email: string;
-    url: string;
-    regExp: string;
-    integer: string;
-    decimal: string;
-    number: string;
-    is: string;
-    isExactly: string;
-    not: string;
-    notExactly: string;
-    contain: string;
-    containExactly: string;
-    doesntContain: string;
-    doesntContainExactly: string;
-    minLength: string;
-    length: string;
-    exactLength: string;
-    maxLength: string;
-    match: string;
-    different: string;
-    creditCard: string;
-    minCount: string;
-    exactCount: string;
-    maxCount: string;
-};
-
-export type SuiValidationText = {
-    unspecifiedRule: string;
-    unspecifiedField: string;
-};
-
-// fomantic-ui 2.9
-export type FuiValidationPrompt = SuiValidationPrompt & {
-    size: string;
-    addErrors: string;
-};
-
-export type FuiValidationText = SuiValidationText & {
-    leavingMessage: string;
-};
 
 export type SuiValidationSettings = {
     fields?: {
@@ -63,8 +18,8 @@ export type SuiValidationSettings = {
     inline?: boolean;
     transition?: "scale" | "fade" | "slide down";
     duration?: number;
-    prompt?: FuiValidationPrompt;
-    text?: FuiValidationText;
+    prompt?: ValidationPrompt;
+    text?: ValidationText;
     onValid?(): void;
     onInvalid?(): void;
     onSuccess?(event: unknown, fields: unknown): void;

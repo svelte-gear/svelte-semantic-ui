@@ -57,7 +57,8 @@ Example:
 import type { Unsubscriber } from "svelte/store";
 import { onMount, afterUpdate, onDestroy } from "svelte";
 
-import type { DataController, DataTypes, JQueryApi, RuleDefinition } from "./_common";
+import type { RuleDefinition } from "./_validation-rules";
+import type { DataController, DataTypes, Formatter, JQueryApi } from "./_common";
 import {
     equalDataTypes,
     jQueryElem,
@@ -66,7 +67,6 @@ import {
     isoDatetime,
 } from "./_common";
 import { validateField } from "./_validate-field";
-import type { Formatter } from "../components/use-format";
 import { format as formatAction } from "../components/use-format";
 
 /** Two-way binding for controlling and reading the Dropdown selection. */

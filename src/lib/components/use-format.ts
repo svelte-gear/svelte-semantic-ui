@@ -2,16 +2,9 @@
 
 import { get, writable } from "svelte/store";
 
-import type { ActionReturnType, DataController, DataTypes } from "../data/_common";
+import type { ActionReturnType, DataController, DataTypes, Formatter } from "../data/_common";
 import { equalDataTypes, SVELTE_DATA_STORE, uid } from "../data/_common";
 import { jQueryElem } from "../data/_common";
-import { parseDate, formatDate } from "../components/use-calendar";
-
-/** Format function, must return null if cannot parse value and doesn't want to override it. */
-export type Formatter = {
-    format: (val: DataTypes) => string;
-    parse?: (val: string) => DataTypes | undefined; // FIXME: use null instead?
-};
 
 type FormatSettings = {
     decimal: string;
@@ -301,25 +294,5 @@ export class ListFormatter implements Formatter {
             return "";
         }
         return str.substring(this.separator.length);
-    }
-}
-
-/*
-       dP            dP
-       88            88
- .d888b88 .d8888b. d8888P .d8888b.
- 88'  `88 88'  `88   88   88ooood8
- 88.  .88 88.  .88   88   88.  ...
- `88888P8 `88888P8   dP   `88888P'
-
-*/
-
-export class DateFormatter implements Formatter {
-    parse(val: string): Date | undefined {
-        return parseDate(val);
-    }
-
-    format(val: DataTypes): string {
-        return formatDate(val);
     }
 }

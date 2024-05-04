@@ -15,54 +15,18 @@ export const SVELTE_FORM_STORE = "svelte_form_store";
 
 import type { Writable } from "svelte/store";
 
+import type { RuleDefinition } from "./_validation-rules";
+
 /** Return type for actions without update. */
 export type ActionReturnType = {
     destroy: () => void;
 } | void;
 
-/** Shortform validation rule */
-type RuleName =
-    // empty
-    | "empty"
-    | "checked"
-    // content type
-    | "email"
-    | "url"
-    | "integer"
-    | "integer[1..10]"
-    | "decimal"
-    | "number"
-    | "regExp[//^[a-z]{2,3}$//]"
-    | "creditCard"
-    // content
-    | "is[foo]"
-    | "isExactly[foo]"
-    | "not[foo]"
-    | "notExactly[foo]"
-    | "contain[foo]"
-    | "containExactly[foo]"
-    | "doesntContain[foo]"
-    | "doesntContainExactly[foo]"
-    | "match[field]"
-    | "different[field]"
-    // length
-    | "minLength[8]"
-    | "exactLength[16]"
-    | "maxLength[32]"
-    | "minCount[3]"
-    | "exactCount[3]"
-    | "maxCount[3]"
-    // allow any string, force the first character to be lowercase
-    // keeps autocomplete working by preventing flattening RuleType to string
-    | Uncapitalize<string>;
-
-/** Validation rule object */
-type RuleObj = {
-    type: RuleName;
-    prompt?: string;
+/** Format function, must return null if cannot parse value and doesn't want to override it. */
+export type Formatter = {
+    format: (val: DataTypes) => string;
+    parse?: (val: string) => DataTypes | undefined; // FIXME: use null instead?
 };
-
-export type RuleDefinition = RuleName | RuleName[] | RuleObj | RuleObj[]; // | BaseSchema;
 
 /*
  oo
@@ -139,6 +103,20 @@ export function jQueryElem(node: Element): JQueryApi {
 /** Possible types for the store */
 export type DataTypes = string | string[] | boolean | Date | number | undefined;
 
+/** description */ // TODO: description
+export type FormController = {
+    uid: string;
+    mode: "sui-form" | "yup-form";
+    valid: Writable<boolean>;
+    errors: Writable<string[]>;
+    getActive(): boolean;
+    setActive(val: boolean): void;
+    addRule: (key: string, rules: RuleDefinition) => void;
+    doValidateField: (key: string) => void;
+    doValidateForm: () => void;
+    onFieldChange: (key: string) => void;
+};
+
 /** Holds Svelte `store` allowing the `Data` comppnent to subscribe to data changes,
  *
  * `doUpdate()` function to imperatively update Semantic component,
@@ -164,20 +142,6 @@ export type SemanticCommand = (
     v2?: unknown,
     v3?: unknown
 ) => unknown;
-
-/** description */ // TODO: description
-export type FormController = {
-    uid: string;
-    mode: "sui-form" | "yup-form";
-    valid: Writable<boolean>;
-    errors: Writable<string[]>;
-    getActive(): boolean;
-    setActive(val: boolean): void;
-    addRule: (key: string, rules: RuleDefinition) => void;
-    doValidateField: (key: string) => void;
-    doValidateForm: () => void;
-    onFieldChange: (key: string) => void;
-};
 
 /*
             dP   oo dP
