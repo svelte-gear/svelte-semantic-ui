@@ -1,18 +1,18 @@
-// validate-field.ts
+// use-validate.ts
 
 import type { Unsubscriber } from "svelte/store";
 
 // import type { BaseSchema } from "yup";
 
-import type { RuleDefinition } from "./_validation-rules";
+import type { RuleDefinition } from "../data/_validation-rules";
 import type {
     DataController,
     DataTypes,
     FormController,
     JQueryApi,
     SemanticCommand,
-} from "./_common";
-import { jQueryElem, uid, SVELTE_DATA_STORE, SVELTE_FORM_STORE } from "./_common";
+} from "../data/_common";
+import { jQueryElem, uid, SVELTE_DATA_STORE, SVELTE_FORM_STORE } from "../data/_common";
 
 /** Iterate through ancestors till `form` if found. */
 function getParentForm(elem: JQueryApi): JQueryApi {
@@ -59,7 +59,7 @@ function getFieldKey(elem: JQueryApi): string {
  * For Dropdown, use id of the select or the inner input.
  * For Calendar, use id of the innermost input.
  */
-export function validateField(node: Element, rules: RuleDefinition) {
+export function validate(node: Element, rules: RuleDefinition) {
     const elem = jQueryElem(node);
     const form = getParentForm(elem) as JQueryApi & { form: SemanticCommand };
 

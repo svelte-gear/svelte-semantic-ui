@@ -66,8 +66,8 @@ import {
     SVELTE_DATA_STORE,
     isoDatetime,
 } from "./_common";
-import { validateField } from "./_validate-field";
 import { format as formatAction } from "../components/use-format";
+import { validate as validateAction } from "../components/use-validate";
 
 /** Two-way binding for controlling and reading the Dropdown selection. */
 export let selected: string | string[] | undefined = undefined; // dropdown
@@ -150,7 +150,7 @@ onMount(() => {
             case "calendar":
             case "slider":
                 if (selected !== undefined && watcher.mode !== "dropdown") {
-                    throw new Error(`Invalid 'active' prop in <Data> for '${watcher.mode}'`);
+                    throw new Error(`Invalid 'selected' prop in <Data> for '${watcher.mode}'`);
                 }
                 if (active !== undefined && watcher.mode !== "modal") {
                     throw new Error(`Invalid 'active' prop in <Data> for '${watcher.mode}'`);
@@ -209,7 +209,7 @@ onMount(() => {
     console.debug(`data : ${watcher.mode} - mount(${watcher.uid})`);
 
     if (validate) {
-        validateField(elem.get(0), validate);
+        validateAction(elem.get(0), validate);
     }
 });
 

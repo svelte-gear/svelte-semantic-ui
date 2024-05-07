@@ -1,9 +1,9 @@
 // yup-form-validation.ts
 
 import { get, writable } from "svelte/store";
-import type { RuleDefinition } from "./_validation-rules";
 // import { BaseSchema } from "yup";
 
+import type { RuleDefinition } from "./_validation-rules";
 import type { FormController, JQueryApi } from "./_common";
 import { jQueryElem, uid, equalDataTypes, SVELTE_FORM_STORE } from "./_common";
 

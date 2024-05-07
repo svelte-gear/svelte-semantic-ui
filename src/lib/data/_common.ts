@@ -155,7 +155,7 @@ export type SemanticCommand = (
 
 let unum = 100;
 
-/** Three random numbers based on curretn time */
+/** Generate an unique number */
 export function uid() {
     // const num = new Date().getTime();
     // const num = Math.round(window.performance.now());
@@ -163,34 +163,7 @@ export function uid() {
     return `000000${unum % 1000}`.slice(-3);
 }
 
-// /** Compare two Date values */
-// export function equalDates(d1: Date | undefined, d2: Date | undefined): boolean {
-//     if ((d1 && !(d1 instanceof Date)) || (d2 && !(d2 instanceof Date))) {
-//         return false;
-//     }
-//     return d1?.getTime() == d2?.getTime();
-// }
-
-// /** Compare two arrays element-by-element */
-// export function equalArrays(
-//     a1: string | string[] | undefined,
-//     a2: string | string[] | undefined
-// ): boolean {
-//     if (!Array.isArray(a1) || !Array.isArray(a2)) {
-//         return false;
-//     }
-//     if (a1.length != a2.length) {
-//         return false;
-//     }
-//     for (let i = 0; i < a1.length; i++) {
-//         if (a1[i] !== a2[i]) {
-//             return false;
-//         }
-//     }
-//     return true;
-// }
-
-/** Compare two arrays element-by-element */
+/** Compare two arrays, two Date objects, or two primitives */
 export function equalDataTypes(a1: DataTypes | undefined, a2: DataTypes | undefined): boolean {
     if (Array.isArray(a1) && Array.isArray(a2)) {
         if (a1.length != a2.length) {

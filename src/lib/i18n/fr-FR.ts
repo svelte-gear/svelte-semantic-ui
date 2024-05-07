@@ -2,7 +2,7 @@
 
 import { isoTime, pad } from "../data/_common";
 import { calendarDefaults } from "../components/use-calendar";
-import { formatDefaults } from "../components/use-format";
+import { formatDefaults } from "../data/format";
 
 import "./fr";
 

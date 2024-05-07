@@ -3,7 +3,7 @@
 // import { suiValidationDefaults } from "../data/sui-form-validation";
 import { pad } from "../data/_common";
 import { calendarDefaults } from "../components/use-calendar";
-import { formatDefaults } from "../components/use-format";
+import { formatDefaults } from "../data/format";
 
 import "./en";
 

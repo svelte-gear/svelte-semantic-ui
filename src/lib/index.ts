@@ -25,10 +25,5 @@ export { default as Data } from "./data/data-bind.svelte";
 export { default as FormValidator } from "./data/form-validator-bind.svelte";
 
 export { isoDate, isoTime, isoDatetime } from "./data/_common";
-export {
-    format,
-    NumberFormatter,
-    MoneyFormatter,
-    CaseFormatter,
-    ListFormatter,
-} from "./components/use-format";
+export { format } from "./components/use-format";
+export { NumberFormatter, MoneyFormatter, CaseFormatter, ListFormatter } from "./data/format";

@@ -15,4 +15,4 @@ import "fomantic-ui-css/components/slider.min.js";
 import "fomantic-ui-css/components/toast.min.css";
 import "fomantic-ui-css/components/toast.min.js";
 
-import "semantic-ui-css/components/form.min.js";
+import "fomantic-ui-css/components/form.min.js";

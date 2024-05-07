@@ -1,9 +1,9 @@
 // sui-form-validation.ts
 
 import { get, writable } from "svelte/store";
-import type { RuleDefinition, ValidationPrompt, ValidationText } from "./_validation-rules";
 // import { BaseSchema } from "yup";
 
+import type { RuleDefinition, ValidationPrompt, ValidationText } from "./_validation-rules";
 import type { FormController, JQueryApi } from "./_common";
 import { jQueryElem, uid, equalDataTypes, SVELTE_FORM_STORE } from "./_common";
 
@@ -24,10 +24,12 @@ export type SuiValidationSettings = {
     onInvalid?(): void;
     onSuccess?(event: unknown, fields: unknown): void;
     onFailure?(errors: unknown, fields: unknown): void;
+    // TODO: addValidationRule(fn, errorPrompt)
 };
 
 export const suiValidationDefaults: SuiValidationSettings = {
     keyboardShortcuts: false, // disable Enter and Esc keys
+    // TODO: addValidationRule(fn, errorPrompt)
 };
 
 /*
