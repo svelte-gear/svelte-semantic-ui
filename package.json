@@ -12,15 +12,17 @@
         "!dist/**/*.spec.*"
     ],
 
-    "_exports": "module exports",
+    "_exports": {
+        "_" : "module exports",
+        "./behavior": {
+            "types":  "./dist/use-behavior.d.ts",
+            "svelte": "./dist/use-behavior.js"
+        }
+    },
     "exports": {
         ".": {
             "types":  "./dist/index.d.ts",
             "svelte": "./dist/index.js"
-        },
-        "./behavior": {
-            "types":  "./dist/use-behavior.d.ts",
-            "svelte": "./dist/use-behavior.js"
         }
     },
 
