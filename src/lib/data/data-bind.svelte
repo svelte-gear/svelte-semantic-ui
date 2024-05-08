@@ -57,8 +57,7 @@ Example:
 import type { Unsubscriber } from "svelte/store";
 import { onMount, afterUpdate, onDestroy } from "svelte";
 
-import type { RuleDefinition } from "./_validation-rules";
-import type { DataController, DataTypes, Formatter, JQueryApi } from "./_common";
+import type { DataController, DataTypes, Formatter, JQueryApi, RuleDefinition } from "./_common";
 import {
     equalDataTypes,
     jQueryElem,

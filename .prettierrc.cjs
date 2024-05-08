@@ -7,9 +7,9 @@ module.exports = {
     // useTabs: false,
     // semi: true,
     // singleQuote: false,
-    // quoteProps: "as-needed",         // suggested: "consistent"
+    // quoteProps: "as-needed", // suggested: "consistent"
     // jsxSingleQuote: false,
-    // trailingComma: "es5",            // suggested: "none"
+    trailingComma: "es5", // default: "all" // suggested: "none"
     // bracketSpacing: true,
     // bracketSameLine: false,
     // arrowParens: "always",

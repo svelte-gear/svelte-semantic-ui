@@ -18,6 +18,7 @@ import {
     format,
     isoTime,
     isoDatetime,
+    rule,
 } from "$lib";
 
 const options = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
@@ -179,7 +180,7 @@ let valid = false;
                     Teams <span class="explain">(multi-select)</span>
                 </label>
                 <select id="numb2" class="ui selection dropdown fluid" multiple use:dropdown>
-                    <Data bind:selected={teams} validate={"empty"} />
+                    <Data bind:selected={teams} validate={[rule.empty()]} />
                     {#each options as m}
                         <option value={m}>Num {m}</option>
                     {/each}
@@ -249,7 +250,7 @@ let valid = false;
                         ],
                     }}
                 >
-                    <Data bind:selected={gender} validate={["not[male]"]} />
+                    <Data bind:selected={gender} validate={[rule.not("male")]} />
                     <input type="hidden" id="gend" />
                     <i class="dropdown icon" />
                     <div class="default text">Gender</div>
@@ -314,7 +315,7 @@ let valid = false;
                             type: "time",
                         }}
                     >
-                        <Data bind:date={tim} validate={["empty", "not[00:00]"]} />
+                        <Data bind:date={tim} validate={[rule.empty(), rule.not("00:00")]} />
                         <div class="ui input right icon" id="x16">
                             <i class="clock outline icon" />
                             <input type="text" placeholder="Time" />
@@ -359,7 +360,7 @@ Formatter replaces you input with correct string or empties it.
                     id="z1"
                     use:format={new DateFormatter()}
                 />
-                <Data bind:value={dat} validate={["empty"]} />
+                <Data bind:value={dat} validate={[rule.empty()]} />
             </div>
 
             <div class="field">
@@ -373,7 +374,7 @@ Formatter replaces you input with correct string or empties it.
                     id="fn2"
                     use:format={new MoneyFormatter()}
                 />
-                <Data bind:value={income} validate={["empty"]} />
+                <Data bind:value={income} validate={[rule.empty()]} />
             </div>
 
             <!-- direct <input bind:value may be used for simple string value -->
@@ -474,7 +475,11 @@ Formatter replaces you input with correct string or empties it.
                     use:slider={{ min: 0, max: 10 }}
                 >
                     <!-- validate={yup.number().required()} -->
-                    <Data forId="sl" bind:position={rating} validate={["not[0]", "not[1]"]} />
+                    <Data
+                        forId="sl"
+                        bind:position={rating}
+                        validate={[rule.not("0"), rule.not("1")]}
+                    />
                 </div>
             </div>
 

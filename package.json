@@ -13,11 +13,8 @@
     ],
 
     "_exports": {
-        "_" : "module exports",
-        "./behavior": {
-            "types":  "./dist/use-behavior.d.ts",
-            "svelte": "./dist/use-behavior.js"
-        }
+        ".": "export root folder",
+        "./behavior": { "types":  "./dist/use-behavior.d.ts", "svelte": "./dist/use-behavior.js" }
     },
     "exports": {
         ".": {
@@ -27,21 +24,22 @@
     },
 
     "_scripts": {
+        "format":  "prettier --plugin-search-dir . --write .",
         "prepublishOnly": "runs before 'npm publish'"
     },
     "scripts": {
-        "dev":     "vite dev",
+        "dev":     "vite dev --host",
         "build":   "vite build",
-        "preview": "vite preview",
-        "format":  "prettier --plugin-search-dir . --write .",
-        "lint":    "prettier --plugin-search-dir . --check . && echo Linting... && eslint .",
+        "preview": "vite preview --host",
+        "format":  "prettier --write .",
+        "lint":    "prettier --check . && echo Linting... && eslint .",
         "check":   "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
         "package": "eslint . && vite build > /dev/null && echo Packaging... && svelte-kit sync && svelte-package && publint",
         "prepublishOnly": "svelte-kit sync && svelte-package && publint"
     },
 
     "_peerDependencies": {
-        "svelte":          "see app.html and /routes folder for examples, but the library can be used without svelte-kit",
+        "svelte":          "see app.html and /routes folder for examples, but the library itself can be used without svelte-kit",
         "jquery":          "jQuery must be staticly loaded in DOM for semantic ui to work",
         "fomantic-ui-css": "works with semantic-ui or fomantic-ui, packages may be imported or loaded in DOM",
         "semantic-ui-css": "for semantic-ui, add optional fomantic modules: calendar, slider, toast, and form"
@@ -54,9 +52,12 @@
     },
 
     "_dependencies": {
-        "_none":  "the library has no npm dependencies, but jQuery and senamtic-ui must be present at runtime",
+        "_none": "the library has no npm dependencies, but jQuery and senamtic-ui must be present at runtime",
         "tslib": "2.9.0 - would be required if importHelpers is set to true in tsconfig.json",
-        "yup":   "1.2.0 - plan to support yup validation, now it uses semantic-ui form"
+        "yup":   "1.2.0 - plan to support yup validation, now it uses semantic-ui form",
+        "jquery":          "3.7.1",
+        "fomantic-ui-css": "2.9.3",
+        "semantic-ui-css": "2.5.0"
     },
     "dependencies": {
     },
@@ -68,36 +69,34 @@
         "_prettier":          "code formatter",
         "_svelte":            "svelte, typescript, and packager tools",
 
-        "parcel": "2.9.3",
-        "@plasmohq/parcel-transformer-svelte3": "0.4.11",
-
-        "eslint-config-prettier": "8.8.0 - create equivivalent eslint rules instead of disabling them",
-        "prettier":               "3.0.0 - is not compartible with prettier-plugin-svelte: 2.10.1",
-        "npm-run-all":            "4.1.5 - allows to run npm tasks sequentially or in parallel"
+        "eslint-config-prettier": "9.1.0 - disables conflicting eslint rules; we prefer creating equivivalent eslint rules",
+        "npm-run-all":            "4.1.5 - allows to run npm tasks sequentially or in parallel; not yet required",
+        "eslint":                           "9.2.0"
     },
     "devDependencies": {
-        "@sveltejs/adapter-static": "2.0.2",
-        "@sveltejs/kit":            "1.22.1",
-        "@sveltejs/package":        "2.1.0",
+        "@sveltejs/adapter-static":     "3.0.1",
+        "@sveltejs/kit":                "2.5.7",
+        "@sveltejs/package":            "2.3.1",
+        "@sveltejs/vite-plugin-svelte": "3.1.0",
 
-        "eslint":                           "8.44.0",
-        "eslint-plugin-svelte":             "2.32.2",
-        "@typescript-eslint/eslint-plugin": "5.61.0",
-        "@typescript-eslint/parser":        "5.61.0",
+        "eslint": "8.57.0",
+        "eslint-plugin-svelte":             "2.38.0",
+        "@typescript-eslint/eslint-plugin": "7.8.0",
+        "@typescript-eslint/parser":        "7.8.0",
 
-        "eslint-config-airbnb-typescript": "17.0.0",
-        "eslint-plugin-import":            "2.27.5",
-        "eslint-plugin-jsx-a11y":          "6.7.1",
+        "eslint-config-airbnb-typescript": "18.0.0",
+        "eslint-plugin-import":            "2.29.1",
+        "eslint-plugin-jsx-a11y":          "6.8.0",
         "eslint-plugin-promise":           "6.1.1",
-        "eslint-plugin-react":             "7.32.2",
+        "eslint-plugin-react":             "7.34.1",
 
-        "prettier": "2.8.8",
-        "prettier-plugin-svelte": "2.10.1",
+        "prettier":               "3.2.5",
+        "prettier-plugin-svelte": "3.2.3",
 
-        "svelte":       "4.0.5",
-        "svelte-check": "3.4.5",
-        "publint":      "0.1.16",
-        "typescript":   "5.1.6",
-        "vite":         "4.4.2"
+        "svelte":       "4.2.16",
+        "svelte-check": "3.7.1",
+        "publint":      "0.2.7",
+        "typescript":   "5.4.5",
+        "vite":         "5.2.11"
     }
 }

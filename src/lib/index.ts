@@ -19,11 +19,19 @@ export { popup } from "./components/use-popup";
 export { slider } from "./components/use-slider";
 export { sticky } from "./components/use-sticky";
 export { toast } from "./components/proc-toast";
+export { format } from "./components/use-format";
 
 export { formValidation } from "./data/sui-form-validation";
 export { default as Data } from "./data/data-bind.svelte";
 export { default as FormValidator } from "./data/form-validator-bind.svelte";
+export { rule } from "./data/sui-rules";
 
 export { isoDate, isoTime, isoDatetime } from "./data/_common";
-export { format } from "./components/use-format";
-export { NumberFormatter, MoneyFormatter, CaseFormatter, ListFormatter } from "./data/format";
+export {
+    fmt,
+    parse,
+    NumberFormatter,
+    MoneyFormatter,
+    CaseFormatter,
+    ListFormatter,
+} from "./data/format";

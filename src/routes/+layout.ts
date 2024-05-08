@@ -5,9 +5,9 @@ import type { LoadEvent } from "@sveltejs/kit";
 export const ssr = false;
 export const prerender = true;
 
-// import "../utils/import-modules"; // individual components from semantic-ui and fomantic-ui
-// import "../utils/import-semantic"; // full semantic-ui + some fomantic components
-// import "../utils/import-fomantic"; // full fomantic-ui library
+// import "../import-fomantic"; // C: full fomantic-ui library
+// import "../import-semantic"; // D: full semantic-ui + some fomantic components
+// import "../import-modules"; //  E: individual components from semantic-ui and fomantic-ui
 
 export async function load({ params }: LoadEvent): Promise<{ locale: string }> {
     void params;

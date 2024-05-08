@@ -15,8 +15,6 @@ export const SVELTE_FORM_STORE = "svelte_form_store";
 
 import type { Writable } from "svelte/store";
 
-import type { RuleDefinition } from "./_validation-rules";
-
 /** Return type for actions without update. */
 export type ActionReturnType = {
     destroy: () => void;
@@ -27,6 +25,14 @@ export type Formatter = {
     format: (val: DataTypes) => string;
     parse?: (val: string) => DataTypes | undefined; // FIXME: use null instead?
 };
+
+/** Validation rule object */
+type RuleObj = {
+    type: string;
+    prompt?: string;
+};
+
+export type RuleDefinition = string | string[] | RuleObj | RuleObj[]; // | BaseSchema;
 
 /*
  oo

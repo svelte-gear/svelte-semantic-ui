@@ -1,18 +1,10 @@
 // import-modules.ts
 /* eslint-disable import/extensions */
 
+// E:
 // add "semantic-ui-css": "2.5.0" to "dependencies" section in package.json
 // add "fomantic-ui-css": "2.9.2" to "dependencies" section in package.json
 // keep jQuery script tag in the app.html
-
-// There are tree ways to inclide Semantic-UI into the project:
-// a) staticly link compiled css and js in html file       (css: 629k, js: 276k)
-// b) import semantic-ui library as a whole                (css: 565k, js: 276k)
-// c) import individual Semantic-UI components (this file) (css: 509k, js: 153k)
-
-// +) add calendar, slider, and toast from fomantic-ui     (css:  35k, js:  60k)
-
-// ~) static fomantic-ui files are larger                 (css: 1374k, js: 370k)
 
 // CORE
 
@@ -105,7 +97,7 @@ import "fomantic-ui-css/components/toast.min.js";
 
 // import "semantic-ui-css/components/form.min.css";
 // import "semantic-ui-css/components/form.min.js"; //        form validation
-// import "fomantic-ui-css/components/form.min.css";
+import "fomantic-ui-css/components/form.min.css";
 import "fomantic-ui-css/components/form.min.js"; //        knows about slider and calendar
 
 // import "semantic-ui-css/components/api.min.js"; //         actions on server

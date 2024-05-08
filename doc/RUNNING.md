@@ -65,7 +65,7 @@ we recommend installing the official extension
 
 # Rollup Visualizer
 
-Fixing visoal layout:
+Fixing visual layout:
 
 ```js
             const simulation = forceSimulation()
@@ -80,4 +80,19 @@ Fixing visoal layout:
                     return 0.1;
                 }
             })
+```
+
+```
+// There are multiple ways to inclide Semantic-UI into the project:
+// 1) staticly link compiled css and js in app.html file (faster compile time)
+//     A: fomantic-ui                                       (css: 1374k, js: 370k)
+//     B: semantic-ui (our favorite method)                  (css: 629k, js: 276k)
+// 2) import sematic-ui js in the project (smaller project size)
+//     C: fomantic-ui,
+//     D: semantic-ui + fomantic components                  (css: 565k, js: 276k)
+//        calendar, slider, and toast from fomantic-ui       (css:  35k, js:  60k)
+// 3) import individual components - this file ()
+//     E: project size depends on component selection        (css: 509k, js: 153k)
+//        small size gain is not worth it in current
+// 4) build semantic-ui-less from source
 ```

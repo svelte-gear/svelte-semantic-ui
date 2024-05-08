@@ -3,8 +3,7 @@
 import { get, writable } from "svelte/store";
 // import { BaseSchema } from "yup";
 
-import type { RuleDefinition } from "./_validation-rules";
-import type { FormController, JQueryApi } from "./_common";
+import type { FormController, JQueryApi, RuleDefinition } from "./_common";
 import { jQueryElem, uid, equalDataTypes, SVELTE_FORM_STORE } from "./_common";
 
 export type YupValidationSettings = {
@@ -145,7 +144,9 @@ export function formValidation(node: Element, settings?: YupValidationSettings):
             // if (rules instanceof BaseSchema) {
             //     throw new Error(`Got yup rule in SUI validator ${key}`);
             // }
-            console.log(`ADD_RULE ${key} : ${rules}`);
+            const isObject = Array.isArray(rules) || typeof rules === "object";
+            const ruleStr = isObject ? JSON.stringify(rules) : String(rules);
+            console.log(`ADD_RULE ${key} : ${ruleStr}`);
             elem.form("add rule", key, rules);
         },
 

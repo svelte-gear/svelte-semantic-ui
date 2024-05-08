@@ -28,9 +28,9 @@
     "editor.fontFamily": "'JetBrains Mono', 'Droid Sans Mono', 'monospace'",
     "editor.fontLigatures": false,
     "editor.renderWhitespace": "all",
-    "editor.rulers": [60, 100],
+    "editor.rulers": [60, 100, 120],
     "editor.wordWrap": "bounded",
-    "editor.wordWrapColumn": 100,
+    "editor.wordWrapColumn": 120,
     "editor.wrappingIndent": "indent",
 
     "eslint.lintTask.enable": true,

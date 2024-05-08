@@ -4,12 +4,12 @@ import type { Unsubscriber } from "svelte/store";
 
 // import type { BaseSchema } from "yup";
 
-import type { RuleDefinition } from "../data/_validation-rules";
 import type {
     DataController,
     DataTypes,
     FormController,
     JQueryApi,
+    RuleDefinition,
     SemanticCommand,
 } from "../data/_common";
 import { jQueryElem, uid, SVELTE_DATA_STORE, SVELTE_FORM_STORE } from "../data/_common";
