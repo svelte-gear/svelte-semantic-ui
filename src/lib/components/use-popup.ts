@@ -3,9 +3,9 @@
 import type { JQueryApi } from "../data/_common";
 import { jQueryElem } from "../data/_common";
 
-type PopupSettings = {
+export interface PopupSettings {
     [key: string]: unknown;
-};
+}
 
 export const popupDefaults: PopupSettings = {};
 

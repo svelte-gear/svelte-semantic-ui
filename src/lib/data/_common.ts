@@ -1,8 +1,8 @@
 // _common.ts
-// Commonly used types and functions.
 
 /***
- * @module jQuery API, get element, Value Watcher.
+ * @module common
+ * Common types, jQuery API, Form and Data controllers, utility functions.
  */
 
 export const SVELTE_DATA_STORE = "svelte_data_store";
@@ -21,13 +21,13 @@ export type ActionReturnType = {
 } | void;
 
 /** Format function, must return null if cannot parse value and doesn't want to override it. */
-export type Formatter = {
+export interface Formatter {
     format: (val: DataTypes) => string;
     parse?: (val: string) => DataTypes | undefined; // FIXME: use null instead?
-};
+}
 
 /** Validation rule object */
-type RuleObj = {
+export type RuleObj = {
     type: string;
     prompt?: string;
 };
@@ -45,7 +45,7 @@ export type RuleDefinition = string | string[] | RuleObj | RuleObj[]; // | BaseS
 */
 
 /** Small subset of jQuery functions used in this library. */
-export type JQueryApi = {
+export interface JQueryApi {
     parent(): JQueryApi;
     filter(selector: string): JQueryApi;
     find(selector: string): JQueryApi;
@@ -72,7 +72,7 @@ export type JQueryApi = {
     get(inx: number): Element;
     val(): string;
     val(val: string): void;
-};
+}
 
 /** Returns jQuery element by id attribute. */
 export function jQueryElemById(id: string): JQueryApi {
@@ -110,7 +110,7 @@ export function jQueryElem(node: Element): JQueryApi {
 export type DataTypes = string | string[] | boolean | Date | number | undefined;
 
 /** description */ // TODO: description
-export type FormController = {
+export interface FormController {
     uid: string;
     mode: "sui-form" | "yup-form";
     valid: Writable<boolean>;
@@ -121,7 +121,7 @@ export type FormController = {
     doValidateField: (key: string) => void;
     doValidateForm: () => void;
     onFieldChange: (key: string) => void;
-};
+}
 
 /** Holds Svelte `store` allowing the `Data` comppnent to subscribe to data changes,
  *
@@ -129,7 +129,7 @@ export type FormController = {
  *
  * event handlers, and `uid` for debuggin purposes.
  */
-export type DataController<T extends DataTypes> = {
+export interface DataController<T extends DataTypes> {
     uid: string;
     mode: "dropdown" | "modal" | "calendar" | "slider" | "input";
     store: Writable<T>;
@@ -139,7 +139,7 @@ export type DataController<T extends DataTypes> = {
     // Yup integration
     setValid?: (value: boolean) => void;
     setPrompt?: (value: string | null) => void;
-};
+}
 
 /** Semantic UI component behaviour API */
 export type SemanticCommand = (
@@ -186,49 +186,4 @@ export function equalDataTypes(a1: DataTypes | undefined, a2: DataTypes | undefi
         return a1.getTime() == a2.getTime();
     }
     return a1 === a2;
-}
-
-/*
- .8888b                                         dP
- 88   "                                         88
- 88aaa  .d8888b. 88d888b. 88d8b.d8b. .d8888b. d8888P
- 88     88'  `88 88'  `88 88'`88'`88 88'  `88   88
- 88     88.  .88 88       88  88  88 88.  .88   88
- dP     `88888P' dP       dP  dP  dP `88888P8   dP
-
-*/
-
-export function pad(n: number, size: number): string {
-    let str = n.toString();
-    while (str.length < size) {
-        str = "0" + str;
-    }
-    return str;
-}
-
-/** Display date and/or time differently depeding on type */
-export function isoDate(d: Date | undefined) {
-    if (!d || !d.getDate) {
-        return "";
-    }
-    const day = pad(d.getDate(), 2);
-    const month = pad(d.getMonth() + 1, 2);
-    const year = pad(d.getFullYear(), 4);
-    return `${year}-${month}-${day}`;
-}
-
-export function isoTime(d: Date | undefined) {
-    if (!d || !d.getDate) {
-        return "";
-    }
-    const hour = pad(d.getHours(), 2);
-    const minute = pad(d.getMinutes(), 2);
-    return `${hour}:${minute}`;
-}
-
-export function isoDatetime(d: Date | undefined) {
-    if (!d || !d.getDate) {
-        return "";
-    }
-    return `${isoDate(d)} ${isoTime(d)}`;
 }

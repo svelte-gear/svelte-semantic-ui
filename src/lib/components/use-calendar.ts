@@ -9,17 +9,10 @@ import type {
     DataTypes,
     Formatter,
 } from "../data/_common";
-import {
-    jQueryElem,
-    equalDataTypes,
-    uid,
-    SVELTE_DATA_STORE,
-    isoDate,
-    isoTime,
-    isoDatetime,
-} from "../data/_common";
+import { jQueryElem, equalDataTypes, uid, SVELTE_DATA_STORE } from "../data/_common";
+import { fmt } from "../data/format";
 
-export type CalendarTranslation = {
+export interface CalendarTranslation {
     days: string[];
     months: string[];
     monthsShort: string[];
@@ -27,13 +20,13 @@ export type CalendarTranslation = {
     now: string;
     am: string;
     pm: string;
-};
+}
 
-type DateFormatFunction = (val: Date | undefined) => string;
-type OnChangeFn = (newValue: Date) => void;
-type OnHiddenFn = () => void;
+export type DateFormatFunction = (val: Date | undefined) => string;
+export type OnCalendarChangeFn = (newValue: Date) => void;
+export type OnCalendarHiddenFn = () => void;
 
-export type CalendarSettings = {
+export interface CalendarSettings {
     type?: string;
     touchReadonly?: boolean;
     ampm?: boolean;
@@ -48,10 +41,10 @@ export type CalendarSettings = {
         time?: DateFormatFunction;
     };
     text?: CalendarTranslation;
-    onChange?: OnChangeFn;
-    onHidden?: OnHiddenFn;
+    onChange?: OnCalendarChangeFn;
+    onHidden?: OnCalendarHiddenFn;
     // [key: string]: unknown;
-};
+}
 // TODO: fix all settings
 
 export const calendarDefaults: CalendarSettings = {
@@ -93,11 +86,11 @@ export function calendar(node: Element, settings?: CalendarSettings): ActionRetu
         const cType = settings && settings.type ? settings.type : "date";
         switch (cType) {
             case "date":
-                return isoDate(d);
+                return fmt.isoDate(d);
             case "time":
-                return isoTime(d);
+                return fmt.isoTime(d);
             case "datetime":
-                return isoDatetime(d);
+                return `${fmt.isoDate(d)} ${fmt.isoTime(d)}`;
             default:
                 throw new Error(`Unrecognized calendar type setting: ${cType}`);
         }

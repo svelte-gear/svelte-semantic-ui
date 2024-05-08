@@ -13,11 +13,12 @@ import { jQueryElem } from "../data/_common";
 
 */
 
-type ToastSettings = {
+export interface ToastSettings {
     message?: string;
     [key: string]: unknown;
-};
+}
 
+/** Default toast settings */
 export const toastDefaults: ToastSettings = {};
 
 /** Imperative function to display Semantic UI Toast component.

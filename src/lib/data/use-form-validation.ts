@@ -5,9 +5,9 @@ import { get, writable } from "svelte/store";
 
 import type { FormController, JQueryApi, RuleDefinition } from "./_common";
 import { jQueryElem, uid, equalDataTypes, SVELTE_FORM_STORE } from "./_common";
-import type { ValidationPrompt, ValidationText } from "./sui-rules";
+import type { ValidationPrompt, ValidationText } from "./rule-book";
 
-export type SuiValidationSettings = {
+export interface FormValidationSettings {
     fields?: {
         [key: string]: unknown;
     };
@@ -25,9 +25,9 @@ export type SuiValidationSettings = {
     onSuccess?(event: unknown, fields: unknown): void;
     onFailure?(errors: unknown, fields: unknown): void;
     // TODO: addValidationRule(fn, errorPrompt)
-};
+}
 
-export const suiValidationDefaults: SuiValidationSettings = {
+export const formValidationDefaults: FormValidationSettings = {
     keyboardShortcuts: false, // disable Enter and Esc keys
     // TODO: addValidationRule(fn, errorPrompt)
 };
@@ -61,9 +61,9 @@ export const suiValidationDefaults: SuiValidationSettings = {
  * For Dropdown, use id of the select or inner input.
  * For Calendar, use id of the innermost input.
 */
-export function formValidation(node: Element, settings?: SuiValidationSettings): void {
+export function formValidation(node: Element, settings?: FormValidationSettings): void {
     type FormApi = {
-        form(settings?: SuiValidationSettings): void;
+        form(settings?: FormValidationSettings): void;
         form(command: string, arg1?: unknown, arg2?: unknown): unknown;
     };
     const elem = jQueryElem(node) as JQueryApi & FormApi;
@@ -190,7 +190,7 @@ export function formValidation(node: Element, settings?: SuiValidationSettings):
 
     // Initialize Semantic compponent
     elem.form({
-        ...suiValidationDefaults,
+        ...formValidationDefaults,
         ...settings,
     });
 

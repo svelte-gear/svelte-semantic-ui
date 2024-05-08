@@ -3,9 +3,9 @@
 import type { JQueryApi } from "../data/_common";
 import { jQueryElem } from "../data/_common";
 
-type StickySettings = {
+export interface StickySettings {
     [key: string]: unknown;
-};
+}
 
 export const stickyDefaults: StickySettings = {};
 

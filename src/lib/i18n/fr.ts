@@ -1,6 +1,6 @@
 // fr.ts
 
-import { suiValidationDefaults } from "../data/sui-form-validation";
+import { formValidationDefaults } from "../data/use-form-validation";
 import { calendarDefaults } from "../components/use-calendar";
 
 /*
@@ -13,7 +13,7 @@ import { calendarDefaults } from "../components/use-calendar";
 
 */
 
-suiValidationDefaults.prompt = Object.assign({}, suiValidationDefaults.prompt, {
+formValidationDefaults.prompt = Object.assign({}, formValidationDefaults.prompt, {
     empty: "{name} doit avoir une valeur.",
     checked: "{name} doit être coché.",
     email: "{name} doit être une adresse e-mail valide.",
@@ -44,7 +44,7 @@ suiValidationDefaults.prompt = Object.assign({}, suiValidationDefaults.prompt, {
     addErrors: "{name}: {error}",
 });
 
-suiValidationDefaults.text = Object.assign({}, suiValidationDefaults.text, {
+formValidationDefaults.text = Object.assign({}, formValidationDefaults.text, {
     unspecifiedRule: "Veuillez entrer une valeur valide",
     unspecifiedField: "Ce champ",
     leavingMessage:

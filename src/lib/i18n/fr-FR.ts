@@ -1,8 +1,7 @@
 // fr-FR.ts
 
-import { isoTime, pad } from "../data/_common";
 import { calendarDefaults } from "../components/use-calendar";
-import { formatDefaults } from "../data/format";
+import { formatDefaults, fmt, pad } from "../data/format";
 
 import "./fr";
 
@@ -19,7 +18,7 @@ function frDate(d: Date | undefined) {
 calendarDefaults.ampm = false;
 calendarDefaults.firstDayOfWeek = 1;
 calendarDefaults.monthFirst = false;
-calendarDefaults.formatter = { date: frDate, time: isoTime };
+calendarDefaults.formatter = { date: frDate, time: fmt.isoTime };
 
 formatDefaults.decimal = ",";
 formatDefaults.thousandSeparator = " ";

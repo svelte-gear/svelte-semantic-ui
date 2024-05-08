@@ -1,9 +1,7 @@
 // en-GB.ts
 
-// import { suiValidationDefaults } from "../data/sui-form-validation";
-import { isoTime, pad } from "../data/_common";
 import { calendarDefaults } from "../components/use-calendar";
-import { formatDefaults } from "../data/format";
+import { formatDefaults, fmt, pad } from "../data/format";
 
 import "./en";
 
@@ -25,7 +23,7 @@ function gbDate(d: Date | undefined): string {
 calendarDefaults.ampm = false;
 calendarDefaults.firstDayOfWeek = 1;
 calendarDefaults.monthFirst = false;
-calendarDefaults.formatter = { date: gbDate, time: isoTime };
+calendarDefaults.formatter = { date: gbDate, time: fmt.isoTime };
 
 formatDefaults.decimal = ".";
 formatDefaults.thousandSeparator = ",";

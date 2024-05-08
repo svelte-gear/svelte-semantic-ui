@@ -7,9 +7,9 @@ import { jQueryElem, equalDataTypes, uid, SVELTE_DATA_STORE } from "../data/_com
 
 const DROPDOWN_PREVENT_CLEARING_BAD_DATA = false;
 
-export type DropdownSettings = {
+export interface DropdownSettings {
     [key: string]: unknown;
-};
+}
 
 export const dropdownDefaults: DropdownSettings = {};
 

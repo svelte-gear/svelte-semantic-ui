@@ -21,7 +21,7 @@
         "forceConsistentCasingInFileNames": true,
         "isolatedModules": true,
         "module": "ES2020",             // support for dynamic import
-        "moduleResolution": "node",     // "node" is required for eslint to get type information on imports
+        "moduleResolution": "bundler",  // "node" is required for eslint to get type information on imports
         "resolveJsonModule": true,      // allows to import json
         "types": ["svelte"],            // include packages without reference from src, alike /// <reference in d.ts
         "verbatimModuleSyntax": true,   // enforce using `import type` instead of `import`

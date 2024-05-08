@@ -3,14 +3,14 @@
 import type { DataTypes, Formatter } from "./_common";
 // import { jQueryElem } from "./_common";
 
-type FormatSettings = {
+export interface FormatSettings {
     decimal: string;
     thousandSeparator: string;
     listSeparator: string;
     moneyPrefix: string;
     moneySuffix: string;
     moneyPrecision: number;
-};
+}
 
 export const formatDefaults: FormatSettings = {
     decimal: ".", //                   TODO: implement decimal
@@ -20,6 +20,14 @@ export const formatDefaults: FormatSettings = {
     moneySuffix: "",
     moneyPrecision: 2,
 };
+
+export function pad(n: number, size: number): string {
+    let str = n.toString();
+    while (str.length < size) {
+        str = "0" + str;
+    }
+    return str;
+}
 
 /*
                               dP
@@ -139,7 +147,8 @@ export class MoneyFormatter implements Formatter {
 
 */
 
-type CaseMode = "upper" | "lower" | "title";
+/** How to upper-case the text */
+export type CaseMode = "upper" | "lower" | "title";
 
 export class CaseFormatter implements Formatter {
     mode: CaseMode;
@@ -213,6 +222,25 @@ export class ListFormatter implements Formatter {
 // TODO: Global fmt and parse objects with default formatting settings.
 // Lazily initialized, to give user the chance to change defaults.
 
-export const fmt = {};
+export const fmt = {
+    isoDate: (d: Date | undefined): string => {
+        if (!d || !d.getDate) {
+            return "";
+        }
+        const day = pad(d.getDate(), 2);
+        const month = pad(d.getMonth() + 1, 2);
+        const year = pad(d.getFullYear(), 4);
+        return `${year}-${month}-${day}`;
+    },
+
+    isoTime: (d: Date | undefined): string => {
+        if (!d || !d.getDate) {
+            return "";
+        }
+        const hour = pad(d.getHours(), 2);
+        const minute = pad(d.getMinutes(), 2);
+        return `${hour}:${minute}`;
+    },
+};
 
 export const parse = {};

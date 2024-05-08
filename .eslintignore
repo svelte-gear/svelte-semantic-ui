@@ -5,6 +5,7 @@ node_modules
 /build
 /dist
 /static
+/doc/api
 .env
 .env.*
 !.env.example

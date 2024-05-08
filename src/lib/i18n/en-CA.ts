@@ -1,15 +1,14 @@
 // en-CA.ts
 
-import { isoDate, isoTime } from "../data/_common";
 import { calendarDefaults } from "../components/use-calendar";
-import { formatDefaults } from "../data/format";
+import { formatDefaults, fmt } from "../data/format";
 
 import "./en";
 
 calendarDefaults.ampm = false;
 calendarDefaults.firstDayOfWeek = 1;
 calendarDefaults.monthFirst = false;
-calendarDefaults.formatter = { date: isoDate, time: isoTime };
+calendarDefaults.formatter = { date: fmt.isoDate, time: fmt.isoTime };
 
 formatDefaults.decimal = ".";
 formatDefaults.thousandSeparator = " ";

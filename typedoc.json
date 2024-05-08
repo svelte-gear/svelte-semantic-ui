@@ -1,0 +1,9 @@
+{
+    // Comments are supported, like tsconfig.json
+    "entryPoints": ["src/lib/**/*.ts"],
+    // "excludePrivate": true,
+    // "excludeProtected": true,
+    // "excludeExternals": true,
+    // "disableSources": true,
+    "out": "doc/api"
+}

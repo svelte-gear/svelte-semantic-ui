@@ -16,9 +16,8 @@ import {
     MoneyFormatter,
     DateFormatter,
     format,
-    isoTime,
-    isoDatetime,
     rule,
+    fmt,
 } from "$lib";
 
 const options = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
@@ -67,11 +66,10 @@ $: {
         gender: gender,
         income: income !== undefined ? income : "",
         agree: chb,
-        date: isoDatetime(dat),
-        time: isoTime(tim),
+        date: `${fmt.isoDate(dat)}_${fmt.isoTime(dat)}`,
+        time: fmt.isoTime(tim),
         rating: rating,
     })
-        .replace(" ", "_")
         .replace(/,"/g, ', "')
         .replace("{", "{ ")
         .replace("}", " }");

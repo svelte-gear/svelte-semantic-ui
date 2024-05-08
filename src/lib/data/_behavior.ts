@@ -6,7 +6,7 @@ import type { JQueryApi, RuleDefinition, SemanticCommand } from "./_common";
 import { jQueryElem } from "./_common";
 
 /** Possible behaviour extensions for Semntic UI components. */
-type SemanticBehavior = {
+export interface SemanticBehavior {
     checkbox?: SemanticCommand;
     dropdown?: SemanticCommand;
     modal?: SemanticCommand;
@@ -17,7 +17,7 @@ type SemanticBehavior = {
     slider?: SemanticCommand;
 
     form?: SemanticCommand;
-};
+}
 
 /*
  dP                dP                         oo

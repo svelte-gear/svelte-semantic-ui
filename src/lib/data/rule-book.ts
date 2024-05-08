@@ -1,8 +1,8 @@
-// sui-rules.ts
+// rule-book.ts
 // Form validation rules and types.
 
-/***
- * @module Validation rules.
+/**
+ * @module data/rule-book
  */
 
 /* prettier-ignore */
@@ -47,7 +47,7 @@ export const rule = {
 // lessThan      (type: "N"|"D"|"S", val: number|Date|string)
 // lessOrEqual   (type: "N"|"D"|"S", val: number|Date|string)
 
-type RuleFunc = (val: string, par: string) => boolean;
+export type RuleFunc = (val: string, par: string) => boolean;
 type WithValidationPrompt = {
     validationPrompts?: Map<string, string>;
 };

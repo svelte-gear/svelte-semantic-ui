@@ -3,9 +3,9 @@
 import type { JQueryApi } from "../data/_common";
 import { jQueryElem } from "../data/_common";
 
-type CheckboxSettings = {
+export interface CheckboxSettings {
     [key: string]: unknown;
-};
+}
 
 export const checkboxDefaults: CheckboxSettings = {};
 

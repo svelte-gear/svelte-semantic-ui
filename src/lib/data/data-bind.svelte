@@ -58,13 +58,8 @@ import type { Unsubscriber } from "svelte/store";
 import { onMount, afterUpdate, onDestroy } from "svelte";
 
 import type { DataController, DataTypes, Formatter, JQueryApi, RuleDefinition } from "./_common";
-import {
-    equalDataTypes,
-    jQueryElem,
-    jQueryElemById,
-    SVELTE_DATA_STORE,
-    isoDatetime,
-} from "./_common";
+import { equalDataTypes, jQueryElem, jQueryElemById, SVELTE_DATA_STORE } from "./_common";
+import { fmt } from "./format";
 import { format as formatAction } from "../components/use-format";
 import { validate as validateAction } from "../components/use-validate";
 
@@ -98,9 +93,9 @@ let watcher: DataController<DataTypes>;
 /** Unsubscriber function */
 let subscribed: Unsubscriber | null;
 
-function fmt(val: DataTypes): string {
+function toStr(val: DataTypes): string {
     if (val instanceof Date) {
-        return isoDatetime(val);
+        return `${fmt.isoDate(val)} ${fmt.isoTime(val)}`;
     }
     if (val instanceof Array) {
         return `[${val.toString()}]`;
@@ -224,7 +219,7 @@ onMount(() => {
 
 /** When store value changes, modify the corresponding prop.*/
 function onSubscriptionChange(storeValue: DataTypes) {
-    console.debug(`data : ${watcher.mode} <- store(${watcher.uid}) = ${fmt(storeValue)}`);
+    console.debug(`data : ${watcher.mode} <- store(${watcher.uid}) = ${toStr(storeValue)}`);
 
     // store in appropriate prop, if the value is different
     switch (watcher.mode) {
@@ -294,7 +289,7 @@ afterUpdate(() => {
     }
 
     // update Semantic component
-    console.debug(`data : ${watcher.mode} -> update(${watcher.uid}) = ${fmt(propValue)}`);
+    console.debug(`data : ${watcher.mode} -> update(${watcher.uid}) = ${toStr(propValue)}`);
     watcher.doUpdate(propValue);
 
     // subsribe after the first update to avoid initial 'undefined' push from the store

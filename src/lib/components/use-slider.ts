@@ -5,9 +5,9 @@ import { get, writable } from "svelte/store";
 import type { ActionReturnType, JQueryApi, DataController } from "../data/_common";
 import { jQueryElem, uid, SVELTE_DATA_STORE } from "../data/_common";
 
-export type SliderSettings = {
+export interface SliderSettings {
     [key: string]: unknown;
-};
+}
 
 export const sliderDefaults: SliderSettings = {};
 
