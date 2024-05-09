@@ -1,4 +1,7 @@
-// proc-toast.ts
+/**
+ * Imperative (procedural) function to display fomantic 'toast' component.
+ * @module components/proc-toast
+ */
 
 import type { JQueryApi } from "../data/common";
 import { jQueryElem } from "../data/common";

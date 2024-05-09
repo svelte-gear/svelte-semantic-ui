@@ -1,4 +1,7 @@
-// en-US.ts
+/**
+ * Translations and formats for American English.
+ * @module i18n/en-US
+ */
 
 import { calendarDefaults } from "../components/use-calendar";
 import { formatDefaults, pad } from "../data/format";

@@ -1,4 +1,7 @@
-// use-sticky.ts
+/**
+ * Svelte action to initialize semantic sticky component.
+ * @module components/use-sticky
+ */
 
 import type { JQueryApi } from "../data/common";
 import { jQueryElem } from "../data/common";

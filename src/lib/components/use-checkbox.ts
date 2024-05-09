@@ -1,4 +1,7 @@
-// use-checkbox.ts
+/**
+ * Svelte action to initialize semantic checkbox component.
+ * @module components/use-checkbox
+ */
 
 import type { JQueryApi } from "../data/common";
 import { jQueryElem } from "../data/common";

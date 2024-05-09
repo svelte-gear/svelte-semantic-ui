@@ -1,4 +1,4 @@
-/***
+/**
  * Common types, jQuery API, Form and Data controllers, utility functions.
  * @module data/common
  */

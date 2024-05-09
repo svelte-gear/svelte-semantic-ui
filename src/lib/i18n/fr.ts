@@ -1,4 +1,7 @@
-// fr.ts
+/**
+ * French translations.
+ * @module i18n/fr-FR
+ */
 
 import { formValidationDefaults } from "../data/use-form-validation";
 import { calendarDefaults } from "../components/use-calendar";

@@ -1,4 +1,7 @@
-// en-GB.ts
+/**
+ * Translations and formats for British English.
+ * @module i18n/en-GB
+ */
 
 import { calendarDefaults } from "../components/use-calendar";
 import { formatDefaults, fmt, pad } from "../data/format";

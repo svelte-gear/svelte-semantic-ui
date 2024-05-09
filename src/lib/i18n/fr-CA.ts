@@ -1,4 +1,7 @@
-// fr-CA.ts
+/**
+ * Translations and formats for Canadian French.
+ * @module i18n/en-FR
+ */
 
 import { calendarDefaults } from "../components/use-calendar";
 import { formatDefaults, fmt } from "../data/format";

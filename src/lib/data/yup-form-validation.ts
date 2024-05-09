@@ -1,4 +1,8 @@
-// yup-form-validation.ts
+/**
+ * Attempting to use yup validation framework.
+ * @module data/yup-form-validation
+ * @experimental
+ */
 
 import { get, writable } from "svelte/store";
 // import { BaseSchema } from "yup";

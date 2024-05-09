@@ -1,4 +1,7 @@
-// use-modal.ts
+/**
+ * Svelte action to initialize semantic modal dialogue component.
+ * @module components/use-modal
+ */
 
 import { get, writable } from "svelte/store";
 

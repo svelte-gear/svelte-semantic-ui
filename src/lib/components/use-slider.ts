@@ -1,4 +1,7 @@
-// use-slider.ts
+/**
+ * Svelte action to initialize fomantic slider component.
+ * @module components/use-slider
+ */
 
 import { get, writable } from "svelte/store";
 

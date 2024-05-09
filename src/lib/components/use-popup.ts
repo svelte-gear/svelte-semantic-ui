@@ -1,4 +1,7 @@
-// use-popup.ts
+/**
+ * Svelte action to initialize semantic popup component.
+ * @module components/use-popup
+ */
 
 import type { JQueryApi } from "../data/common";
 import { jQueryElem } from "../data/common";

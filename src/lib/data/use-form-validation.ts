@@ -1,4 +1,7 @@
-// sui-form-validation.ts
+/**
+ * Svelte action to activate validation framework for the form.
+ * @module data/use-form-validation
+ */
 
 import { get, writable } from "svelte/store";
 // import { BaseSchema } from "yup";

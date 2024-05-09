@@ -1,4 +1,7 @@
-// use-dropdown.ts
+/**
+ * Svelte action to initialize semantic dropdown component.
+ * @module components/use-dropdown
+ */
 
 import { get, writable } from "svelte/store";
 

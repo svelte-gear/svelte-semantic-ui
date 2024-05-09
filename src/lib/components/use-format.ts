@@ -1,4 +1,7 @@
-// use-format.ts
+/**
+ * Svelte action to attach fomatter to an input.
+ * @module components/use-format
+ */
 
 import { get, writable } from "svelte/store";
 

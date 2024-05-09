@@ -1,4 +1,7 @@
-// use-calendar.ts
+/**
+ * Svelte action to initialize fomantic calendar component.
+ * @module components/use-calendar
+ */
 
 import { get, writable } from "svelte/store";
 

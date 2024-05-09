@@ -1,4 +1,7 @@
-// index.ts
+/**
+ * Re-export components, most common functions and objects.
+ * @module index
+ */
 
 /*
                                                 dP
@@ -30,6 +33,8 @@ export { default as FormValidator } from "./data/form-validator-bind.svelte";
 export { fmt, parse } from "./data/format";
 export { NumberFormatter, MoneyFormatter, CaseFormatter, ListFormatter } from "./data/format";
 export { DateFormatter } from "./components/use-calendar";
+
+/** Valudation rule builder */
 export { rule } from "./data/rule-book";
 
 // export { calendarDefaults } from "./components/use-calendar";

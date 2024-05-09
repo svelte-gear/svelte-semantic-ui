@@ -1,4 +1,7 @@
-// fr-FR.ts
+/**
+ * Translations and formats for Metropolitan French.
+ * @module i18n/fr-FR
+ */
 
 import { calendarDefaults } from "../components/use-calendar";
 import { formatDefaults, fmt, pad } from "../data/format";

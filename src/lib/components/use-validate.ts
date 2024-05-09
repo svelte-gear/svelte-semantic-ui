@@ -1,4 +1,7 @@
-// use-validate.ts
+/**
+ * Svelte action to add validation rules to the form field.
+ * @module components/use-validate
+ */
 
 import type { Unsubscriber } from "svelte/store";
 
