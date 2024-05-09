@@ -31,11 +31,16 @@ Example:
                                dP
 -->
 <script lang="ts">
+/**
+The line below is required for typedoc.sh to work
+@module data/Svelte::FormValidator
+*/
+
 import type { Unsubscriber } from "svelte/store";
 import { onMount, afterUpdate, onDestroy } from "svelte";
 
-import type { FormController } from "./_common";
-import { equalDataTypes, jQueryElem, SVELTE_FORM_STORE } from "./_common";
+import type { FormController } from "./common";
+import { equalDataTypes, jQueryElem, SVELTE_FORM_STORE } from "./common";
 
 /** Determines if any field change will cause form re-validation. */
 export let active: boolean;

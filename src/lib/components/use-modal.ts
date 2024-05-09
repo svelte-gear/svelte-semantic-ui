@@ -2,8 +2,8 @@
 
 import { get, writable } from "svelte/store";
 
-import type { ActionReturnType, JQueryApi, DataController } from "../data/_common";
-import { jQueryElem, uid, SVELTE_DATA_STORE } from "../data/_common";
+import type { ActionReturnType, JQueryApi, DataController } from "../data/common";
+import { jQueryElem, uid, SVELTE_DATA_STORE } from "../data/common";
 
 export interface ModalSettings {
     [key: string]: unknown;

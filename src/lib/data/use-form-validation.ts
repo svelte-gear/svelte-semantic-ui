@@ -3,8 +3,8 @@
 import { get, writable } from "svelte/store";
 // import { BaseSchema } from "yup";
 
-import type { FormController, JQueryApi, RuleDefinition } from "./_common";
-import { jQueryElem, uid, equalDataTypes, SVELTE_FORM_STORE } from "./_common";
+import type { FormController, JQueryApi, RuleDefinition } from "./common";
+import { jQueryElem, uid, equalDataTypes, SVELTE_FORM_STORE } from "./common";
 import type { ValidationPrompt, ValidationText } from "./rule-book";
 
 export interface FormValidationSettings {

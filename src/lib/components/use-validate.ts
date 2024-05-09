@@ -11,8 +11,8 @@ import type {
     JQueryApi,
     RuleDefinition,
     SemanticCommand,
-} from "../data/_common";
-import { jQueryElem, uid, SVELTE_DATA_STORE, SVELTE_FORM_STORE } from "../data/_common";
+} from "../data/common";
+import { jQueryElem, uid, SVELTE_DATA_STORE, SVELTE_FORM_STORE } from "../data/common";
 
 /** Iterate through ancestors till `form` if found. */
 function getParentForm(elem: JQueryApi): JQueryApi {

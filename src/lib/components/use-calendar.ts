@@ -8,8 +8,8 @@ import type {
     DataController,
     DataTypes,
     Formatter,
-} from "../data/_common";
-import { jQueryElem, equalDataTypes, uid, SVELTE_DATA_STORE } from "../data/_common";
+} from "../data/common";
+import { jQueryElem, equalDataTypes, uid, SVELTE_DATA_STORE } from "../data/common";
 import { fmt } from "../data/format";
 
 export interface CalendarTranslation {

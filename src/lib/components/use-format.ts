@@ -2,8 +2,8 @@
 
 import { get, writable } from "svelte/store";
 
-import type { ActionReturnType, DataController, DataTypes, Formatter } from "../data/_common";
-import { equalDataTypes, SVELTE_DATA_STORE, uid, jQueryElem } from "../data/_common";
+import type { ActionReturnType, DataController, DataTypes, Formatter } from "../data/common";
+import { equalDataTypes, SVELTE_DATA_STORE, uid, jQueryElem } from "../data/common";
 
 /*
  .8888b                                         dP

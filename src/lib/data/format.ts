@@ -1,7 +1,10 @@
-// format.ts
+/**
+ * 'fmt' and 'parse' utility object, input formatter classes.
+ * @module data/format
+ */
 
-import type { DataTypes, Formatter } from "./_common";
-// import { jQueryElem } from "./_common";
+import type { DataTypes, Formatter } from "./common";
+// import { jQueryElem } from "./common";
 
 export interface FormatSettings {
     decimal: string;

@@ -1,7 +1,7 @@
 // proc-toast.ts
 
-import type { JQueryApi } from "../data/_common";
-import { jQueryElem } from "../data/_common";
+import type { JQueryApi } from "../data/common";
+import { jQueryElem } from "../data/common";
 
 /*
    dP                                dP

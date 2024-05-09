@@ -1,7 +1,7 @@
 // rule-book.ts
-// Form validation rules and types.
 
 /**
+ * Form validation rules and types.
  * @module data/rule-book
  */
 

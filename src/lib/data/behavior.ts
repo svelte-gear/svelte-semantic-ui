@@ -1,9 +1,14 @@
-// _behavior.ts
+/**
+ * Todo - usage example.
+ * Experimental, maybe it's not required.
+ * @module data/behavior
+ * @experimental
+ */
 
 /* eslint-disable @typescript-eslint/lines-between-class-members */
 
-import type { JQueryApi, RuleDefinition, SemanticCommand } from "./_common";
-import { jQueryElem } from "./_common";
+import type { JQueryApi, RuleDefinition, SemanticCommand } from "./common";
+import { jQueryElem } from "./common";
 
 /** Possible behaviour extensions for Semntic UI components. */
 export interface SemanticBehavior {

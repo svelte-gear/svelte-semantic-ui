@@ -1,8 +1,6 @@
-// _common.ts
-
 /***
- * @module common
  * Common types, jQuery API, Form and Data controllers, utility functions.
+ * @module data/common
  */
 
 export const SVELTE_DATA_STORE = "svelte_data_store";

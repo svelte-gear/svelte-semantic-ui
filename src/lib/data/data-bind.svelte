@@ -54,11 +54,16 @@ Example:
                                dP
 -->
 <script lang="ts">
+/**
+The line below is required for typedoc.sh to work
+@module data/Svelte::Data
+*/
+
 import type { Unsubscriber } from "svelte/store";
 import { onMount, afterUpdate, onDestroy } from "svelte";
 
-import type { DataController, DataTypes, Formatter, JQueryApi, RuleDefinition } from "./_common";
-import { equalDataTypes, jQueryElem, jQueryElemById, SVELTE_DATA_STORE } from "./_common";
+import type { DataController, DataTypes, Formatter, JQueryApi, RuleDefinition } from "./common";
+import { equalDataTypes, jQueryElem, jQueryElemById, SVELTE_DATA_STORE } from "./common";
 import { fmt } from "./format";
 import { format as formatAction } from "../components/use-format";
 import { validate as validateAction } from "../components/use-validate";
