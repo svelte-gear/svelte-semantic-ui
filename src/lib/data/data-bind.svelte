@@ -68,22 +68,32 @@ import { fmt } from "./format";
 import { format as formatAction } from "../components/use-format";
 import { validate as validateAction } from "../components/use-validate";
 
-/** Two-way binding for controlling and reading the Dropdown selection. */
-export let selected: string | string[] | undefined = undefined; // dropdown
+/** Two-way binding for controlling and reading the Dropdown selection
+    - see {@link components/use-dropdown} */
+export let selected: string | string[] | undefined = undefined;
 
-/** Two-way binding for controlling and reading the Modal state. */
-export let active: boolean | undefined = undefined; // modal
+/** Two-way binding for controlling and reading the Modal state
+    - see {@link components/use-modal} */
+export let active: boolean | undefined = undefined;
 
-/** Two-way binding for controlling and reading the Calendar date, time, or datetime. */
-export let date: Date | undefined = undefined; // calendar
+/** Two-way binding for controlling and reading the Calendar date, time, or datetime
+    - see {@link components/use-calendar} */
+export let date: Date | undefined = undefined;
 
-/** Two-way binding for controlling and reading the Slider value. */
-export let position: number | undefined = undefined; // slider
+/** Two-way binding for controlling and reading the Slider value
+    - see {@link components/use-slider} */
+export let position: number | undefined = undefined;
 
-/** Two-way binding for controlling and reading raw input value. */
-export let value: DataTypes | undefined = undefined; // slider
+/** Two-way binding for controlling and reading raw input value.
 
-/** Optional value validator. Uses Semantic UI validator syntax. */
+    May be used together with {@link components/use-format}. */
+export let value: DataTypes | undefined = undefined;
+
+/** Optional value validator. Uses Semantic UI validator syntax.
+
+    The same as {@link components/use-validate}.
+
+    Ususally takes the value generated with {@link data/rule-book.rule}. */
 export let validate: RuleDefinition | undefined = undefined;
 
 /** Id of the input element, takes precendence over tag position */
