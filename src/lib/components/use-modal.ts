@@ -100,7 +100,7 @@ export function modal(node: Element, settings?: ModalSettings): ActionReturnType
 
     type OnChangeFn = () => void;
 
-    function onModalShow() {
+    function onModalShow(): void {
         if (modalDefaults.onShow) {
             (modalDefaults.onShow as OnChangeFn)();
         }
@@ -110,7 +110,7 @@ export function modal(node: Element, settings?: ModalSettings): ActionReturnType
         holder.onChange(true);
     }
 
-    function onModalHidden() {
+    function onModalHidden(): void {
         if (modalDefaults.onHidden) {
             (modalDefaults.onHidden as OnChangeFn)();
         }

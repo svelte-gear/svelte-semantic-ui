@@ -65,6 +65,7 @@ export const formValidationDefaults: FormValidationSettings = {
  * For Calendar, use id of the innermost input.
 */
 export function formValidation(node: Element, settings?: FormValidationSettings): void {
+    // TODO: return : ActionReturnType, destroy form controller of exit ?
     type FormApi = {
         form(settings?: FormValidationSettings): void;
         form(command: string, arg1?: unknown, arg2?: unknown): unknown;

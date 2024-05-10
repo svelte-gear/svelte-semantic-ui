@@ -132,7 +132,7 @@ export function dropdown(node: Element, settings?: DropdownSettings): ActionRetu
 
     type OnChangeFn = (newValue: string | string[], text: string, choice: string) => void;
 
-    function onDropdownChange(newValue: string | string[], text: string, choice: string) {
+    function onDropdownChange(newValue: string | string[], text: string, choice: string): void {
         if (dropdownDefaults.onChange) {
             (dropdownDefaults.onChange as OnChangeFn)(newValue, text, choice);
         }
@@ -164,7 +164,7 @@ export function dropdown(node: Element, settings?: DropdownSettings): ActionRetu
     elem.data(SVELTE_DATA_STORE, holder);
 
     // show dropdown on label click, if for="_"
-    function handleClick() {
+    function handleClick(): void {
         elem.dropdown("show");
     }
     const field = elem.parent().filter(".field");

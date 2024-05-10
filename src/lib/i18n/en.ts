@@ -4,7 +4,7 @@
  */
 
 import { formValidationDefaults } from "../data/use-form-validation";
-import { calendarDefaults } from "../components/use-calendar";
+import { dateFormatDefaults } from "../data/format";
 
 /*
                    dP oo       dP            dP
@@ -69,7 +69,7 @@ formValidationDefaults.text = Object.assign({}, formValidationDefaults.text, {
 // CAL.SHORT.1 = "Jan"
 // CAL.TODAY = "Today"
 
-calendarDefaults.text = Object.assign({}, calendarDefaults.text, {
+dateFormatDefaults.text = Object.assign({}, dateFormatDefaults.text, {
     days: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
     months: [
         "January",

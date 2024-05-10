@@ -31,8 +31,7 @@ export { default as Data } from "./data/data-bind.svelte";
 export { default as FormValidator } from "./data/form-validator-bind.svelte";
 
 export { fmt, parse } from "./data/format";
-export { NumberFormatter, MoneyFormatter, CaseFormatter, ListFormatter } from "./data/format";
-export { DateFormatter } from "./components/use-calendar";
+export { NumberFmt, MoneyFmt, TextFmt, ListFmt, DateFmt } from "./data/input-formatter";
 
 /** Valudation rule builder */
 export { rule } from "./data/rule-book";

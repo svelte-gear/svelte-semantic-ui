@@ -44,5 +44,7 @@ module.exports = {
         "@typescript-eslint/ban-ts-comment": "off", // it is there on purpose
         "@typescript-eslint/no-inferrable-types": "off", // extra check is good
         "@typescript-eslint/restrict-template-expressions": "off", // complains about string[]
+
+        "@typescript-eslint/explicit-function-return-type": ["warn", { allowExpressions: true }],
     },
 };

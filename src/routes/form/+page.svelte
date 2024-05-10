@@ -13,8 +13,8 @@ import {
     formValidation,
     Data,
     FormValidator,
-    MoneyFormatter,
-    DateFormatter,
+    MoneyFmt,
+    DateFmt,
     format,
     rule,
     fmt,
@@ -32,7 +32,7 @@ let dat: Date | undefined;
 let tim: Date | undefined;
 let rating: number;
 
-function init() {
+function init(): void {
     rank = "5";
     teams = ["1", "2", "3"];
     country = "ar";
@@ -45,7 +45,7 @@ function init() {
 }
 init();
 
-function reset() {
+function reset(): void {
     init();
     toast({
         class: "success",
@@ -78,7 +78,7 @@ $: {
 $: console.log(`nums [${teams.toString()}]`);
 
 let active = false;
-function toggleActive() {
+function toggleActive(): void {
     active = !active;
 }
 let valid = false;
@@ -356,7 +356,7 @@ Formatter replaces you input with correct string or empties it.
                     name="calendar-date"
                     placeholder="date"
                     id="z1"
-                    use:format={new DateFormatter()}
+                    use:format={new DateFmt()}
                 />
                 <Data bind:value={dat} validate={[rule.empty()]} />
             </div>
@@ -370,7 +370,7 @@ Formatter replaces you input with correct string or empties it.
                     name="first-name"
                     placeholder="money"
                     id="fn2"
-                    use:format={new MoneyFormatter()}
+                    use:format={new MoneyFmt()}
                 />
                 <Data bind:value={income} validate={[rule.empty()]} />
             </div>

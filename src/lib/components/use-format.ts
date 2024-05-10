@@ -75,7 +75,7 @@ export function format(node: Element, fmt: Formatter): ActionReturnType {
     };
 
     // onChange event handler
-    function formatElement() {
+    function formatElement(): void {
         const val = elem.val();
         ctrl.onChange(val);
     }

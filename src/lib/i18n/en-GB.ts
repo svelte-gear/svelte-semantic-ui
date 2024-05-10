@@ -1,34 +1,32 @@
 /**
  * Translations and formats for British English.
+ *
+ * Number: `£1,000.00`
+ *
+ * Date: `31-Jan-2024 14:50`
  * @module i18n/en-GB
  */
 
-import { calendarDefaults } from "../components/use-calendar";
-import { formatDefaults, fmt, pad } from "../data/format";
+import { numberFormatDefaults, dateFormatDefaults, fmt, pad } from "../data/format";
 
 import "./en";
 
-type CalendarSetting = {
-    text: {
-        monthsShort: string[];
-    };
-};
 function gbDate(d: Date | undefined): string {
     if (!d || !d.getDate) {
         return "";
     }
     const day = pad(d.getDate(), 2);
-    const month = (calendarDefaults as CalendarSetting).text.monthsShort[d.getMonth()];
+    const month = dateFormatDefaults.text!.monthsShort[d.getMonth()];
     const year = d.getFullYear();
     return `${day}-${month}-${year}`;
 }
 
-calendarDefaults.ampm = false;
-calendarDefaults.firstDayOfWeek = 1;
-calendarDefaults.monthFirst = false;
-calendarDefaults.formatter = { date: gbDate, time: fmt.isoTime };
+numberFormatDefaults.decimal = ".";
+numberFormatDefaults.thousandSeparator = ",";
+numberFormatDefaults.moneyPrefix = "£";
+numberFormatDefaults.moneySuffix = "";
 
-formatDefaults.decimal = ".";
-formatDefaults.thousandSeparator = ",";
-formatDefaults.moneyPrefix = "£";
-formatDefaults.moneySuffix = "";
+dateFormatDefaults.ampm = false;
+dateFormatDefaults.firstDayOfWeek = 1;
+dateFormatDefaults.monthFirst = false;
+dateFormatDefaults.formatter = { date: gbDate, time: fmt.isoTime };

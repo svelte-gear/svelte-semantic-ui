@@ -1,55 +1,36 @@
 /**
  * Svelte action to initialize fomantic calendar component.
+ *
+ * - https://fomantic-ui.com/modules/calendar.html
+ *
  * @module components/use-calendar
  */
 
 import { get, writable } from "svelte/store";
 
-import type {
-    ActionReturnType,
-    JQueryApi,
-    DataController,
-    DataTypes,
-    Formatter,
-} from "../data/common";
+import type { ActionReturnType, JQueryApi, DataController } from "../data/common";
 import { jQueryElem, equalDataTypes, uid, SVELTE_DATA_STORE } from "../data/common";
-import { fmt } from "../data/format";
+import type { DateFormatSettings } from "../data/format";
+import { dateFormatDefaults, fmt } from "../data/format";
 
-export interface CalendarTranslation {
-    days: string[];
-    months: string[];
-    monthsShort: string[];
-    today: string;
-    now: string;
-    am: string;
-    pm: string;
-}
-
-export type DateFormatFunction = (val: Date | undefined) => string;
+export type CalendarType = "datetime" | "date" | "time";
 export type OnCalendarChangeFn = (newValue: Date) => void;
 export type OnCalendarHiddenFn = () => void;
 
-export interface CalendarSettings {
-    type?: string;
+/** Calendar component parameters.
+    @extends DateFormatSettings */
+export interface CalendarSettings extends DateFormatSettings {
+    type?: CalendarType;
     touchReadonly?: boolean;
-    ampm?: boolean;
-    firstDayOfWeek?: number;
-    monthFirst?: boolean;
-
     maxDate?: Date;
     startMode?: string;
-
-    formatter?: {
-        date?: DateFormatFunction;
-        time?: DateFormatFunction;
-    };
-    text?: CalendarTranslation;
     onChange?: OnCalendarChangeFn;
     onHidden?: OnCalendarHiddenFn;
     // [key: string]: unknown;
 }
 // TODO: fix all settings
 
+/** Calendar default settings. May be overriden by settings parameter in use:calendar() */
 export const calendarDefaults: CalendarSettings = {
     type: "date",
     touchReadonly: false,
@@ -145,7 +126,7 @@ export function calendar(node: Element, settings?: CalendarSettings): ActionRetu
 
     */
 
-    function onCalendarChange(newValue: Date) {
+    function onCalendarChange(newValue: Date): void {
         if (calendarDefaults.onChange) {
             calendarDefaults.onChange(newValue);
         }
@@ -155,7 +136,7 @@ export function calendar(node: Element, settings?: CalendarSettings): ActionRetu
         ctrl.onChange(newValue);
     }
 
-    function onCalendarHidden() {
+    function onCalendarHidden(): void {
         if (calendarDefaults.onHidden) {
             calendarDefaults.onHidden();
         }
@@ -180,6 +161,7 @@ export function calendar(node: Element, settings?: CalendarSettings): ActionRetu
 
     // Initialize Semantic component
     elem.calendar({
+        ...dateFormatDefaults,
         ...calendarDefaults,
         ...settings,
         onChange: onCalendarChange,
@@ -191,7 +173,7 @@ export function calendar(node: Element, settings?: CalendarSettings): ActionRetu
     elem.data(SVELTE_DATA_STORE, ctrl);
 
     // show calendar on label click, if for="_"
-    function handleClick() {
+    function handleClick(): void {
         elem.calendar("focus");
     }
     const field = elem.parent().filter(".field");
@@ -199,7 +181,7 @@ export function calendar(node: Element, settings?: CalendarSettings): ActionRetu
     if (labelFor === "_") {
         field.on("click", "label", handleClick);
         return {
-            destroy() {
+            destroy(): void {
                 field.off("click", "label", handleClick);
             },
         };
@@ -214,73 +196,4 @@ export function calendar(node: Element, settings?: CalendarSettings): ActionRetu
     //         }
     //     },
     // };
-}
-
-/*
- .8888b                                         dP
- 88   "                                         88
- 88aaa  .d8888b. 88d888b. 88d8b.d8b. .d8888b. d8888P
- 88     88'  `88 88'  `88 88'`88'`88 88'  `88   88
- 88     88.  .88 88       88  88  88 88.  .88   88
- dP     `88888P' dP       dP  dP  dP `88888P8   dP
-
-*/
-
-// TODO: move to use-format.ts - try calendar, try date formatter, default to ISO date
-
-export function parseDate(val: string): Date | undefined {
-    if (!val) {
-        return undefined;
-    }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
-    const jQuery = (window as any).jQuery;
-    if (!jQuery) {
-        throw new Error("jQuery in not initialized");
-    }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const dateParser = jQuery.fn.calendar.settings.parser.date as (
-        val: string,
-        opt: object
-    ) => Date;
-    if (!dateParser) {
-        throw new Error("Semantic UI calendar in not initialized");
-    }
-    return dateParser(val, { type: "date" });
-}
-
-export function formatDate(val: DataTypes): string {
-    if (val === undefined) {
-        return "";
-    }
-    if (!(val instanceof Date)) {
-        throw new Error("numberFormatter expects Date as data type, got " + typeof val);
-    }
-    if (calendarDefaults.formatter?.date) {
-        return calendarDefaults.formatter?.date(val);
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
-    const jQuery = (window as any).jQuery;
-    if (!jQuery) {
-        throw new Error("jQuery in not initialized");
-    }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const dateFormatter = jQuery.fn.calendar.settings.formatter.date as (
-        val: Date | undefined,
-        opt: object
-    ) => string;
-    if (!dateFormatter) {
-        throw new Error("Semantic UI calendar in not initialized");
-    }
-    return dateFormatter(val, { type: "date" });
-}
-
-export class DateFormatter implements Formatter {
-    parse(val: string): Date | undefined {
-        return parseDate(val);
-    }
-
-    format(val: DataTypes): string {
-        return formatDate(val);
-    }
 }

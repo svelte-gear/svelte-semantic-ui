@@ -1,14 +1,17 @@
 /**
  * Translations and formats for American English.
+ *
+ * Number: `$1,000.00`
+ *
+ * Date: `01/31/2024 2:50 PM`
  * @module i18n/en-US
  */
 
-import { calendarDefaults } from "../components/use-calendar";
-import { formatDefaults, pad } from "../data/format";
+import { numberFormatDefaults, dateFormatDefaults, pad } from "../data/format";
 
 import "./en";
 
-function usDate(d: Date | undefined) {
+function usDate(d: Date | undefined): string {
     if (!d || !d.getDate) {
         return "";
     }
@@ -18,12 +21,12 @@ function usDate(d: Date | undefined) {
     return `${month}/${day}/${year}`;
 }
 
-calendarDefaults.ampm = true;
-calendarDefaults.firstDayOfWeek = 0;
-calendarDefaults.monthFirst = true;
-calendarDefaults.formatter = { date: usDate };
+numberFormatDefaults.decimal = ".";
+numberFormatDefaults.thousandSeparator = ",";
+numberFormatDefaults.moneyPrefix = "$";
+numberFormatDefaults.moneySuffix = "";
 
-formatDefaults.decimal = ".";
-formatDefaults.thousandSeparator = ",";
-formatDefaults.moneyPrefix = "$";
-formatDefaults.moneySuffix = "";
+dateFormatDefaults.ampm = true;
+dateFormatDefaults.firstDayOfWeek = 0;
+dateFormatDefaults.monthFirst = true;
+dateFormatDefaults.formatter = { date: usDate };

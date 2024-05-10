@@ -233,7 +233,7 @@ onMount(() => {
     */
 
 /** When store value changes, modify the corresponding prop.*/
-function onSubscriptionChange(storeValue: DataTypes) {
+function onSubscriptionChange(storeValue: DataTypes): void {
     console.debug(`data : ${watcher.mode} <- store(${watcher.uid}) = ${toStr(storeValue)}`);
 
     // store in appropriate prop, if the value is different

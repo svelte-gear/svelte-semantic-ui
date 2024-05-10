@@ -1,19 +1,22 @@
 /**
  * Translations and formats for Canadian French.
- * @module i18n/en-FR
+ *
+ * Number: `1 000,00 $ CA`
+ *
+ * Date: `2024-01-31 14:50`
+ * @module i18n/fr-CA
  */
 
-import { calendarDefaults } from "../components/use-calendar";
-import { formatDefaults, fmt } from "../data/format";
+import { numberFormatDefaults, dateFormatDefaults, fmt } from "../data/format";
 
 import "./fr";
 
-calendarDefaults.ampm = false;
-calendarDefaults.firstDayOfWeek = 1;
-calendarDefaults.monthFirst = false;
-calendarDefaults.formatter = { date: fmt.isoDate, time: fmt.isoTime };
+numberFormatDefaults.decimal = ",";
+numberFormatDefaults.thousandSeparator = " ";
+numberFormatDefaults.moneyPrefix = "";
+numberFormatDefaults.moneySuffix = " $ CA";
 
-formatDefaults.decimal = ",";
-formatDefaults.thousandSeparator = " ";
-formatDefaults.moneyPrefix = "";
-formatDefaults.moneySuffix = " $ CAD";
+dateFormatDefaults.ampm = false;
+dateFormatDefaults.firstDayOfWeek = 1;
+dateFormatDefaults.monthFirst = false;
+dateFormatDefaults.formatter = { date: fmt.isoDate, time: fmt.isoTime };

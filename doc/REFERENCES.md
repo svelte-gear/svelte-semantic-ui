@@ -38,4 +38,4 @@ https://github.com/sveltejs/svelte-eslint-parser
 
 ## Back
 
--   [Readme](../README)
+-   [Readme](../README) - [Readme](../index.html)

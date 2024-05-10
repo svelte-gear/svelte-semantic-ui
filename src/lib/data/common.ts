@@ -24,12 +24,10 @@ export interface Formatter {
     parse?: (val: string) => DataTypes | undefined; // FIXME: use null instead?
 }
 
-/** Validation rule object */
-export type RuleObj = {
-    type: string;
-    prompt?: string;
-};
+/** Validation rule object: rule string and custom error prompt */
+export type RuleObj = { type: string; prompt?: string };
 
+/** Rule definition takes array or single instance of string or RuleObj */
 export type RuleDefinition = string | string[] | RuleObj | RuleObj[]; // | BaseSchema;
 
 /*
@@ -160,7 +158,7 @@ export type SemanticCommand = (
 let unum = 100;
 
 /** Generate an unique number */
-export function uid() {
+export function uid(): string {
     // const num = new Date().getTime();
     // const num = Math.round(window.performance.now());
     unum = unum + 1;

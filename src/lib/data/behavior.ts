@@ -124,17 +124,17 @@ export class CheckboxBehavior {
         throw new Error("Initialize CheckboxBehavior with use:behavior");
     };
 
-    toggle()  { this.checkbox("toggle"); }
-    check()   { this.checkbox("check"); }
-    uncheck() { this.checkbox("uncheck"); }
-    enable()  { this.checkbox("enable"); }
-    disable() { this.checkbox("disable"); }
+    toggle(): void  { this.checkbox("toggle"); }
+    check(): void   { this.checkbox("check"); }
+    uncheck(): void { this.checkbox("uncheck"); }
+    enable(): void  { this.checkbox("enable"); }
+    disable(): void { this.checkbox("disable"); }
 
-    isRadio()     { return this.checkbox("is radio") as boolean; }
-    isChecked()   { return this.checkbox("is checked") as boolean; }
-    isUnchecked() { return this.checkbox("is unchecked") as boolean; }
-    isEnabled()   { return this.checkbox("is enabled") as boolean; }
-    isDisabled()  { return this.checkbox("is disabled") as boolean; }
+    isRadio(): boolean     { return this.checkbox("is radio") as boolean; }
+    isChecked(): boolean   { return this.checkbox("is checked") as boolean; }
+    isUnchecked(): boolean { return this.checkbox("is unchecked") as boolean; }
+    isEnabled(): boolean   { return this.checkbox("is enabled") as boolean; }
+    isDisabled(): boolean  { return this.checkbox("is disabled") as boolean; }
 }
 
 export class DropdownBehavior {
@@ -154,10 +154,10 @@ export class ModalBehavior {
         throw new Error("Initialize ModalBehavior with use:behavior");
     };
 
-    show()     { this.modal("show"); }
-    hide()     { this.modal("hide"); }
-    toggle()   { this.modal("toggle"); }
-    isActive() { return this.modal("is active"); }
+    show(): void        { this.modal("show"); }
+    hide(): void        { this.modal("hide"); }
+    toggle(): void      { this.modal("toggle"); }
+    isActive(): boolean { return this.modal("is active") as boolean; }
 }
 
 export class PopupBehavior {

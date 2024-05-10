@@ -91,7 +91,7 @@ export function slider(node: Element, settings?: SliderSettings): ActionReturnTy
 
     type OnChangeFn = (newValue: number) => void;
 
-    function onSliderChange(newValue: number) {
+    function onSliderChange(newValue: number): void {
         if (sliderDefaults.onChange) {
             (sliderDefaults.onChange as OnChangeFn)(newValue);
         }

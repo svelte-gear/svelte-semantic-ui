@@ -1,14 +1,17 @@
 /**
  * Translations and formats for Metropolitan French.
+ *
+ * Number: `1 000,00 €`
+ *
+ * Date: `31.01.2024 14:50`
  * @module i18n/fr-FR
  */
 
-import { calendarDefaults } from "../components/use-calendar";
-import { formatDefaults, fmt, pad } from "../data/format";
+import { numberFormatDefaults, dateFormatDefaults, fmt, pad } from "../data/format";
 
 import "./fr";
 
-function frDate(d: Date | undefined) {
+function frDate(d: Date | undefined): string {
     if (!d || !d.getDate) {
         return "";
     }
@@ -18,12 +21,12 @@ function frDate(d: Date | undefined) {
     return `${day}.${month}.${year}`;
 }
 
-calendarDefaults.ampm = false;
-calendarDefaults.firstDayOfWeek = 1;
-calendarDefaults.monthFirst = false;
-calendarDefaults.formatter = { date: frDate, time: fmt.isoTime };
+numberFormatDefaults.decimal = ",";
+numberFormatDefaults.thousandSeparator = " ";
+numberFormatDefaults.moneyPrefix = "";
+numberFormatDefaults.moneySuffix = " €";
 
-formatDefaults.decimal = ",";
-formatDefaults.thousandSeparator = " ";
-formatDefaults.moneyPrefix = "";
-formatDefaults.moneySuffix = " €";
+dateFormatDefaults.ampm = false;
+dateFormatDefaults.firstDayOfWeek = 1;
+dateFormatDefaults.monthFirst = false;
+dateFormatDefaults.formatter = { date: frDate, time: fmt.isoTime };

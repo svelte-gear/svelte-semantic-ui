@@ -67,5 +67,5 @@ Svelte actions and data bindings for Semantic UI components
 
 ## Read more
 
--   [Running the app](doc/RUNNING)
--   [Refernces](doc/REFERENCES)
+-   [Running the app](doc/RUNNING) - see {@link man/RUNNING}
+-   [Refernces](doc/REFERENCES) - see {@link man/REFERENCES}

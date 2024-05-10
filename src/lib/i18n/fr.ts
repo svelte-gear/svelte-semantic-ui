@@ -1,10 +1,10 @@
 /**
  * French translations.
- * @module i18n/fr-FR
+ * @module i18n/fr
  */
 
 import { formValidationDefaults } from "../data/use-form-validation";
-import { calendarDefaults } from "../components/use-calendar";
+import { dateFormatDefaults } from "../data/format";
 
 /*
                    dP oo       dP            dP
@@ -64,11 +64,7 @@ formValidationDefaults.text = Object.assign({}, formValidationDefaults.text, {
 
 */
 
-calendarDefaults.ampm = false;
-calendarDefaults.firstDayOfWeek = 1;
-calendarDefaults.monthFirst = false;
-
-calendarDefaults.text = Object.assign({}, calendarDefaults.text, {
+dateFormatDefaults.text = Object.assign({}, dateFormatDefaults.text, {
     days: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
     months: [
         "janvier",

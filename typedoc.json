@@ -1,5 +1,4 @@
 {
-    // Comments are supported, like tsconfig.json
     "entryPoints": ["src/lib/**/*.ts"],
     // "excludePrivate": true,
     // "excludeProtected": true,

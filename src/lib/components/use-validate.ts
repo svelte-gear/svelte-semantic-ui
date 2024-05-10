@@ -8,6 +8,7 @@ import type { Unsubscriber } from "svelte/store";
 // import type { BaseSchema } from "yup";
 
 import type {
+    ActionReturnType,
     DataController,
     DataTypes,
     FormController,
@@ -62,7 +63,7 @@ function getFieldKey(elem: JQueryApi): string {
  * For Dropdown, use id of the select or the inner input.
  * For Calendar, use id of the innermost input.
  */
-export function validate(node: Element, rules: RuleDefinition) {
+export function validate(node: Element, rules: RuleDefinition): ActionReturnType {
     const elem = jQueryElem(node);
     const form = getParentForm(elem) as JQueryApi & { form: SemanticCommand };
 
@@ -71,7 +72,7 @@ export function validate(node: Element, rules: RuleDefinition) {
     let subscribed: Unsubscriber | null;
 
     // onChange event handler
-    function revalidate() {
+    function revalidate(): void {
         // wait for data change to propagate
         setTimeout(() => {
             // console.log("REVALIDATE ->");

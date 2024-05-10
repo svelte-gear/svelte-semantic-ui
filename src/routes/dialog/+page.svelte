@@ -2,17 +2,17 @@
 // routes/dialog/+page.svelte
 
 import { modal, Data } from "$lib";
-import { behavior, ModalBehavior } from "../../lib/data/_behavior";
+import { behavior, ModalBehavior } from "../../lib/data/behavior";
 
 let show: boolean = true;
 
 // const ctrl = {} as { modal: SemanticCommand };
 const ctrl = new ModalBehavior();
 
-function okFn() {
+function okFn(): void {
     console.log("ok");
 }
-function noFn() {
+function noFn(): void {
     console.log("no");
 }
 

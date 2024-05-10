@@ -1,24 +1,25 @@
 /**
  * Translations and formats for Canadian English.
+ *
+ * Number: `$1 000.00 CAD`
+ *
+ * Date: `2024-01-31 14:50`
  * @module i18n/en-CA
  */
 
-import { calendarDefaults } from "../components/use-calendar";
-import { formatDefaults, fmt } from "../data/format";
+import { numberFormatDefaults, dateFormatDefaults, fmt } from "../data/format";
 
 import "./en";
 
-calendarDefaults.ampm = false;
-calendarDefaults.firstDayOfWeek = 1;
-calendarDefaults.monthFirst = false;
-calendarDefaults.formatter = { date: fmt.isoDate, time: fmt.isoTime };
+numberFormatDefaults.decimal = ".";
+numberFormatDefaults.thousandSeparator = " ";
+numberFormatDefaults.moneyPrefix = "$";
+numberFormatDefaults.moneySuffix = " CAD";
 
-formatDefaults.decimal = ".";
-formatDefaults.thousandSeparator = " ";
-formatDefaults.moneySuffix = " CAD";
-formatDefaults.moneySuffix = "";
-
-// TODO: consider isf calemdar may be optional
+dateFormatDefaults.ampm = false;
+dateFormatDefaults.firstDayOfWeek = 1;
+dateFormatDefaults.monthFirst = false;
+dateFormatDefaults.formatter = { date: fmt.isoDate, time: fmt.isoTime };
 
 // formatDefaults.simpleDateFormat_monthFirst = false;
 // formatDefaults.simpleDateFormat_locale = "en-CA";
