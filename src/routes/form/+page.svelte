@@ -385,12 +385,13 @@ Formatter replaces you input with correct string or empties it.
                     type="text"
                     name="last-name"
                     placeholder="Last Name"
-                    bind:value={rank}
                     use:popup={{
                         content: "this input is bound to 'Rank'",
                         position: "bottom right",
                     }}
                 />
+                <Data bind:value={rank} validate="start[A]" />
+                <!-- bind:value={rank} -->
             </div>
             <!--
           dP                         dP       dP

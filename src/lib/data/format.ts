@@ -109,4 +109,42 @@ export const fmt: {
  dP
 */
 
-export const parse: { [key: string]: (s: string) => DataTypes } = {};
+export const parse: {
+    [key: string]: (s: string) => DataTypes;
+} = {
+    isoDate: (value: string): Date | undefined => {
+        const d: Date = new Date(value);
+        return d;
+    },
+};
+
+/*
+          dP                                             dP
+          88                                             88
+ .d8888b. 88d888b. .d8888b. 88d888b. .d8888b. .d8888b. d8888P
+ 88'  `"" 88'  `88 88'  `88 88'  `88 Y8ooooo. 88ooood8   88
+ 88.  ... 88    88 88.  .88 88             88 88.  ...   88
+ `88888P' dP    dP `88888P8 dP       `88888P' `88888P'   dP
+
+*/
+
+type Range = [number, number];
+type Charset = Array<Range>;
+
+function ch(s: string): number {
+    return s.codePointAt(0) ?? 0;
+}
+function chRng(s: string): Range {
+    return [ch(s), ch(s)];
+}
+
+export const NUMER: Charset = [[ch("0"), ch("9")]];
+export const ALPHA: Charset = [
+    [ch("A"), ch("Z")],
+    [ch("a"), ch("z")],
+];
+export const ALPNU: Charset = [...NUMER, ...ALPHA];
+export const IDENT: Charset = [...ALPNU, chRng("_")];
+export const ASCII: Charset = [[ch(" "), ch("~")]];
+
+// void new CharsetList({ base: IDENTIFIER, inclide: "-.", exclude: "_" });

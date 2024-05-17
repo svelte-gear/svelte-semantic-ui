@@ -3,6 +3,20 @@
  * @module data/rule-book
  */
 
+import type { JQueryApi } from "./common";
+import { fmt, parse } from "./format";
+
+/*
+ dP                dP
+ 88                88
+ 88d888b. .d8888b. 88 88d888b. .d8888b. 88d888b.
+ 88'  `88 88ooood8 88 88'  `88 88ooood8 88'  `88
+ 88    88 88.  ... 88 88.  .88 88.  ... 88
+ dP    dP `88888P' dP 88Y888P' `88888P' dP
+                      88
+                      dP
+*/
+
 /* prettier-ignore */
 // eslint-disable-next-line @typescript-eslint/typedef
 export const rule = {
@@ -40,29 +54,16 @@ export const rule = {
     maxCount:    (n: number): string => `maxCount[${n}]`,
 };
 
-// date: () => "date",
-// greaterThan   (type: "N"|"D"|"S", val: number|Date|string)
-// greaterOrEqual(type: "N"|"D"|"S", val: number|Date|string)
-// lessThan      (type: "N"|"D"|"S", val: number|Date|string)
-// lessOrEqual   (type: "N"|"D"|"S", val: number|Date|string)
-
-export type RuleFunc = (val: string, par: string) => boolean;
-type WithValidationPrompt = {
-    validationPrompts?: Map<string, string>;
-};
-// type WithFunction = {
-//     validationPrompts?: Map<string, RuleFunc>;
-// };
-export function registerRule(name: string, fn: RuleFunc, prompt: string): void {
-    // $.fn.form.settings.rules[name] = fn;
-    void fn;
-
-    const win: WithValidationPrompt = window as unknown as WithValidationPrompt;
-    if (!win.validationPrompts) {
-        win.validationPrompts = new Map();
-    }
-    win.validationPrompts.set(name, prompt);
-}
+/*
+                     dP     dP   oo
+                     88     88
+ .d8888b. .d8888b. d8888P d8888P dP 88d888b. .d8888b. .d8888b.
+ Y8ooooo. 88ooood8   88     88   88 88'  `88 88'  `88 Y8ooooo.
+       88 88.  ...   88     88   88 88    88 88.  .88       88
+ `88888P' `88888P'   dP     dP   dP dP    dP `8888P88 `88888P'
+                                                  .88
+                                              d8888P
+*/
 
 /* prettier-ignore */
 type RulePromptTranslation = {
@@ -103,6 +104,13 @@ type RulePromptTranslation = {
     // fomantic-ui 2.9
     size:        string;
     addErrors:   string;
+
+    // // svelte-semantic-ui
+    // date:           string;
+    // greaterThen:    string;
+    // greaterOrEqual: string;
+    // lessThen:       string;
+    // lessOrEqual:    string;
 };
 
 type FormPromptTranslation = {
@@ -114,17 +122,70 @@ type FormPromptTranslation = {
 };
 
 export type PromptSettings = {
-    prompt?: RulePromptTranslation;
+    prompt?: RulePromptTranslation & { [key: string]: string };
     text?: FormPromptTranslation;
 };
 
 export const promptDefaults: PromptSettings = {};
 
-// type RuleHelper =
-//     | ((s: string) => RuleName)
-//     | ((n: number) => RuleName)
-//     | ((n1: number, n2: number) => RuleName);
-// type RuleDict = {
-//     [key: string]: RuleHelper;
-// };
-// type Ustring = Uncapitalize<string>;
+/*
+                              dP
+                              88
+ .d8888b. dP    dP .d8888b. d8888P .d8888b. 88d8b.d8b.
+ 88'  `"" 88    88 Y8ooooo.   88   88'  `88 88'`88'`88
+ 88.  ... 88.  .88       88   88   88.  .88 88  88  88
+ `88888P' `88888P' `88888P'   dP   `88888P' dP  dP  dP
+
+*/
+
+// date: () => "date",
+// greaterThan   (type: "N"|"D"|"S", val: number|Date|string) -> greaterThan[D|2012-01-01]
+// greaterOrEqual(type: "N"|"D"|"S", val: number|Date|string) -> gretaerOrEqual[N|0]
+// lessThan      (type: "N"|"D"|"S", val: number|Date|string) -> lessThan[S|Abc]
+// lessOrEqual   (type: "N"|"D"|"S", val: number|Date|string) -> lessOrEqueal[Abc]
+
+export type RuleFunc = (value: string, ruleValue: string, form: JQueryApi) => boolean;
+
+export function registerRule(name: string, fn: RuleFunc, defaultPrompt: string): void {
+    // eslint-disable-next-line @typescript-eslint/typedef, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+    const jQuery = (window as any).jQuery;
+    if (!jQuery) {
+        throw new Error("jQuery in not initialized");
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/typedef
+    const rules = jQuery.fn.form.settings.rules as { [key: string]: RuleFunc };
+    if (!rules) {
+        throw new Error("Semantic UI form in not initialized");
+    }
+    rules[name] = fn;
+
+    if (!promptDefaults.prompt) {
+        promptDefaults.prompt = {} as RulePromptTranslation;
+    }
+    promptDefaults.prompt[name] = defaultPrompt;
+}
+
+// Add custom rule
+function isoDateFn(value: string): boolean {
+    let d: Date | undefined = undefined;
+    try {
+        d = parse.isoDate(value + " 13:00") as Date;
+    } catch (ex) {
+        d = undefined;
+    }
+    return value === fmt.isoDate(d);
+}
+registerRule("isoDate", isoDateFn, "{name} must follow the 'YYYY-MM-DD' format");
+
+// Add custom rule
+function startFn(value: string, ruleValue: string): boolean {
+    return value.startsWith(ruleValue);
+}
+registerRule("start", startFn, "{name} must start with '{ruleValue}'");
+
+// Add custom rule
+function startEndFn(value: string, ruleValue: string): boolean {
+    console.info("startEnd : " + value + " - " + ruleValue);
+    return value.startsWith(ruleValue);
+}
+registerRule("startEnd", startEndFn, "{name} must start and end with '{ruleValue}'");
