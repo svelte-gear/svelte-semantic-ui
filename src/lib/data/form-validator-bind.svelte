@@ -39,7 +39,7 @@ The line below is required for typedoc.sh to work
 import type { Unsubscriber } from "svelte/store";
 import { onMount, afterUpdate, onDestroy } from "svelte";
 
-import type { FormController } from "./common";
+import type { FormController, JQueryApi } from "./common";
 import { equalDataTypes, jQueryElem, SVELTE_FORM_STORE } from "./common";
 
 /** Determines if any field change will cause form re-validation. */
@@ -74,7 +74,7 @@ let subscribed: Unsubscriber[] = [];
  * extract ```elem``` and ```holder```. */
 onMount(() => {
     // extract the value watcher (store and controller) from the parent's jQuery data
-    const elem = jQueryElem(span).parent();
+    const elem: JQueryApi = jQueryElem(span).parent();
     watcher = elem.data(SVELTE_FORM_STORE) as FormController;
     if (!watcher) {
         throw new Error(
@@ -158,7 +158,7 @@ onDestroy(() => {
     if (subscribed.length > 0) {
         // unsubscribe
         console.debug(`data : ${watcher.mode} - unsubscribe(${watcher.uid})`);
-        subscribed.forEach((unsubscribe) => {
+        subscribed.forEach((unsubscribe: Unsubscriber) => {
             unsubscribe();
         });
     }

@@ -19,7 +19,7 @@ export type OnCalendarHiddenFn = () => void;
 
 /** Calendar component parameters.
     @extends DateFormatSettings */
-export interface CalendarSettings extends DateFormatSettings {
+export interface CalendarSettings {
     type?: CalendarType;
     touchReadonly?: boolean;
     maxDate?: Date;
@@ -35,6 +35,7 @@ export const calendarDefaults: CalendarSettings = {
     type: "date",
     touchReadonly: false,
 };
+console.info("///use-calendar.calendarDefaults");
 
 type CalendarApi = {
     calendar(settings: CalendarSettings): void;
@@ -59,15 +60,18 @@ type CalendarApi = {
     </div>
 ```
 */
-export function calendar(node: Element, settings?: CalendarSettings): ActionReturnType {
-    const elem = jQueryElem(node) as JQueryApi & CalendarApi;
+export function calendar(
+    node: Element,
+    settings?: CalendarSettings & DateFormatSettings
+): ActionReturnType {
+    const elem: JQueryApi & CalendarApi = jQueryElem(node) as JQueryApi & CalendarApi;
     if (!elem.calendar) {
         throw new Error("Semantic UI is not initialized");
     }
 
     /** Format as date, time, or datetime depending on type */
     function format(d: Date | undefined): string {
-        const cType = settings && settings.type ? settings.type : "date";
+        const cType: CalendarType = settings && settings.type ? settings.type : "date";
         switch (cType) {
             case "date":
                 return fmt.isoDate(d);
@@ -98,7 +102,7 @@ export function calendar(node: Element, settings?: CalendarSettings): ActionRetu
 
         /** Push value into the calendar */
         doUpdate(value: Date) {
-            const curValue = elem.calendar("get date") as Date;
+            const curValue: Date = elem.calendar("get date") as Date;
             if (!equalDataTypes(curValue, value)) {
                 console.debug(`  update(${this.uid}) -> calendar = ${format(value)}`);
                 elem.calendar("set date", value);
@@ -108,7 +112,7 @@ export function calendar(node: Element, settings?: CalendarSettings): ActionRetu
         /** Return updated value from the calendar */
         onChange(newValue: Date) {
             console.debug(`  onChange(${this.uid}) = ${format(newValue)}`);
-            const value = get(this.store);
+            const value: Date = get(this.store);
             if (!equalDataTypes(value, newValue)) {
                 console.debug(`  store(${this.uid}) <- calendar = ${format(newValue)}`);
                 this.store.set(newValue);
@@ -143,7 +147,7 @@ export function calendar(node: Element, settings?: CalendarSettings): ActionRetu
         if (settings && settings.onHidden) {
             settings.onHidden();
         }
-        const value = elem.calendar("get date") as Date;
+        const value: Date = elem.calendar("get date") as Date;
         ctrl.onChange(value);
     }
 
@@ -176,8 +180,8 @@ export function calendar(node: Element, settings?: CalendarSettings): ActionRetu
     function handleClick(): void {
         elem.calendar("focus");
     }
-    const field = elem.parent().filter(".field");
-    const labelFor = field.find("label").prop("for");
+    const field: JQueryApi = elem.parent().filter(".field");
+    const labelFor: string = field.find("label").prop("for");
     if (labelFor === "_") {
         field.on("click", "label", handleClick);
         return {

@@ -6,7 +6,13 @@
 
 import { get, writable } from "svelte/store";
 
-import type { ActionReturnType, DataController, DataTypes, Formatter } from "../data/common";
+import type {
+    ActionReturnType,
+    DataController,
+    DataTypes,
+    Formatter,
+    JQueryApi,
+} from "../data/common";
 import { equalDataTypes, SVELTE_DATA_STORE, uid, jQueryElem } from "../data/common";
 
 /*
@@ -34,8 +40,8 @@ import { equalDataTypes, SVELTE_DATA_STORE, uid, jQueryElem } from "../data/comm
 ```
  */
 export function format(node: Element, fmt: Formatter): ActionReturnType {
-    const elem = jQueryElem(node);
-    const tagName = elem.prop("tagName");
+    const elem: JQueryApi = jQueryElem(node);
+    const tagName: string = elem.prop("tagName");
     if (!["INPUT", "TEXTAREA"].includes(tagName)) {
         throw new Error(
             `use:format may only be used on <input> or <textarea> element, but found on ${tagName}`
@@ -53,8 +59,8 @@ export function format(node: Element, fmt: Formatter): ActionReturnType {
             if (value !== get(this.store)) {
                 this.store.set(value);
             }
-            const curValue = elem.val();
-            const newValue = fmt.format(value);
+            const curValue: string = elem.val();
+            const newValue: string = fmt.format(value);
             if (/*newValue &&*/ newValue !== curValue) {
                 console.debug(`  update(${this.uid}) -> input = ${newValue}`);
                 elem.val(newValue ?? "");
@@ -64,8 +70,8 @@ export function format(node: Element, fmt: Formatter): ActionReturnType {
         /** Return updated value from the input */
         onChange(text: DataTypes) {
             console.debug(`  onChange(${this.uid}) = ${text}`);
-            const newValue = fmt.parse ? fmt.parse(text as string) : text;
-            const value = get(this.store);
+            const newValue: DataTypes = fmt.parse ? fmt.parse(text as string) : text;
+            const value: DataTypes = get(this.store);
             if (!equalDataTypes(newValue, value)) {
                 console.debug(`  store(${this.uid}) <- input = ${newValue}`);
                 this.store.set(newValue);
@@ -76,7 +82,7 @@ export function format(node: Element, fmt: Formatter): ActionReturnType {
 
     // onChange event handler
     function formatElement(): void {
-        const val = elem.val();
+        const val: string = elem.val();
         ctrl.onChange(val);
     }
 

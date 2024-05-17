@@ -14,11 +14,6 @@ export interface ModalSettings {
 
 export const modalDefaults: ModalSettings = {};
 
-type ModalApi = {
-    modal(settings?: ModalSettings): void;
-    modal(command: string): unknown;
-};
-
 /**
  * Initializes Semantic UI Modal componenet. Takes settings object as argument.
  *
@@ -45,7 +40,11 @@ or
 ```
 */
 export function modal(node: Element, settings?: ModalSettings): ActionReturnType {
-    const elem = jQueryElem(node) as JQueryApi & ModalApi;
+    type ModalApi = JQueryApi & {
+        modal(settings?: ModalSettings): void;
+        modal(command: string): unknown;
+    };
+    const elem: ModalApi = jQueryElem(node) as ModalApi;
     if (!elem.modal) {
         throw new Error("Semantic UI is not initialized");
     }

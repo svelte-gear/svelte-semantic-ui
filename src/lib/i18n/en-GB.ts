@@ -1,9 +1,9 @@
 /**
  * Translations and formats for British English.
- *
- * Number: `£1,000.00`
- *
- * Date: `31-Jan-2024 14:50`
+```text
+ Number: £1,000.00
+ Date:   01-Mar-2024 14:50
+```
  * @module i18n/en-GB
  */
 
@@ -15,9 +15,9 @@ function gbDate(d: Date | undefined): string {
     if (!d || !d.getDate) {
         return "";
     }
-    const day = pad(d.getDate(), 2);
-    const month = dateFormatDefaults.text!.monthsShort[d.getMonth()];
-    const year = d.getFullYear();
+    const day: string = pad(d.getDate(), 1);
+    const month: string = dateFormatDefaults.text!.monthsShort[d.getMonth()];
+    const year: number = d.getFullYear();
     return `${day}-${month}-${year}`;
 }
 

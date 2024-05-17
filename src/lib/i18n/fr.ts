@@ -3,7 +3,7 @@
  * @module i18n/fr
  */
 
-import { formValidationDefaults } from "../data/use-form-validation";
+import { promptDefaults } from "../data/rule-book";
 import { dateFormatDefaults } from "../data/format";
 
 /*
@@ -16,7 +16,7 @@ import { dateFormatDefaults } from "../data/format";
 
 */
 
-formValidationDefaults.prompt = Object.assign({}, formValidationDefaults.prompt, {
+promptDefaults.prompt = Object.assign({}, promptDefaults.prompt, {
     empty: "{name} doit avoir une valeur.",
     checked: "{name} doit être coché.",
     email: "{name} doit être une adresse e-mail valide.",
@@ -47,7 +47,7 @@ formValidationDefaults.prompt = Object.assign({}, formValidationDefaults.prompt,
     addErrors: "{name}: {error}",
 });
 
-formValidationDefaults.text = Object.assign({}, formValidationDefaults.text, {
+promptDefaults.text = Object.assign({}, promptDefaults.text, {
     unspecifiedRule: "Veuillez entrer une valeur valide",
     unspecifiedField: "Ce champ",
     leavingMessage:
@@ -65,7 +65,7 @@ formValidationDefaults.text = Object.assign({}, formValidationDefaults.text, {
 */
 
 dateFormatDefaults.text = Object.assign({}, dateFormatDefaults.text, {
-    days: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
+    days: ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"],
     months: [
         "janvier",
         "février",
@@ -96,6 +96,6 @@ dateFormatDefaults.text = Object.assign({}, dateFormatDefaults.text, {
     ],
     today: "aujourd'hui",
     now: "maintenant",
-    am: "du matin",
-    pm: "de soirée",
+    am: "AM",
+    pm: "PM",
 });

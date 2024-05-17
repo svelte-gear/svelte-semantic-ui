@@ -1,15 +1,20 @@
 /**
- * Translations and formats for American English.
+ * Translations and formats for American Spanish.
 ```text
- Number: $1,000.00
- Date:   1/3/2024 2:50 PM
+ Number: $1.000,00
+ Date:   3/1/2024 2:50 PM
 ```
- * @module i18n/en-US
+ * @module i18n/es-MX
  */
 
 import { numberFormatDefaults, dateFormatDefaults, pad } from "../data/format";
 
-import "./en";
+import "./es";
+
+numberFormatDefaults.decimal = ",";
+numberFormatDefaults.thousandSeparator = ".";
+numberFormatDefaults.moneyPrefix = "$";
+numberFormatDefaults.moneySuffix = "";
 
 function usDate(d: Date | undefined): string {
     if (!d || !d.getDate) {
@@ -21,12 +26,7 @@ function usDate(d: Date | undefined): string {
     return `${month}/${day}/${year}`;
 }
 
-numberFormatDefaults.decimal = ".";
-numberFormatDefaults.thousandSeparator = ",";
-numberFormatDefaults.moneyPrefix = "$";
-numberFormatDefaults.moneySuffix = "";
-
-dateFormatDefaults.ampm = true;
+dateFormatDefaults.ampm = false;
 dateFormatDefaults.firstDayOfWeek = 0;
-dateFormatDefaults.monthFirst = true;
+dateFormatDefaults.monthFirst = false;
 dateFormatDefaults.formatter = { date: usDate };

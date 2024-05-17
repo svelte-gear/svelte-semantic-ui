@@ -14,11 +14,6 @@ export interface SliderSettings {
 
 export const sliderDefaults: SliderSettings = {};
 
-type SliderApi = {
-    slider(settings: SliderSettings): void;
-    slider(command: string, arg1?: unknown, arg2?: unknown, arg3?: unknown): unknown;
-};
-
 /**
  * Initializes Fomantic UI Slider componenet. Takes settings object as argument.
  *
@@ -34,12 +29,16 @@ type SliderApi = {
 ```
 */
 export function slider(node: Element, settings?: SliderSettings): ActionReturnType {
-    const elem = jQueryElem(node) as JQueryApi & SliderApi;
+    type SliderApi = JQueryApi & {
+        slider(settings: SliderSettings): void;
+        slider(command: string, arg1?: unknown, arg2?: unknown, arg3?: unknown): unknown;
+    };
+    const elem: SliderApi = jQueryElem(node) as SliderApi;
     if (!elem.slider) {
         throw new Error("Semantic UI is not initialized");
     }
     elem.append('<input type="hidden" />');
-    const input = elem.find("input");
+    const input: JQueryApi = elem.find("input");
 
     /*
             dP
@@ -59,7 +58,7 @@ export function slider(node: Element, settings?: SliderSettings): ActionReturnTy
 
         /** Push value into the slider */
         doUpdate(value: number) {
-            const curValue = elem.slider("get value") as number;
+            const curValue: number = elem.slider("get value") as number;
             if (curValue !== value) {
                 console.debug(`  update(${this.uid}) -> slider = ${value}`);
                 elem.slider("set value", value);
@@ -70,7 +69,7 @@ export function slider(node: Element, settings?: SliderSettings): ActionReturnTy
         /** Return updated value from the slider */
         onChange(newValue: number) {
             console.debug(`  onChange(${this.uid}) = ${newValue} ${typeof newValue}`);
-            const value = get(this.store);
+            const value: number = get(this.store);
             if (value !== newValue) {
                 console.debug(`  store(${this.uid}) <- slider = ${newValue}`);
                 this.store.set(newValue);

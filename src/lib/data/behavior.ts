@@ -58,8 +58,8 @@ export interface SemanticBehavior {
 ```
  */
 export function behavior(node: Element, bhv: SemanticBehavior): void {
-    const elem = jQueryElem(node) as SemanticBehavior & JQueryApi;
-    let bound = false;
+    const elem: SemanticBehavior & JQueryApi = jQueryElem(node) as SemanticBehavior & JQueryApi;
+    let bound: boolean = false;
 
     if (elem.checkbox && elem.hasClass("checkbox")) {
         bhv.checkbox = elem.checkbox.bind(elem);

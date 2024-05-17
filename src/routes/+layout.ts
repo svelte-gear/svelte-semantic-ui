@@ -1,9 +1,12 @@
+/* eslint-disable import/extensions */
 // routes/+layout.ts
 
 import type { LoadEvent } from "@sveltejs/kit";
+import { applyLocale } from "./locales";
+import { readLocaleCookie, saveLocaleCookie } from "./locale-cookie";
 
-export const ssr = false;
-export const prerender = true;
+export const ssr: boolean = false;
+export const prerender: boolean = true;
 
 // import "../import-fomantic"; // C: full fomantic-ui library
 // import "../import-semantic"; // D: full semantic-ui + some fomantic components
@@ -11,27 +14,30 @@ export const prerender = true;
 
 export async function load({ params }: LoadEvent): Promise<{ locale: string }> {
     void params;
-    const locale: string = "en-GB";
+    let res: string | null = null;
 
-    let i18n: Promise<unknown> | undefined = undefined;
-    if (locale === "fr") {
-        i18n = import("../lib/i18n/fr");
-    } else if (locale === "fr-CA") {
-        i18n = import("../lib/i18n/fr-CA");
-    } else if (locale === "fr-FR") {
-        i18n = import("../lib/i18n/fr-FR");
-    } else if (locale === "en") {
-        i18n = import("../lib/i18n/en");
-    } else if (locale === "en-CA") {
-        i18n = import("../lib/i18n/en-CA");
-    } else if (locale === "en-GB") {
-        i18n = import("../lib/i18n/en-GB");
-    } else if (locale === "en-US") {
-        i18n = import("../lib/i18n/en-US");
+    const cookieLocale: string | null = readLocaleCookie();
+    if (cookieLocale) {
+        res = await applyLocale(cookieLocale);
+        if (res !== null) {
+            return { locale: res };
+        }
     }
 
-    if (i18n !== undefined) {
-        await i18n;
+    for (const browserLocale of navigator.languages) {
+        res = await applyLocale(browserLocale);
+        if (res !== null) {
+            saveLocaleCookie(res);
+            return { locale: res };
+        }
     }
-    return { locale: locale };
+
+    const usLocale: string = "en-US";
+    res = await applyLocale(usLocale);
+    if (res !== null) {
+        saveLocaleCookie(res);
+        return { locale: res };
+    }
+
+    throw new Error("Ensupported locale");
 }

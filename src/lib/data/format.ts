@@ -3,6 +3,8 @@
  * @module data/format
  */
 
+import type { DataTypes } from "./common";
+
 export interface NumberFormatSettings {
     decimal: string;
     thousandSeparator: string;
@@ -21,7 +23,7 @@ export const numberFormatDefaults: NumberFormatSettings = {
     moneyPrecision: 2,
 };
 
-export interface CalendarTranslation {
+interface CalendarTranslation {
     days: string[];
     months: string[];
     monthsShort: string[];
@@ -45,9 +47,10 @@ export interface DateFormatSettings {
 }
 
 export const dateFormatDefaults: DateFormatSettings = {};
+console.info("///format.dateFormatDefaults");
 
 export function pad(n: number, size: number): string {
-    let str = n.toString();
+    let str: string = n.toString();
     while (str.length < size) {
         str = "0" + str;
     }
@@ -66,14 +69,23 @@ export function pad(n: number, size: number): string {
  dP     dP  dP  dP   dP
 
 */
-export const fmt = {
+export const fmt: {
+    /* eslint-disable @typescript-eslint/indent */
+    [key: string]:
+        | ((d: Date | undefined) => string)
+        | ((n: number | undefined) => string)
+        | ((s: string | undefined) => string);
+    isoDate: DateFormatFunction;
+    isoTime: DateFormatFunction;
+    /* eslint-enable @typescript-eslint/indent */
+} = {
     isoDate: (d: Date | undefined): string => {
         if (!d || !d.getDate) {
             return "";
         }
-        const day = pad(d.getDate(), 2);
-        const month = pad(d.getMonth() + 1, 2);
-        const year = pad(d.getFullYear(), 4);
+        const day: string = pad(d.getDate(), 2);
+        const month: string = pad(d.getMonth() + 1, 2);
+        const year: string = pad(d.getFullYear(), 4);
         return `${year}-${month}-${day}`;
     },
 
@@ -81,8 +93,8 @@ export const fmt = {
         if (!d || !d.getDate) {
             return "";
         }
-        const hour = pad(d.getHours(), 2);
-        const minute = pad(d.getMinutes(), 2);
+        const hour: string = pad(d.getHours(), 2);
+        const minute: string = pad(d.getMinutes(), 2);
         return `${hour}:${minute}`;
     },
 };
@@ -97,4 +109,4 @@ export const fmt = {
  dP
 */
 
-export const parse = {};
+export const parse: { [key: string]: (s: string) => DataTypes } = {};

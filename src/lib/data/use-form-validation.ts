@@ -8,7 +8,8 @@ import { get, writable } from "svelte/store";
 
 import type { FormController, JQueryApi, RuleDefinition } from "./common";
 import { jQueryElem, uid, equalDataTypes, SVELTE_FORM_STORE } from "./common";
-import type { ValidationPrompt, ValidationText } from "./rule-book";
+import type { PromptSettings } from "./rule-book";
+import { promptDefaults } from "./rule-book";
 
 export interface FormValidationSettings {
     fields?: {
@@ -20,9 +21,7 @@ export interface FormValidationSettings {
     delay?: boolean;
     inline?: boolean;
     transition?: "scale" | "fade" | "slide down";
-    duration?: number;
-    prompt?: ValidationPrompt;
-    text?: ValidationText;
+    /** delay after on:chabge        */ duration?: number;
     onValid?(): void;
     onInvalid?(): void;
     onSuccess?(event: unknown, fields: unknown): void;
@@ -64,21 +63,24 @@ export const formValidationDefaults: FormValidationSettings = {
  * For Dropdown, use id of the select or inner input.
  * For Calendar, use id of the innermost input.
 */
-export function formValidation(node: Element, settings?: FormValidationSettings): void {
+export function formValidation(
+    node: Element,
+    settings?: FormValidationSettings & PromptSettings
+): void {
     // TODO: return : ActionReturnType, destroy form controller of exit ?
-    type FormApi = {
+    type FormApi = JQueryApi & {
         form(settings?: FormValidationSettings): void;
         form(command: string, arg1?: unknown, arg2?: unknown): unknown;
     };
-    const elem = jQueryElem(node) as JQueryApi & FormApi;
+    const elem: FormApi = jQueryElem(node) as FormApi;
     if (!elem.form) {
         throw new Error("Semantic form is not initialized");
     }
-    const msg = elem.find(".ui.message.error");
+    const msg: JQueryApi = elem.find(".ui.message.error");
 
     function getFormErrors(): string[] {
         const errors: string[] = [];
-        msg.find("ul li").each((_idx, item) => {
+        msg.find("ul li").each((_idx: number, item: Element) => {
             errors.push(jQueryElem(item).text());
         });
         return errors;
@@ -154,8 +156,8 @@ export function formValidation(node: Element, settings?: FormValidationSettings)
             // if (rules instanceof BaseSchema) {
             //     throw new Error(`Got yup rule in SUI validator ${key}`);
             // }
-            const isObject = Array.isArray(rules) || typeof rules === "object";
-            const ruleStr = isObject ? JSON.stringify(rules) : String(rules);
+            const isObject: boolean = Array.isArray(rules) || typeof rules === "object";
+            const ruleStr: string = isObject ? JSON.stringify(rules) : String(rules);
             console.log(`ADD_RULE ${key} : ${ruleStr}`);
             elem.form("add rule", key, rules);
         },
@@ -166,15 +168,15 @@ export function formValidation(node: Element, settings?: FormValidationSettings)
 
         doValidateForm(): void {
             elem.form("validate form");
-            const res = elem.form("is valid") as boolean;
+            const res: boolean = elem.form("is valid") as boolean;
             // update 'valid' binding
             if (get(this.valid) !== res) {
                 this.valid.set(res);
             }
             // get errors from message and update 'errors' binding
             if (msg.length) {
-                const curr = get(this.errors);
-                const errors = getFormErrors();
+                const curr: string[] = get(this.errors);
+                const errors: string[] = getFormErrors();
                 if (!equalDataTypes(curr, errors)) {
                     this.errors.set(errors);
                 }
@@ -194,6 +196,7 @@ export function formValidation(node: Element, settings?: FormValidationSettings)
 
     // Initialize Semantic compponent
     elem.form({
+        ...promptDefaults,
         ...formValidationDefaults,
         ...settings,
     });

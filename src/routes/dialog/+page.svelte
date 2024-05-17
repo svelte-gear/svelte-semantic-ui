@@ -7,7 +7,7 @@ import { behavior, ModalBehavior } from "../../lib/data/behavior";
 let show: boolean = true;
 
 // const ctrl = {} as { modal: SemanticCommand };
-const ctrl = new ModalBehavior();
+const ctrl: ModalBehavior = new ModalBehavior();
 
 function okFn(): void {
     console.log("ok");

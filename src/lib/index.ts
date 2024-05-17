@@ -3,16 +3,7 @@
  * @module index
  */
 
-/*
-                                                dP
-                                                88
- .d8888b. dP.  .dP 88d888b. .d8888b. 88d888b. d8888P
- 88ooood8  `8bd8'  88'  `88 88'  `88 88'  `88   88
- 88.  ...  .d88b.  88.  .88 88.  .88 88         88
- `88888P' dP'  `dP 88Y888P' `88888P' dP         dP
-                   88
-                   dP
-*/
+// COMPONENTS
 
 export { calendar } from "./components/use-calendar";
 export { checkbox } from "./components/use-checkbox";
@@ -23,18 +14,22 @@ export { slider } from "./components/use-slider";
 export { sticky } from "./components/use-sticky";
 export { toast } from "./components/proc-toast";
 
+// DATA
+
 export { format } from "./components/use-format";
+export { NumberFmt, MoneyFmt, TextFmt, ListFmt, DateFmt } from "./data/input-formatter";
 export { validate } from "./components/use-validate";
 export { formValidation } from "./data/use-form-validation";
 
 export { default as Data } from "./data/data-bind.svelte";
 export { default as FormValidator } from "./data/form-validator-bind.svelte";
 
-export { fmt, parse } from "./data/format";
-export { NumberFmt, MoneyFmt, TextFmt, ListFmt, DateFmt } from "./data/input-formatter";
+// HELPERS
 
-/** Valudation rule builder */
+export { fmt, parse } from "./data/format";
 export { rule } from "./data/rule-book";
+
+// // SETTINGS
 
 // export { calendarDefaults } from "./components/use-calendar";
 // export { checkboxDefaults } from "./components/use-checkbox";
@@ -44,10 +39,14 @@ export { rule } from "./data/rule-book";
 // export { sliderDefaults } from "./components/use-slider";
 // export { stickyDefaults } from "./components/use-sticky";
 // export { toastDefaults } from "./components/proc-toast";
-// export { formatDefaults } from "./data/format";
+
+// export { numberFormatDefaults, dateFormatDefaults } from "./data/format";
+// export { promptDefaults } from "./data/rule-book";
 // export { formValidationDefaults } from "./data/use-form-validation";
 
-// export type { CalendarTranslation, CalendarSettings } from "./components/use-calendar";
+// // TYPES
+
+// export type { CalendarSettings } from "./components/use-calendar";
 // export type { CheckboxSettings } from "./components/use-checkbox";
 // export type { DropdownSettings } from "./components/use-dropdown";
 // export type { ModalSettings } from "./components/use-modal";
@@ -56,5 +55,6 @@ export { rule } from "./data/rule-book";
 // export type { StickySettings } from "./components/use-sticky";
 // export type { ToastSettings } from "./components/proc-toast";
 
-// export type { FormatSettings } from "./data/format";
-// export type { SuiValidationSettings } from "./data/sui-form-validation";
+// export type { NumberFormatSettings } from "./data/format";
+// export type { PromptSettings } from "./data/rule-book";
+// export type { FormValidationSettings } from "./data/use-form-validation";

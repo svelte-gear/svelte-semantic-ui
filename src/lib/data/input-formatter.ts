@@ -4,8 +4,7 @@
  */
 
 import type { DataTypes, Formatter } from "./common";
-import { calendarDefaults } from "../components/use-calendar";
-import { numberFormatDefaults } from "./format";
+import { dateFormatDefaults, numberFormatDefaults } from "./format";
 
 /*
                               dP
@@ -37,11 +36,11 @@ export class NumberFmt implements Formatter {
     parse(val: string): number | undefined {
         val = val.replace(/\s/g, ""); // remove whitespace
         val = val.split(this.separator).join(""); // replace all
-        const num = parseFloat(val);
+        const num: number = parseFloat(val);
         if (Number.isNaN(num)) {
             return undefined;
         }
-        const pwr = 10.0 ** -this.precision;
+        const pwr: number = 10.0 ** -this.precision;
         console.log("PWR", pwr, val, num, Math.round(num / pwr) * pwr);
         return Math.round(num / pwr) * pwr;
     }
@@ -53,10 +52,10 @@ export class NumberFmt implements Formatter {
         if (typeof val !== "number") {
             throw new Error("numberFormatter expects number as data type, got " + typeof val);
         }
-        let str = val.toFixed(Math.max(this.precision, 0)); // `${val}`;
-        const len = str.length;
-        const firstPos = this.precision > 0 ? this.precision + 1 : 0;
-        for (let n = 3 + firstPos; n < len; n += 3) {
+        let str: string = val.toFixed(Math.max(this.precision, 0)); // `${val}`;
+        const len: number = str.length;
+        const firstPos: number = this.precision > 0 ? this.precision + 1 : 0;
+        for (let n: number = 3 + firstPos; n < len; n += 3) {
             str = str.substring(0, len - n) + this.separator + str.substring(len - n);
         }
         return str;
@@ -92,7 +91,7 @@ export class MoneyFmt implements Formatter {
     suffixRegex: RegExp;
 
     constructor(prec?: number, pref?: string, suff?: string) {
-        const moneyPrec = prec !== undefined ? prec : numberFormatDefaults.moneyPrecision;
+        const moneyPrec: number = prec !== undefined ? prec : numberFormatDefaults.moneyPrecision;
         this.numFormatter = new NumberFmt(moneyPrec);
         this.prefix = pref !== undefined ? pref : numberFormatDefaults.moneyPrefix;
         this.suffix = suff !== undefined ? suff : numberFormatDefaults.moneySuffix;
@@ -102,12 +101,12 @@ export class MoneyFmt implements Formatter {
 
     // TODO: add precision
     parse(val: string): number | undefined {
-        const numStr = val.replace(this.prefixRegex, "").replace(this.suffixRegex, "");
+        const numStr: string = val.replace(this.prefixRegex, "").replace(this.suffixRegex, "");
         return this.numFormatter.parse(numStr);
     }
 
     format(val: DataTypes): string {
-        const fmt = this.numFormatter.format(val);
+        const fmt: string = this.numFormatter.format(val);
         console.log("fmt", fmt);
         if (!fmt) {
             return "";
@@ -179,7 +178,7 @@ export class ListFmt implements Formatter {
         if (!val) {
             return [];
         }
-        let sep = this.separator.trim();
+        let sep: string = this.separator.trim();
         if (sep === "") {
             sep = " ";
         }
@@ -190,7 +189,10 @@ export class ListFmt implements Formatter {
         if (!Array.isArray(val)) {
             throw new Error("listFormatter expects string[] as data type, got " + typeof val);
         }
-        const str = val.reduce((res: string, curr: string) => res + this.separator + curr, "");
+        const str: string = val.reduce(
+            (res: string, curr: string) => res + this.separator + curr,
+            ""
+        );
         if (str === "") {
             return "";
         }
@@ -212,12 +214,12 @@ export function parseDate(val: string): Date | undefined {
     if (!val) {
         return undefined;
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any, @typescript-eslint/typedef
     const jQuery = (window as any).jQuery;
     if (!jQuery) {
         throw new Error("jQuery in not initialized");
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/typedef
     const dateParser = jQuery.fn.calendar.settings.parser.date as (
         val: string,
         opt: object
@@ -233,18 +235,18 @@ export function formatDate(val: DataTypes): string {
         return "";
     }
     if (!(val instanceof Date)) {
-        throw new Error("numberFormatter expects Date as data type, got " + typeof val);
+        throw new Error("dateFormatter expects Date as data type, got " + typeof val);
     }
-    if (calendarDefaults.formatter?.date) {
-        return calendarDefaults.formatter?.date(val);
+    if (dateFormatDefaults.formatter?.date) {
+        return dateFormatDefaults.formatter?.date(val);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any, @typescript-eslint/typedef
     const jQuery = (window as any).jQuery;
     if (!jQuery) {
         throw new Error("jQuery in not initialized");
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/typedef
     const dateFormatter = jQuery.fn.calendar.settings.formatter.date as (
         val: Date | undefined,
         opt: object
@@ -265,6 +267,7 @@ export class DateFmt implements Formatter {
     }
 
     format(val: DataTypes): string {
-        return formatDate(val);
+        return dateFormatDefaults.formatter?.date!(val as Date) ?? "";
+        // return formatDate(val);
     }
 }

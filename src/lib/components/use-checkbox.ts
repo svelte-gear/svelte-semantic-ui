@@ -27,10 +27,10 @@ export const checkboxDefaults: CheckboxSettings = {};
 ```
 */
 export function checkbox(node: Element, settings?: CheckboxSettings): void {
-    type CheckboxInitializer = {
+    type CheckboxInitializer = JQueryApi & {
         checkbox(settings?: CheckboxSettings): void;
     };
-    const elem = jQueryElem(node) as JQueryApi & CheckboxInitializer;
+    const elem: CheckboxInitializer = jQueryElem(node) as CheckboxInitializer;
     if (!elem.checkbox) {
         throw new Error("Semantic checkbox is not initialized");
     }

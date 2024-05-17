@@ -20,7 +20,7 @@ import {
     fmt,
 } from "$lib";
 
-const options = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+const options: string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
 let rank: string;
 let teams: string[];
@@ -77,11 +77,11 @@ $: {
 
 $: console.log(`nums [${teams.toString()}]`);
 
-let active = false;
+let active: boolean = false;
 function toggleActive(): void {
     active = !active;
 }
-let valid = false;
+let valid: boolean = false;
 </script>
 
 <main>

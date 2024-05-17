@@ -32,10 +32,10 @@ export const stickyDefaults: StickySettings = {};
 ```
 */
 export function sticky(node: Element, settings?: StickySettings): void {
-    type StickyInitializer = {
+    type StickyInitializer = JQueryApi & {
         sticky(settings?: StickySettings): void;
     };
-    const elem = jQueryElem(node) as JQueryApi & StickyInitializer;
+    const elem: StickyInitializer = jQueryElem(node) as StickyInitializer;
     if (!elem.sticky) {
         throw new Error("Semantic sticky is not initialized");
     }

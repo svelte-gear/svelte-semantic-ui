@@ -8,18 +8,13 @@ import { get, writable } from "svelte/store";
 import type { ActionReturnType, JQueryApi, DataController } from "../data/common";
 import { jQueryElem, equalDataTypes, uid, SVELTE_DATA_STORE } from "../data/common";
 
-const DROPDOWN_PREVENT_CLEARING_BAD_DATA = false;
+const DROPDOWN_PREVENT_CLEARING_BAD_DATA: boolean = false;
 
 export interface DropdownSettings {
     [key: string]: unknown;
 }
 
 export const dropdownDefaults: DropdownSettings = {};
-
-type DropdownApi = {
-    dropdown(options?: DropdownSettings): void;
-    dropdown(command: string, arg1?: unknown): unknown;
-};
 
 /**
  * Initializes Semantic UI Dropdown component. Takes settings object as argument.
@@ -45,7 +40,11 @@ type DropdownApi = {
  * If value is not in the list, it will be removed (not added).
 */
 export function dropdown(node: Element, settings?: DropdownSettings): ActionReturnType {
-    const elem = jQueryElem(node) as JQueryApi & DropdownApi;
+    type DropdownApi = JQueryApi & {
+        dropdown(options?: DropdownSettings): void;
+        dropdown(command: string, arg1?: unknown): unknown;
+    };
+    const elem: DropdownApi = jQueryElem(node) as DropdownApi;
     if (!elem.dropdown) {
         throw new Error("Semantic UI is not initialized");
     }
@@ -68,7 +67,7 @@ export function dropdown(node: Element, settings?: DropdownSettings): ActionRetu
 
         /** Push value into the dropdown. */
         doUpdate(value: string | string[]) {
-            const curValue = elem.dropdown("get value") as string | string[];
+            const curValue: string | string[] = elem.dropdown("get value") as string | string[];
             if (Array.isArray(value)) {
                 // multi-select
                 if (value && !equalDataTypes(value, curValue)) {
@@ -81,7 +80,7 @@ export function dropdown(node: Element, settings?: DropdownSettings): ActionRetu
                 if (curValue !== value) {
                     console.debug(`  update(${this.uid}) -> dropdown = ${value}`);
                     // elem.dropdown("set selected", value);
-                    const exists = elem.dropdown("get item", value);
+                    const exists: unknown = elem.dropdown("get item", value); // FIXME: JQueryApi ?
                     if (exists) {
                         elem.dropdown("set selected", value);
                     } else {
@@ -97,18 +96,18 @@ export function dropdown(node: Element, settings?: DropdownSettings): ActionRetu
             console.debug(`  onChange(${this.uid}) = ${newValue}`);
             if (Array.isArray(newValue)) {
                 // multi-select
-                const value = get(this.store) as string[];
+                const value: string[] = get(this.store) as string[];
                 if (!value || !equalDataTypes(value, newValue)) {
                     console.debug(`  store(${this.uid}) <- dropdown = [${newValue}]`);
                     this.store.set(newValue);
                 }
             } else {
                 // single-select
-                const value = get(this.store) as string;
+                const value: string = get(this.store) as string;
                 if (value !== newValue) {
                     console.debug(`  store(${this.uid}) <- dropdown = ${newValue}`);
                     if (DROPDOWN_PREVENT_CLEARING_BAD_DATA) {
-                        const exists = elem.dropdown("get item", newValue);
+                        const exists: unknown = elem.dropdown("get item", newValue); // FIXME: JQueryApi
                         if (exists) {
                             this.store.set(newValue);
                         }
@@ -167,8 +166,8 @@ export function dropdown(node: Element, settings?: DropdownSettings): ActionRetu
     function handleClick(): void {
         elem.dropdown("show");
     }
-    const field = elem.parent().filter(".field");
-    const labelFor = field.find("label").prop("for");
+    const field: JQueryApi = elem.parent().filter(".field");
+    const labelFor: string = field.find("label").prop("for");
     if (labelFor === "_") {
         field.on("click", "label", handleClick);
         return {

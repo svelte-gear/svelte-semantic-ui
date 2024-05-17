@@ -2,10 +2,20 @@
 // routes/+page.svelte
 
 import { dropdown, Data } from "$lib";
-let s = "2";
+import { applyLocale, supportedLocales } from "./locales";
+import { readLocaleCookie, saveLocaleCookie } from "./locale-cookie";
+
+const currLocale: string = readLocaleCookie() ?? "";
+let locale: string = currLocale;
 
 $: {
-    console.log("s = " + s);
+    void (async () => {
+        if (locale && locale !== currLocale) {
+            await applyLocale(locale);
+            saveLocaleCookie(locale);
+            location.reload();
+        }
+    })();
 }
 </script>
 
@@ -15,10 +25,11 @@ $: {
 
 <form>
     <select class="ui selection dropdown" use:dropdown={{ clearable: true }}>
-        <Data bind:selected={s} />
-        <option value="1">one</option>
-        <option value="2">two</option>
+        <Data bind:selected={locale} />
+        {#each supportedLocales() as locStr}
+            <option value={locStr}>{locStr}</option>
+        {/each}
     </select>
 </form>
 
-<p>value = {s}</p>
+<p>value = {locale}</p>

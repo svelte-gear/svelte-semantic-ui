@@ -46,5 +46,46 @@ module.exports = {
         "@typescript-eslint/restrict-template-expressions": "off", // complains about string[]
 
         "@typescript-eslint/explicit-function-return-type": ["warn", { allowExpressions: true }],
+        "@typescript-eslint/explicit-module-boundary-types": "warn",
+        "@typescript-eslint/typedef": [
+            "warn",
+            {
+                arrayDestructuring: true,
+                arrowParameter: true,
+                memberVariableDeclaration: true,
+                objectDestructuring: true,
+                parameter: true,
+                propertyDeclaration: true,
+                variableDeclaration: true,
+                variableDeclarationIgnoreFunction: false,
+            },
+        ],
+        // indent: [
+        //     "error",
+        //     4,
+        //     {
+        //         SwitchCase: 1,
+        //         VariableDeclarator: 1,
+        //         outerIIFEBody: 1,
+        //         MemberExpression: 1,
+        //         FunctionDeclaration: {
+        //             parameters: 1,
+        //             body: 1,
+        //         },
+        //         FunctionExpression: {
+        //             parameters: 1,
+        //             body: 1,
+        //         },
+        //         CallExpression: {
+        //             arguments: 1,
+        //         },
+        //         ArrayExpression: 1,
+        //         ObjectExpression: 1,
+        //         ImportDeclaration: 1,
+        //         flatTernaryExpressions: false,
+        //         ignoredNodes: ["TemplateLiteral *"],
+        //         offsetTernaryExpressions: true,
+        //     },
+        // ],
     },
 };

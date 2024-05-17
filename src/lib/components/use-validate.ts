@@ -20,7 +20,7 @@ import { jQueryElem, uid, SVELTE_DATA_STORE, SVELTE_FORM_STORE } from "../data/c
 
 /** Iterate through ancestors till `form` if found. */
 function getParentForm(elem: JQueryApi): JQueryApi {
-    let form = elem;
+    let form: JQueryApi = elem;
     do {
         form = form.parent();
     } while (form && !form.hasClass("form"));
@@ -34,7 +34,7 @@ function getParentForm(elem: JQueryApi): JQueryApi {
 /** Get or assign field identifier: id, name, data-validate. */
 function getFieldKey(elem: JQueryApi): string {
     // get or assign field identifier: id, name, data-validate
-    let key = elem.prop("id");
+    let key: string = elem.prop("id");
     if (!key) {
         key = elem.prop("name");
     }
@@ -64,8 +64,11 @@ function getFieldKey(elem: JQueryApi): string {
  * For Calendar, use id of the innermost input.
  */
 export function validate(node: Element, rules: RuleDefinition): ActionReturnType {
-    const elem = jQueryElem(node);
-    const form = getParentForm(elem) as JQueryApi & { form: SemanticCommand };
+    const elem: JQueryApi = jQueryElem(node);
+    type FormApi = JQueryApi & {
+        form: SemanticCommand;
+    };
+    const form: FormApi = getParentForm(elem) as FormApi;
 
     let key: string;
     let formCtrl: FormController;
@@ -82,7 +85,7 @@ export function validate(node: Element, rules: RuleDefinition): ActionReturnType
 
     // wait for form to be created, then add the rule
     setTimeout(() => {
-        const input = ["INPUT", "SELECT", "TEXTAREA"].includes(elem.prop("tagName"))
+        const input: JQueryApi = ["INPUT", "SELECT", "TEXTAREA"].includes(elem.prop("tagName"))
             ? elem
             : elem.find("input, select, textarea");
         if (!input.length) {
@@ -96,7 +99,8 @@ export function validate(node: Element, rules: RuleDefinition): ActionReturnType
         }
         formCtrl.addRule(key, rules);
 
-        const dataCtrl = elem.data(SVELTE_DATA_STORE) as DataController<DataTypes>;
+        type GenericDataCtrl = DataController<DataTypes>;
+        const dataCtrl: GenericDataCtrl = elem.data(SVELTE_DATA_STORE) as GenericDataCtrl;
         // console.log("CTRL", dataCtrl);
         if (dataCtrl) {
             subscribed = dataCtrl.store.subscribe(revalidate);
@@ -111,7 +115,8 @@ export function validate(node: Element, rules: RuleDefinition): ActionReturnType
     return {
         // FIXME: move to field destroy!!!
         destroy() {
-            const dataCtrl = elem.data(SVELTE_DATA_STORE) as DataController<DataTypes>;
+            type GenericDataCtrl = DataController<DataTypes>;
+            const dataCtrl: GenericDataCtrl = elem.data(SVELTE_DATA_STORE) as GenericDataCtrl;
             if (dataCtrl) {
                 if (subscribed) {
                     // unsubscribe

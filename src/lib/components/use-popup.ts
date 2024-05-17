@@ -29,10 +29,10 @@ export const popupDefaults: PopupSettings = {};
 ```
 */
 export function popup(node: Element, settings?: PopupSettings): void {
-    type PopupInitializer = {
+    type PopupInitializer = JQueryApi & {
         popup(settings?: PopupSettings): void;
     };
-    const elem = jQueryElem(node) as JQueryApi & PopupInitializer;
+    const elem: PopupInitializer = jQueryElem(node) as PopupInitializer;
     if (!elem.popup) {
         throw new Error("Semantic popup is not initialized");
     }

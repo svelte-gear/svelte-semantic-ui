@@ -3,7 +3,7 @@
  * @module i18n/en
  */
 
-import { formValidationDefaults } from "../data/use-form-validation";
+import { promptDefaults } from "../data/rule-book";
 import { dateFormatDefaults } from "../data/format";
 
 /*
@@ -16,7 +16,7 @@ import { dateFormatDefaults } from "../data/format";
 
 */
 
-formValidationDefaults.prompt = Object.assign({}, formValidationDefaults.prompt, {
+promptDefaults.prompt = Object.assign({}, promptDefaults.prompt, {
     empty: "{name} must have a value",
     checked: "{name} must be checked",
     email: "{name} must be a valid e-mail",
@@ -47,7 +47,7 @@ formValidationDefaults.prompt = Object.assign({}, formValidationDefaults.prompt,
     addErrors: "{name}: {error}",
 });
 
-formValidationDefaults.text = Object.assign({}, formValidationDefaults.text, {
+promptDefaults.text = Object.assign({}, promptDefaults.text, {
     unspecifiedRule: "Please enter a valid value",
     unspecifiedField: "This field",
     leavingMessage:
@@ -63,12 +63,7 @@ formValidationDefaults.text = Object.assign({}, formValidationDefaults.text, {
  `88888P' `88888P8 dP `88888P' dP    dP `88888P8 `88888P8 dP
 
 */
-
-// CAL.DAY.SU = "Su"
-// CAL.MONTH.1 = "January"
-// CAL.SHORT.1 = "Jan"
-// CAL.TODAY = "Today"
-
+console.info("///en.dateFormatDefaults.text");
 dateFormatDefaults.text = Object.assign({}, dateFormatDefaults.text, {
     days: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
     months: [

@@ -4,39 +4,40 @@
  */
 
 /* prettier-ignore */
+// eslint-disable-next-line @typescript-eslint/typedef
 export const rule = {
-    empty:      () => "empty",
-    checked:    () => "checked",
+    empty:      (): string => "empty",
+    checked:    (): string => "checked",
 
-    email:      () => "email",
-    url:        () => "url",
-    integer:    () => "integer",
-    decimal:    () => "decimal",
-    number:     () => "number",
-    creditCard: () => "creditCard",
-    regex:      (reg: string) => `regExp[//${reg}//]`,
+    email:      (): string => "email",
+    url:        (): string => "url",
+    integer:    (): string => "integer",
+    decimal:    (): string => "decimal",
+    number:     (): string => "number",
+    creditCard: (): string => "creditCard",
+    regex:      (reg: string): string => `regExp[//${reg}//]`,
 
-    // integer:    (min?: number, max?: number) =>
+    // integer:    (min?: number, max?: number): string =>
     //     min == undefined && max == undefined ? "integer" : `integer[${min}..${max}]`,
 
-    is:             (val: string) => `is[${val}]`,
-    isExactly:      (val: string) => `isExactly[${val}]`,
-    not:            (val: string) => `not[${val}]`,
-    notExactly:     (val: string) => `notExactly[${val}]`,
-    contain:        (val: string) => `contain[${val}]`,
-    containExactly: (val: string) => `containExactly[${val}]`,
-    doesntContain:  (val: string) => `doesntContain[${val}]`,
-    doesntContainExactly: (val: string) => `doesntContainExactly[${val}]`,
+    is:             (val: string): string => `is[${val}]`,
+    isExactly:      (val: string): string => `isExactly[${val}]`,
+    not:            (val: string): string => `not[${val}]`,
+    notExactly:     (val: string): string => `notExactly[${val}]`,
+    contain:        (val: string): string => `contain[${val}]`,
+    containExactly: (val: string): string => `containExactly[${val}]`,
+    doesntContain:  (val: string): string => `doesntContain[${val}]`,
+    doesntContainExactly: (val: string): string => `doesntContainExactly[${val}]`,
 
-    match:          (fld: string) => `match[${fld}]`,
-    different:      (fld: string) => `different[${fld}]`,
+    match:          (fld: string): string => `match[${fld}]`,
+    different:      (fld: string): string => `different[${fld}]`,
 
-    minLength:   (n: number) => `minLength[${n}]`,
-    exactLength: (n: number) => `exactLength[${n}]`,
-    maxLength:   (n: number) => `maxLength[${n}]`,
-    minCount:    (n: number) => `minCount[${n}]`,
-    exactCount:  (n: number) => `exactCount[${n}]`,
-    maxCount:    (n: number) => `maxCount[${n}]`,
+    minLength:   (n: number): string => `minLength[${n}]`,
+    exactLength: (n: number): string => `exactLength[${n}]`,
+    maxLength:   (n: number): string => `maxLength[${n}]`,
+    minCount:    (n: number): string => `minCount[${n}]`,
+    exactCount:  (n: number): string => `exactCount[${n}]`,
+    maxCount:    (n: number): string => `maxCount[${n}]`,
 };
 
 // date: () => "date",
@@ -56,7 +57,7 @@ export function registerRule(name: string, fn: RuleFunc, prompt: string): void {
     // $.fn.form.settings.rules[name] = fn;
     void fn;
 
-    const win = window as unknown as WithValidationPrompt;
+    const win: WithValidationPrompt = window as unknown as WithValidationPrompt;
     if (!win.validationPrompts) {
         win.validationPrompts = new Map();
     }
@@ -64,7 +65,7 @@ export function registerRule(name: string, fn: RuleFunc, prompt: string): void {
 }
 
 /* prettier-ignore */
-export type ValidationPrompt = {
+type RulePromptTranslation = {
     // semantic-ui 2.4
     empty:      string;
     checked:    string;
@@ -104,7 +105,7 @@ export type ValidationPrompt = {
     addErrors:   string;
 };
 
-export type ValidationText = {
+type FormPromptTranslation = {
     // semantic-ui 2.4
     unspecifiedRule: string;
     unspecifiedField: string;
@@ -112,42 +113,13 @@ export type ValidationText = {
     leavingMessage?: string;
 };
 
-// /** Shortform validation rule */
-// type RuleName =
-//     // empty
-//     | "empty"
-//     | "checked"
-//     // content type
-//     | "email"
-//     | "url"
-//     | "integer"
-//     | "integer[1..10]"
-//     | "decimal"
-//     | "number"
-//     | "regExp[//^[a-z]{2,3}$//]"
-//     | "creditCard"
-//     // content
-//     | "is[foo]"
-//     | "isExactly[foo]"
-//     | "not[foo]"
-//     | "notExactly[foo]"
-//     | "contain[foo]"
-//     | "containExactly[foo]"
-//     | "doesntContain[foo]"
-//     | "doesntContainExactly[foo]"
-//     | "match[field]"
-//     | "different[field]"
-//     // length
-//     | "minLength[8]"
-//     | "exactLength[16]"
-//     | "maxLength[32]"
-//     | "minCount[3]"
-//     | "exactCount[3]"
-//     | "maxCount[3]"
-//     // allow any string, force the first character to be lowercase
-//     // keeps autocomplete working by preventing flattening RuleType to string
-//     | Uncapitalize<string>;
-//
+export type PromptSettings = {
+    prompt?: RulePromptTranslation;
+    text?: FormPromptTranslation;
+};
+
+export const promptDefaults: PromptSettings = {};
+
 // type RuleHelper =
 //     | ((s: string) => RuleName)
 //     | ((n: number) => RuleName)

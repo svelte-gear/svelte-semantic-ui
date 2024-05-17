@@ -1,9 +1,9 @@
 /**
  * Translations and formats for Canadian French.
- *
- * Number: `1 000,00 $ CA`
- *
- * Date: `2024-01-31 14:50`
+```text
+ Number: 1 000,00 $
+ Date:   2024-03-01 14:50
+```
  * @module i18n/fr-CA
  */
 
@@ -14,7 +14,7 @@ import "./fr";
 numberFormatDefaults.decimal = ",";
 numberFormatDefaults.thousandSeparator = " ";
 numberFormatDefaults.moneyPrefix = "";
-numberFormatDefaults.moneySuffix = " $ CA";
+numberFormatDefaults.moneySuffix = " $";
 
 dateFormatDefaults.ampm = false;
 dateFormatDefaults.firstDayOfWeek = 1;

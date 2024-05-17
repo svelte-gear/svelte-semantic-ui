@@ -42,10 +42,10 @@ export const toastDefaults: ToastSettings = {};
 */
 export function toast(settings?: ToastSettings): void {
     console.debug("toast - created");
-    type ToastInitializer = {
+    type ToastInitializer = JQueryApi & {
         toast(settings?: ToastSettings): void;
     };
-    const body = jQueryElem(document.body) as JQueryApi & ToastInitializer;
+    const body: ToastInitializer = jQueryElem(document.body) as ToastInitializer;
     if (!body.toast) {
         throw new Error("Semantic toast is not initialized");
     }

@@ -3,22 +3,22 @@
  * @module data/common
  */
 
-export const SVELTE_DATA_STORE = "svelte_data_store";
-export const SVELTE_FORM_STORE = "svelte_form_store";
-
 // NOTE: getting jQuery element by dom node has a strange effect inside a Svelte action:
 // it doesn't see existing elements, and changes done to the element are not visible to the app.
 // Getting element by id seems to fix the problem.
-// This maybe because 'modal' component moves the element up in dom...
+// This maybe caused by 'modal' component moving the element up in dom...
+
+export const SVELTE_DATA_STORE: string = "svelte_data_store";
+export const SVELTE_FORM_STORE: string = "svelte_form_store";
 
 import type { Writable } from "svelte/store";
 
-/** Return type for actions without update. */
+/** Return type for a simple svelte action; with destroy(), but without update(). */
 export type ActionReturnType = {
     destroy: () => void;
 } | void;
 
-/** Format function, must return null if cannot parse value and doesn't want to override it. */
+/** Format function, must return null if it can't parse value and doesn't want to override it. */
 export interface Formatter {
     format: (val: DataTypes) => string;
     parse?: (val: string) => DataTypes | undefined; // FIXME: use null instead?
@@ -70,10 +70,10 @@ export interface JQueryApi {
     val(val: string): void;
 }
 
-/** Returns jQuery element by id attribute. */
+/** Gets jQuery element by id attribute. */
 export function jQueryElemById(id: string): JQueryApi {
     type WithJQuerySelector = { jQuery(selector: string): JQueryApi };
-    // eslint-disable-next-line @typescript-eslint/unbound-method
+    // eslint-disable-next-line @typescript-eslint/unbound-method, @typescript-eslint/typedef
     const jQuery = (window as unknown as WithJQuerySelector).jQuery;
     if (!jQuery) {
         throw new Error("jQuery is not initialized");
@@ -81,10 +81,10 @@ export function jQueryElemById(id: string): JQueryApi {
     return jQuery(`#${id}`);
 }
 
-/** Returns jQuery element by dom node. */
+/** Gets jQuery element by dom node. */
 export function jQueryElem(node: Element): JQueryApi {
     type WithJQueryNode = { jQuery(node: Element): JQueryApi };
-    // eslint-disable-next-line @typescript-eslint/unbound-method
+    // eslint-disable-next-line @typescript-eslint/unbound-method, @typescript-eslint/typedef
     const jQuery = (window as unknown as WithJQueryNode).jQuery;
     if (!jQuery) {
         throw new Error("jQuery is not initialized");
@@ -102,10 +102,10 @@ export function jQueryElem(node: Element): JQueryApi {
 
 */
 
-/** Possible types for the store */
+/** Possible data types for the store */
 export type DataTypes = string | string[] | boolean | Date | number | undefined;
 
-/** description */ // TODO: description
+/** Controls Semantic UI form element and it's data validation. */
 export interface FormController {
     uid: string;
     mode: "sui-form" | "yup-form";
@@ -119,22 +119,26 @@ export interface FormController {
     onFieldChange: (key: string) => void;
 }
 
-/** Holds Svelte `store` allowing the `Data` comppnent to subscribe to data changes,
- *
- * `doUpdate()` function to imperatively update Semantic component,
- *
- * event handlers, and `uid` for debuggin purposes.
- */
+/** Holds Svelte `store` allowing the `Data` component to subscribe to data changes */
 export interface DataController<T extends DataTypes> {
+    /** Is used for debugging. */
     uid: string;
+
+    /** Describes the type of the controlled component. */
     mode: "dropdown" | "modal" | "calendar" | "slider" | "input";
+
+    /** Svelte store */
     store: Writable<T>;
+
+    /** Imperatively updates Semantic component. */
     doUpdate: (val: T) => void;
+
+    /** Called after user data entry or interaction. */
     onChange: (value: T) => void;
 
-    // Yup integration
-    setValid?: (value: boolean) => void;
-    setPrompt?: (value: string | null) => void;
+    // // Yup integration
+    // setValid?: (value: boolean) => void;
+    // setPrompt?: (value: string | null) => void;
 }
 
 /** Semantic UI component behaviour API */
@@ -155,7 +159,7 @@ export type SemanticCommand = (
 
 */
 
-let unum = 100;
+let unum: number = 100;
 
 /** Generate an unique number */
 export function uid(): string {
@@ -171,7 +175,7 @@ export function equalDataTypes(a1: DataTypes | undefined, a2: DataTypes | undefi
         if (a1.length != a2.length) {
             return false;
         }
-        for (let i = 0; i < a1.length; i++) {
+        for (let i: number = 0; i < a1.length; i++) {
             if (a1[i] !== a2[i]) {
                 return false;
             }
