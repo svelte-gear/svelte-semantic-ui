@@ -1,5 +1,6 @@
 <script lang="ts">
-// routes/form/+page.svelte
+// form/+page.svelte
+// Sample form page with components, data binding, and validation.
 
 // import { number, reach } from "yup";
 import {

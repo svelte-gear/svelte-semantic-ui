@@ -1,5 +1,4 @@
 // app.d.ts
-
 // SvelteKit app options
 // see https://kit.svelte.dev/docs/types#app for information about these interfaces
 

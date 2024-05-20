@@ -1,9 +1,9 @@
-/* eslint-disable import/extensions */
-// routes/+layout.ts
+// +layout.ts
+// Script executed for all pages.
 
 import type { LoadEvent } from "@sveltejs/kit";
-import { applyLocale } from "./locales";
-import { readLocaleCookie, saveLocaleCookie } from "./locale-cookie";
+import { applyLocale } from "./i18n/extra-locales";
+import { readLocaleCookie, saveLocaleCookie } from "./i18n/locale-cookie";
 
 export const ssr: boolean = false;
 export const prerender: boolean = true;

@@ -1,9 +1,10 @@
 <script lang="ts">
-// routes/+page.svelte
+// +page.svelte
+// Home page, allows to change locale.
 
 import { dropdown, Data } from "$lib";
-import { applyLocale, supportedLocales } from "./locales";
-import { readLocaleCookie, saveLocaleCookie } from "./locale-cookie";
+import { applyLocale, supportedLocales } from "./i18n/extra-locales";
+import { readLocaleCookie, saveLocaleCookie } from "./i18n/locale-cookie";
 
 const currLocale: string = readLocaleCookie() ?? "";
 let locale: string = currLocale;

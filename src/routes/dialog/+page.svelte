@@ -1,5 +1,6 @@
 <script lang="ts">
-// routes/dialog/+page.svelte
+// dialog/+page.svelte
+// Sample dialog page.
 
 import { modal, Data } from "$lib";
 import { behavior, ModalBehavior } from "../../lib/data/behavior";

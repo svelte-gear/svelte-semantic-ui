@@ -1,3 +1,6 @@
+// i18n/locale-cookie
+// Helper functions for storing selected locale in a cookie.
+
 const localeCookieName: string = "ssui_locale";
 const localeCookieExpDays: number = 90;
 

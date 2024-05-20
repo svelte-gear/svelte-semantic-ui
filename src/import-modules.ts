@@ -1,10 +1,10 @@
 // import-modules.ts
-/* eslint-disable import/extensions */
-
 // E:
 // add "semantic-ui-css": "2.5.0" to "dependencies" section in package.json
 // add "fomantic-ui-css": "2.9.2" to "dependencies" section in package.json
 // keep jQuery script tag in the app.html
+
+/* eslint-disable import/extensions */
 
 // CORE
 

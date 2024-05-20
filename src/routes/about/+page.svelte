@@ -1,5 +1,6 @@
 <script lang="ts">
-// routes/about/+page.svelte
+// about/+page.svelte
+// Sample about page.
 </script>
 
 <svelte:head>

@@ -1,5 +1,6 @@
 <script lang="ts">
-// routes/+layout.svelte
+// +layout.svelte
+// Common navigation component.
 
 // eslint-disable-next-line import/extensions
 import { page } from "$app/stores";
