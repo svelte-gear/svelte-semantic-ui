@@ -55,11 +55,13 @@
         "_none": "the library has no npm dependencies, but jQuery and senamtic-ui must be present at runtime",
         "tslib": "2.9.0 - would be required if importHelpers is set to true in tsconfig.json",
         "yup":   "1.2.0 - plan to support yup validation, now it uses semantic-ui form",
-        "jquery":          "3.7.1",
-        "fomantic-ui-css": "2.9.3",
-        "semantic-ui-css": "2.5.0"
+        "jquery":                "3.7.1 - doesn't seem to work, needs to be imported in app.html",
+        "fomantic-ui-css":       "2.9.3 - required for import variants C, D, E",
+        "semantic-ui-css":       "2.5.0 - required for import variants D, E",
+        "@rollup/plugin-inject": "5.0.5 - to make jQuery globally available"
     },
     "dependencies": {
+        "sveltekit-i18n": "2.4.2"
     },
 
     "_devDependencies": {

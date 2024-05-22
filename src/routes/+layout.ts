@@ -8,9 +8,9 @@ import { readLocaleCookie, saveLocaleCookie } from "./i18n/locale-cookie";
 export const ssr: boolean = false;
 export const prerender: boolean = true;
 
-// import "../import-fomantic"; // C: full fomantic-ui library
-// import "../import-semantic"; // D: full semantic-ui + some fomantic components
-// import "../import-modules"; //  E: individual components from semantic-ui and fomantic-ui
+// import "./import/import-fomantic"; // C: full fomantic-ui library
+// import "./import/import-semantic"; // D: full semantic-ui + some fomantic components
+// import "./import/import-modules"; //  E: individual components from semantic-ui and fomantic-ui
 
 export async function load({ params }: LoadEvent): Promise<{ locale: string }> {
     void params;

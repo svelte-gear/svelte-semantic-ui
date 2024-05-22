@@ -11,6 +11,12 @@ import { numberFormatDefaults, dateFormatDefaults, pad } from "../data/format";
 
 import "./en";
 
+numberFormatDefaults.decimal = ".";
+numberFormatDefaults.thousandSeparator = ",";
+numberFormatDefaults.moneyPrefix = "$";
+numberFormatDefaults.moneySuffix = "";
+numberFormatDefaults.listSeparator = ",";
+
 function usDate(d: Date | undefined): string {
     if (!d || !d.getDate) {
         return "";
@@ -20,11 +26,6 @@ function usDate(d: Date | undefined): string {
     const year: number = d.getFullYear();
     return `${month}/${day}/${year}`;
 }
-
-numberFormatDefaults.decimal = ".";
-numberFormatDefaults.thousandSeparator = ",";
-numberFormatDefaults.moneyPrefix = "$";
-numberFormatDefaults.moneySuffix = "";
 
 dateFormatDefaults.ampm = true;
 dateFormatDefaults.firstDayOfWeek = 0;

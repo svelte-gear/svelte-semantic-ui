@@ -11,6 +11,12 @@ import { numberFormatDefaults, dateFormatDefaults, fmt, pad } from "../data/form
 
 import "./fr";
 
+numberFormatDefaults.decimal = ",";
+numberFormatDefaults.thousandSeparator = " ";
+numberFormatDefaults.moneyPrefix = "";
+numberFormatDefaults.moneySuffix = " €";
+numberFormatDefaults.listSeparator = ";";
+
 function frDate(d: Date | undefined): string {
     if (!d || !d.getDate) {
         return "";
@@ -20,12 +26,6 @@ function frDate(d: Date | undefined): string {
     const year: number = d.getFullYear();
     return `${day}.${month}.${year}`;
 }
-
-numberFormatDefaults.decimal = ",";
-numberFormatDefaults.thousandSeparator = " ";
-numberFormatDefaults.moneyPrefix = "";
-numberFormatDefaults.moneySuffix = " €";
-numberFormatDefaults.listSeparator = ";";
 
 dateFormatDefaults.ampm = false;
 dateFormatDefaults.firstDayOfWeek = 1;

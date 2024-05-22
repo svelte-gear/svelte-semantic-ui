@@ -1,5 +1,7 @@
-// import-fomantic.ts
+// import-semantic.ts
+
 // D:
+// comment out semantic imports in app.html
 // add "semantic-ui-css": "2.5.0" to "dependencies" section in package.json
 // add "fomantic-ui-css": "2.9.2" to "dependencies" section in package.json
 // keep jquery script tag in the app.html

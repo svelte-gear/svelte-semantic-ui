@@ -15,6 +15,7 @@ numberFormatDefaults.decimal = ",";
 numberFormatDefaults.thousandSeparator = ".";
 numberFormatDefaults.moneyPrefix = "$";
 numberFormatDefaults.moneySuffix = "";
+numberFormatDefaults.listSeparator = ",";
 
 function esDate(d: Date | undefined): string {
     if (!d || !d.getDate) {

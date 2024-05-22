@@ -6,7 +6,22 @@
 
 /** Returns list of supported locales. */
 export function supportedLocales(): string[] {
-    return ["de-DE", "en-CA", "en-GB", "en-US", "fr-CA", "fr-FR", "es-ES", "es-MX", "es-US"];
+    return [
+        "de-DE",
+        "el-GR",
+        "en-CA",
+        "en-GB",
+        "en-US",
+        "fr-CA",
+        "fr-FR",
+        "es-ES",
+        "es-MX",
+        "es-US",
+        "it-IT",
+        "pl-PL",
+        "ru-RU",
+        "uk-UA",
+    ];
 }
 
 /** Imports locale settings: validation messages, calendar, date and number formats.
@@ -21,6 +36,7 @@ export async function applyLocale(locale: string): Promise<string | null> {
         return null;
     }
     else if (locale === "de-DE") { i18n = import("./de-DE"); }
+    else if (locale === "el-GR") { i18n = import("./el-GR"); }
     else if (locale === "en-CA") { i18n = import("./en-CA"); }
     else if (locale === "en-GB") { i18n = import("./en-GB"); }
     else if (locale === "en-US") { i18n = import("./en-US"); }
@@ -29,6 +45,10 @@ export async function applyLocale(locale: string): Promise<string | null> {
     else if (locale === "es-ES") { i18n = import("./es-ES"); }
     else if (locale === "es-MX") { i18n = import("./es-MX"); }
     else if (locale === "es-US") { i18n = import("./es-US"); }
+    else if (locale === "it-IT") { i18n = import("./it-IT"); }
+    else if (locale === "pl-PL") { i18n = import("./pl-PL"); }
+    else if (locale === "ru-RU") { i18n = import("./ru-RU"); }
+    else if (locale === "uk-UA") { i18n = import("./uk-UA"); }
     else {
         console.info(`Unrecognized locale: ${locale}`);
         return null;

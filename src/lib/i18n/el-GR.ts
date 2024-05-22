@@ -1,8 +1,50 @@
-// i18n/gr
-// Greek translations and formats.
+/**
+ * Greek translations and formats.
+```text
+ Number: 1.234,56 €
+ Date:   01/03/2024 14.50
+```
+ * @module i18n/el-GR
+ */
 
 import { promptDefaults } from "../../lib/data/rule-book";
 import { numberFormatDefaults, dateFormatDefaults, fmt, pad } from "../../lib/data/format";
+
+dateFormatDefaults.text = Object.assign({}, dateFormatDefaults.text, {
+    days: ["Κυ", "Δε", "Τρ", "Τε", "Πε", "Πα", "Σα"],
+    months: [
+        "Ιανουάριος",
+        "Φεβρουάριος",
+        "Μάρτιος",
+        "Απρίλιος",
+        "Μάιος",
+        "Ιούνιος",
+        "Ιούλιος",
+        "Αύγουστος",
+        "Σεπτέμβριος",
+        "Οκτώβριος",
+        "Νοέμβριος",
+        "Δεκέμβριος",
+    ],
+    monthsShort: [
+        "Ιαν",
+        "Φεβ",
+        "Μαρ",
+        "Απρ",
+        "Μαι",
+        "Ιουν",
+        "Ιουλ",
+        "Αυγ",
+        "Σεπ",
+        "Οκτ",
+        "Νοε",
+        "Δεκ",
+    ],
+    today: "Σήμερα",
+    now: "Τώρα",
+    am: "ΠΜ",
+    pm: "ΜΜ",
+});
 
 promptDefaults.prompt = Object.assign({}, promptDefaults.prompt, {
     empty: "{name} πρέπει να έχει μια τιμή",
@@ -42,46 +84,11 @@ promptDefaults.text = Object.assign({}, promptDefaults.text, {
         "Υπάρχουν μη αποθηκευμένες αλλαγές σε αυτή τη σελίδα οι οποίες θα χαθούν αν συνεχίσετε.",
 });
 
-dateFormatDefaults.text = Object.assign({}, dateFormatDefaults.text, {
-    days: ["Κυ", "Δε", "Τρ", "Τε", "Πε", "Πα", "Σα"],
-    months: [
-        "Ιανουάριος",
-        "Φεβρουάριος",
-        "Μάρτιος",
-        "Απρίλιος",
-        "Μάιος",
-        "Ιούνιος",
-        "Ιούλιος",
-        "Αύγουστος",
-        "Σεπτέμβριος",
-        "Οκτώβριος",
-        "Νοέμβριος",
-        "Δεκέμβριος",
-    ],
-    monthsShort: [
-        "Ιαν",
-        "Φεβ",
-        "Μαρ",
-        "Απρ",
-        "Μαι",
-        "Ιουν",
-        "Ιουλ",
-        "Αυγ",
-        "Σεπ",
-        "Οκτ",
-        "Νοε",
-        "Δεκ",
-    ],
-    today: "Σήμερα",
-    now: "Τώρα",
-    am: "ΠΜ",
-    pm: "ΜΜ",
-});
-
 numberFormatDefaults.decimal = ",";
 numberFormatDefaults.thousandSeparator = ".";
 numberFormatDefaults.moneyPrefix = "";
 numberFormatDefaults.moneySuffix = " €";
+numberFormatDefaults.listSeparator = ",";
 
 function grDate(d: Date | undefined): string {
     if (!d || !d.getDate) {

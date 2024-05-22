@@ -128,23 +128,23 @@ export const parse: {
 
 */
 
-type Range = [number, number];
-type Charset = Array<Range>;
+// type Range = [number, number];
+// type Charset = Array<Range>;
 
-function ch(s: string): number {
-    return s.codePointAt(0) ?? 0;
-}
-function chRng(s: string): Range {
-    return [ch(s), ch(s)];
-}
+// function ch(s: string): number {
+//     return s.codePointAt(0) ?? 0;
+// }
+// function chRng(s: string): Range {
+//     return [ch(s), ch(s)];
+// }
 
-export const NUMER: Charset = [[ch("0"), ch("9")]];
-export const ALPHA: Charset = [
-    [ch("A"), ch("Z")],
-    [ch("a"), ch("z")],
-];
-export const ALPNU: Charset = [...NUMER, ...ALPHA];
-export const IDENT: Charset = [...ALPNU, chRng("_")];
-export const ASCII: Charset = [[ch(" "), ch("~")]];
+// export const NUMER: Charset = [[ch("0"), ch("9")]];
+// export const ALPHA: Charset = [
+//     [ch("A"), ch("Z")],
+//     [ch("a"), ch("z")],
+// ];
+// export const ALPNU: Charset = [...NUMER, ...ALPHA];
+// export const IDENT: Charset = [...ALPNU, chRng("_")];
+// export const ASCII: Charset = [[ch(" "), ch("~")]];
 
 // void new CharsetList({ base: IDENTIFIER, inclide: "-.", exclude: "_" });

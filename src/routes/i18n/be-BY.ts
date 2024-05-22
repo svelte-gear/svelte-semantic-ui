@@ -4,6 +4,42 @@
 import { promptDefaults } from "../../lib/data/rule-book";
 import { numberFormatDefaults, dateFormatDefaults, fmt, pad } from "../../lib/data/format";
 
+dateFormatDefaults.text = Object.assign({}, dateFormatDefaults.text, {
+    days: ["Нд", "Пн", "Аў", "Ср", "Чц", "Пт", "Сб"],
+    months: [
+        "Студзень",
+        "Люты",
+        "Сакавік",
+        "Красавік",
+        "Май",
+        "Чэрвень",
+        "Ліпень",
+        "Жнівень",
+        "Верасень",
+        "Кастрычнік",
+        "Лістапад",
+        "Снежань",
+    ],
+    monthsShort: [
+        "Студ",
+        "Лют",
+        "Сак",
+        "Крас",
+        "Май",
+        "Чэрв",
+        "Ліп",
+        "Жн",
+        "Вер",
+        "Каст",
+        "Ліст",
+        "Снеж",
+    ],
+    today: "Сёння",
+    now: "Зараз",
+    am: "AM",
+    pm: "PM",
+});
+
 promptDefaults.prompt = Object.assign({}, promptDefaults.prompt, {
     empty: "{name} павінна мець значэнне",
     checked: "{name} павінна быць адзначана",
@@ -42,46 +78,11 @@ promptDefaults.text = Object.assign({}, promptDefaults.text, {
         "На гэтай старонцы ёсць незахаваныя змены, якія будуць згублены, калі вы не спынiцiся",
 });
 
-dateFormatDefaults.text = Object.assign({}, dateFormatDefaults.text, {
-    days: ["Нд", "Пн", "Аў", "Ср", "Чц", "Пт", "Сб"],
-    months: [
-        "Студзень",
-        "Люты",
-        "Сакавік",
-        "Красавік",
-        "Май",
-        "Чэрвень",
-        "Ліпень",
-        "Жнівень",
-        "Верасень",
-        "Кастрычнік",
-        "Лістапад",
-        "Снежань",
-    ],
-    monthsShort: [
-        "Студ",
-        "Лют",
-        "Сак",
-        "Крас",
-        "Май",
-        "Чэрв",
-        "Ліп",
-        "Жн",
-        "Вер",
-        "Каст",
-        "Ліст",
-        "Снеж",
-    ],
-    today: "Сёння",
-    now: "Зараз",
-    am: "AM",
-    pm: "PM",
-});
-
 numberFormatDefaults.decimal = ",";
 numberFormatDefaults.thousandSeparator = " ";
 numberFormatDefaults.moneyPrefix = "";
-numberFormatDefaults.moneySuffix = " руб";
+numberFormatDefaults.moneySuffix = " р.";
+numberFormatDefaults.listSeparator = ",";
 
 function beDate(d: Date | undefined): string {
     if (!d || !d.getDate) {

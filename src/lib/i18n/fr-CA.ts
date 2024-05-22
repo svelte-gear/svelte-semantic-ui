@@ -15,6 +15,7 @@ numberFormatDefaults.decimal = ",";
 numberFormatDefaults.thousandSeparator = " ";
 numberFormatDefaults.moneyPrefix = "";
 numberFormatDefaults.moneySuffix = " $";
+numberFormatDefaults.listSeparator = ";";
 
 dateFormatDefaults.ampm = false;
 dateFormatDefaults.firstDayOfWeek = 1;

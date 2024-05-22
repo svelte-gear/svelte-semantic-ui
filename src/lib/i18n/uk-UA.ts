@@ -1,5 +1,11 @@
-// i18n/uk-UA
-// Ukranian translations and formats.
+/**
+ * Ukranian translations and formats.
+```text
+ Number: 1 000,00 ₽
+ Date:   01.03.2024 14:50
+```
+ * @module i18n/uk-UA
+ */
 
 import { promptDefaults } from "../../lib/data/rule-book";
 import { numberFormatDefaults, dateFormatDefaults, fmt, pad } from "../../lib/data/format";
@@ -81,6 +87,7 @@ numberFormatDefaults.decimal = ",";
 numberFormatDefaults.thousandSeparator = " ";
 numberFormatDefaults.moneyPrefix = "";
 numberFormatDefaults.moneySuffix = " ₴";
+numberFormatDefaults.listSeparator = ",";
 
 function ukDate(d: Date | undefined): string {
     if (!d || !d.getDate) {
