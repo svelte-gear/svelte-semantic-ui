@@ -377,23 +377,25 @@ Formatter replaces you input with correct string or empties it.
             </div>
 
             <!-- direct <input bind:value may be used for simple string value -->
-            <div class="field">
-                <label for="ln">
-                    Rank <span class="explain">(with popup)</span>
-                </label>
-                <input
-                    id="ln"
-                    type="text"
-                    name="last-name"
-                    placeholder="Last Name"
-                    use:popup={{
-                        content: "this input is bound to 'Rank'",
-                        position: "bottom right",
-                    }}
-                />
-                <Data bind:value={rank} validate="start[A]" />
-                <!-- bind:value={rank} -->
-            </div>
+            {#if chb}
+                <div class="field">
+                    <label for="ln">
+                        Rank <span class="explain">(with popup)</span>
+                    </label>
+                    <input
+                        id="ln"
+                        type="text"
+                        name="last-name"
+                        placeholder="Last Name"
+                        use:popup={{
+                            content: "this input is bound to 'Rank'",
+                            position: "bottom right",
+                        }}
+                    />
+                    <Data bind:value={rank} validate="start[A]" />
+                    <!-- bind:value={rank} -->
+                </div>
+            {/if}
             <!--
           dP                         dP       dP
           88                         88       88

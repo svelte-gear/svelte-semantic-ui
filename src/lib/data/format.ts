@@ -47,7 +47,6 @@ export interface DateFormatSettings {
 }
 
 export const dateFormatDefaults: DateFormatSettings = {};
-console.info("///format.dateFormatDefaults");
 
 export function pad(n: number, size: number): string {
     let str: string = n.toString();

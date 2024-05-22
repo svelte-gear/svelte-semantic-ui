@@ -1,0 +1,14 @@
+{
+    "translation-locales": "Jazyky překladu:",
+    "cont.title": "Vítejte ve SvelteKitu",
+    "menu.notification": "{{count:gt; 0:Máte {{count}} {{count:gte; 1:novou zprávu; 2:nové zprávy; 5:nových zpráv}}!; default:Nemáte žádné zprávy...}}",
+    "cont.text": "Navštivte \"{{link}}\" a přečtěte si dokumentaci",
+    "welcome-to-your-lib": "Vítejte ve vašem projektu knihovny",
+    "nav-home": "Domov",
+    "visit-svelte": "Navštivte <a href=\"{{link}}\">Výukový program Svelte</a>, kde se dozvíte, jak vytvářet aplikace Svelte.",
+    "modal-is-if-active": "Modální {{isActive; false:je NE; default:je}} aktivní",
+    "archive-old-messages": "Archivujte staré zprávy",
+    "your-inbox-is-getting-full": "Vaše schránka se zaplňuje, chcete, abychom povolili automatickou archivaci starých zpráv?",
+    "btn.no": "Ne",
+    "btn.yes": "Ano"
+}

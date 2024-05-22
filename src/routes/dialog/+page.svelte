@@ -4,6 +4,7 @@
 
 import { modal, Data } from "$lib";
 import { behavior, ModalBehavior } from "../../lib/data/behavior";
+import { t } from "../../util/translate";
 
 let show: boolean = true;
 
@@ -21,15 +22,14 @@ $: console.log(`SHOW : ${show}`);
 </script>
 
 <main>
-    <h1>Home</h1>
+    <h1>{$t("nav-home")}</h1>
 
     <p>
-        Visit the
-        <a href="https://svelte.dev/tutorial">Svelte tutorial</a>
-        to learn how to build Svelte apps.
+        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+        {@html $t("visit-svelte", { link: "https://svelte.dev/tutorial" })}
     </p>
     <p>
-        Modal is {#if !show}NOT{/if} active
+        {$t("modal-is-if-active", { isActive: show })}
     </p>
     <button
         class="ui button"
@@ -70,25 +70,24 @@ $: console.log(`SHOW : ${show}`);
         <Data bind:active={show} />
         <div class="ui icon header">
             <i class="archive icon" />
-            Archive Old Messages
+            {$t("archive-old-messages")}
         </div>
         <div class="content">
             <p id="x3">
-                Your inbox is getting full, would you like us to enable automatic archiving of old
-                messages?
+                {$t("your-inbox-is-getting-full")}
             </p>
             <p>
-                Modal is {#if !show}NOT{/if} active
+                {$t("modal-is-if-active", { isActive: show })}
             </p>
         </div>
         <div class="actions">
             <div class="ui red basic cancel inverted button">
                 <i class="remove icon" />
-                No
+                {$t("btn.no")}
             </div>
             <div class="ui green ok inverted button">
                 <i class="checkmark icon" />
-                Yes
+                {$t("btn.yes")}
             </div>
         </div>
     </div>

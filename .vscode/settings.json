@@ -45,5 +45,28 @@
     "window.zoomLevel": 1,
     "diffEditor.ignoreTrimWhitespace": false,
     "git.confirmSync": false,
+    "i18n-ally.localesPaths": [
+        "src/lib/i18n",
+        "src/util/i18n",
+        "src/util/translate"
+    ],
+    "i18n-ally.keystyle": "flat",
+    "i18n-ally.extract.ignored": [
+        "value = {locale}",
+        "English",
+        "Česky",
+        "&nbsp;",
+        "&nbsp;\n            {#if locStr === $currentLocale}\n                ",
+        "Unsupported locale",
+        " {\n            show = true;\n        }}\n    >\n        show = true\n    ",
+        " {\n            ctrl.show();\n        }}\n    >\n        ctrl.show()\n    "
+    ],
+    "i18n-ally.annotationInPlace": false,
+    "i18n-ally.enabledFrameworks": [
+        "vscode",
+        "svelte"
+    ],
+    "i18n-ally.extract.keygenStyle": "kebab-case",
+    "i18n-ally.extract.keyMaxLength": 40,
 
 }

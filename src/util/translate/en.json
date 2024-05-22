@@ -1,0 +1,14 @@
+{
+    "welcome-to-your-lib": "Welcome to your library project",
+    "cont.title": "Welcome to SvelteKit",
+    "cont.text": "Visit \"{{link}}\" to read the documentation",
+    "menu.notification": "You have {{count:gt; 0:{{count}} new {{count; 1:message; default:messages}}!; default:no messages...}}",
+    "translation-locales": "Translation locales:",
+    "nav-home": "Home",
+    "visit-svelte": "Visit the <a href=\"{{link}}\">Svelte Tutorial</a> to learn how to build Svelte apps.",
+    "modal-is-if-active": "Modal {{isActive; false:isn't; default:is}} active",
+    "archive-old-messages": "Archive Old Messages",
+    "your-inbox-is-getting-full": "Your inbox is getting full, would you like us to enable automatic archiving of old messages?",
+    "btn.no": "No",
+    "btn.yes": "Yes"
+}

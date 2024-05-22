@@ -21,4 +21,3 @@ dateFormatDefaults.ampm = false;
 dateFormatDefaults.firstDayOfWeek = 0;
 dateFormatDefaults.monthFirst = false;
 dateFormatDefaults.formatter = { date: fmt.isoDate, time: fmt.isoTime };
-console.info("///en-CA.dateFormatDefaults.formatter");

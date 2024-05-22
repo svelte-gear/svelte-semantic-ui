@@ -35,7 +35,6 @@ export const calendarDefaults: CalendarSettings = {
     type: "date",
     touchReadonly: false,
 };
-console.info("///use-calendar.calendarDefaults");
 
 type CalendarApi = {
     calendar(settings: CalendarSettings): void;

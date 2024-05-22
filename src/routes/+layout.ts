@@ -2,8 +2,9 @@
 // Script executed for all pages.
 
 import type { LoadEvent } from "@sveltejs/kit";
-import { applyLocale } from "./i18n/extra-locales";
-import { readLocaleCookie, saveLocaleCookie } from "./i18n/locale-cookie";
+import { applyLocale } from "../util/i18n/extra-locales";
+import { readLocaleCookie, saveLocaleCookie } from "../util/i18n/locale-cookie";
+import { loadTranslations } from "../util/translate";
 
 export const ssr: boolean = false;
 export const prerender: boolean = true;
@@ -15,6 +16,9 @@ export const prerender: boolean = true;
 export async function load({ params }: LoadEvent): Promise<{ locale: string }> {
     void params;
     let res: string | null = null;
+
+    const initialLocale: string = "en";
+    await loadTranslations(initialLocale);
 
     const cookieLocale: string | null = readLocaleCookie();
     if (cookieLocale) {
@@ -39,5 +43,5 @@ export async function load({ params }: LoadEvent): Promise<{ locale: string }> {
         return { locale: res };
     }
 
-    throw new Error("Ensupported locale");
+    throw new Error("Unsupported locale");
 }
