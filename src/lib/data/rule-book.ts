@@ -3,8 +3,10 @@
  * @module data/rule-book
  */
 
-import type { JQueryApi } from "./common";
+import type { SettingsObject } from "./common";
 import { fmt, parse } from "./format";
+import type { FormPropmt, FormSettings, RuleFunc } from "./semantic-types";
+import { formDefaults } from "./use-form-validation";
 
 /*
  dP                dP
@@ -52,6 +54,8 @@ export const rule = {
     minCount:    (n: number): string => `minCount[${n}]`,
     exactCount:  (n: number): string => `exactCount[${n}]`,
     maxCount:    (n: number): string => `maxCount[${n}]`,
+
+    // TODO: add custom rules
 };
 
 /*
@@ -65,68 +69,68 @@ export const rule = {
                                               d8888P
 */
 
-/* prettier-ignore */
-type RulePromptTranslation = {
-    // semantic-ui 2.4
-    empty:      string;
-    checked:    string;
+// /* prettier-ignore */
+// type RulePromptTranslation = {
+//     // semantic-ui 2.4
+//     empty:      string;
+//     checked:    string;
 
-    email:      string;
-    url:        string;
-    regExp:     string;
-    integer:    string;
-    decimal:    string;
-    number:     string;
-    // creditCard?
+//     email:      string;
+//     url:        string;
+//     regExp:     string;
+//     integer:    string;
+//     decimal:    string;
+//     number:     string;
+//     // creditCard?
 
-    is:             string;
-    isExactly:      string;
-    not:            string;
-    notExactly:     string;
-    contain:        string;
-    containExactly: string;
-    doesntContain:  string;
-    doesntContainExactly: string;
-    // match?
-    // different?
+//     is:             string;
+//     isExactly:      string;
+//     not:            string;
+//     notExactly:     string;
+//     contain:        string;
+//     containExactly: string;
+//     doesntContain:  string;
+//     doesntContainExactly: string;
+//     // match?
+//     // different?
 
-    minLength:   string;
-    length:      string;
-    exactLength: string;
-    maxLength:   string;
-    match:       string;
-    different:   string;
-    creditCard:  string;
-    minCount:    string;
-    exactCount:  string;
-    maxCount:    string;
+//     minLength:   string;
+//     length:      string;
+//     exactLength: string;
+//     maxLength:   string;
+//     match:       string;
+//     different:   string;
+//     creditCard:  string;
+//     minCount:    string;
+//     exactCount:  string;
+//     maxCount:    string;
 
-    // fomantic-ui 2.9
-    size:        string;
-    addErrors:   string;
+//     // fomantic-ui 2.9
+//     size:        string;
+//     addErrors:   string;
 
-    // // svelte-semantic-ui
-    // date:           string;
-    // greaterThen:    string;
-    // greaterOrEqual: string;
-    // lessThen:       string;
-    // lessOrEqual:    string;
-};
+//     // // svelte-semantic-ui
+//     // date:           string;
+//     // greaterThen:    string;
+//     // greaterOrEqual: string;
+//     // lessThen:       string;
+//     // lessOrEqual:    string;
+// };
 
-type FormPromptTranslation = {
-    // semantic-ui 2.4
-    unspecifiedRule: string;
-    unspecifiedField: string;
-    // fomantic-ui 2.9
-    leavingMessage?: string;
-};
+// type FormPromptTranslation = {
+//     // semantic-ui 2.4
+//     unspecifiedRule: string;
+//     unspecifiedField: string;
+//     // fomantic-ui 2.9
+//     leavingMessage?: string;
+// };
 
-export type PromptSettings = {
-    prompt?: RulePromptTranslation & { [key: string]: string };
-    text?: FormPromptTranslation;
-};
+// export type PromptSettings = {
+//     prompt?: FormPropmt & { [key: string]: string };
+//     text?: FormText;
+// };
 
-export const promptDefaults: PromptSettings = {};
+// export const promptDefaults: PromptSettings = {};
 
 /*
                               dP                                            dP
@@ -144,27 +148,6 @@ export const promptDefaults: PromptSettings = {};
 // lessThan      (type: "N"|"D"|"S", val: number|Date|string) -> lessThan[S|Abc]
 // lessOrEqual   (type: "N"|"D"|"S", val: number|Date|string) -> lessOrEqueal[Abc]
 
-export type RuleFunc = (value: string, ruleValue: string, form: JQueryApi) => boolean;
-
-export function registerRule(name: string, fn: RuleFunc, defaultPrompt: string): void {
-    // eslint-disable-next-line @typescript-eslint/typedef, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
-    const jQuery = (window as any).jQuery;
-    if (!jQuery) {
-        throw new Error("jQuery in not initialized");
-    }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/typedef
-    const rules = jQuery.fn.form.settings.rules as { [key: string]: RuleFunc };
-    if (!rules) {
-        throw new Error("Semantic UI form in not initialized");
-    }
-    rules[name] = fn;
-
-    if (!promptDefaults.prompt) {
-        promptDefaults.prompt = {} as RulePromptTranslation;
-    }
-    promptDefaults.prompt[name] = defaultPrompt;
-}
-
 // Add custom rule
 function isoDateFn(value: string): boolean {
     let d: Date | undefined = undefined;
@@ -175,17 +158,27 @@ function isoDateFn(value: string): boolean {
     }
     return value === fmt.isoDate(d);
 }
-registerRule("isoDate", isoDateFn, "{name} must follow the 'YYYY-MM-DD' format");
 
 // Add custom rule
 function startFn(value: string, ruleValue: string): boolean {
     return value.startsWith(ruleValue);
 }
-registerRule("start", startFn, "{name} must start with '{ruleValue}'");
 
 // Add custom rule
 function startEndFn(value: string, ruleValue: string): boolean {
     console.info("startEnd : " + value + " - " + ruleValue);
     return value.startsWith(ruleValue);
 }
-registerRule("startEnd", startEndFn, "{name} must start and end with '{ruleValue}'");
+
+export function registerRule(name: string, fn: RuleFunc, defaultPrompt: string): void {
+    const def: FormSettings = formDefaults.read();
+    def.rules![name] = fn;
+    (def.prompt as FormPropmt & SettingsObject)[name] = defaultPrompt;
+}
+
+// TODO: translate custom rules
+export function extendRules(): void {
+    registerRule("start", startFn, "{name} must start with '{ruleValue}'");
+    registerRule("isoDate", isoDateFn, "{name} must follow the 'YYYY-MM-DD' format");
+    registerRule("startEnd", startEndFn, "{name} must start and end with '{ruleValue}'");
+}

@@ -1,5 +1,5 @@
 /**
- * Translations and formats for Mexican Spanish.
+ * Formats for Mexican Spanish.
 ```text
  Number: $1,000.00
  Date:   1/03/2024 14:50
@@ -7,27 +7,41 @@
  * @module i18n/es-MX
  */
 
-import { numberFormatDefaults, dateFormatDefaults, fmt, pad } from "../data/format";
+import type { CalendarSettings, FormText, NumberSettings } from "../data/semantic-types";
 
-import "./es";
+const formText: Partial<FormText> = {
+    unspecifiedRule: "Por favor, ingresa un valor válido",
+    leavingMessage: "Hay cambios no guardados en esta página que se perderán si continúas.",
+};
 
-numberFormatDefaults.decimal = ",";
-numberFormatDefaults.thousandSeparator = ".";
-numberFormatDefaults.moneyPrefix = "$";
-numberFormatDefaults.moneySuffix = "";
-numberFormatDefaults.listSeparator = ",";
+const calendarSettings: CalendarSettings = {
+    firstDayOfWeek: 0,
+    monthFirst: false,
+    formatter: {
+        cellTime: "HH:mm",
+        date: "D/MM/YYYY",
+        datetime: "D/MM/YYYY HH:mm",
+        time: "HH:mm",
+    },
+};
 
-function mxDate(d: Date | undefined): string {
-    if (!d || !d.getDate) {
-        return "";
-    }
-    const day: string = pad(d.getDate(), 1);
-    const month: string = pad(d.getMonth() + 1, 2);
-    const year: number = d.getFullYear();
-    return `${day}/${month}/${year}`;
-}
+const numberSettings: NumberSettings = {
+    decimal: ".",
+    thousandSeparator: ",",
+    moneyPrefix: "$",
+    moneySuffix: "",
+    listSeparator: ",",
+    moneyPrecision: 2,
+};
 
-dateFormatDefaults.ampm = false;
-dateFormatDefaults.firstDayOfWeek = 0;
-dateFormatDefaults.monthFirst = false;
-dateFormatDefaults.formatter = { date: mxDate, time: fmt.isoTime };
+export default {
+    form: {
+        text: formText,
+    },
+    calendar: {
+        ...calendarSettings,
+    },
+    number: {
+        ...numberSettings,
+    },
+};

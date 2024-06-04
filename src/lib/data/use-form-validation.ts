@@ -7,32 +7,10 @@ import { get, writable } from "svelte/store";
 // import { BaseSchema } from "yup";
 
 import type { FormController, JQueryApi, RuleDefinition } from "./common";
-import { jQueryElem, uid, equalDataTypes, SVELTE_FORM_STORE } from "./common";
-import type { PromptSettings } from "./rule-book";
-import { promptDefaults } from "./rule-book";
+import { jQueryElem, uid, equalDataTypes, SettingsHelper, SVELTE_FORM_STORE } from "./common";
+import type { FormSettings } from "./semantic-types";
 
-export interface FormValidationSettings {
-    fields?: {
-        [key: string]: unknown;
-    };
-    keyboardShortcuts?: boolean;
-    on?: "submit" | "blur" | "change";
-    revalidate?: boolean;
-    delay?: boolean;
-    inline?: boolean;
-    transition?: "scale" | "fade" | "slide down";
-    /** delay after on:chabge        */ duration?: number;
-    onValid?(): void;
-    onInvalid?(): void;
-    onSuccess?(event: unknown, fields: unknown): void;
-    onFailure?(errors: unknown, fields: unknown): void;
-    // TODO: addValidationRule(fn, errorPrompt)
-}
-
-export const formValidationDefaults: FormValidationSettings = {
-    keyboardShortcuts: false, // disable Enter and Esc keys
-    // TODO: addValidationRule(fn, errorPrompt)
-};
+export const formDefaults: SettingsHelper<FormSettings> = new SettingsHelper("form");
 
 /*
  .8888b
@@ -63,13 +41,10 @@ export const formValidationDefaults: FormValidationSettings = {
  * For Dropdown, use id of the select or inner input.
  * For Calendar, use id of the innermost input.
 */
-export function formValidation(
-    node: Element,
-    settings?: FormValidationSettings & PromptSettings
-): void {
+export function formValidation(node: Element, settings?: FormSettings): void {
     // TODO: return : ActionReturnType, destroy form controller of exit ?
     type FormApi = JQueryApi & {
-        form(settings?: FormValidationSettings): void;
+        form(settings?: FormSettings): void;
         form(command: string, arg1?: unknown, arg2?: unknown): unknown;
     };
     const elem: FormApi = jQueryElem(node) as FormApi;
@@ -195,11 +170,7 @@ export function formValidation(
     };
 
     // Initialize Semantic compponent
-    elem.form({
-        ...promptDefaults,
-        ...formValidationDefaults,
-        ...settings,
-    });
+    elem.form(settings);
 
     // Attach store holder to jQuery element
     console.debug(`  store(${ctrl.uid}) - ${ctrl.mode} created`);

@@ -4,57 +4,12 @@
  */
 
 import type { DataTypes } from "./common";
+import { SettingsHelper, pad } from "./common";
+import type { NumberSettings } from "./semantic-types";
 
-export interface NumberFormatSettings {
-    decimal: string;
-    thousandSeparator: string;
-    listSeparator: string;
-    moneyPrefix: string;
-    moneySuffix: string;
-    moneyPrecision: number;
-}
-
-export const numberFormatDefaults: NumberFormatSettings = {
-    decimal: ".", //                   TODO: implement decimal
-    thousandSeparator: " ",
-    listSeparator: ", ",
-    moneyPrefix: "$",
-    moneySuffix: "",
-    moneyPrecision: 2,
-};
-
-interface CalendarTranslation {
-    days: string[];
-    months: string[];
-    monthsShort: string[];
-    today: string;
-    now: string;
-    am: string;
-    pm: string;
-}
+export const numberDefaults: SettingsHelper<NumberSettings> = new SettingsHelper("number");
 
 export type DateFormatFunction = (val: Date | undefined) => string;
-
-export interface DateFormatSettings {
-    ampm?: boolean;
-    firstDayOfWeek?: number;
-    monthFirst?: boolean;
-    formatter?: {
-        date?: DateFormatFunction;
-        time?: DateFormatFunction;
-    };
-    text?: CalendarTranslation;
-}
-
-export const dateFormatDefaults: DateFormatSettings = {};
-
-export function pad(n: number, size: number): string {
-    let str: string = n.toString();
-    while (str.length < size) {
-        str = "0" + str;
-    }
-    return str;
-}
 
 // TODO: Global fmt and parse objects with default formatting settings.
 // Lazily initialized, to give user the chance to change defaults.

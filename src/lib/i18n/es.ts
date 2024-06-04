@@ -1,12 +1,21 @@
 /**
- * Spanish translations.
- * @module i18n/es
+ * Castilian Spanish translations and formats.
+```text
+ Number: 1.234,56 €
+ Date:   1-03-2024 14.50
+```
+ * @module i18n/es-ES
  */
 
-import { promptDefaults } from "../data/rule-book";
-import { dateFormatDefaults } from "../data/format";
+import type {
+    CalendarSettings,
+    CalendarText,
+    FormPropmt,
+    FormText,
+    NumberSettings,
+} from "../data/semantic-types";
 
-promptDefaults.prompt = Object.assign({}, promptDefaults.prompt, {
+const formPrompt: FormPropmt = {
     empty: "{name} debe tener un valor",
     checked: "{name} debe estar marcado",
     email: "{name} debe ser un correo electrónico válido",
@@ -19,31 +28,34 @@ promptDefaults.prompt = Object.assign({}, promptDefaults.prompt, {
     isExactly: "{name} debe ser exactamente '{ruleValue}'",
     not: "{name} no puede ser '{ruleValue}'",
     notExactly: "{name} no puede ser exactamente '{ruleValue}'",
-    contain: "{name} no puede contener '{ruleValue}'",
-    containExactly: "{name} no puede contener exactamente '{ruleValue}'",
+    contains: "{name} no puede contener '{ruleValue}'",
+    containsExactly: "{name} no puede contener exactamente '{ruleValue}'",
     doesntContain: "{name} debe contener '{ruleValue}'",
     doesntContainExactly: "{name} debe contener exactamente '{ruleValue}'",
     minLength: "{name} debe tener al menos {ruleValue} caracteres",
-    length: "{name} debe tener al menos {ruleValue} caracteres",
+    // length: "{name} debe tener al menos {ruleValue} caracteres",
     exactLength: "{name} debe tener exactamente {ruleValue} caracteres",
     maxLength: "{name} no puede tener más de {ruleValue} caracteres",
-    size: "{name} debe tener una longitud entre {min} y {max} caracteres",
+    // size: "{name} debe tener una longitud entre {min} y {max} caracteres",
     match: "{name} debe coincidir con el campo {ruleValue}",
     different: "{name} debe tener un valor diferente al del campo {ruleValue}",
     creditCard: "{name} debe ser un número de tarjeta de crédito válido",
     minCount: "{name} debe tener al menos {ruleValue} opciones",
     exactCount: "{name} debe tener exactamente {ruleValue} opciones",
     maxCount: "{name} debe tener {ruleValue} opciones o menos",
-    addErrors: "{name}: {error}",
-});
+    // addErrors: "{name}: {error}",
+    start: "{name} debe empezar con '{ruleValue}'",
+    isoDate: "{name} debe seguir el formato 'AAAA-MM-DD' (año-mes-día)",
+    startEnd: "{name} debe empezar y terminar con '{ruleValue}'",
+};
 
-promptDefaults.text = Object.assign({}, promptDefaults.text, {
+const formText: FormText = {
     unspecifiedRule: "Por favor, introduzca un valor válido",
     unspecifiedField: "Este campo",
     leavingMessage: "Hay cambios no guardados en esta página que se perderán si continúa.",
-});
+};
 
-dateFormatDefaults.text = Object.assign({}, dateFormatDefaults.text, {
+const calendarText: CalendarText = {
     days: ["D", "L", "M", "X", "J", "V", "S"],
     months: [
         "enero",
@@ -77,4 +89,39 @@ dateFormatDefaults.text = Object.assign({}, dateFormatDefaults.text, {
     now: "ahora",
     am: "AM",
     pm: "PM",
-});
+    weekNo: "Semana",
+};
+
+const calendarSettings: CalendarSettings = {
+    firstDayOfWeek: 1,
+    monthFirst: false,
+    formatter: {
+        cellTime: "HH:mm",
+        date: "D-MM-YYYY",
+        datetime: "D-MM-YYYY HH:mm",
+        time: "HH:mm",
+    },
+};
+
+const numberSettings: NumberSettings = {
+    decimal: ",",
+    thousandSeparator: ".",
+    moneyPrefix: "",
+    moneySuffix: " €",
+    listSeparator: ",",
+    moneyPrecision: 2,
+};
+
+export default {
+    form: {
+        prompt: formPrompt,
+        text: formText,
+    },
+    calendar: {
+        text: calendarText,
+        ...calendarSettings,
+    },
+    number: {
+        ...numberSettings,
+    },
+};

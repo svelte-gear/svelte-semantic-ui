@@ -101,7 +101,9 @@
         "typescript":   "5.4.5",
         "vite":         "5.2.11",
 
-        "typedoc":      "0.25.13",
-        "@types/node":  "20.12.11"
+        "typedoc":         "0.25.13",
+        "@types/node":     "20.12.11",
+        "fomantic-ui-css": "2.9.3",
+        "@types/jquery":   "3.5.30"
     }
 }

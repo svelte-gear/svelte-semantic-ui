@@ -1,5 +1,5 @@
 /**
- * Translations and formats for Canadian French.
+ * Formats for Canadian French.
 ```text
  Number: 1 000,00 $
  Date:   2024-03-01 14:50
@@ -7,17 +7,41 @@
  * @module i18n/fr-CA
  */
 
-import { numberFormatDefaults, dateFormatDefaults, fmt } from "../data/format";
+import type { CalendarSettings, FormPropmt, NumberSettings } from "../data/semantic-types";
 
-import "./fr";
+const formPrompt: Partial<FormPropmt> = {
+    checked: "{name} doit être coché.",
+    email: "{name} doit être une adresse courriel valide.",
+};
 
-numberFormatDefaults.decimal = ",";
-numberFormatDefaults.thousandSeparator = " ";
-numberFormatDefaults.moneyPrefix = "";
-numberFormatDefaults.moneySuffix = " $";
-numberFormatDefaults.listSeparator = ";";
+const calendarSettings: CalendarSettings = {
+    firstDayOfWeek: 1,
+    monthFirst: false,
+    formatter: {
+        cellTime: "HH:mm",
+        date: "YYYY-MM-DD",
+        datetime: "YYYY-MM-DD HH:mm",
+        time: "HH:mm",
+    },
+};
 
-dateFormatDefaults.ampm = false;
-dateFormatDefaults.firstDayOfWeek = 1;
-dateFormatDefaults.monthFirst = false;
-dateFormatDefaults.formatter = { date: fmt.isoDate, time: fmt.isoTime };
+const numberSettings: NumberSettings = {
+    decimal: ",",
+    thousandSeparator: " ",
+    moneyPrefix: "",
+    moneySuffix: " $",
+    listSeparator: ";",
+    moneyPrecision: 2,
+};
+
+export default {
+    form: {
+        prompt: formPrompt,
+    },
+    calendar: {
+        ...calendarSettings,
+    },
+    number: {
+        ...numberSettings,
+    },
+};

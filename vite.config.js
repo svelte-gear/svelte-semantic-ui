@@ -14,5 +14,8 @@ export default defineConfig({
         //     jQuery: "jquery",
         // }),
     ],
+    // build: {
+    //     sourcemap: true,
+    // },
     // ssr: { target: "webworker" },
 });

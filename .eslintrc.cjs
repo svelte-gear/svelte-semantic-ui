@@ -38,7 +38,7 @@ module.exports = {
     },
     rules: {
         "@typescript-eslint/comma-dangle": ["warn", "only-multiline"],
-        "@typescript-eslint/indent": ["warn", 4],
+        // "@typescript-eslint/indent": ["warn", 4],
         "@typescript-eslint/quotes": ["warn", "double", { avoidEscape: true }],
 
         "@typescript-eslint/ban-ts-comment": "off", // it is there on purpose
@@ -60,31 +60,40 @@ module.exports = {
                 variableDeclarationIgnoreFunction: false,
             },
         ],
+        "@typescript-eslint/indent": [
+            "warn",
+            4,
+            {
+                flatTernaryExpressions: false,
+                ignoredNodes: ["TSTypeParameterInstantiation"],
+                SwitchCase: 1,
+            },
+        ],
         // indent: [
-        //     "error",
+        //     "warn",
         //     4,
         //     {
         //         SwitchCase: 1,
-        //         VariableDeclarator: 1,
-        //         outerIIFEBody: 1,
-        //         MemberExpression: 1,
-        //         FunctionDeclaration: {
-        //             parameters: 1,
-        //             body: 1,
-        //         },
-        //         FunctionExpression: {
-        //             parameters: 1,
-        //             body: 1,
-        //         },
-        //         CallExpression: {
-        //             arguments: 1,
-        //         },
-        //         ArrayExpression: 1,
-        //         ObjectExpression: 1,
-        //         ImportDeclaration: 1,
-        //         flatTernaryExpressions: false,
-        //         ignoredNodes: ["TemplateLiteral *"],
-        //         offsetTernaryExpressions: true,
+        //         // VariableDeclarator: 1,
+        //         // outerIIFEBody: 1,
+        //         // MemberExpression: 1,
+        //         // FunctionDeclaration: {
+        //         //     parameters: 1,
+        //         //     body: 1,
+        //         // },
+        //         // FunctionExpression: {
+        //         //     parameters: 1,
+        //         //     body: 1,
+        //         // },
+        //         // CallExpression: {
+        //         //     arguments: 1,
+        //         // },
+        //         // ArrayExpression: 1,
+        //         // ObjectExpression: 1,
+        //         // ImportDeclaration: 1,
+        //         // flatTernaryExpressions: false,
+        //         // // ignoredNodes: ["TemplateLiteral *"],
+        //         // offsetTernaryExpressions: true,
         //     },
         // ],
     },

@@ -1,5 +1,5 @@
 /**
- * Translations and formats for German.
+ * German translations and formats.
 ```text
  Number: €1.000,00
  Date:   01.03.2024 14:50
@@ -7,10 +7,15 @@
  * @module i18n/de-DE
  */
 
-import { numberFormatDefaults, dateFormatDefaults, fmt, pad } from "../data/format";
-import { promptDefaults } from "../data/rule-book";
+import type {
+    CalendarSettings,
+    CalendarText,
+    FormPropmt,
+    FormText,
+    NumberSettings,
+} from "../data/semantic-types";
 
-promptDefaults.prompt = Object.assign({}, promptDefaults.prompt, {
+const formPrompt: FormPropmt = {
     empty: "{name} muss einen Wert haben",
     checked: "{name} muss ausgewählt sein",
     email: "{name} muss eine gültige E-Mail-Adresse sein",
@@ -23,32 +28,33 @@ promptDefaults.prompt = Object.assign({}, promptDefaults.prompt, {
     isExactly: "{name} muss genau '{ruleValue}' sein",
     not: "{name} darf nicht '{ruleValue}' sein",
     notExactly: "{name} darf nicht genau '{ruleValue}' sein",
-    contain: "{name} darf '{ruleValue}' nicht enthalten",
-    containExactly: "{name} darf genau '{ruleValue}' nicht enthalten",
+    contains: "{name} darf '{ruleValue}' nicht enthalten",
+    containsExactly: "{name} darf genau '{ruleValue}' nicht enthalten",
     doesntContain: "{name} muss '{ruleValue}' enthalten",
     doesntContainExactly: "{name} muss genau '{ruleValue}' enthalten",
     minLength: "{name} muss mindestens {ruleValue} Zeichen lang sein",
-    length: "{name} muss mindestens {ruleValue} Zeichen lang sein",
     exactLength: "{name} muss genau {ruleValue} Zeichen lang sein",
     maxLength: "{name} darf nicht länger als {ruleValue} Zeichen sein",
-    size: "{name} muss eine Länge zwischen {min} und {max} Zeichen haben",
     match: "{name} muss mit dem Feld {ruleValue} übereinstimmen",
     different: "{name} muss sich vom Feld {ruleValue} unterscheiden",
     creditCard: "{name} muss eine gültige Kreditkartennummer sein",
     minCount: "{name} muss mindestens {ruleValue} Auswahlmöglichkeiten haben",
     exactCount: "{name} muss genau {ruleValue} Auswahlmöglichkeiten haben",
     maxCount: "{name} darf nicht mehr als {ruleValue} Auswahlmöglichkeiten haben",
-    addErrors: "{name}: {error}",
-});
 
-promptDefaults.text = Object.assign({}, promptDefaults.text, {
+    start: "{name} muss :) start with '{ruleValue}'",
+    isoDate: "{name} muss :) follow the 'YYYY-MM-DD' format",
+    startEnd: "{name} muss :) start and end with '{ruleValue}'",
+};
+
+const formText: FormText = {
     unspecifiedRule: "Bitte geben Sie einen gültigen Wert ein",
     unspecifiedField: "Dieses Feld",
     leavingMessage:
         "Es gibt nicht gespeicherte Änderungen auf dieser Seite, die verworfen werden, wenn Sie fortfahren.",
-});
+};
 
-dateFormatDefaults.text = Object.assign({}, dateFormatDefaults.text, {
+const calendarText: CalendarText = {
     days: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
     months: [
         "Januar",
@@ -82,25 +88,39 @@ dateFormatDefaults.text = Object.assign({}, dateFormatDefaults.text, {
     now: "Jetzt",
     am: "vorm.",
     pm: "nachm.",
-});
+    weekNo: "Woche",
+};
 
-numberFormatDefaults.decimal = ",";
-numberFormatDefaults.thousandSeparator = ".";
-numberFormatDefaults.moneyPrefix = "€";
-numberFormatDefaults.moneySuffix = "";
-numberFormatDefaults.listSeparator = ",";
+const calendarSettings: CalendarSettings = {
+    firstDayOfWeek: 1,
+    monthFirst: false,
+    formatter: {
+        cellTime: "HH:mm",
+        date: "DD.MM.YYYY",
+        datetime: "DD.MM.YYYY HH:ss",
+        time: "HH:mm",
+    },
+};
 
-function deDate(d: Date | undefined): string {
-    if (!d || !d.getDate) {
-        return "";
-    }
-    const day: string = pad(d.getDate(), 2);
-    const month: string = pad(d.getMonth() + 1, 2);
-    const year: number = d.getFullYear();
-    return `${day}.${month}.${year}`;
-}
+const numberSettings: NumberSettings = {
+    decimal: ",",
+    thousandSeparator: ".",
+    moneyPrefix: "€",
+    moneySuffix: "",
+    listSeparator: ",",
+    moneyPrecision: 2,
+};
 
-dateFormatDefaults.ampm = false;
-dateFormatDefaults.firstDayOfWeek = 1;
-dateFormatDefaults.monthFirst = false;
-dateFormatDefaults.formatter = { date: deDate, time: fmt.isoTime };
+export default {
+    form: {
+        prompt: formPrompt,
+        text: formText,
+    },
+    calendar: {
+        text: calendarText,
+        ...calendarSettings,
+    },
+    number: {
+        ...numberSettings,
+    },
+};

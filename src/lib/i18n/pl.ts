@@ -7,10 +7,15 @@
  * @module i18n/pl-PL
  */
 
-import { promptDefaults } from "../../lib/data/rule-book";
-import { numberFormatDefaults, dateFormatDefaults, fmt, pad } from "../../lib/data/format";
+import type {
+    CalendarSettings,
+    CalendarText,
+    FormPropmt,
+    FormText,
+    NumberSettings,
+} from "../data/semantic-types";
 
-promptDefaults.prompt = Object.assign({}, promptDefaults.prompt, {
+const formPrompt: FormPropmt = {
     empty: "{name} musi mieć wartość",
     checked: "{name} musi być zaznaczone",
     email: "{name} musi być prawidłowym adresem e-mail",
@@ -23,32 +28,33 @@ promptDefaults.prompt = Object.assign({}, promptDefaults.prompt, {
     isExactly: "{name} musi być dokładnie '{ruleValue}'",
     not: "{name} nie może być ustawione na '{ruleValue}'",
     notExactly: "{name} nie może być dokładnie '{ruleValue}'",
-    contain: "{name} nie może zawierać '{ruleValue}'",
-    containExactly: "{name} nie może zawierać dokładnie '{ruleValue}'",
+    contains: "{name} nie może zawierać '{ruleValue}'",
+    containsExactly: "{name} nie może zawierać dokładnie '{ruleValue}'",
     doesntContain: "{name} musi zawierać '{ruleValue}'",
     doesntContainExactly: "{name} musi zawierać dokładnie '{ruleValue}'",
     minLength: "{name} musi mieć przynajmniej {ruleValue} znaków",
-    length: "{name} musi mieć przynajmniej {ruleValue} znaków",
     exactLength: "{name} musi mieć dokładnie {ruleValue} znaków",
     maxLength: "{name} nie może być dłuższe niż {ruleValue} znaków",
-    size: "{name} musi mieć długość między {min} a {max} znaków",
     match: "{name} musi odpowiadać polu {ruleValue}",
     different: "{name} musi mieć inną wartość niż pole {ruleValue}",
     creditCard: "{name} musi być prawidłowym numerem karty kredytowej",
     minCount: "{name} musi mieć przynajmniej {ruleValue} wyborów",
     exactCount: "{name} musi mieć dokładnie {ruleValue} wyborów",
     maxCount: "{name} musi mieć {ruleValue} lub mniej wyborów",
-    addErrors: "{name}: {error}",
-});
 
-promptDefaults.text = Object.assign({}, promptDefaults.text, {
+    start: "{name} musi zaczynać się od '{ruleValue}'",
+    isoDate: "{name} musi być w formacie 'RRRR-MM-DD' (rok-miesiąc-dzień)",
+    startEnd: "{name} musi zaczynać się i kończyć na '{ruleValue}'",
+};
+
+const formText: FormText = {
     unspecifiedRule: "Proszę wprowadzić prawidłową wartość",
     unspecifiedField: "To pole",
     leavingMessage:
         "Na tej stronie są niezapisane zmiany, które zostaną utracone, jeśli kontynuujesz.",
-});
+};
 
-dateFormatDefaults.text = Object.assign({}, dateFormatDefaults.text, {
+const calendarText: CalendarText = {
     days: ["Nd", "Pn", "Wt", "Śr", "Cz", "Pt", "So"],
     months: [
         "Styczeń",
@@ -82,25 +88,39 @@ dateFormatDefaults.text = Object.assign({}, dateFormatDefaults.text, {
     now: "Teraz",
     am: "AM",
     pm: "PM",
-});
+    weekNo: "Tydzień",
+};
 
-numberFormatDefaults.decimal = ",";
-numberFormatDefaults.thousandSeparator = " ";
-numberFormatDefaults.moneyPrefix = "";
-numberFormatDefaults.moneySuffix = " zł";
-numberFormatDefaults.listSeparator = ",";
+const calendarSettings: CalendarSettings = {
+    firstDayOfWeek: 1,
+    monthFirst: false,
+    formatter: {
+        cellTime: "HH:mm",
+        date: "DD.MM.YYYY",
+        datetime: "DD.MM.YYYY HH:mm",
+        time: "HH:mm",
+    },
+};
 
-function plDate(d: Date | undefined): string {
-    if (!d || !d.getDate) {
-        return "";
-    }
-    const day: string = pad(d.getDate(), 2);
-    const month: string = pad(d.getMonth() + 1, 2);
-    const year: number = d.getFullYear();
-    return `${day}.${month}.${year}`;
-}
+const numberSettings: NumberSettings = {
+    decimal: ",",
+    thousandSeparator: " ",
+    moneyPrefix: "",
+    moneySuffix: " zł",
+    listSeparator: ",",
+    moneyPrecision: 2,
+};
 
-dateFormatDefaults.ampm = false;
-dateFormatDefaults.firstDayOfWeek = 1;
-dateFormatDefaults.monthFirst = false;
-dateFormatDefaults.formatter = { date: plDate, time: fmt.isoTime };
+export default {
+    form: {
+        prompt: formPrompt,
+        text: formText,
+    },
+    calendar: {
+        text: calendarText,
+        ...calendarSettings,
+    },
+    number: {
+        ...numberSettings,
+    },
+};

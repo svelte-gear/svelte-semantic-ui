@@ -17,7 +17,7 @@ $: {
         if (locale && locale !== currLocale) {
             await applyLocale(locale);
             saveLocaleCookie(locale);
-            location.reload();
+            // location.reload();
         }
     })();
 }

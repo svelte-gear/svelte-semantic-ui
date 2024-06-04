@@ -3,8 +3,10 @@
  * @module data/input-formatter
  */
 
+import type { NumberSettings } from "./semantic-types";
 import type { DataTypes, Formatter } from "./common";
-import { dateFormatDefaults, numberFormatDefaults } from "./format";
+import { fmt, numberDefaults } from "./format";
+import { calendarDefaults } from "../components/use-calendar";
 
 /*
                               dP
@@ -30,9 +32,10 @@ export class NumberFmt implements Formatter {
             }
             this.precision = prec;
         }
-        this.separator = sep !== undefined ? sep : numberFormatDefaults.thousandSeparator;
+        this.separator = sep !== undefined ? sep : numberDefaults.read().thousandSeparator ?? " ";
     }
 
+    // TODO: move format / parse number into format.ts
     parse(val: string): number | undefined {
         val = val.replace(/\s/g, ""); // remove whitespace
         val = val.split(this.separator).join(""); // replace all
@@ -91,10 +94,11 @@ export class MoneyFmt implements Formatter {
     suffixRegex: RegExp;
 
     constructor(prec?: number, pref?: string, suff?: string) {
-        const moneyPrec: number = prec !== undefined ? prec : numberFormatDefaults.moneyPrecision;
+        const def: NumberSettings = numberDefaults.read();
+        const moneyPrec: number = prec !== undefined ? prec : def.moneyPrecision ?? 2;
         this.numFormatter = new NumberFmt(moneyPrec);
-        this.prefix = pref !== undefined ? pref : numberFormatDefaults.moneyPrefix;
-        this.suffix = suff !== undefined ? suff : numberFormatDefaults.moneySuffix;
+        this.prefix = pref !== undefined ? pref : def.moneyPrefix ?? "$";
+        this.suffix = suff !== undefined ? suff : def.moneySuffix ?? "";
         this.prefixRegex = new RegExp("^\\s*" + escapeRegExp(this.prefix) + "\\s*");
         this.suffixRegex = new RegExp("\\s*" + escapeRegExp(this.suffix) + "\\s*$");
     }
@@ -106,12 +110,12 @@ export class MoneyFmt implements Formatter {
     }
 
     format(val: DataTypes): string {
-        const fmt: string = this.numFormatter.format(val);
-        console.log("fmt", fmt);
-        if (!fmt) {
+        const str: string = this.numFormatter.format(val);
+        console.log("fmt", str);
+        if (!str) {
             return "";
         }
-        return this.prefix + fmt + this.suffix;
+        return this.prefix + str + this.suffix;
     }
 }
 
@@ -171,7 +175,7 @@ export class ListFmt implements Formatter {
         if (sep === "") {
             throw new Error("List separator can't be empty");
         }
-        this.separator = sep !== undefined ? sep : numberFormatDefaults.listSeparator;
+        this.separator = sep !== undefined ? sep : numberDefaults.read().listSeparator;
     }
 
     parse(val: string): string[] {
@@ -237,8 +241,9 @@ export function formatDate(val: DataTypes): string {
     if (!(val instanceof Date)) {
         throw new Error("dateFormatter expects Date as data type, got " + typeof val);
     }
-    if (dateFormatDefaults.formatter?.date) {
-        return dateFormatDefaults.formatter?.date(val);
+    if (calendarDefaults.read().formatter?.date) {
+        return fmt.isoDate(val as Date | undefined);
+        // return dateFormatDefaults.formatter?.date(val);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any, @typescript-eslint/typedef
@@ -267,7 +272,8 @@ export class DateFmt implements Formatter {
     }
 
     format(val: DataTypes): string {
-        return dateFormatDefaults.formatter?.date!(val as Date) ?? "";
+        return fmt.isoDate(val as Date | undefined);
+        // return dateFormatDefaults.formatter?.date!(val as Date) ?? "";
         // return formatDate(val);
     }
 }

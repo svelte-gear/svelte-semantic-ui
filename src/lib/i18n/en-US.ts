@@ -1,33 +1,39 @@
 /**
- * Translations and formats for American English.
+ * Formats for American English.
 ```text
  Number: $1,000.00
- Date:   1/3/2024 2:50 PM
+ Date:   3/1/2024 2:50 PM
 ```
  * @module i18n/en-US
  */
 
-import { numberFormatDefaults, dateFormatDefaults, pad } from "../data/format";
+import type { CalendarSettings, NumberSettings } from "../data/semantic-types";
 
-import "./en";
+const calendarSettings: CalendarSettings = {
+    firstDayOfWeek: 0,
+    monthFirst: true,
+    formatter: {
+        cellTime: "h:mm A",
+        date: "M/D/YYYY",
+        datetime: "M/D/YYYY h:mm A",
+        time: "h:mm A",
+    },
+};
 
-numberFormatDefaults.decimal = ".";
-numberFormatDefaults.thousandSeparator = ",";
-numberFormatDefaults.moneyPrefix = "$";
-numberFormatDefaults.moneySuffix = "";
-numberFormatDefaults.listSeparator = ",";
+const numberSettings: NumberSettings = {
+    decimal: ".",
+    thousandSeparator: ",",
+    moneyPrefix: "$",
+    moneySuffix: "",
+    listSeparator: ",",
+    moneyPrecision: 2,
+};
 
-function usDate(d: Date | undefined): string {
-    if (!d || !d.getDate) {
-        return "";
-    }
-    const day: string = pad(d.getDate(), 1);
-    const month: string = pad(d.getMonth() + 1, 1);
-    const year: number = d.getFullYear();
-    return `${month}/${day}/${year}`;
-}
-
-dateFormatDefaults.ampm = true;
-dateFormatDefaults.firstDayOfWeek = 0;
-dateFormatDefaults.monthFirst = true;
-dateFormatDefaults.formatter = { date: usDate };
+export default {
+    calendar: {
+        ...calendarSettings,
+    },
+    number: {
+        ...numberSettings,
+    },
+};
