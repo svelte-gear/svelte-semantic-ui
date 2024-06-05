@@ -33,7 +33,7 @@
         "preview": "vite preview --host",
         "format":  "prettier --write .",
         "lint":    "prettier --check . && echo Linting... && eslint .",
-        "check":   "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+        "checks":  "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
         "package": "eslint . && vite build > /dev/null && echo Packaging... && svelte-kit sync && svelte-package && publint",
         "prepublishOnly": "svelte-kit sync && svelte-package && publint"
     },
