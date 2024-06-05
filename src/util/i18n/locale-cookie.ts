@@ -7,7 +7,7 @@ const localeCookieExpDays: number = 90;
 export function saveLocaleCookie(value: string): void {
     const date: Date = new Date();
     date.setTime(date.getTime() + localeCookieExpDays * 24 * 60 * 60 * 1000);
-    document.cookie = `${localeCookieName}=${value}; expires=${date.toUTCString()}; path=/`;
+    document.cookie = `${localeCookieName}=${value}; expires=${date.toUTCString()}; path=/; SameSite=Strict`;
 }
 
 export function readLocaleCookie(): string | null {

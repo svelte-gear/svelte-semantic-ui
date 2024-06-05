@@ -1,0 +1,959 @@
+​$.fn:
+    jquery: "3.6.0"
+    length: 0
+
+Common/trivial:
+    className: { active: "active", addition: "addition", animating: "animating", … }
+    debug: false
+    fields: { disabled: "disabled", ... }
+    metadata:
+        {
+            defaultText: "defaultText",
+            defaultValue: "defaultValue",
+            placeholderText: "placeholder",
+            …,
+        }
+    name: "Dropdown"
+    namespace: "dropdown"
+    performance: true
+    silent: false
+    selector: { addition: ".addition", dropdown: ".ui.dropdown", hidden: ".hidden", … }
+    templates: { dropdown: dropdown(e), menu: menu(e, o), label: label(e, t), … }
+    verbose: false
+
+accordion:
+    animateChildren: true
+    closeNested: false
+    collapsible: true
+    duration: 350
+    easing: "easeOutQuad"
+    exclusive: true
+    observeChanges: true
+    on: "click"
+
+    error:
+        method: "The method you called is not defined"
+
+    onChange: function onChange()
+    onChanging: function onChanging()
+    onClose: function onClose()
+    onClosing: function onClosing()
+    onOpen: function onOpen()
+    onOpening: function onOpening()
+
+api:
+    api: Object {  }
+    data: Object {  }
+    method: "get"
+    url: false
+    urlData: Object {  }
+
+    action: false
+    base: ""
+    cache: true
+    dataType: "json"
+    defaultData: true
+    encodeParameters: true
+    errorDuration: 2000
+    hideError: "auto"
+    interruptRequests: true
+    loadingDuration: 0
+    mockResponse: false
+    mockResponseAsync: false
+    on: "auto"
+    onResponse: false
+    rawResponse: true
+    response: false
+    responseAsync: false
+    serializeForm: false
+    stateContext: false
+    successTest: false
+    throttle: 0
+    throttleFirstRequest: true
+
+    error:
+        JSONParse: "JSON could not be parsed during error handling"
+        beforeSend: "The before send function has aborted the request"
+        error: "There was an error with your request"
+        exitConditions: "API Request Aborted. Exit conditions met"
+        legacyParameters: "You are using legacy API success callback names"
+        method: "The method you called is not defined"
+        missingAction: "API action used but no url was defined"
+        missingSerialize: "jquery-serialize-object is required to add form data to an existing data object"
+        missingURL: "No URL specified for api event"
+        noReturnedValue: "The beforeSend callback must return a settings object, beforeSend ignored."
+        noStorage: "Caching responses locally requires session storage"
+        parseError: "There was an error parsing your request"
+        requiredParameter: "Missing a required URL parameter: "
+        statusMessage: "Server gave an error: "
+        timeout: "Your request timed out"
+    regExp:
+        fixed: /^\d+$/
+        key: /[\w-]+|(?=\[])/gi
+        named: /^[\w-]+$/i
+        optional: /{\/\$*[\da-z]+}/gi
+        push: /^$/
+        required: /{\$*[\da-z]+}/gi​​
+        validate: /^[_a-z][\w-]*(?:\[[\w-]*])*$/i
+
+    beforeSend: function beforeSend(e)
+    beforeXHR: function beforeXHR(e)
+    onAbort: function onAbort(e, t)
+    onComplete: function onComplete(e, t)
+    onError: function onError(e, t)
+    onFailure: function onFailure(e, t)
+    onRequest: function onRequest(e, t)
+    onSuccess: function onSuccess(e, t)
+
+#                     dP                         dP
+#                     88                         88
+#   .d8888b. .d8888b. 88 .d8888b. 88d888b. .d888b88 .d8888b. 88d888b.
+#   88'  `"" 88'  `88 88 88ooood8 88'  `88 88'  `88 88'  `88 88'  `88
+#   88.  ... 88.  .88 88 88.  ... 88    88 88.  .88 88.  .88 88
+#   `88888P' `88888P8 dP `88888P' dP    dP `88888P8 `88888P8 dP
+#
+
+calendar:
+    type: "datetime" # date | time | month | year
+    context: false
+    disabledDates: Array []
+    disabledDaysOfWeek: Array []
+    disabledHours: Array []
+    enabledDates: Array []
+    eventDates: Array []
+    maxDate: null
+    minDate: null
+    initialDate: null # (def: now)
+    startCalendar: null # jQuery selector
+    endCalendar: null # jQuery selector
+
+    multiMonth: 1
+    monthOffest: 0
+
+    ampm: true # deleted
+    centuryBreak: 60
+    closable: true # close after selecting
+    constantHeight: true # always 6 rows
+    currentCentury: 2000
+    eventClass: "blue"
+    disableMinute: false # no minute selector
+    disableMonth: false # no month selector
+    disableYear: false # no year selector
+    firstDayOfWeek: 0 # 0 = Sunday
+    formatInput: true # on create & on blur
+    inline: false # no popup
+    isDisabled: function isDisabled(e, t)  ???
+    minTimeGap: 5 # min precision: 5|10|15|20|30
+    monthFirst: true # when parsing  #
+    on: null # when to show (def: click)
+    popupOptions:
+        hideOnScroll: false
+        lastResort: "bottom left"
+        position: "bottom left"
+        prefer: "opposite"
+    selectAdjacentDays: false # days from prev/next month
+    showWeekNumbers: false # on the left
+    startMode: false # year | month | def:day | hour
+    today: false # show today/now button
+    touchReadonly: true # no input on toch devives
+
+    error:
+        popup: "UI Popup, a required component is not included in this page"
+        method: "The method you called is not defined."
+    formatter:
+        cell: function cell(cell, date, options)
+        cellTime: "h:mm A" #
+        date: "MMMM D, YYYY" #
+        datetime: "MMMM D, YYYY h:mm A" #
+        dayColumnHeader: function dayColumnHeader(day, stn)
+        dayHeader: "MMMM YYYY"
+        hourHeader: "MMMM D, YYYY"
+        minuteHeader: "MMMM D, YYYY"
+        month: "MMMM YYYY"
+        monthHeader: "YYYY"
+        time: "h:mm A" #
+        today: function today(settings)
+        year: "YYYY"
+        yearHeader: function yearHeader(date, settings)
+    parser:
+        date: function date(e, t)
+    regExp:
+        dateWords: /[^A-Za-z\u00C0-\u024F]+/g
+        dateNumbers: /[^\d:]+/g
+    text: #
+        am: "AM"
+        days: Array(7) [ "S", "M", "T", … ]
+        months: Array(12) [ "January", "February", "March", … ]
+        monthsShort: Array(12) [ "Jan", "Feb", "Mar", … ]
+        dayNamesShort: ["Sun", "Mon", "Tue", …]
+        dayNames: ["Sunday", "Monday", "Tuesday", …]
+        now: "Now"
+        pm: "PM"
+        today: "Today"
+        weekNo: "Week"
+
+    onBeforeChange: function onBeforeChange(date, text, mode)
+    onChange: function onChange(date, text, mode)
+    onHidden: function onHidden()
+    onHide: function onHide()
+    onSelect: function onSelect(date, mode)
+    onShow: function onShow()
+    onVisible: function onVisible()
+
+checkbox:
+    fireOnInit: false
+    uncheckable: "auto"
+
+    error:
+        method: "The method you called is not defined"
+
+    beforeChecked: function beforeChecked()
+    beforeDeterminate: function beforeDeterminate()
+    beforeIndeterminate: function beforeIndeterminate()
+    beforeUnchecked: function beforeUnchecked()
+    onChange: function onChange()
+    onChecked: function onChecked()
+    onDeterminate: function onDeterminate()
+    onDisable: function onDisable()
+    onDisabled: function onDisabled()
+    onEnable: function onEnable()
+    onEnabled: function onEnabled()
+    onIndeterminate: function onIndeterminate()
+    onUnchecked: function onUnchecked()
+
+dimmer:
+    closable: "auto"
+    dimmerName: false
+    duration: { show: 500, hide: 500 }
+    on: false
+    opacity: "auto"
+    transition: "fade"
+    useCSS: true
+    useFlex: true
+    variation: false
+
+    error:
+        method: "The method you called is not defined."
+
+    onChange: function onChange()
+    onHide: function onHide()
+    onShow: function onShow()
+
+dropdown:
+    context: Window http://localhost:5173/
+    values: false
+
+    action: "activate"
+    allowAdditions: false
+    allowCategorySelection: false
+    allowReselection: false
+    allowTab: true
+    apiSettings: false
+    clearable: false
+    delay: { hide: 300, search: 20, show: 200​, touch: 50 }
+    delimiter: ","
+    direction: "auto"
+    duration: 200
+    filterRemoteData: false
+    fireOnInit: false
+    forceSelection: true
+    fullTextSearch: false
+    glyphWidth: 1.037
+    hideAdditions: true
+    ignoreCase: false
+    keepOnScreen: true
+    label: { transition: "scale", duration: 200, variation: false }
+    match: "both"
+    maxSelections: false
+    minCharacters: 0
+    on: "click"
+    placeholder: "auto"
+    preserveHTML: true
+    saveRemoteData: true
+    selectOnKeydown: true
+    showOnFocus: true
+    sortSelect: false
+    throttle: 200
+    transition: "auto"
+    useLabels: true
+
+    regExp:
+        escape: /[-[\]{}()*+?.,\\^$|#\s]/g
+        quote: /"/g
+    error:
+        action: "You called a dropdown action that was not defined"
+        alreadySetup: "Once a select has been initialized behaviors must be called on the created ui dropdown"
+        labels: "Allowing user additions currently requires the use of labels."
+        method: "The method you called is not defined."
+        missingMultiple: "<select> requires multiple property to be set to correctly preserve multiple values"
+        noAPI: "The API module is required to load resources remotely"
+        noStorage: "Saving remote data requires session storage"
+        noTransition: "This module requires ui transitions <https://github.com/Semantic-Org/UI-Transition>"
+    keys:
+        backspace: 8
+        deleteKey: 46
+        delimiter: 188
+        downArrow: 40
+        enter: 13
+        escape: 27
+        leftArrow: 37
+        pageDown: 34
+        pageUp: 33
+        rightArrow: 39
+        upArrow: 38
+    message:
+        addResult: "Add <b>{term}</b>"
+        count: "{count} selected"
+        maxSelections: "Max {maxCount} selections"
+        noResults: "No results found."
+        serverError: "There was an error contacting the server"
+
+    onAdd: function onAdd(e, t, n)
+    onChange: function onChange(e, t, n)
+    onHide: function onHide()
+    onLabelCreate: function onLabelCreate(e, t)
+    onLabelRemove: function onLabelRemove(e)
+    onLabelSelect: function onLabelSelect(e)
+    onNoResults: function onNoResults(e)
+    onRemove: function onRemove(e, t, n)
+    onShow: function onShow()
+
+embed:
+    source: false
+    url: false
+
+    api: false
+    autoplay: "auto"
+    brandedUI: false
+    color: "#444444"
+    hd: true
+    icon: false
+    id: false
+    parameters: false
+    sources:
+        youtube: { … }
+        vimeo: { … }
+
+    error:
+        noURL: "No URL specified"
+        method: "The method you called is not defined"
+
+    onCreate: function onCreate(e)
+    onDisplay: function onDisplay()
+    onEmbed: function onEmbed(e)
+    onPause: function onPause()
+    onPlaceholderDisplay: function onPlaceholderDisplay()
+    onPlay: function onPlay()
+    onReset: function onReset()
+    onStop: function onStop()
+
+#   .8888b
+#   88   "
+#   88aaa  .d8888b. 88d888b. 88d8b.d8b.
+#   88     88'  `88 88'  `88 88'`88'`88
+#   88     88.  .88 88       88  88  88
+#   dP     `88888P' dP       dP  dP  dP
+#
+
+form:
+    fields: false
+
+    autoCheckRequired: false
+    dateHandling: "date"
+    delay: 200
+    duration: 200
+    errorFocus: false
+    inline: false
+    keyboardShortcuts: true
+    on: "submit"
+    preventLeaving: false
+    revalidate: true
+    shouldTrim: true
+    transition: "scale"
+
+    regExp:
+        bracket: /\[(.*)\]/i
+        decimal: /^\d+\.?\d*$/
+        email: /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i
+        escape: /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|:,=@]/g
+        flags: /^\/(.*)\/(.*)?/
+        htmlID: /^[a-zA-Z][\w:.-]*$/g
+        integer: /^\-?\d+$/
+        number: /^\-?\d*(\.\d+)?$/
+        url: /(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/i
+    error:
+        identifier: "You must specify a string identifier for each field"
+        method: "The method you called is not defined."
+        noElement: "This module requires ui {element}"
+        noRule: "There is no rule matching the one you specified"
+        oldSyntax: "Starting in 2.0 forms now only take a single settings object. Validation settings converted to new syntax automatically."
+    prompt:
+        checked: "{name} must be checked"
+        contain: '{name} must contain "{ruleValue}"'
+        containExactly: '{name} must contain exactly "{ruleValue}"'
+        creditCard: "{name} must be a valid credit card number"
+        decimal: "{name} must be a decimal number"
+        different: "{name} must have a different value than {ruleValue} field"
+        doesntContain: '{name} cannot contain  "{ruleValue}"'
+        doesntContainExactly: '{name} cannot contain exactly "{ruleValue}"'
+        email: "{name} must be a valid e-mail"
+        empty: "{name} must have a value"
+        exactCount: "{name} must have exactly {ruleValue} choices"
+        exactLength: "{name} must be exactly {ruleValue} characters"
+        integer: "{name} must be an integer"
+        is: '{name} must be "{ruleValue}"'
+        isExactly: '{name} must be exactly "{ruleValue}"'
+        length: "{name} must be at least {ruleValue} characters"
+        match: "{name} must match {ruleValue} field"
+        maxCount: "{name} must have {ruleValue} or less choices"
+        maxLength: "{name} cannot be longer than {ruleValue} characters"
+        maxValue: "{name} must have a maximum value of {ruleValue}"
+        minCount: "{name} must have at least {ruleValue} choices"
+        minLength: "{name} must be at least {ruleValue} characters"
+        minValue: "{name} must have a minimum value of {ruleValue}"
+        not: '{name} cannot be set to "{ruleValue}"'
+        notExactly: '{name} cannot be set to exactly "{ruleValue}"'
+        number: "{name} must be set to a number"
+        range: "{name} must be in a range from {min} to {max}"
+        regExp: "{name} is not formatted correctly"
+        url: "{name} must be a valid url"
+    text:
+        and: "and"
+        leavingMessage: "There are unsaved changes on this page which will be discarded if you continue."
+        unspecifiedField: "This field"
+        unspecifiedRule: "Please enter a valid value"
+
+    formatter:
+        date: function date(e)
+        datetime: function datetime(e)
+        month: function month(e)
+        time: function time(e)
+        year: function year(e)
+    rules:
+        checked: function checked()
+        contains: function contains(e, t)
+        containsExactly: function containsExactly(e, t)
+        creditCard: function creditCard(n, e)
+        decimal: function decimal(e, t)
+        different: function different(e, t, n)
+        doesntContain: function doesntContain(e, t)
+        doesntContainExactly: function doesntContainExactly(e, t)
+        email: function email(e)
+        empty: function empty(e)
+        exactCount: function exactCount(e, t)
+        exactLength: function exactLength(e, t)
+        integer: function integer(e, t)
+        is: function is(e, t)
+        isExactly: function isExactly(e, t)
+        isoDate: function isoDateFn(value)
+        length: function length(e, t)
+        match: function match(e, t, n)
+        maxCount: function maxCount(e, t)
+        maxLength: function maxLength(e, t)
+        maxValue: function maxValue(e, t)
+        minCount: function minCount(e, t)
+        minLength: function minLength(e, t)
+        minValue: function minValue(e, t)
+        not: function not(e, t)
+        notExactly: function notExactly(e, t)
+        number: function number(e, t)
+        range: function range(e, t, n)
+        regExp: function regExp(e, t)
+        start: function startFn(value, ruleValue)
+        startEnd: function startEndFn(value, ruleValue)
+        url: function url(e)
+
+    onClean: function onClean()
+    onDirty: function onDirty()
+    onFailure: function onFailure()
+    onInvalid: function onInvalid()
+    onSuccess: function onSuccess()
+    onValid: function onValid()
+
+modal:
+    context: "body"
+
+    allowMultiple: false
+    autofocus: true
+    blurring: false
+    centered: true
+    closable: true
+    detachable: true
+    dimmerSettings: { closable: false, useCSS: true }
+    duration: 500
+    inverted: false
+    keyboardShortcuts: true
+    observeChanges: false
+    offset: 0
+    padding: 50
+    queue: false
+    transition: "scale"
+    useFlex: "auto"
+
+    error:
+        dimmer: "UI Dimmer, a required component is not included in this page"
+        method: "The method you called is not defined."
+        notFound: "The element you specified could not be found"
+
+    onApprove: function onApprove()
+    onDeny: function onDeny()
+    onHidden: function onHidden()
+    onHide: function onHide()
+    onShow: function onShow()
+    onVisible: function onVisible()
+
+nag:
+    value: "dismiss"
+
+    animation: { show: "slide", hide: "slide" }
+    className: { bottom: "bottom", fixed: "fixed" }
+    context: false
+    detachable: false
+    displayTime: 0
+    domain: false
+    easing: "easeOutQuad"
+    expires: 30
+    key: "nag"
+    path: "/"
+    persist: false
+    speed: 500
+    storageMethod: "cookie"
+
+    error:
+        noCookieStorage: "$.cookie is not included. A storage solution is required."
+        noStorage: "Neither $.cookie or store is defined. A storage solution is required for storing state"
+        method: "The method you called is not defined."
+
+    onHide: function onHide()
+
+popup:
+    boundary: Window http://localhost:5173/
+    content: false
+    context: "body"
+    scrollContext: Window http://localhost:5173/
+
+    addTouchEvents: true
+    arrowPixelsFromEdge: 20
+    closable: true
+    debug: false
+    delay: { show: 50, hide: 70 }
+    distanceAway: 0
+    duration: 200
+    exclusive: false
+    hideOnScroll: "auto"
+    hoverable: false
+    html: false
+    inline: false
+    jitter: 2
+    lastResort: false
+    maxSearchDepth: 15
+    movePopup: true
+    observeChanges: true
+    offset: 0
+    on: "hover"
+    popup: false
+    position: "top left"
+    prefer: "opposite"
+    preserve: false
+    setFluidWidth: true
+    silent: false
+    target: false
+    title: false
+    transition: "scale"
+
+    error:
+        cannotPlace: "Popup does not fit within the boundaries of the viewport"
+        invalidPosition: "The position you specified is not a valid position"
+        method: "The method you called is not defined."
+        noTransition: "This module requires ui transitions <https://github.com/Semantic-Org/UI-Transition>"
+        notFound: "The target or popup you specified does not exist on the page"
+
+    onCreate: function onCreate()
+    onHidden: function onHidden()
+    onHide: function onHide()
+    onRemove: function onRemove()
+    onShow: function onShow()
+    onUnplaceable: function onUnplaceable()
+    onVisible: function onVisible()
+
+progress:
+    value: false
+
+    autoSuccess: true
+    duration: 300
+    failSafeDelay: 100
+    framerate: 33.333333333333336
+    label: "percent"
+    limitValues: true
+    percent: false
+    performance: true
+    precision: 0
+    random: { min: 2, max: 5 }
+    showActivity: true
+    silent: false
+    total: false
+    updateInterval: "auto"
+
+    error:
+        method: "The method you called is not defined."
+        nonNumeric: "Progress value is non numeric"
+        tooHigh: "Value specified is above 100%"
+        tooLow: "Value specified is below 0%"
+    regExp:
+        variable: /\{\$*[A-z0-9]+\}/g
+    text:
+        active: false
+        error: false
+        percent: "{percent}%"
+        ratio: "{value} of {total}"
+        success: false
+        warning: false
+
+    onActive: function onActive(e, t)
+    onChange: function onChange(e, t, n)
+    onError: function onError(e, t)
+    onLabelUpdate: function onLabelUpdate(e, t, n, i)
+    onSuccess: function onSuccess(e)
+    onWarning: function onWarning(e, t)
+
+rating:
+    clearable: "auto"
+    fireOnInit: false
+    initialRating: 0
+    interactive: true
+    maxRating: 4
+
+    error:
+        method: "The method you called is not defined"
+        noMaximum: "No maximum rating specified. Cannot generate HTML automatically"
+
+    onRate: function onRate(e)
+
+search:
+    apiSettings: false
+    automatic: true
+    cache: true
+    displayField: ""
+    duration: 200
+    easing: "easeOutExpo"
+    fullTextSearch: "exact"
+    hideDelay: 0
+    maxResults: 7
+    minCharacters: 1
+    onResultsAdd: false
+    performance: true
+    searchDelay: 200
+    searchFields: Array [ "title", "description" ]
+    searchOnFocus: true
+    selectFirstResult: false
+    showNoResults: true
+    source: false
+    transition: "scale"
+    type: "standard"
+
+    error:
+        logging: "Error in debug logging, exiting."
+        maxResults: "Results must be an array to use maxResults setting"
+        method: "The method you called is not defined."
+        noEndpoint: "No search endpoint was specified"
+        noResults: "Your search returned no results"
+        noTemplate: "A valid template name was not specified."
+        oldSearchSyntax: "searchFullText setting has been renamed fullTextSearch for consistency, please adjust your settings."
+        serverError: "There was an issue querying the server."
+        source: "Cannot search. No source used, and Semantic API module was not included"
+    regExp:
+        escape: /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, \
+        beginsWith: "(?:s|^)"
+
+    onResults: function onResults(e)
+    onResultsClose: function onResultsClose()
+    onResultsOpen: function onResultsOpen()
+    onSearchQuery: function onSearchQuery(e)
+    onSelect: false
+
+shape:
+    allowRepeats: false
+    debug: false
+    duration: false
+    height: "initial"
+    jitter: 0
+    width: "initial"
+
+    error:
+        side: "You tried to switch to a side that does not exist."
+        method: "The method you called is not defined"
+
+    onBeforeChange: function beforeChange()
+    onChange: function onChange()
+
+sidebar:
+    context: "body"
+
+    closable: true
+    defaultTransition: { computer: { … }, mobile: { … } }
+    delaySetup: false
+    dimPage: true
+    duration: 500
+    exclusive: false
+    mobileTransition: "auto"
+    returnScroll: false
+    scrollLock: false
+    transition: "auto"
+
+    error:
+        method: "The method you called is not defined."
+        movedSidebar: "Had to move sidebar. For optimal performance make sure sidebar and pusher are direct children of your body tag"
+        notFound: "There were no elements that matched the specified selector"
+        overlay: "The overlay setting is no longer supported, use animation: overlay"
+        pusher: "Had to add pusher element. For optimal performance make sure body content is inside a pusher element"
+    regExp:
+        ios: /(iPad|iPhone|iPod)/g
+        mobileChrome: /(CriOS)/g
+        mobile: /Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/g
+
+    onChange: function onChange()
+    onHidden: function onHidden()
+    onHide: function onHide()
+    onShow: function onShow()
+    onVisible: function onVisible()
+
+site:
+    namespaceStub:
+        cache: Object {  }
+        config: Object {  }
+        section: Object {  }
+        sections: Object {  }
+        utilities: Object {  }
+    error:
+        console: "Console cannot be restored, most likely it was overwritten outside of module"
+        method: "The method you called is not defined."
+    modules:
+        0: "accordion"
+        1: "api"
+        2: "checkbox"
+        3: "dimmer"
+        4: "dropdown"
+        5: "embed"
+        6: "form"
+        7: "modal"
+        8: "nag"
+        9: "popup"
+        10: "rating"
+        11: "shape"
+        12: "sidebar"
+        13: "state"
+        14: "sticky"
+        15: "tab"
+        16: "transition"
+        17: "visit"
+        18: "visibility"
+
+slider:
+    end: 20
+    decimalPlaces: 2
+    max: 20
+    min: 0
+    start: 0
+    step: 1
+
+    autoAdjustLabels: true
+    fireOnInit: false
+    interpretLabel: false
+    labelDistance: 100
+    labelType: "number"
+    labelTypes: { number: "number", letter: "letter" }
+    pageMultiplier: 2
+    preventCrossover: true
+    showLabelTicks: false
+    smooth: false
+
+    error:
+        method: "The method you called is not defined."
+        notrange: "This slider is not a range slider"
+    keys:
+        downArrow: 40
+        leftArrow: 37
+        pageDown: 34
+        pageUp: 33
+        rightArrow: 39
+        upArrow: 38
+
+    onChange: function onChange(e, t, n)
+    onMove: function onMove(e, t, n)
+
+sticky:
+    container: false
+    context: false
+    scrollContext: Window http://localhost:5173/
+
+    bottomOffset: 0
+    jitter: 5
+    observeChanges: false
+    offset: 0
+    pushing: false
+    setSize: true
+
+    error:
+        container: "Sticky element must be inside a relative container"
+        elementSize: "Sticky element is larger than its container, cannot create sticky."
+        invalidContext: "Context specified does not exist"
+        method: "The method you called is not defined."
+        visible: "Element is hidden, you must call refresh after element becomes visible. Use silent setting to surpress this warning in production."
+
+    onBottom: function onBottom()
+    onReposition: function onReposition()
+    onScroll: function onScroll()
+    onStick: function onStick()
+    onTop: function onTop()
+    onUnstick: function onUnstick()
+
+tab:
+    alwaysRefresh: false
+    apiSettings: false
+    auto: false
+    cache: true
+    cacheType: "response"
+    childrenOnly: false
+    context: false
+    deactivate: "siblings"
+    evaluateScripts: "once"
+    history: false
+    historyType: "hash"
+    ignoreFirstLoad: false
+    loadOnce: false
+    maxDepth: 25
+    path: false
+
+    error:
+        api: "You attempted to load content without API module"
+        legacyInit: "onTabInit has been renamed to onFirstLoad in 2.0, please adjust your code."
+        legacyLoad: "onTabLoad has been renamed to onLoad in 2.0. Please adjust your code"
+        method: "The method you called is not defined"
+        missingTab: "Activated tab cannot be found. Tabs are case-sensitive."
+        noContent: "The tab you specified is missing a content url."
+        path: "History enabled, but no path was specified"
+        recursion: "Max recursive depth reached"
+        state: "History requires Asual's Address library <https://github.com/asual/jquery-address>"
+
+    onFirstLoad: function onFirstLoad(e, t, n)
+    onLoad: function onLoad(e, t, n)
+    onRequest: function onRequest(e, t, n)
+    onVisible: function onVisible(e, t, n)
+
+toast:
+    context: "body"
+    message: ""
+    title: ""
+
+    actions: false
+    class: "neutral"
+    classActions: false
+    classImage: "mini"
+    classProgress: false
+    cloneModule: true
+    closeIcon: false
+    closeOnClick: true
+    compact: true
+    displayTime: 3000
+    horizontal: false
+    minDisplayTime: 1000
+    newestOnTop: false
+    opacity: 1
+    pauseOnHover: true
+    position: "top right"
+    preserveHTML: true
+    progressUp: false
+    showIcon: false
+    showImage: false
+    showProgress: false
+    transition:
+        closeDuration: 500
+        closeEasing: "easeOutCubic"
+        hideDuration: 500
+        hideMethod: "scale"
+        showDuration: 500
+        showMethod: "scale"
+    wordsPerMinute: 120
+
+    error:
+        method: "The method you called is not defined."
+        noElement: "This module requires ui {element}"
+        verticalCard: "Vertical but not attached actions are not supported for card layout"
+    icons:
+        error: "times"
+        info: "info"
+        success: "checkmark"
+        warning: "warning"
+
+    onApprove: function onApprove()
+    onClick: function onClick()
+    onDeny: function onDeny()
+    onHidden: function onHidden()
+    onHide: function onHide()
+    onRemove: function onRemove()
+    onShow: function onShow()
+    onVisible: function onVisible()
+
+transition:
+    allowRepeats: false
+    animation: "fade"
+    displayType: false
+    duration: false
+    failSafeDelay: 100
+    interval: 0
+    queue: true
+    reverse: "auto"
+    useFailSafe: true
+
+    error:
+        method: "The method you called is not defined"
+        noAnimation: "Element is no longer attached to DOM. Unable to animate.  Use silent setting to surpress this warning in production."
+        repeated: "That animation is already occurring, cancelling repeated animation"
+        support: "This browser does not support CSS animations"
+
+    onComplete: function onComplete()
+    onHide: function onHide()
+    onShow: function onShow()
+    onStart: function onStart()
+
+visibility:
+    context: Window http://localhost:5173/
+
+    checkOnRefresh: true
+    continuous: false
+    duration: 1000
+    includeMargin: false
+    initialCheck: true
+    observeChanges: true
+    offset: 0
+    once: true
+    refreshOnLoad: true
+    refreshOnResize: true
+    throttle: false
+    transition: "fade in"
+    type: false
+    zIndex: "10"
+
+    error:
+        method: "The method you called is not defined."
+        visible: "Element is hidden, you must call refresh after element becomes visible"
+
+    onAllLoaded: function onAllLoaded()
+    onBottomPassed: false
+    onBottomPassedReverse: false
+    onBottomVisible: false
+    onBottomVisibleReverse: false
+    onFixed: function onFixed()
+    onLoad: function onLoad()
+    onOffScreen: false
+    onOnScreen: false
+    onPassed: Object {  }
+    onPassing: false
+    onPassingReverse: false
+    onRefresh: function onRefresh()
+    onTopPassed: false
+    onTopPassedReverse: false
+    onTopVisible: false
+    onTopVisibleReverse: false
+    onUnfixed: function onUnfixed()
+    onUpdate: false

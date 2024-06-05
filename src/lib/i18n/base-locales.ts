@@ -38,8 +38,6 @@ export async function readAndApply(prom: Promise<unknown>): Promise<void> {
     applyAllSettings(langJson.default);
 }
 
-/* eslint-disable @typescript-eslint/brace-style */
-
 /** Imports locale settings: validation messages, calendar, date and number formats.
     Returns applied local string or null if locale is not found */
 export async function applyLocale(locale: string): Promise<string | null> {
@@ -63,6 +61,7 @@ export async function applyLocale(locale: string): Promise<string | null> {
 
     // translate semantic ui components
     let langProm: Promise<unknown> | null = null;
+    /* eslint-disable @typescript-eslint/brace-style */
     /* prettier-ignore */
     if /**/ (lang === "de") { langProm = import("./de"); }
     else if (lang === "el") { langProm = import("./el"); }
@@ -74,10 +73,10 @@ export async function applyLocale(locale: string): Promise<string | null> {
     else if (lang === "ru") { langProm = import("./ru"); }
     else if (lang === "uk") { langProm = import("./uk"); }
     else {
-        console.info(`Unrecognized language: ${locale}`);
+        console.debug(`svt-sui-lib: base-locales: no translation for language '${lang}' (${locale})`);
         return null;
     }
-
+    /* eslint-enable */
     if (langProm !== null) {
         await readAndApply(langProm);
     }
@@ -87,6 +86,7 @@ export async function applyLocale(locale: string): Promise<string | null> {
 
     // apply country formats
     let locProm: Promise<unknown> | null = null;
+    /* eslint-disable @typescript-eslint/brace-style */
     /* prettier-ignore */
     if /**/ (locale === "de-DE") { locProm = null;  /* == de */ }
     else if (locale === "el-GR") { locProm = null;  /* == el */ }
@@ -103,13 +103,12 @@ export async function applyLocale(locale: string): Promise<string | null> {
     else if (locale === "ru-RU") { locProm = null;  /* == ru */ }
     else if (locale === "uk-UA") { locProm = null;  /* == uk */ }
     else {
-        console.info(`Unrecognized country: ${locale}`);
+        console.debug(`svt-sui-lib: base-locales: no config for locale '${locale}'`);
         return lang;
     }
-
+    /* eslint-enable */
     if (locProm !== null) {
         await readAndApply(locProm);
     }
     return locale;
 }
-/* eslint-enable */

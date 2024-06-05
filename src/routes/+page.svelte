@@ -7,7 +7,12 @@ import { writable } from "svelte/store";
 import { dropdown, Data } from "$lib";
 import { applyLocale, supportedLocales } from "../util/i18n/extra-locales";
 import { readLocaleCookie, saveLocaleCookie } from "../util/i18n/locale-cookie";
-import { currentLocale, supportedLocales as translationLocales } from "../util/translate";
+import {
+    currentLocale,
+    loadTranslations,
+    supportedLocales as translationLocales,
+    t,
+} from "../util/sveltekit-i18n";
 
 const currLocale: string = readLocaleCookie() ?? "";
 let locale: string = currLocale;
@@ -15,14 +20,21 @@ let locale: string = currLocale;
 $: {
     void (async () => {
         if (locale && locale !== currLocale) {
+            console.log(`Applying ${locale} locale to semantic-ui`);
             await applyLocale(locale);
+            const lang: string = locale.split("-")[0];
+            if (translationLocales.get().includes(lang)) {
+                console.log(`Loading ${lang} translations`);
+                await loadTranslations(lang);
+            } else {
+                console.log("Loading default translations");
+                await loadTranslations("en");
+            }
             saveLocaleCookie(locale);
-            // location.reload();
         }
     })();
 }
 
-import { t } from "../util/translate";
 const link: string = "https://kit.svelte.dev";
 const count: Writable<number> = writable(3);
 </script>

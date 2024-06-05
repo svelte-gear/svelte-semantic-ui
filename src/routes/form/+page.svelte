@@ -15,7 +15,7 @@ import {
     Data,
     FormValidator,
     MoneyFmt,
-    DateFmt,
+    // DateFmt,
     format,
     rule,
     fmt,
@@ -293,7 +293,7 @@ let valid: boolean = false;
                     <div
                         class="ui calendar"
                         use:calendar={{
-                            // type: "date",
+                            // type: "date", // FIXME: why is this required ?!
                             startMode: "year",
                         }}
                     >
@@ -352,13 +352,8 @@ Formatter replaces you input with correct string or empties it.
                 <label for="z1">
                     Date Input <span class="explain">(format)</span>
                 </label>
-                <input
-                    type="text"
-                    name="calendar-date"
-                    placeholder="date"
-                    id="z1"
-                    use:format={new DateFmt()}
-                />
+                <input type="text" name="calendar-date" placeholder="date" id="z1" />
+                <!-- use:format={new DateFmt()} -->
                 <Data bind:value={dat} validate={[rule.empty()]} />
             </div>
 

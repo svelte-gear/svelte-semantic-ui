@@ -7,6 +7,7 @@ import type { SettingsObject } from "./common";
 import { fmt, parse } from "./format";
 import type { FormPropmt, FormSettings, RuleFunc } from "./semantic-types";
 import { formDefaults } from "./use-form-validation";
+import { calendarDefaults } from "../components/use-calendar";
 
 /*
  dP                dP
@@ -176,9 +177,21 @@ export function registerRule(name: string, fn: RuleFunc, defaultPrompt: string):
     (def.prompt as FormPropmt & SettingsObject)[name] = defaultPrompt;
 }
 
-// TODO: translate custom rules
 export function extendRules(): void {
     registerRule("start", startFn, "{name} must start with '{ruleValue}'");
     registerRule("isoDate", isoDateFn, "{name} must follow the 'YYYY-MM-DD' format");
     registerRule("startEnd", startEndFn, "{name} must start and end with '{ruleValue}'");
+}
+
+export function applyDefaultSettings(locale?: string): void {
+    void locale;
+
+    calendarDefaults.apply({
+        type: "date",
+        touchReadonly: false,
+        minTimeGap: 5,
+    });
+    formDefaults.apply({
+        keyboardShortcuts: false,
+    });
 }

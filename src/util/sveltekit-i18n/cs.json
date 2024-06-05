@@ -7,8 +7,8 @@
     "nav-home": "Domov",
     "visit-svelte": "Navštivte <a href=\"{{link}}\">Výukový program Svelte</a>, kde se dozvíte, jak vytvářet aplikace Svelte.",
     "modal-is-if-active": "Modální {{isActive; false:je NE; default:je}} aktivní",
-    "archive-old-messages": "Archivujte staré zprávy",
     "your-inbox-is-getting-full": "Vaše schránka se zaplňuje, chcete, abychom povolili automatickou archivaci starých zpráv?",
     "btn.no": "Ne",
-    "btn.yes": "Ano"
+    "btn.yes": "Ano",
+    "archive-old-messages": "\"Archivovat staré zprávy\""
 }

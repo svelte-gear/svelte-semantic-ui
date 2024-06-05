@@ -7,8 +7,8 @@
     "nav-home": "Hogar",
     "visit-svelte": "Visite el <a href=\"{{link}}\">Tutorial de Svelte</a> para aprender cómo crear aplicaciones de Svelte.",
     "modal-is-if-active": "Modal {{isActive; false: no lo es; default: está}} activo",
-    "archive-old-messages": "Archivar mensajes antiguos",
     "your-inbox-is-getting-full": "Tu bandeja de entrada se está llenando. ¿Quieres que habilitemos el archivado automático de mensajes antiguos?",
     "btn.no": "No",
-    "btn.yes": "Sí"
+    "btn.yes": "Sí",
+    "archive-old-messages": "\"Archivar mensajes antiguos\""
 }

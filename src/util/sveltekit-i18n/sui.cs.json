@@ -1,0 +1,114 @@
+{
+    "calendar": {
+        "firstDayOfWeek": 1,
+        "monthFirst": false,
+        "formatter": {
+            "cellTime": "HH:mm",
+            "date": "DD.MM.YYYY",
+            "time": "HH.mm",
+            "datetime": "DD.MM.YYYY HH.mm"
+        },
+        "text": {
+            "days": ["ne", "po", "út", "st", "čt", "pá", "so"],
+            "months": [
+                "leden",
+                "únor",
+                "březen",
+                "duben",
+                "květen",
+                "červen",
+                "červenec",
+                "srpen",
+                "září",
+                "říjen",
+                "listopad",
+                "prosinec"
+            ],
+            "monthsShort": [
+                "led",
+                "úno",
+                "bře",
+                "dub",
+                "kvě",
+                "čvn",
+                "čvc",
+                "srp",
+                "zář",
+                "říj",
+                "lis",
+                "pro"
+            ],
+            "today": "dnes",
+            "now": "nyní",
+            "am": "AM",
+            "pm": "PM",
+            "weekNo": "Týden"
+        }
+    },
+    "form": {
+        "prompt": {
+            "empty": "{name} musí mít hodnotu.",
+            "checked": "{name} musí být zaškrtnuto.",
+            "email": "{name} musí být platná e-mailová adresa.",
+            "url": "{name} musí být platná URL.",
+            "regExp": "{name} není správně naformátováno.",
+            "integer": "{name} musí být celé číslo.",
+            "decimal": "{name} musí být desetinné číslo.",
+            "number": "{name} musí být číslo.",
+            "is": "{name} musí být '{ruleValue}'.",
+            "isExactly": "{name} musí být přesně '{ruleValue}'.",
+            "not": "{name} nesmí být '{ruleValue}'.",
+            "notExactly": "{name} nesmí být přesně '{ruleValue}'.",
+            "contains": "{name} nesmí obsahovat '{ruleValue}'.",
+            "containsExactly": "{name} nesmí obsahovat přesně '{ruleValue}'.",
+            "doesntContain": "{name} musí obsahovat '{ruleValue}'.",
+            "doesntContainExactly": "{name} musí obsahovat přesně '{ruleValue}'.",
+            "minLength": "{name} musí mít alespoň {ruleValue} znaků.",
+            "exactLength": "{name} musí mít přesně {ruleValue} znaků.",
+            "maxLength": "{name} nesmí přesáhnout {ruleValue} znaků.",
+            "match": "{name} musí odpovídat poli {ruleValue}.",
+            "different": "{name} musí mít odlišnou hodnotu od pole {ruleValue}.",
+            "creditCard": "{name} musí být platné číslo kreditní karty.",
+            "minCount": "{name} musí mít alespoň {ruleValue} možnosti.",
+            "exactCount": "{name} musí mít přesně {ruleValue} možnosti.",
+            "maxCount": "{name} nesmí mít více než {ruleValue} možnosti.",
+
+            "start": "{name} musí začínat na '{ruleValue}'",
+            "isoDate": "{name} musí být ve formátu 'YYYY-MM-DD' (rok-měsíc-den)",
+            "startEnd": "{name} musí začínat a končit na '{ruleValue}'"
+        },
+        "text": {
+            "unspecifiedRule": "Zadejte platnou hodnotu",
+            "unspecifiedField": "Toto pole",
+            "leavingMessage": "Na této stránce jsou neuložené změny, které budou ztraceny, pokud budete pokračovat.",
+
+            "and": "i"
+        }
+    },
+    "dropdown": {
+        "message": {
+            "addResult": "Přidat <b>{term}</b>",
+            "count": "{count} vybráno",
+            "maxSelections": "Maximálně {maxCount} výběrů",
+            "noResults": "Nebyly nalezeny žádné výsledky.",
+            "serverError": "Došlo k chybě při kontaktování serveru"
+        }
+    },
+    "progress": {
+        "text": {
+            "active": false,
+            "error": false,
+            "percent": "{percent}%",
+            "ratio": "{value} z {total}",
+            "success": "Úspěšně",
+            "warning": false
+        }
+    },
+    "number": {
+        "decimal": ",",
+        "thousandSeparator": " ",
+        "moneyPrefix": "",
+        "moneySuffix": " CZK",
+        "listSeparator": ","
+    }
+}

@@ -9,4 +9,3 @@ node_modules.*
 .env.*
 !.env.example
 yarn-error.log
-/static/fomantic-ui/components*

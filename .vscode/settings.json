@@ -46,9 +46,7 @@
     "diffEditor.ignoreTrimWhitespace": false,
     "git.confirmSync": false,
     "i18n-ally.localesPaths": [
-        "src/lib/i18n",
-        "src/util/i18n",
-        "src/util/translate"
+        "src/util/sveltekit-i18n"
     ],
     "i18n-ally.keystyle": "flat",
     "i18n-ally.extract.ignored": [
@@ -59,7 +57,8 @@
         "&nbsp;\n            {#if locStr === $currentLocale}\n                ",
         "Unsupported locale",
         " {\n            show = true;\n        }}\n    >\n        show = true\n    ",
-        " {\n            ctrl.show();\n        }}\n    >\n        ctrl.show()\n    "
+        " {\n            ctrl.show();\n        }}\n    >\n        ctrl.show()\n    ",
+        "\n                        {#if active}\n                            Validating\n                            "
     ],
     "i18n-ally.annotationInPlace": false,
     "i18n-ally.enabledFrameworks": [

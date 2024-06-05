@@ -4,7 +4,7 @@
 
 import { modal, Data } from "$lib";
 import { behavior, ModalBehavior } from "../../lib/data/behavior";
-import { t } from "../../util/translate";
+import { t } from "../../util/sveltekit-i18n";
 
 let show: boolean = true;
 

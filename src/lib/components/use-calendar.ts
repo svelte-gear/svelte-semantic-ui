@@ -9,32 +9,14 @@
 import { get, writable } from "svelte/store";
 
 import type { ActionReturnType, JQueryApi, DataController } from "../data/common";
-import { jQueryElem, equalDataTypes, uid, SVELTE_DATA_STORE } from "../data/common";
-import type { DateFormatSettings } from "../data/format";
-import { dateFormatDefaults, fmt } from "../data/format";
+import { jQueryElem, equalDataTypes, uid, SettingsHelper, SVELTE_DATA_STORE } from "../data/common";
+import type { CalendarSettings } from "../data/semantic-types";
+import { fmt } from "../data/format";
 
-export type CalendarType = "datetime" | "date" | "time";
-export type OnCalendarChangeFn = (newValue: Date) => void;
-export type OnCalendarHiddenFn = () => void;
-
-/** Calendar component parameters.
-    @extends DateFormatSettings */
-export interface CalendarSettings {
-    type?: CalendarType;
-    touchReadonly?: boolean;
-    maxDate?: Date;
-    startMode?: string;
-    onChange?: OnCalendarChangeFn;
-    onHidden?: OnCalendarHiddenFn;
-    // [key: string]: unknown;
-}
-// TODO: fix all settings
+export type CalendarType = "datetime" | "date" | "time" | "month" | "year";
 
 /** Calendar default settings. May be overriden by settings parameter in use:calendar() */
-export const calendarDefaults: CalendarSettings = {
-    type: "date",
-    touchReadonly: false,
-};
+export const calendarDefaults: SettingsHelper<CalendarSettings> = new SettingsHelper("calendar");
 
 type CalendarApi = {
     calendar(settings: CalendarSettings): void;
@@ -61,16 +43,19 @@ type CalendarApi = {
 */
 export function calendar(
     node: Element,
-    settings?: CalendarSettings & DateFormatSettings
+    settings?: CalendarSettings /*& DateFormatSettings*/
 ): ActionReturnType {
     const elem: JQueryApi & CalendarApi = jQueryElem(node) as JQueryApi & CalendarApi;
     if (!elem.calendar) {
         throw new Error("Semantic UI is not initialized");
     }
 
+    // TODO: review this function scope, can it be simpyfied ?
     /** Format as date, time, or datetime depending on type */
     function format(d: Date | undefined): string {
-        const cType: CalendarType = settings && settings.type ? settings.type : "date";
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const cType: CalendarType | undefined =
+            (settings && settings.type) ?? calendarDefaults.read().type;
         switch (cType) {
             case "date":
                 return fmt.isoDate(d);
@@ -129,22 +114,31 @@ export function calendar(
 
     */
 
-    function onCalendarChange(newValue: Date): void {
-        if (calendarDefaults.onChange) {
-            calendarDefaults.onChange(newValue);
+    function onCalendarChange(
+        this: JQuery<HTMLElement>,
+        newValue: Date,
+        text: string,
+        mode: string
+    ): void {
+        const def: CalendarSettings = calendarDefaults.read();
+        if (def.onChange) {
+            def.onChange.call(this, newValue, text, mode);
         }
         if (settings && settings.onChange) {
-            settings.onChange(newValue);
+            settings.onChange.call(this, newValue, text, mode);
         }
         ctrl.onChange(newValue);
     }
 
-    function onCalendarHidden(): void {
-        if (calendarDefaults.onHidden) {
-            calendarDefaults.onHidden();
+    // TODO: check other component's onChange methods
+
+    function onCalendarHidden(this: JQuery<HTMLElement>): void {
+        const def: CalendarSettings = calendarDefaults.read();
+        if (def.onHidden) {
+            def.onHidden.call(this);
         }
         if (settings && settings.onHidden) {
-            settings.onHidden();
+            settings.onHidden.call(this);
         }
         const value: Date = elem.calendar("get date") as Date;
         ctrl.onChange(value);
@@ -160,16 +154,14 @@ export function calendar(
 
     */
 
-    console.log("calendarDefaults", calendarDefaults);
-
     // Initialize Semantic component
     elem.calendar({
-        ...dateFormatDefaults,
-        ...calendarDefaults,
+        // ...dateFormatDefaults,
+        // ...calendarDefaults,
         ...settings,
         onChange: onCalendarChange,
         onHidden: onCalendarHidden,
-    });
+    } as CalendarSettings);
 
     // Attach store holder to jQuery element
     console.debug(`  store(${ctrl.uid}) - ${ctrl.mode} created`);
