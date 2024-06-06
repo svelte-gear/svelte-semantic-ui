@@ -5,11 +5,17 @@ import {
     supportedLocales as baseSupportedLocales,
     applyLocale as baseApplyLocale,
     readAndApply,
-} from "../../lib/i18n/base-locales";
+} from "../../lib/i18n";
 
 /** Returns full list od supported locales: default and added by the application. */
 export function supportedLocales(): string[] {
     return [...baseSupportedLocales(), "be-BY", "fi-FI", "en-AU", "ja-JP"];
+}
+
+let currLocale: string = "en";
+
+export function currentLocale(): string {
+    return currLocale;
 }
 
 /** Imports locale settings added in the app, if not in list - uses default.
@@ -39,8 +45,11 @@ export async function applyLocale(locale: string): Promise<string | null> {
         ext = lang;
     }
     if (lang === locale) {
+        currLocale = lang;
         return lang;
     }
+
+    // TODO: create registerLocale function in the base module
 
     let locProm: Promise<unknown> | null = null;
     /* eslint-disable @typescript-eslint/brace-style */

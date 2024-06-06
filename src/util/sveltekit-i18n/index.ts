@@ -75,7 +75,7 @@ export const t: Readable<(key: string, ...params: { [key: string]: any }[]) => a
 export const loadTranslations: (locale: string, route?: string) => LtRes = ski18n.loadTranslations;
 
 /** List of locales configured in sveltekit-i18n. */
-export const supportedLocales: Readable<string[]> & { get: () => string[] } = ski18n.locales;
+export const locales: Readable<string[]> & { get: () => string[] } = ski18n.locales;
 
 /** Currntly applied locale. */
-export const currentLocale: Readable<string> & { get: () => string } = ski18n.locale;
+export const locale: Readable<string> & { get: () => string } = ski18n.locale;

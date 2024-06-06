@@ -2,12 +2,11 @@
 // Script executed for all pages.
 
 import type { LoadEvent } from "@sveltejs/kit";
-
 import { extendRules, applyDefaultSettings } from "../lib/data/rule-book";
 
-import { applyLocale, supportedLocales } from "../util/i18n/extra-locales";
-import { readLocaleCookie, saveLocaleCookie } from "../util/i18n/locale-cookie";
-import { supportedLocales as translationLocales, loadTranslations } from "../util/sveltekit-i18n";
+import { applyLocale, supportedLocales } from "../util/sui-i18n";
+import { browserMatch, cookieMatch, saveLocaleCookie } from "../util/locale";
+import { locales, loadTranslations } from "../util/sveltekit-i18n";
 
 export const ssr: boolean = false;
 export const prerender: boolean = true;
@@ -18,9 +17,13 @@ export const prerender: boolean = true;
 
 async function translate(locale: string): Promise<void> {
     console.log(`Applying ${locale} locale to semantic-ui`);
-    await applyLocale(locale);
+    // const res: string | null = await applyLocale(locale);
+    // if (!res) {
+    //     return;
+    // }
+
     const lang: string = locale.split("-")[0];
-    if (translationLocales.get().includes(lang)) {
+    if (locales.get().includes(lang)) {
         console.log(`Loading ${lang} translations`);
         await loadTranslations(lang);
     } else {
@@ -37,39 +40,22 @@ export async function load({ params }: LoadEvent): Promise<{ locale: string }> {
     extendRules();
     applyDefaultSettings();
 
-    // semantic-ui translations - read from cookie
-    const cookieLocale: string | null = readLocaleCookie();
+    const cookieLocale: string | null = cookieMatch(supportedLocales());
     if (cookieLocale) {
         res = await applyLocale(cookieLocale);
-        if (res !== null) {
-            await translate(cookieLocale);
-            return { locale: res };
-        }
+        await translate(cookieLocale);
+        return { locale: res! };
     }
 
-    // semantic-ui translations - try browser languages
-    for (const browserLocale of navigator.languages) {
-        // first, look for exact match
-        if (supportedLocales().includes(browserLocale)) {
-            res = await applyLocale(browserLocale);
-            if (res !== null) {
-                saveLocaleCookie(res);
-                await translate(browserLocale);
-                return { locale: res };
-            }
-        }
-    }
-    // then allow partial matching by language
-    for (const browserLocale of navigator.languages) {
+    const browserLocale: string | null = browserMatch(supportedLocales());
+    if (browserLocale) {
         res = await applyLocale(browserLocale);
-        if (res !== null) {
-            saveLocaleCookie(res);
-            await translate(browserLocale);
-            return { locale: res };
-        }
+        saveLocaleCookie(res!);
+        await translate(browserLocale);
+        return { locale: res! };
     }
 
-    // default = "en" (no locale changes)
+    res = await applyLocale("en");
     await translate("en");
-    return { locale: "default" };
+    return { locale: res! };
 }
