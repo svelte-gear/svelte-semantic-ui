@@ -74,3 +74,7 @@ utils  <---  use-action    <---  index         <---  pages
         />
     </form>
 ```
+
+# Sequence diagram
+
+https://github.com/svelte-gear/svelte-semantic-ui/blob/main/doc/sequence-diagram.png?raw=true

@@ -1,16 +1,23 @@
 {
-    "name":        "svelte-semantic-ui",
-    "version":     "0.0.2",
+    "name":        "@svelte-gear/svelte-semantic-ui",
+    "version":     "0.0.5-alpha",
     "type":        "module",
-    "private":     true,
     "license":     "MIT",
-    "description": "svelte actions and bindings for semantic-ui or fomantic-ui",
+    "description": "svelte actions and bindings for semantic-ui or fomantic-ui (work in progress)",
+    "author":      "AK",
 
     "_files": "files to be included when is installed as a dependency",
     "files": [
         "dist",
-        "!dist/**/*.spec.*"
+        "!dist/**/*.spec.*",
+        "!dist/**/_.*",
+        "doc",
+        "!doc/api",
+        "!doc/logo",
+        "!doc/img"
     ],
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
 
     "_exports": {
         ".": "export root folder",
@@ -46,9 +53,8 @@
     },
     "peerDependencies": {
         "svelte":          "^3.12.1 || ^4.0.0",
-        "jquery":          "^1.12.4 || ^2.2.4 || ^3.3.1",
-        "semantic-ui-css": "^2.4.1",
-        "fomantic-ui-css": "^2.8.8"
+        "jquery":          "^3.6.0",
+        "fomantic-ui-css": "^2.9.3"
     },
 
     "_dependencies": {

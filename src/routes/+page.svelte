@@ -2,42 +2,36 @@
 // +page.svelte
 // Home page, allows to change locale.
 
-import type { Writable } from "svelte/store";
-import { writable } from "svelte/store";
 import { dropdown, Data } from "$lib";
 
-import { applyLocale, supportedLocales } from "../util/sui-i18n";
-import { readLocaleCookie, saveLocaleCookie } from "../util/locale";
-import { loadTranslations, locale, locales, t } from "../util/sveltekit-i18n";
+import { applyLocale, supportedLocales } from "../lib/i18n";
+import { readLocaleCookie, saveLocaleCookie } from "../locale-info";
 
-const currLocale: string = readLocaleCookie() ?? "";
+let currLocale: string = readLocaleCookie() ?? "";
 let newLocale: string = currLocale;
 
 $: {
     void (async () => {
         if (newLocale && newLocale !== currLocale) {
-            console.log(`Applying ${newLocale} locale to semantic-ui`);
             await applyLocale(newLocale);
-            const lang: string = newLocale.split("-")[0];
-            if (locales.get().includes(lang)) {
-                console.log(`Loading ${lang} translations`);
-                await loadTranslations(lang);
-            } else {
-                console.log("Loading default translations");
-                await loadTranslations("en");
-            }
             saveLocaleCookie(newLocale);
+            currLocale = newLocale;
         }
     })();
 }
-
-const link: string = "https://kit.svelte.dev";
-const count: Writable<number> = writable(3);
 </script>
 
-<h1>{$t("welcome-to-your-lib")}</h1>
+<h1>Home</h1>
+<p><b>Svelte Semantic UI</b> - demo and test pages</p>
 
-<br />
+<p>
+    <a href="https://svelte.dev/tutorial">Svelte</a> |
+    <a href="https://semantic-ui.com/introduction/getting-started.html">Semantic UI</a> |
+    <a href="https://fomantic-ui.com/introduction/getting-started.html">Fomantic UI</a>
+    <br />
+    <a href="https://github.com/svelte-gear/svelte-semantic-ui">GitHub</a> |
+    <a href="https://www.npmjs.com/package/@svelte-gear/svelte-semantic-ui">npm</a>
+</p>
 
 <form>
     <select class="ui selection dropdown" use:dropdown={{ clearable: true }}>
@@ -47,22 +41,4 @@ const count: Writable<number> = writable(3);
         {/each}
     </select>
 </form>
-<p>value = {newLocale}</p>
-
-<h1>{$t("cont.title")}</h1>
-<p>
-    {$t("translation-locales")}
-    {#each $locales as locStr}
-        <span>
-            &nbsp;
-            {#if locStr === $locale}
-                <b><u>{locStr}</u></b>
-            {:else}
-                {locStr}
-            {/if}
-        </span>
-    {/each}
-</p>
-<p>{$t("cont.text", { link: link })}</p>
-
-{$t("menu.notification", { count: $count })}
+<p>locale = {newLocale}</p>

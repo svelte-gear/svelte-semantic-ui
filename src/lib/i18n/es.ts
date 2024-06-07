@@ -1,10 +1,10 @@
 /**
  * Castilian Spanish translations and formats.
 ```text
- Number: 1.234,56 €
- Date:   1-03-2024 14.50
+ Number: 1 234,56 €
+ Date:   1-mar-2024 14.50
 ```
- * @module i18n/es-ES
+ * @module i18n/es-int
  */
 
 import type {
@@ -97,15 +97,15 @@ const calendarSettings: CalendarSettings = {
     monthFirst: false,
     formatter: {
         cellTime: "HH:mm",
-        date: "D-MM-YYYY",
-        datetime: "D-MM-YYYY HH:mm",
+        date: "D-MMM-YYYY",
+        datetime: "D-MMM-YYYY HH:mm",
         time: "HH:mm",
     },
 };
 
 const numberSettings: NumberSettings = {
     decimal: ",",
-    thousandSeparator: ".",
+    thousandSeparator: " ",
     moneyPrefix: "",
     moneySuffix: " €",
     listSeparator: ",",

@@ -2,7 +2,7 @@
  * Metropolitan French translations and formats.
 ```text
  Number: 1 000,00 €
- Date:   01/03/2024 14:50
+ Date:   01 mar 2024, 14:50
 ```
  * @module i18n/fr
  */
@@ -96,8 +96,8 @@ const calendarSettings: CalendarSettings = {
     monthFirst: false,
     formatter: {
         cellTime: "HH:mm",
-        date: "DD/MM/YYYY",
-        datetime: "DD/MM/YYYY HH:mm",
+        date: "D MMM YYYY",
+        datetime: "D MMM YYYY, HH:mm",
         time: "HH:mm",
     },
 };

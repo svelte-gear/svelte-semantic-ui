@@ -10,14 +10,14 @@ import { formDefaults } from "./use-form-validation";
 import { calendarDefaults } from "../components/use-calendar";
 
 /*
- dP                dP
- 88                88
- 88d888b. .d8888b. 88 88d888b. .d8888b. 88d888b.
- 88'  `88 88ooood8 88 88'  `88 88ooood8 88'  `88
- 88    88 88.  ... 88 88.  .88 88.  ... 88
- dP    dP `88888P' dP 88Y888P' `88888P' dP
-                      88
-                      dP
+                   dP             dP                dP
+                   88             88                88
+ 88d888b. dP    dP 88 .d8888b.    88d888b. .d8888b. 88 88d888b. .d8888b. 88d888b.
+ 88'  `88 88    88 88 88ooood8    88'  `88 88ooood8 88 88'  `88 88ooood8 88'  `88
+ 88       88.  .88 88 88.  ...    88    88 88.  ... 88 88.  .88 88.  ... 88
+ dP       `88888P' dP `88888P'    dP    dP `88888P' dP 88Y888P' `88888P' dP
+                                                       88
+                                                       dP
 */
 
 /* prettier-ignore */
@@ -58,80 +58,6 @@ export const rule = {
 
     // TODO: add custom rules
 };
-
-/*
-                     dP     dP   oo
-                     88     88
- .d8888b. .d8888b. d8888P d8888P dP 88d888b. .d8888b. .d8888b.
- Y8ooooo. 88ooood8   88     88   88 88'  `88 88'  `88 Y8ooooo.
-       88 88.  ...   88     88   88 88    88 88.  .88       88
- `88888P' `88888P'   dP     dP   dP dP    dP `8888P88 `88888P'
-                                                  .88
-                                              d8888P
-*/
-
-// /* prettier-ignore */
-// type RulePromptTranslation = {
-//     // semantic-ui 2.4
-//     empty:      string;
-//     checked:    string;
-
-//     email:      string;
-//     url:        string;
-//     regExp:     string;
-//     integer:    string;
-//     decimal:    string;
-//     number:     string;
-//     // creditCard?
-
-//     is:             string;
-//     isExactly:      string;
-//     not:            string;
-//     notExactly:     string;
-//     contain:        string;
-//     containExactly: string;
-//     doesntContain:  string;
-//     doesntContainExactly: string;
-//     // match?
-//     // different?
-
-//     minLength:   string;
-//     length:      string;
-//     exactLength: string;
-//     maxLength:   string;
-//     match:       string;
-//     different:   string;
-//     creditCard:  string;
-//     minCount:    string;
-//     exactCount:  string;
-//     maxCount:    string;
-
-//     // fomantic-ui 2.9
-//     size:        string;
-//     addErrors:   string;
-
-//     // // svelte-semantic-ui
-//     // date:           string;
-//     // greaterThen:    string;
-//     // greaterOrEqual: string;
-//     // lessThen:       string;
-//     // lessOrEqual:    string;
-// };
-
-// type FormPromptTranslation = {
-//     // semantic-ui 2.4
-//     unspecifiedRule: string;
-//     unspecifiedField: string;
-//     // fomantic-ui 2.9
-//     leavingMessage?: string;
-// };
-
-// export type PromptSettings = {
-//     prompt?: FormPropmt & { [key: string]: string };
-//     text?: FormText;
-// };
-
-// export const promptDefaults: PromptSettings = {};
 
 /*
                               dP                                            dP

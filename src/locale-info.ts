@@ -1,5 +1,5 @@
-// util/locale.ts
-// Helper functions for storing selected locale in a cookie.
+// locale-info.ts
+// Helper functions for storing selected locale in a cookie and matching browser locale.
 
 const localeCookieName: string = "ssui_locale";
 const localeCookieExpDays: number = 90;
@@ -22,11 +22,11 @@ export function readLocaleCookie(): string | null {
     return null;
 }
 
-export function getLanguage(locale: string): string {
+function getLanguage(locale: string): string {
     return locale.split("-")[0];
 }
 
-export function getLanguages(locales: readonly string[]): string[] {
+function getLanguages(locales: readonly string[]): string[] {
     const languages: string[] = locales.map((locale: string): string => getLanguage(locale));
     const uniqueLanguages: string[] = [...new Set(languages)];
     return uniqueLanguages;
@@ -42,6 +42,7 @@ export function cookieMatch(supportedLocales: string[]): string | null {
     }
     const cookieLanguage: string = getLanguage(cookieLocale);
     if (getLanguages(supportedLocales).includes(cookieLanguage)) {
+        console.debug(`Partial cookie locale match: ${cookieLocale} ~= ${cookieLanguage}`);
         return cookieLanguage;
     }
     return null;
@@ -56,8 +57,10 @@ export function browserMatch(supportedLocales: string[]): string | null {
     }
     // try partial matching by language
     const supportedLanguages: string[] = getLanguages(supportedLocales);
-    for (const browserLanguage of getLanguages(navigator.languages)) {
+    for (const browserLocale of navigator.languages) {
+        const browserLanguage: string = getLanguage(browserLocale);
         if (supportedLanguages.includes(browserLanguage)) {
+            console.debug(`Partial browser locale match: ${browserLocale} ~= ${browserLanguage}`);
             return browserLanguage;
         }
     }

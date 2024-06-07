@@ -9,8 +9,10 @@ import { page } from "$app/stores";
 <div class="app-layout">
     <nav class="ui buttons">
         <a href="/" class="ui button basic">Home</a>
-        <a href="/form" class="ui button basic">Form</a>
         <a href="/dialog" class="ui button basic">Dialog</a>
+        <a href="/form" class="ui button basic">Form</a>
+        <a href="/about" class="ui button basic">About</a>
+        <a href="/xxx" class="ui button basic">Wrong</a>
     </nav>
     <div class="ui divider" />
 

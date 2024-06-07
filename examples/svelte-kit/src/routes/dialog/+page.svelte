@@ -3,8 +3,13 @@
 // Sample dialog page.
 
 import { modal, Data } from "$lib";
+import { behavior, ModalBehavior } from "../../lib/data/behavior";
+import { t } from "../../util/sveltekit-i18n";
 
 let show: boolean = true;
+
+// const ctrl = {} as { modal: SemanticCommand };
+const ctrl: ModalBehavior = new ModalBehavior();
 
 function okFn(): void {
     console.log("ok");
@@ -17,11 +22,14 @@ $: console.log(`SHOW : ${show}`);
 </script>
 
 <main>
-    <h1>Dialog</h1>
+    <h1>{$t("nav-home")}</h1>
+
     <p>
-        Modal dialog is
-        {#if !show}NOT{/if}
-        active.
+        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+        {@html $t("visit-svelte", { link: "https://svelte.dev/tutorial" })}
+    </p>
+    <p>
+        {$t("modal-is-if-active", { isActive: show })}
     </p>
     <button
         class="ui button"
@@ -29,7 +37,15 @@ $: console.log(`SHOW : ${show}`);
             show = true;
         }}
     >
-        Show Dialog
+        show = true
+    </button>
+    <button
+        class="ui button basic"
+        on:click={() => {
+            ctrl.show();
+        }}
+    >
+        ctrl.show()
     </button>
 
     <!--
@@ -44,6 +60,7 @@ $: console.log(`SHOW : ${show}`);
     <div
         id="md"
         class="ui basic modal"
+        use:behavior={ctrl}
         use:modal={{
             onApprove: okFn,
             onDeny: noFn,
@@ -53,22 +70,24 @@ $: console.log(`SHOW : ${show}`);
         <Data bind:active={show} />
         <div class="ui icon header">
             <i class="archive icon" />
-            Archive Old Messages
+            {$t("archive-old-messages")}
         </div>
         <div class="content">
             <p id="x3">
-                Your inbox is getting full, would you like us to enable automatic archiving of old
-                messages?
+                {$t("your-inbox-is-getting-full")}
+            </p>
+            <p>
+                {$t("modal-is-if-active", { isActive: show })}
             </p>
         </div>
         <div class="actions">
             <div class="ui red basic cancel inverted button">
                 <i class="remove icon" />
-                No
+                {$t("btn.no")}
             </div>
             <div class="ui green ok inverted button">
                 <i class="checkmark icon" />
-                Yes
+                {$t("btn.yes")}
             </div>
         </div>
     </div>

@@ -2,6 +2,7 @@
 // form/+page.svelte
 // Sample form page with components, data binding, and validation.
 
+// import { number, reach } from "yup";
 import {
     checkbox,
     popup,
@@ -14,7 +15,7 @@ import {
     Data,
     FormValidator,
     MoneyFmt,
-    DateFmt,
+    // DateFmt,
     format,
     rule,
     fmt,
@@ -351,13 +352,8 @@ Formatter replaces you input with correct string or empties it.
                 <label for="z1">
                     Date Input <span class="explain">(format)</span>
                 </label>
-                <input
-                    type="text"
-                    name="calendar-date"
-                    placeholder="date"
-                    id="z1"
-                    use:format={new DateFmt()}
-                />
+                <input type="text" name="calendar-date" placeholder="date" id="z1" />
+                <!-- use:format={new DateFmt()} -->
                 <Data bind:value={dat} validate={[rule.empty()]} />
             </div>
 
@@ -392,6 +388,7 @@ Formatter replaces you input with correct string or empties it.
                         }}
                     />
                     <Data bind:value={rank} validate="start[A]" />
+                    <!-- bind:value={rank} -->
                 </div>
             {/if}
             <!--
