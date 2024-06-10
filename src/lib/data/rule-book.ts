@@ -79,7 +79,7 @@ export const rule = {
 function isoDateFn(value: string): boolean {
     let d: Date | undefined = undefined;
     try {
-        d = parse.isoDate(value + " 13:00") as Date;
+        d = parse.isoDate(value + " 13:00") as Date; // TODO: use better hack
     } catch (ex) {
         d = undefined;
     }
@@ -117,6 +117,7 @@ export function applyDefaultSettings(locale?: string): void {
         touchReadonly: false,
         minTimeGap: 5,
     });
+
     formDefaults.apply({
         keyboardShortcuts: false,
     });

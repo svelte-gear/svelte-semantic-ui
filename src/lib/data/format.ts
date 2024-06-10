@@ -3,13 +3,12 @@
  * @module data/format
  */
 
-import type { DataTypes } from "./common";
 import { SettingsHelper, pad } from "./common";
-import type { NumberSettings } from "./semantic-types";
+import type { DateFormatFn, DateParseFn, NumberSettings } from "./semantic-types";
+import { DateFmt } from "./input-formatter";
 
 export const numberDefaults: SettingsHelper<NumberSettings> = new SettingsHelper("number");
-
-export type DateFormatFunction = (val: Date | undefined) => string;
+// TODO: move to input-formatter ?
 
 // TODO: Global fmt and parse objects with default formatting settings.
 // Lazily initialized, to give user the chance to change defaults.
@@ -23,15 +22,32 @@ export type DateFormatFunction = (val: Date | undefined) => string;
  dP     dP  dP  dP   dP
 
 */
+
+let defaultDateFmt: DateFmt | null = null;
+function getDefaultDateFmt(): DateFmt {
+    if (defaultDateFmt === null) {
+        defaultDateFmt = new DateFmt({ type: "date" });
+    }
+    return defaultDateFmt;
+}
+
+let defaultTimeFmt: DateFmt | null = null;
+function getDefaultTimeFmt(): DateFmt {
+    if (defaultTimeFmt === null) {
+        defaultTimeFmt = new DateFmt({ type: "time" });
+    }
+    return defaultTimeFmt;
+}
+
 export const fmt: {
-    /* eslint-disable @typescript-eslint/indent */
-    [key: string]:
-        | ((d: Date | undefined) => string)
-        | ((n: number | undefined) => string)
-        | ((s: string | undefined) => string);
-    isoDate: DateFormatFunction;
-    isoTime: DateFormatFunction;
-    /* eslint-enable @typescript-eslint/indent */
+    isoDate: DateFormatFn;
+    isoTime: DateFormatFn;
+    date: DateFormatFn;
+    time: DateFormatFn;
+    // TODO: implement number, etc
+    // number: (val: number | undefined, prec?: number) => string;
+    // money:  (val: number | undefined) => string;
+    // list: (val: string[] | undefined) => string;
 } = {
     isoDate: (d: Date | undefined): string => {
         if (!d || !d.getDate) {
@@ -51,6 +67,14 @@ export const fmt: {
         const minute: string = pad(d.getMinutes(), 2);
         return `${hour}:${minute}`;
     },
+
+    date: (d: Date | undefined): string => {
+        return getDefaultDateFmt().format(d);
+    },
+
+    time: (d: Date | undefined): string => {
+        return getDefaultTimeFmt().format(d);
+    },
 };
 
 /*
@@ -63,12 +87,42 @@ export const fmt: {
  dP
 */
 
+// TODO: review null/undefined, decide which one should be used
 export const parse: {
-    [key: string]: (s: string) => DataTypes;
+    isoDate: DateParseFn;
+    isoTime: DateParseFn;
+    date: DateParseFn;
+    time: DateParseFn;
+    // TODO: implement number, etc
+    // number: (val: string | undefined) => number | undefined;
+    // money: (val: string | undefined) => number | undefined;
+    // list: (val: string | undefined) => string[];
 } = {
-    isoDate: (value: string): Date | undefined => {
+    isoDate: (value: string | undefined): Date | undefined => {
+        if (!value) {
+            return undefined;
+        }
         const d: Date = new Date(value);
         return d;
+    },
+    isoTime: (value: string | undefined): Date | undefined => {
+        if (!value) {
+            return undefined;
+        }
+        const d: Date = new Date("2000-01-01 " + value);
+        return d;
+    },
+    date: (value: string | undefined): Date | undefined => {
+        if (!value) {
+            return undefined;
+        }
+        return getDefaultDateFmt().parse(value);
+    },
+    time: (value: string | undefined): Date | undefined => {
+        if (!value) {
+            return undefined;
+        }
+        return getDefaultTimeFmt().parse(value);
     },
 };
 

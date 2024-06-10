@@ -1,5 +1,5 @@
 // locale-info.ts
-// Helper functions for storing selected locale in a cookie and matching browser locale.
+// Helper functions for storing locale in a cookie and matching browser locale.
 
 const localeCookieName: string = "ssui_locale";
 const localeCookieExpDays: number = 90;
@@ -34,17 +34,20 @@ function getLanguages(locales: readonly string[]): string[] {
 
 export function cookieMatch(supportedLocales: string[]): string | null {
     const cookieLocale: string | null = readLocaleCookie();
+    // look for exact match
     if (!cookieLocale) {
         return null;
     }
     if (supportedLocales.includes(cookieLocale)) {
         return cookieLocale;
     }
+    // try partial matching by language
     const cookieLanguage: string = getLanguage(cookieLocale);
     if (getLanguages(supportedLocales).includes(cookieLanguage)) {
         console.debug(`Partial cookie locale match: ${cookieLocale} ~= ${cookieLanguage}`);
         return cookieLanguage;
     }
+    // no match found
     return null;
 }
 

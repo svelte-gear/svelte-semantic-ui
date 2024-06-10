@@ -3,7 +3,9 @@
  * @module components/proc-toast
  */
 
+import type { ToastSettings } from "../data/semantic-types";
 import type { JQueryApi } from "../data/common";
+import { SettingsHelper } from "../data/common";
 import { jQueryElem } from "../data/common";
 
 /*
@@ -16,13 +18,8 @@ import { jQueryElem } from "../data/common";
 
 */
 
-export interface ToastSettings {
-    message?: string;
-    [key: string]: unknown;
-}
-
 /** Default toast settings */
-export const toastDefaults: ToastSettings = {};
+export const toastDefaults: SettingsHelper<ToastSettings> = new SettingsHelper("toast");
 
 /** Imperative function to display Semantic UI Toast component.
  *
@@ -50,7 +47,7 @@ export function toast(settings?: ToastSettings): void {
         throw new Error("Semantic toast is not initialized");
     }
     body.toast({
-        ...toastDefaults,
+        // ...toastDefaults,
         ...settings,
     });
 }

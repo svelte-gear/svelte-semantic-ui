@@ -6,13 +6,10 @@
 import { get, writable } from "svelte/store";
 
 import type { ActionReturnType, JQueryApi, DataController } from "../data/common";
-import { jQueryElem, uid, SVELTE_DATA_STORE } from "../data/common";
+import type { ModalSettings } from "../data/semantic-types";
+import { jQueryElem, uid, SettingsHelper, SVELTE_DATA_STORE } from "../data/common";
 
-export interface ModalSettings {
-    [key: string]: unknown;
-}
-
-export const modalDefaults: ModalSettings = {};
+export const modalDefaults: SettingsHelper<ModalSettings> = new SettingsHelper("modal");
 
 /**
  * Initializes Semantic UI Modal componenet. Takes settings object as argument.
@@ -130,7 +127,7 @@ export function modal(node: Element, settings?: ModalSettings): ActionReturnType
 
     // Initialize Semantic component
     elem.modal({
-        ...modalDefaults,
+        // ...modalDefaults,
         ...settings,
         onShow: onModalShow,
         onHidden: onModalHidden,

@@ -2,7 +2,7 @@
  * Castilian Spanish translations and formats.
 ```text
  Number: 1 234,56 €
- Date:   1-mar-2024 14.50
+ Date:   1-mar-2024 14:50
 ```
  * @module i18n/es-int
  */

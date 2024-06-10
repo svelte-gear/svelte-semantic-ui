@@ -13,7 +13,7 @@ import { jQueryElem, equalDataTypes, uid, SettingsHelper, SVELTE_DATA_STORE } fr
 import type { CalendarSettings } from "../data/semantic-types";
 import { fmt } from "../data/format";
 
-export type CalendarType = "datetime" | "date" | "time" | "month" | "year";
+type CalendarType = CalendarSettings["type"]; // "datetime" | "date" | "time" | "month" | "year";
 
 /** Calendar default settings. May be overriden by settings parameter in use:calendar() */
 export const calendarDefaults: SettingsHelper<CalendarSettings> = new SettingsHelper("calendar");

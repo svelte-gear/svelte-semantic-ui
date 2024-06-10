@@ -4,13 +4,10 @@
  */
 
 import type { JQueryApi } from "../data/common";
-import { jQueryElem } from "../data/common";
+import type { StickySettings } from "../data/semantic-types";
+import { jQueryElem, SettingsHelper } from "../data/common";
 
-export interface StickySettings {
-    [key: string]: unknown;
-}
-
-export const stickyDefaults: StickySettings = {};
+export const stickyDefaults: SettingsHelper<StickySettings> = new SettingsHelper("sticky");
 
 /** Svelte action to initialize Semantic UI Sticky component.
  *
@@ -40,7 +37,7 @@ export function sticky(node: Element, settings?: StickySettings): void {
         throw new Error("Semantic sticky is not initialized");
     }
     elem.sticky({
-        ...stickyDefaults,
+        // ...stickyDefaults,
         ...settings,
     });
 }

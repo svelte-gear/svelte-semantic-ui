@@ -12,9 +12,15 @@
         "src/**/*.json",
         "src/**/*.ts",
         "src/**/*.svelte",
+
         "*.js",
         "*.?js",
-        ".*.?js"
+        ".*.?js",
+
+        "examples/**/*.js",
+        "examples/**/*.json",
+        "examples/**/*.ts",
+        "examples/**/*.svelte"
     ],
     "exclude": ["node_modules/**/*", "static/**/*"]
 }

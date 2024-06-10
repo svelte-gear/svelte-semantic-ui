@@ -3,14 +3,11 @@
  * @module components/use-popup
  */
 
+import type { PopupSettings } from "$lib/data/semantic-types";
 import type { JQueryApi } from "../data/common";
-import { jQueryElem } from "../data/common";
+import { jQueryElem, SettingsHelper } from "../data/common";
 
-export interface PopupSettings {
-    [key: string]: unknown;
-}
-
-export const popupDefaults: PopupSettings = {};
+export const popupDefaults: SettingsHelper<PopupSettings> = new SettingsHelper("popup");
 
 /** Svelte action to initialize Semantic UI `Popup` component.
  *
@@ -37,7 +34,7 @@ export function popup(node: Element, settings?: PopupSettings): void {
         throw new Error("Semantic popup is not initialized");
     }
     elem.popup({
-        ...popupDefaults,
+        // ...popupDefaults,
         ...settings,
     });
 }

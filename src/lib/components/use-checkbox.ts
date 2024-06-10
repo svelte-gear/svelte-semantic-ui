@@ -3,14 +3,12 @@
  * @module components/use-checkbox
  */
 
+import type { CheckboxSettings } from "$lib/data/semantic-types";
 import type { JQueryApi } from "../data/common";
+import { SettingsHelper } from "../data/common";
 import { jQueryElem } from "../data/common";
 
-export interface CheckboxSettings {
-    [key: string]: unknown;
-}
-
-export const checkboxDefaults: CheckboxSettings = {};
+export const checkboxDefaults: SettingsHelper<CheckboxSettings> = new SettingsHelper("checkbox");
 
 /** Svelte action to initialize Semantic UI Checkbox component.
  *
@@ -35,7 +33,7 @@ export function checkbox(node: Element, settings?: CheckboxSettings): void {
         throw new Error("Semantic checkbox is not initialized");
     }
     elem.checkbox({
-        ...checkboxDefaults,
+        // ...checkboxDefaults,
         ...settings,
     });
 }

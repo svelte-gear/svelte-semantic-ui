@@ -1,7 +1,7 @@
 /**
- * Semantic UI types and access to settings.
+ * Semantic UI types and helper to access settings.
  *
- * Re-exports SemanitUI types from a module instead of namespace.
+ * Re-exports SemanitUI types from the module instead of namespaces.
  *
  * Fixes type definition inconsistencies.
  * @module data/semantic-ui-types
@@ -21,6 +21,10 @@
 */
 
 export type DateFormatFn = (d: Date | undefined, settings?: CalendarSettings) => string;
+export type DateParseFn = (
+    date: string | undefined,
+    settings?: CalendarSettings
+) => Date | undefined;
 
 /**
  * Fomantic UI Calendar settings.
@@ -61,9 +65,14 @@ export type CalendarSettings = Omit<Partial<FomanticUI.CalendarSettings>, "onCha
         dayColumnHeader?: (day: number, settings: CalendarSettings) => string;
         today?: (settings: CalendarSettings) => string;
     };
+
+    parser?: {
+        date?: DateParseFn;
+    };
 };
 
-export type CalendarText = Required<FomanticUI.CalendarSettings["text"]>;
+// export type CalendarText = Required<FomanticUI.CalendarSettings["text"]>;
+export type CalendarText = FomanticUI.Calendar.Settings.Texts;
 
 /*
  .8888b
@@ -90,6 +99,10 @@ export type FormSettings = Partial<FomanticUI.FormSettings> & {
     rules?: FormRules;
 };
 
+// formatter:
+// Settings to modify default returned values.
+// Actually exclusively used with calendar fields(through the dateHandling: 'formatter' setting).
+
 export type FormPropmt = Omit<FomanticUI.Form.Settings.Prompts, "contain" | "containExactly"> & {
     // fixes
     contains: string;
@@ -112,7 +125,7 @@ export type FormText = FomanticUI.Form.Settings.Texts;
  dP    dP `88888P' dP  dP  dP 88Y8888' `88888P' dP
 
 */
-
+/** Settings contriolling number, money, and list formatting. */
 export interface NumberSettings {
     decimal: string;
     thousandSeparator: string;
@@ -121,3 +134,92 @@ export interface NumberSettings {
     moneySuffix: string;
     moneyPrecision: number;
 } // TODO: Partial<> ?
+
+/*
+       dP                                  dP
+       88                                  88
+ .d888b88 88d888b. .d8888b. 88d888b. .d888b88 .d8888b. dP  dP  dP 88d888b.
+ 88'  `88 88'  `88 88'  `88 88'  `88 88'  `88 88'  `88 88  88  88 88'  `88
+ 88.  .88 88       88.  .88 88.  .88 88.  .88 88.  .88 88.88b.88' 88    88
+ `88888P8 dP       `88888P' 88Y888P' `88888P8 `88888P' 8888P Y8P  dP    dP
+                            88
+                            dP
+*/
+
+/** @see {@link http://fomantic-ui.com/modules/dropdown.html#/settings} */
+export type DropdownSettings = Partial<FomanticUI.DropdownSettings>;
+
+export type DropdownMessages = FomanticUI.Dropdown.Settings.Messages;
+
+/*
+
+ 88d888b. 88d888b. .d8888b. .d8888b. 88d888b. .d8888b. .d8888b. .d8888b.
+ 88'  `88 88'  `88 88'  `88 88'  `88 88'  `88 88ooood8 Y8ooooo. Y8ooooo.
+ 88.  .88 88       88.  .88 88.  .88 88       88.  ...       88       88
+ 88Y888P' dP       `88888P' `8888P88 dP       `88888P' `88888P' `88888P'
+ 88                              .88
+ dP                          d8888P
+*/
+
+// TODO: implement use-progress
+/** @see {@link https://fomantic-ui.com/modules/progress.html#/settings} */
+export type ProgressSettings = Partial<FomanticUI.ProgressSettings>;
+
+/**
+ * Text content for each state, uses simple templating with {percent}, {value}, {total} and {bar}.
+
+   {bar} is useful to show bar names on multiple bars.
+   Names of bars are provided by text.bars in the forms of array of string. E.g. ['bar1', 'bar2'].
+ */
+export type ProgressTexts = Partial<FomanticUI.Progress.Settings.Texts>;
+
+/*
+ .8888b dP                              dP
+ 88   " 88                              88
+ 88aaa  88 dP    dP .d8888b. dP    dP d8888P
+ 88     88 88    88 88'  `88 88    88   88
+ 88     88 88.  .88 88.  .88 88.  .88   88
+ dP     dP `8888P88 `88888P' `88888P'   dP
+                .88
+            d8888P
+*/
+
+export type FlyoutTexts = {
+    ok: string; //     "Ok"
+    cancel: string; // "Cancel"
+    close: string; //  "Close"
+};
+// TODO: add to translation
+
+/** @see {@link https://fomantic-ui.com/modules/flyout.html#/settings} */
+export type FlyoutSettings = Partial<FomanticUI.FlyoutSettings> & {
+    text: FlyoutTexts;
+};
+
+/*
+            dP   dP
+            88   88
+ .d8888b. d8888P 88d888b. .d8888b. 88d888b.
+ 88'  `88   88   88'  `88 88ooood8 88'  `88
+ 88.  .88   88   88    88 88.  ... 88
+ `88888P'   dP   dP    dP `88888P' dP
+
+*/
+
+/** @see {@link https://fomantic-ui.com/modules/checkbox.html#/settings} */
+export type CheckboxSettings = Partial<FomanticUI.CheckboxSettings>;
+
+/** @see {@link https://fomantic-ui.com/modules/modal.html#/settings} */
+export type ModalSettings = Partial<FomanticUI.ModalSettings>;
+
+/** @see {@link https://fomantic-ui.com/modules/popup.html#/settings} */
+export type PopupSettings = Partial<FomanticUI.PopupSettings>;
+
+/** @see {@link https://fomantic-ui.com/modules/slider.html#/settings} */
+export type SliderSettings = Partial<FomanticUI.SliderSettings>;
+
+/** @see {@link https://fomantic-ui.com/modules/sticky.html#/settings} */
+export type StickySettings = Partial<FomanticUI.StickySettings>;
+
+/** @see {@link https://fomantic-ui.com/modules/toast.html#/settings} */
+export type ToastSettings = Partial<FomanticUI.ToastSettings>;

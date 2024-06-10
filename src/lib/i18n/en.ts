@@ -10,9 +10,11 @@
 import type {
     CalendarSettings,
     CalendarText,
+    DropdownMessages,
     FormPropmt,
     FormText,
     NumberSettings,
+    ProgressTexts,
 } from "../data/semantic-types";
 
 const formPrompt: FormPropmt = {
@@ -111,6 +113,20 @@ const numberSettings: NumberSettings = {
     moneyPrecision: 2,
 };
 
+// TODO: transpalte to other languages
+const dropdownMessages: DropdownMessages = {
+    addResult: "Add <b>{term}</b>",
+    count: "{count} selected",
+    maxSelections: "Max {maxCount} selections",
+    noResults: "No results found.",
+    serverError: "There was an error contacting the server",
+};
+
+const progressTexts: ProgressTexts = {
+    percent: "{percent}%",
+    ratio: "{value} of {total}",
+};
+
 export default {
     form: {
         prompt: formPrompt,
@@ -122,5 +138,11 @@ export default {
     },
     number: {
         ...numberSettings,
+    },
+    dropdown: {
+        message: dropdownMessages,
+    },
+    progress: {
+        test: progressTexts,
     },
 };

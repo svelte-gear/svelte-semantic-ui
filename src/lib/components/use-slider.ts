@@ -6,13 +6,10 @@
 import { get, writable } from "svelte/store";
 
 import type { ActionReturnType, JQueryApi, DataController } from "../data/common";
-import { jQueryElem, uid, SVELTE_DATA_STORE } from "../data/common";
+import { jQueryElem, uid, SVELTE_DATA_STORE, SettingsHelper } from "../data/common";
+import type { SliderSettings } from "$lib/data/semantic-types";
 
-export interface SliderSettings {
-    [key: string]: unknown;
-}
-
-export const sliderDefaults: SliderSettings = {};
+export const sliderDefaults: SettingsHelper<SliderSettings> = new SettingsHelper("slider");
 
 /**
  * Initializes Fomantic UI Slider componenet. Takes settings object as argument.
@@ -111,7 +108,7 @@ export function slider(node: Element, settings?: SliderSettings): ActionReturnTy
 
     // Initialize Semantic component
     elem.slider({
-        ...sliderDefaults,
+        // ...sliderDefaults,
         ...settings,
         onChange: onSliderChange,
     });

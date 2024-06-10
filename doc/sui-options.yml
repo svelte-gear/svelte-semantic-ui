@@ -2,9 +2,8 @@
     jquery: "3.6.0"
     length: 0
 
-Common/trivial:
-    className: { active: "active", addition: "addition", animating: "animating", … }
-    debug: false
+DOM Settingsl:
+    className: { active: "active", addition: "addition", animating: "animating", … } # Class names used to attach style to state
     fields: { disabled: "disabled", ... }
     metadata:
         {
@@ -13,13 +12,16 @@ Common/trivial:
             placeholderText: "placeholder",
             …,
         }
-    name: "Dropdown"
-    namespace: "dropdown"
-    performance: true
-    silent: false
+    namespace: "dropdown" # Event namespace. Makes sure module teardown does not effect other events attached to an element.
     selector: { addition: ".addition", dropdown: ".ui.dropdown", hidden: ".hidden", … }
     templates: { dropdown: dropdown(e), menu: menu(e, o), label: label(e, t), … }
-    verbose: false
+
+Debug Settings:
+    name:        Calendar # Name used in debug logs
+    silent:      false    # Silences all console output including error messages, regardless of other debug settings.
+    debug:       false    # Provides standard debug output to console
+    performance: true     # Show console.table output with performance metrics
+    verbose:     false    # Provides ancillary debug output to console
 
 accordion:
     animateChildren: true
@@ -93,7 +95,7 @@ api:
         named: /^[\w-]+$/i
         optional: /{\/\$*[\da-z]+}/gi
         push: /^$/
-        required: /{\$*[\da-z]+}/gi​​
+        required: /{\$*[\da-z]+}/gi
         validate: /^[_a-z][\w-]*(?:\[[\w-]*])*$/i
 
     beforeSend: function beforeSend(e)
@@ -346,6 +348,51 @@ embed:
     onPlay: function onPlay()
     onReset: function onReset()
     onStop: function onStop()
+flyout:
+    actions: false
+    autoShow: false
+    autofocus: true
+    class: ""
+    classActions: ""
+    classContent: ""
+    classTitle: ""
+    closable: true
+    closeIcon: false
+    content: ""
+    context: "body"
+    delaySetup: false
+    dimPage: true
+    error:
+        method: "The method you called is not defined."
+        movedFlyout: "Had to move flyout. For optimal performance make sure flyout and pusher are direct children of your body tag"
+        notFound: "There were no elements that matched the specified selector"
+        pusher: "Had to add pusher element. For optimal performance make sure body content is inside a pusher element"
+    exclusive: false
+    keyboardShortcuts: true
+    keys:
+        enter: 13
+        escape: 27
+        space: 32
+        tab: 9
+    onApprove: function onApprove()
+    onChange: function onChange()
+    onDeny: function onDeny()
+    onHidden: false
+    onHide: function onHide()
+    onShow: function onShow()
+    onVisible: function onVisible()
+    performance: true
+    preserveHTML: true
+    regExp:
+        mobile: /Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/g }
+    restoreFocus: true
+    returnScroll: false
+    scrollLock: false
+    text:
+        ok: "Ok"
+        cancel: "Cancel"
+        close: "Close"
+    title: ""
 
 #   .8888b
 #   88   "
@@ -780,6 +827,51 @@ slider:
 
     onChange: function onChange(e, t, n)
     onMove: function onMove(e, t, n)
+
+state:
+    activateTest: function activateTest()
+    automatic: true
+    context: false
+    deactivateTest: function deactivateTest()
+    defaults:
+        button:
+            disabled: true
+            loading: true
+            active: true
+        input:
+            disabled: true
+            loading: true
+            active: true
+        progress:
+            active: true
+            error: true
+            success: true
+            warning: true
+    error:
+        method: "The method you called is not defined."
+    filter:
+        text: ".loading, .disabled"
+        active: ".disabled"
+    flashDuration: 1000
+    onActivate: function onActivate()
+    onChange: function onChange()
+    onDeactivate: function onDeactivate()
+    states:
+        active: true
+        disabled: true
+        error: true
+        loading: true
+        success: true
+        warning: true
+    sync: false
+    text:
+        activate: false
+        active: false
+        deactivate: false
+        disabled: false
+        flash: false
+        hover: false
+        inactive: false
 
 sticky:
     container: false
