@@ -63,8 +63,14 @@ import type { Unsubscriber } from "svelte/store";
 import { onMount, afterUpdate, onDestroy } from "svelte";
 
 import type { DataController, DataTypes, Formatter, JQueryApi, RuleDefinition } from "./common";
-import { equalDataTypes, jQueryElem, jQueryElemById, SVELTE_DATA_STORE } from "./common";
-import { fmt } from "./format";
+import {
+    equalDataTypes,
+    isoDate,
+    isoTime,
+    jQueryElem,
+    jQueryElemById,
+    SVELTE_DATA_STORE,
+} from "./common";
 import { format as formatAction } from "../components/use-format";
 import { validate as validateAction } from "../components/use-validate";
 
@@ -93,7 +99,7 @@ export let value: DataTypes | undefined = undefined;
 
     The same as {@link components/use-validate}.
 
-    Ususally takes the value generated with {@link data/rule-book.rule}. */
+    Ususally takes the value generated with {@link data/helpers.rule}. */
 export let validate: RuleDefinition | undefined = undefined;
 
 /** Id of the input element, takes precendence over tag position */
@@ -110,7 +116,7 @@ let subscribed: Unsubscriber | null;
 
 function toStr(val: DataTypes): string {
     if (val instanceof Date) {
-        return `${fmt.isoDate(val)} ${fmt.isoTime(val)}`;
+        return `${isoDate(val)} ${isoTime(val)}`;
     }
     if (val instanceof Array) {
         return `[${val.toString()}]`;

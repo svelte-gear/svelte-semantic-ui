@@ -4,7 +4,7 @@
  Number: 1 000,00 €
  Date:   01/03/2024 14:50
 ```
- * @module i18n/fr
+ * @module i18n/fr-FR
  */
 
 import type { CalendarSettings, NumberSettings } from "../data/semantic-types";

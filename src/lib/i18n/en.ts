@@ -4,7 +4,7 @@
  Number: $1 000.00
  Date:   May 1, 2024 14:50
 ```
- * @module i18n/en-001
+ * @module i18n/en
  */
 
 import type {

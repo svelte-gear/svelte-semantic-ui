@@ -6,15 +6,13 @@
 import { get, writable } from "svelte/store";
 
 import type { ActionReturnType, JQueryApi, DataController } from "../data/common";
+import type { DropdownSettings } from "../data/semantic-types";
+import { SettingsHelper } from "../data/settings";
 import { jQueryElem, equalDataTypes, uid, SVELTE_DATA_STORE } from "../data/common";
 
 const DROPDOWN_PREVENT_CLEARING_BAD_DATA: boolean = false;
 
-export interface DropdownSettings {
-    [key: string]: unknown;
-}
-
-export const dropdownDefaults: DropdownSettings = {};
+export const dropdownDefaults: SettingsHelper<DropdownSettings> = new SettingsHelper("dropdown");
 
 /**
  * Initializes Semantic UI Dropdown component. Takes settings object as argument.
@@ -129,14 +127,21 @@ export function dropdown(node: Element, settings?: DropdownSettings): ActionRetu
 
     */
 
-    type OnChangeFn = (newValue: string | string[], text: string, choice: string) => void;
+    // type OnChangeFn = (newValue: string | string[], text: string, choice: string) => void;
 
-    function onDropdownChange(newValue: string | string[], text: string, choice: string): void {
-        if (dropdownDefaults.onChange) {
-            (dropdownDefaults.onChange as OnChangeFn)(newValue, text, choice);
+    function onDropdownChange(
+        this: JQuery<HTMLElement>,
+        newValue: string | string[],
+        text: string,
+        choice: JQuery
+    ): void {
+        // console.info("ON DROPDOWN CHANGE", this, newValue, text, choice);
+        const def: DropdownSettings = dropdownDefaults.read();
+        if (def.onChange) {
+            def.onChange.call(this, newValue, text, choice);
         }
         if (settings && settings.onChange) {
-            (settings.onChange as OnChangeFn)(newValue, text, choice);
+            settings.onChange.call(this, newValue, text, choice);
         }
         holder.onChange(newValue);
     }
@@ -153,7 +158,8 @@ export function dropdown(node: Element, settings?: DropdownSettings): ActionRetu
 
     // Initialize Semantic component
     elem.dropdown({
-        ...dropdownDefaults,
+        // FIXME
+        // ...dropdownDefaults,
         ...settings,
         onChange: onDropdownChange,
     });

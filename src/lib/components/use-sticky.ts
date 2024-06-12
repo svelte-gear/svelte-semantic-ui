@@ -5,7 +5,8 @@
 
 import type { JQueryApi } from "../data/common";
 import type { StickySettings } from "../data/semantic-types";
-import { jQueryElem, SettingsHelper } from "../data/common";
+import { jQueryElem } from "../data/common";
+import { SettingsHelper } from "../data/settings";
 
 export const stickyDefaults: SettingsHelper<StickySettings> = new SettingsHelper("sticky");
 

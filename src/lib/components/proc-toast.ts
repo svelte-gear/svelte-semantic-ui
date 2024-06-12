@@ -5,7 +5,7 @@
 
 import type { ToastSettings } from "../data/semantic-types";
 import type { JQueryApi } from "../data/common";
-import { SettingsHelper } from "../data/common";
+import { SettingsHelper } from "../data/settings";
 import { jQueryElem } from "../data/common";
 
 /*

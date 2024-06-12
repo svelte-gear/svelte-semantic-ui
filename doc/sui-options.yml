@@ -17,11 +17,11 @@ DOM Settingsl:
     templates: { dropdown: dropdown(e), menu: menu(e, o), label: label(e, t), … }
 
 Debug Settings:
-    name:        Calendar # Name used in debug logs
-    silent:      false    # Silences all console output including error messages, regardless of other debug settings.
-    debug:       false    # Provides standard debug output to console
-    performance: true     # Show console.table output with performance metrics
-    verbose:     false    # Provides ancillary debug output to console
+    name: Calendar # Name used in debug logs
+    silent: false # Silences all console output including error messages, regardless of other debug settings.
+    debug: false # Provides standard debug output to console
+    performance: true # Show console.table output with performance metrics
+    verbose: false # Provides ancillary debug output to console
 
 accordion:
     animateChildren: true

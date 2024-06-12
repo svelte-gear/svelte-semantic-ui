@@ -13,7 +13,7 @@
         accordion:
         dimmer:
         embed:
-        flyout:  #set
+        flyout: #set
         nag:
         progress:
         rating:
@@ -22,10 +22,10 @@
         sidebar:
         tab:
     special:
-        api:        # ?
+        api: # ?
 
-        state:      # use svelte
+        state: # use svelte
         transition:
         visibility:
 
-        site:       # has css
+        site: # has css

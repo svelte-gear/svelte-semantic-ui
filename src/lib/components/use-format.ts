@@ -1,6 +1,6 @@
 /**
  * Svelte action to attach fomatter to an input.
- * Takes a Formatter as a value -- see {@link data/format}.
+ * Takes a Formatter as a value -- see {@link data/input-formatter}.
  * @module components/use-format
  */
 

@@ -10,7 +10,7 @@ import type {
     FormPropmt,
     FormText,
     NumberSettings,
-} from "$lib/data/semantic-types";
+} from "@svelte-gear/svelte-semantic-ui";
 
 const formPrompt: FormPropmt = {
     empty: "{name} павінна мець значэнне",

@@ -7,8 +7,9 @@ import { get, writable } from "svelte/store";
 // import { BaseSchema } from "yup";
 
 import type { FormController, JQueryApi, RuleDefinition } from "./common";
-import { jQueryElem, uid, equalDataTypes, SettingsHelper, SVELTE_FORM_STORE } from "./common";
 import type { FormSettings } from "./semantic-types";
+import { jQueryElem, uid, equalDataTypes, SVELTE_FORM_STORE } from "./common";
+import { SettingsHelper } from "./settings";
 
 export const formDefaults: SettingsHelper<FormSettings> = new SettingsHelper("form");
 

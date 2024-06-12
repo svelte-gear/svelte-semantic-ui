@@ -2,14 +2,13 @@
 // dialog/+page.svelte
 // Sample dialog page.
 
-import { modal, Data } from "$lib";
-import { behavior, ModalBehavior } from "../../lib/data/behavior";
-import { t } from "../../util/sveltekit-i18n";
+import { modal, Data } from "@svelte-gear/svelte-semantic-ui";
+import { t } from "../../sveltekit-i18n";
+// import { behavior, ModalBehavior } from "../../lib/data/behavior";
 
 let show: boolean = true;
 
-// const ctrl = {} as { modal: SemanticCommand };
-const ctrl: ModalBehavior = new ModalBehavior();
+// const ctrl: ModalBehavior = new ModalBehavior();
 
 function okFn(): void {
     console.log("ok");
@@ -39,14 +38,6 @@ $: console.log(`SHOW : ${show}`);
     >
         show = true
     </button>
-    <button
-        class="ui button basic"
-        on:click={() => {
-            ctrl.show();
-        }}
-    >
-        ctrl.show()
-    </button>
 
     <!--
                            dP          dP
@@ -60,7 +51,6 @@ $: console.log(`SHOW : ${show}`);
     <div
         id="md"
         class="ui basic modal"
-        use:behavior={ctrl}
         use:modal={{
             onApprove: okFn,
             onDeny: noFn,

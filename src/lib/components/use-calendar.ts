@@ -9,9 +9,16 @@
 import { get, writable } from "svelte/store";
 
 import type { ActionReturnType, JQueryApi, DataController } from "../data/common";
-import { jQueryElem, equalDataTypes, uid, SettingsHelper, SVELTE_DATA_STORE } from "../data/common";
 import type { CalendarSettings } from "../data/semantic-types";
-import { fmt } from "../data/format";
+import {
+    jQueryElem,
+    equalDataTypes,
+    uid,
+    SVELTE_DATA_STORE,
+    isoDate,
+    isoTime,
+} from "../data/common";
+import { SettingsHelper } from "../data/settings";
 
 type CalendarType = CalendarSettings["type"]; // "datetime" | "date" | "time" | "month" | "year";
 
@@ -58,11 +65,11 @@ export function calendar(
             (settings && settings.type) ?? calendarDefaults.read().type;
         switch (cType) {
             case "date":
-                return fmt.isoDate(d);
+                return isoDate(d);
             case "time":
-                return fmt.isoTime(d);
+                return isoTime(d);
             case "datetime":
-                return `${fmt.isoDate(d)} ${fmt.isoTime(d)}`;
+                return `${isoDate(d)} ${isoTime(d)}`;
             default:
                 throw new Error(`Unrecognized calendar type setting: ${cType}`);
         }
@@ -124,6 +131,7 @@ export function calendar(
         if (def.onChange) {
             def.onChange.call(this, newValue, text, mode);
         }
+        // FIXME: would def.onChange be called twice?
         if (settings && settings.onChange) {
             settings.onChange.call(this, newValue, text, mode);
         }

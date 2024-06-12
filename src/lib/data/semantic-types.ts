@@ -147,7 +147,14 @@ export interface NumberSettings {
 */
 
 /** @see {@link http://fomantic-ui.com/modules/dropdown.html#/settings} */
-export type DropdownSettings = Partial<FomanticUI.DropdownSettings>;
+export type DropdownSettings = Omit<Partial<FomanticUI.DropdownSettings>, "onChange"> & {
+    /**
+     * Is called after a dropdown value changes.
+     * Receives the name and value of selection and the active menu element.
+     */
+    onChange?(value: string | string[], text: string, $choice: JQuery): void;
+    // fix signature to allow string[] for multi-select
+};
 
 export type DropdownMessages = FomanticUI.Dropdown.Settings.Messages;
 

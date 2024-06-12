@@ -1,5 +1,5 @@
 // locale-info.ts
-// Helper functions for storing locale in a cookie and matching browser locale.
+// Helper functions for storing selected locale in a cookie and matching browser locale.
 
 const localeCookieName: string = "ssui_locale";
 const localeCookieExpDays: number = 90;

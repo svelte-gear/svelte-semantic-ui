@@ -1,0 +1,56 @@
+{
+    "name":        "@svelte-gear/svelte-semantic-ui-examples-svelte-kit",
+    "version":     "0.0.6-alpha",
+    "type":        "module",
+    "license":     "MIT",
+    "description": "sample application for svelte-semantic-ui",
+    "author":      "AK",
+
+    "scripts": {
+        "dev":     "vite dev --host",
+        "build":   "vite build",
+        "preview": "vite preview --host",
+        "format":  "prettier --write .",
+        "lint":    "prettier --check . && echo Linting... && eslint .",
+        "checks":  "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
+    },
+    "peerDependencies": {
+        "svelte":          "^3.12.1 || ^4.0.0",
+        "jquery":          "^3.6.0",
+        "fomantic-ui-css": "^2.9.3"
+    },
+    "dependencies": {
+        "@svelte-gear/svelte-semantic-ui": "0.0.6-alpha",
+        "sveltekit-i18n": "2.4.2"
+    },
+    "devDependencies": {
+        "@sveltejs/adapter-static":     "3.0.1",
+        "@sveltejs/kit":                "2.5.10",
+        "@sveltejs/package":            "2.3.1",
+        "@sveltejs/vite-plugin-svelte": "3.1.1",
+
+        "eslint": "8.57.0",
+        "eslint-plugin-svelte":             "2.39.3",
+        "@typescript-eslint/eslint-plugin": "7.13.0",
+        "@typescript-eslint/parser":        "7.13.0",
+
+        "eslint-config-airbnb-typescript": "18.0.0",
+        "eslint-plugin-import":            "2.29.1",
+        "eslint-plugin-jsx-a11y":          "6.8.0",
+        "eslint-plugin-promise":           "6.2.0",
+        "eslint-plugin-react":             "7.34.2",
+
+        "prettier":               "3.3.2",
+        "prettier-plugin-svelte": "3.2.4",
+
+        "svelte":       "4.2.18",
+        "svelte-check": "3.8.0",
+        "publint":      "0.2.8",
+        "typescript":   "5.4.5",
+        "vite":         "5.2.13",
+
+        "@types/node":     "20.14.2",
+        "fomantic-ui-css": "2.9.3",
+        "@types/jquery":   "3.5.30"
+    }
+}

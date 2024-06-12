@@ -5,7 +5,8 @@
 
 import type { PopupSettings } from "$lib/data/semantic-types";
 import type { JQueryApi } from "../data/common";
-import { jQueryElem, SettingsHelper } from "../data/common";
+import { jQueryElem } from "../data/common";
+import { SettingsHelper } from "../data/settings";
 
 export const popupDefaults: SettingsHelper<PopupSettings> = new SettingsHelper("popup");
 

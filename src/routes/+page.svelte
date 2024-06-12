@@ -4,22 +4,23 @@
 
 import { dropdown, Data } from "$lib";
 
-import { applyLocale, supportedLocales } from "../lib/i18n";
-import { readLocaleCookie, saveLocaleCookie } from "../locale-info";
+import { applyLocale, getLocale, supportedLocales } from "../lib/i18n";
 
-let currLocale: string = readLocaleCookie() ?? "";
+let currLocale: string = getLocale();
 let newLocale: string = currLocale;
 
 $: {
+    // execute on locale change
     void (async () => {
         if (newLocale && newLocale !== currLocale) {
             await applyLocale(newLocale);
-            saveLocaleCookie(newLocale);
             currLocale = newLocale;
         }
     })();
 }
 </script>
+
+<!------------------------------------------------------------------------------------------------>
 
 <h1>Home</h1>
 <p><b>Svelte Semantic UI</b> - demo and test pages</p>
@@ -34,6 +35,7 @@ $: {
 </p>
 
 <form>
+    <p>Change locale:</p>
     <select class="ui selection dropdown" use:dropdown={{ clearable: true }}>
         <Data bind:selected={newLocale} />
         {#each supportedLocales() as locStr}
@@ -41,4 +43,5 @@ $: {
         {/each}
     </select>
 </form>
-<p>locale = {newLocale}</p>
+<br />
+<p>current locale = {currLocale}</p>

@@ -5,8 +5,10 @@
 
 import type { CalendarSettings, DateFormatFn, DateParseFn, NumberSettings } from "./semantic-types";
 import type { DataTypes, Formatter } from "./common";
-import { numberDefaults } from "./format";
+import { SettingsHelper } from "./settings";
 import { calendarDefaults } from "../components/use-calendar";
+
+export const numberDefaults: SettingsHelper<NumberSettings> = new SettingsHelper("number");
 
 /*
                               dP

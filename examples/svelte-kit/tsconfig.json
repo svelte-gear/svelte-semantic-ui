@@ -1,0 +1,37 @@
+// tsconfig.json
+// https://github.com/tsconfig/bases/blob/main/bases/svelte.json
+// https://www.typescriptlang.org/tsconfig
+
+{
+    "extends": "./.svelte-kit/tsconfig.json",
+    "compilerOptions": {
+        // type checking
+        "allowUnreachableCode": false,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,         // duplicate with @typescript-eslint/no-unused-vars
+        "noUnusedParameters": true,     // duplicate with @typescript-eslint/no-unused-vars
+        "skipLibCheck": false,          // disable faster compile at expense of type accuracy
+        "strict": true,
+
+        // modules
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "isolatedModules": true,
+        "module": "ES2020",             // support for dynamic import
+        "moduleResolution": "bundler",  // "node" is required for eslint to get type information on imports
+        "resolveJsonModule": true,      // allows to import json
+        "types": ["svelte"],            // include packages w/o reference from src, alike /// <reference in d.ts
+        "verbatimModuleSyntax": true,   // enforce using `import type` instead of `import`
+
+        // language
+        "allowJs": true,
+        "checkJs": true,
+        "lib": ["es2020", "DOM", "DOM.Iterable"], // restore default library for es2020 target
+        "sourceMap": true,              // to show Svelte warnings/errors at the correct position
+        "target": "es2020"              // async/await, async iterables, Intl.pluralRules, array.flatMap; safe
+        // "target": "es2022"           // top-lvl await, private fields; req iOS 16.4, bad for 12% of iOS users
+    }
+}

@@ -1,7 +1,7 @@
 // i18n/en-AU
 // Formats for Autraliam English
 
-import type { CalendarSettings, NumberSettings } from "../../lib/data/semantic-types";
+import type { CalendarSettings, NumberSettings } from "@svelte-gear/svelte-semantic-ui";
 
 const calendarSettings: Partial<CalendarSettings> = {
     formatter: {

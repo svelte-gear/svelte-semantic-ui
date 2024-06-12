@@ -5,7 +5,7 @@
 
 import type { CheckboxSettings } from "$lib/data/semantic-types";
 import type { JQueryApi } from "../data/common";
-import { SettingsHelper } from "../data/common";
+import { SettingsHelper } from "../data/settings";
 import { jQueryElem } from "../data/common";
 
 export const checkboxDefaults: SettingsHelper<CheckboxSettings> = new SettingsHelper("checkbox");

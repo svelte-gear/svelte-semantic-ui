@@ -1,14 +1,10 @@
 /**
- * 'fmt' and 'parse' utility object, input formatter classes.
- * @module data/format
+ * 'fmt', 'parse', and 'rile' utility object.
+ * @module data/helpers
  */
 
-import { SettingsHelper, pad } from "./common";
-import type { DateFormatFn, DateParseFn, NumberSettings } from "./semantic-types";
+import type { DateFormatFn, DateParseFn } from "./semantic-types";
 import { DateFmt } from "./input-formatter";
-
-export const numberDefaults: SettingsHelper<NumberSettings> = new SettingsHelper("number");
-// TODO: move to input-formatter ?
 
 // TODO: Global fmt and parse objects with default formatting settings.
 // Lazily initialized, to give user the chance to change defaults.
@@ -40,8 +36,6 @@ function getDefaultTimeFmt(): DateFmt {
 }
 
 export const fmt: {
-    isoDate: DateFormatFn;
-    isoTime: DateFormatFn;
     date: DateFormatFn;
     time: DateFormatFn;
     // TODO: implement number, etc
@@ -49,25 +43,6 @@ export const fmt: {
     // money:  (val: number | undefined) => string;
     // list: (val: string[] | undefined) => string;
 } = {
-    isoDate: (d: Date | undefined): string => {
-        if (!d || !d.getDate) {
-            return "";
-        }
-        const day: string = pad(d.getDate(), 2);
-        const month: string = pad(d.getMonth() + 1, 2);
-        const year: string = pad(d.getFullYear(), 4);
-        return `${year}-${month}-${day}`;
-    },
-
-    isoTime: (d: Date | undefined): string => {
-        if (!d || !d.getDate) {
-            return "";
-        }
-        const hour: string = pad(d.getHours(), 2);
-        const minute: string = pad(d.getMinutes(), 2);
-        return `${hour}:${minute}`;
-    },
-
     date: (d: Date | undefined): string => {
         return getDefaultDateFmt().format(d);
     },
@@ -89,8 +64,6 @@ export const fmt: {
 
 // TODO: review null/undefined, decide which one should be used
 export const parse: {
-    isoDate: DateParseFn;
-    isoTime: DateParseFn;
     date: DateParseFn;
     time: DateParseFn;
     // TODO: implement number, etc
@@ -98,20 +71,6 @@ export const parse: {
     // money: (val: string | undefined) => number | undefined;
     // list: (val: string | undefined) => string[];
 } = {
-    isoDate: (value: string | undefined): Date | undefined => {
-        if (!value) {
-            return undefined;
-        }
-        const d: Date = new Date(value);
-        return d;
-    },
-    isoTime: (value: string | undefined): Date | undefined => {
-        if (!value) {
-            return undefined;
-        }
-        const d: Date = new Date("2000-01-01 " + value);
-        return d;
-    },
     date: (value: string | undefined): Date | undefined => {
         if (!value) {
             return undefined;
@@ -124,6 +83,56 @@ export const parse: {
         }
         return getDefaultTimeFmt().parse(value);
     },
+};
+
+/*
+                   dP             dP                dP
+                   88             88                88
+ 88d888b. dP    dP 88 .d8888b.    88d888b. .d8888b. 88 88d888b. .d8888b. 88d888b.
+ 88'  `88 88    88 88 88ooood8    88'  `88 88ooood8 88 88'  `88 88ooood8 88'  `88
+ 88       88.  .88 88 88.  ...    88    88 88.  ... 88 88.  .88 88.  ... 88
+ dP       `88888P' dP `88888P'    dP    dP `88888P' dP 88Y888P' `88888P' dP
+                                                       88
+                                                       dP
+*/
+
+/* prettier-ignore */
+// eslint-disable-next-line @typescript-eslint/typedef
+export const rule = {
+    empty:      (): string => "empty",
+    checked:    (): string => "checked",
+
+    email:      (): string => "email",
+    url:        (): string => "url",
+    integer:    (): string => "integer",
+    decimal:    (): string => "decimal",
+    number:     (): string => "number",
+    creditCard: (): string => "creditCard",
+    regex:      (reg: string): string => `regExp[//${reg}//]`,
+
+    // integer:    (min?: number, max?: number): string =>
+    //     min == undefined && max == undefined ? "integer" : `integer[${min}..${max}]`,
+
+    is:             (val: string): string => `is[${val}]`,
+    isExactly:      (val: string): string => `isExactly[${val}]`,
+    not:            (val: string): string => `not[${val}]`,
+    notExactly:     (val: string): string => `notExactly[${val}]`,
+    contain:        (val: string): string => `contain[${val}]`,
+    containExactly: (val: string): string => `containExactly[${val}]`,
+    doesntContain:  (val: string): string => `doesntContain[${val}]`,
+    doesntContainExactly: (val: string): string => `doesntContainExactly[${val}]`,
+
+    match:          (fld: string): string => `match[${fld}]`,
+    different:      (fld: string): string => `different[${fld}]`,
+
+    minLength:   (n: number): string => `minLength[${n}]`,
+    exactLength: (n: number): string => `exactLength[${n}]`,
+    maxLength:   (n: number): string => `maxLength[${n}]`,
+    minCount:    (n: number): string => `minCount[${n}]`,
+    exactCount:  (n: number): string => `exactCount[${n}]`,
+    maxCount:    (n: number): string => `maxCount[${n}]`,
+
+    // TODO: add custom rules
 };
 
 /*

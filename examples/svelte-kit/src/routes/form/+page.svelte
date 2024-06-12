@@ -15,11 +15,12 @@ import {
     Data,
     FormValidator,
     MoneyFmt,
-    // DateFmt,
+    DateFmt,
     format,
     rule,
-    fmt,
-} from "$lib";
+    isoDate,
+    isoTime,
+} from "@svelte-gear/svelte-semantic-ui";
 
 const options: string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
@@ -67,8 +68,8 @@ $: {
         gender: gender,
         income: income !== undefined ? income : "",
         agree: chb,
-        date: `${fmt.isoDate(dat)}_${fmt.isoTime(dat)}`,
-        time: fmt.isoTime(tim),
+        date: `${isoDate(dat)}_${isoTime(dat)}`,
+        time: isoTime(tim),
         rating: rating,
     })
         .replace(/,"/g, ', "')
@@ -352,8 +353,13 @@ Formatter replaces you input with correct string or empties it.
                 <label for="z1">
                     Date Input <span class="explain">(format)</span>
                 </label>
-                <input type="text" name="calendar-date" placeholder="date" id="z1" />
-                <!-- use:format={new DateFmt()} -->
+                <input
+                    type="text"
+                    name="calendar-date"
+                    placeholder="date"
+                    id="z1"
+                    use:format={new DateFmt()}
+                />
                 <Data bind:value={dat} validate={[rule.empty()]} />
             </div>
 

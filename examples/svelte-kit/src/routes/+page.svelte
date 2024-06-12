@@ -4,19 +4,19 @@
 
 import type { Writable } from "svelte/store";
 import { writable } from "svelte/store";
-import { dropdown, Data } from "$lib";
+import { dropdown, Data, applyLocale, supportedLocales } from "@svelte-gear/svelte-semantic-ui";
 
-import { applyLocale, supportedLocales } from "../util/sui-i18n";
-import { readLocaleCookie, saveLocaleCookie } from "../util/locale";
-import { loadTranslations, locale, locales, t } from "../util/sveltekit-i18n";
+import { readLocaleCookie, saveLocaleCookie } from "../locale-info";
+import { loadTranslations, locale, locales, t } from "../sveltekit-i18n";
 
 const currLocale: string = readLocaleCookie() ?? "";
 let newLocale: string = currLocale;
 
+// TODO: check why prettier isn't working in the subproject
+
 $: {
     void (async () => {
         if (newLocale && newLocale !== currLocale) {
-            console.log(`Applying ${newLocale} locale to semantic-ui`);
             await applyLocale(newLocale);
             const lang: string = newLocale.split("-")[0];
             if (locales.get().includes(lang)) {

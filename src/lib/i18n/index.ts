@@ -1,34 +1,106 @@
 /**
+ * Internatinalization module.
  * Dynamically import translations and formats based on locale.
  * See routes/i18n/extra-locales.ts for an example how to extend it.
- * @module  i18n/base-locales.ts
+
+```text
+locale      money           date time   week
+--------------------------------------------
+de-DE   €1.000,00     01.03.2024 14:50     1
+en-CA   $1 000.00     2024-03-01 14:50     0
+en-GB   £1,000.00     01/03/2024 14:50     1
+en-US   $1,000.00       3/1/2024 2:50 PM   0
+es-ES    1.234,56 €    1-03-2024 14.50     1
+es-MX   $1,000.00      1/03/2024 14:50     0
+es-US   $1,000.00       3/1/2024 2:50 PM   0
+fr-CA    1 000,00 $   2024-03-01 14:50     1
+fr-FR    1 000,00 €   01/03/2024 14:50     1
+```
+
+Sources:
+- https://docs.oracle.com/cd/E19455-01/806-0169/overview-9/index.html
+- https://en.wikipedia.org/wiki/List_of_date_formats_by_country
+- https://gist.github.com/mlconnor/1887156
+- https://en.wikipedia.org/wiki/Decimal_separator
+- https://leap.hcldoc.com/help/topic/SSS28S_8.2.1/XFDL_Specification/i_xfdl_r_formats_en_CA.html
+ * @module i18n
  */
 
-import type { AllSettingsJson } from "../data/common";
-import { applyAllSettings } from "../data/common";
+import type { AllSettingsJson } from "../data/settings";
+import { applyAllSettings } from "../data/settings";
 
-/** Returns list of supported locales. */
-export function supportedLocales1(): string[] {
-    return [
-        "de-DE",
-        "el-GR",
-        "en-CA",
-        "en-GB",
-        "en-US",
-        "fr-CA",
-        "fr-FR",
-        "es-ES",
-        "es-MX",
-        "es-US",
-        "it-IT",
-        "pl-PL",
-        "ru-RU",
-        "uk-UA",
-    ];
+type Register = {
+    [key: string]: () => Promise<object>;
+};
+
+/*
+ dP
+ 88
+ 88 .d8888b. 88d888b. .d8888b.
+ 88 88'  `88 88'  `88 88'  `88
+ 88 88.  .88 88    88 88.  .88
+ dP `88888P8 dP    dP `8888P88
+                           .88
+                       d8888P
+*/
+
+const languages: string[] = [];
+const languageRegister: Register = {};
+
+/** Register translation loading function. */
+export function registerLanguage(language: string, fn: () => Promise<object>): void {
+    if (!languages.includes(language)) {
+        languages.push(language);
+    }
+    languageRegister[language] = fn;
 }
 
+/** Returns list of supported languages. */
+export function supportedLanguages(): string[] {
+    return languages;
+}
+
+/*
+ dP                            dP
+ 88                            88
+ 88 .d8888b. .d8888b. .d8888b. 88 .d8888b.
+ 88 88'  `88 88'  `"" 88'  `88 88 88ooood8
+ 88 88.  .88 88.  ... 88.  .88 88 88.  ...
+ dP `88888P' `88888P' `88888P8 dP `88888P'
+
+*/
+
+const locales: string[] = [];
+const localeRegister: Register = {};
+
+/** Register locale loading function. */
+export function registerLocale(locale: string, fn: () => Promise<object>): void {
+    if (!locales.includes(locale)) {
+        locales.push(locale);
+    }
+    localeRegister[locale] = fn;
+}
+
+/** Returns list of supported locales. */
+export function supportedLocales(): string[] {
+    return locales;
+}
+
+/*
+                            dP
+                            88
+ .d8888b. 88d888b. 88d888b. 88 dP    dP
+ 88'  `88 88'  `88 88'  `88 88 88    88
+ 88.  .88 88.  .88 88.  .88 88 88.  .88
+ `88888P8 88Y888P' 88Y888P' dP `8888P88
+          88       88               .88
+          dP       dP           d8888P
+*/
+
+let currLocale: string = "en";
+
 /** Takes module import promise, reads json, applies settings. */
-export async function readAndApply(prom: Promise<unknown>): Promise<void> {
+async function readAndApply(prom: Promise<unknown>): Promise<void> {
     type SettingImport = {
         default: AllSettingsJson;
     };
@@ -36,101 +108,9 @@ export async function readAndApply(prom: Promise<unknown>): Promise<void> {
     applyAllSettings(langJson.default);
 }
 
-/** Imports locale settings: validation messages, calendar, date and number formats.
-    Returns applied local string or null if locale is not found */
-export async function applyLocale1(locale: string): Promise<string | null> {
-    // check locale and language
-    if (!locale) {
-        console.info("Missing locale");
-        return null;
-    }
-    const lang: string = locale.split("-")[0];
-
-    // translate semantic ui components
-    let langProm: Promise<unknown> | null = null;
-    /* eslint-disable @typescript-eslint/brace-style */
-    /* prettier-ignore */
-    if /**/ (lang === "de") { langProm = import("./de"); }
-    else if (lang === "el") { langProm = import("./el"); }
-    else if (lang === "en") { langProm = import("./en"); }
-    else if (lang === "fr") { langProm = import("./fr"); }
-    else if (lang === "es") { langProm = import("./es"); }
-    else if (lang === "it") { langProm = import("./it"); }
-    else if (lang === "pl") { langProm = import("./pl"); }
-    else if (lang === "ru") { langProm = import("./ru"); }
-    else if (lang === "uk") { langProm = import("./uk"); }
-    else {
-        console.debug(`svt-sui-lib: base-locales: no translation for language '${lang}' (${locale})`);
-        return null;
-    }
-    /* eslint-enable */
-    if (langProm !== null) {
-        await readAndApply(langProm);
-    }
-    if (locale === lang) {
-        return lang;
-    }
-
-    // apply country formats
-    let locProm: Promise<unknown> | null = null;
-    /* eslint-disable @typescript-eslint/brace-style */
-    /* prettier-ignore */
-    if /**/ (locale === "de-DE") { locProm = null;  /* == de */ }
-    else if (locale === "el-GR") { locProm = null;  /* == el */ }
-    else if (locale === "en-CA") { locProm = import("./en-CA"); }
-    else if (locale === "en-GB") { locProm = import("./en-GB"); }
-    else if (locale === "en-US") { locProm = import("./en-US"); }
-    else if (locale === "fr-CA") { locProm = import("./fr-CA"); }
-    else if (locale === "fr-FR") { locProm = null;  /* == fr */ }
-    else if (locale === "es-ES") { locProm = null;  /* == es */ }
-    else if (locale === "es-MX") { locProm = import("./es-MX"); }
-    else if (locale === "es-US") { locProm = import("./es-US"); }
-    else if (locale === "it-IT") { locProm = null;  /* == it */ }
-    else if (locale === "pl-PL") { locProm = null;  /* == pl */ }
-    else if (locale === "ru-RU") { locProm = null;  /* == ru */ }
-    else if (locale === "uk-UA") { locProm = null;  /* == uk */ }
-    else {
-        console.debug(`svt-sui-lib: base-locales: no config for locale '${locale}'`);
-        return lang;
-    }
-    /* eslint-enable */
-    if (locProm !== null) {
-        await readAndApply(locProm);
-    }
-    return locale;
-}
-
-type LocaleLoadFn = () => Promise<object>;
-type Register = {
-    [key: string]: LocaleLoadFn;
-};
-
-const languages: string[] = [];
-const locales: string[] = [];
-const languageRegister: Register = {};
-const localeRegister: Register = {};
-let currLocale: string = "en";
-
-export function registerLanguage(language: string, fn: LocaleLoadFn): void {
-    if (!languages.includes(language)) {
-        languages.push(language);
-    }
-    languageRegister[language] = fn;
-}
-
-export function registerLocale(locale: string, fn: LocaleLoadFn): void {
-    if (!locales.includes(locale)) {
-        locales.push(locale);
-    }
-    localeRegister[locale] = fn;
-}
-
-export function supportedLlanguages(): string[] {
-    return languages;
-}
-
-export function supportedLocales(): string[] {
-    return locales;
+/** Return currently set locale. */
+export function getLocale(): string {
+    return currLocale;
 }
 
 /** Imports locale settings: validation messages, calendar, date and number formats.
@@ -143,7 +123,7 @@ export async function applyLocale(locale: string): Promise<string | null> {
     const lang: string = locale.split("-")[0];
 
     // translate semantic ui components
-    const langFn: LocaleLoadFn = languageRegister[lang];
+    const langFn: () => Promise<object> = languageRegister[lang];
     if (!langFn) {
         console.debug(`No language translation for ${lang}`);
         return null;
@@ -158,7 +138,7 @@ export async function applyLocale(locale: string): Promise<string | null> {
     }
 
     // apply country formats
-    const localeFn: LocaleLoadFn = localeRegister[locale];
+    const localeFn: () => Promise<object> = localeRegister[locale];
     if (!localeFn) {
         console.debug(`No locale settings for ${locale}`);
         currLocale = lang;
@@ -172,10 +152,24 @@ export async function applyLocale(locale: string): Promise<string | null> {
     return currLocale;
 }
 
-function noop(): Promise<object> {
-    return Promise.resolve({});
+/*
+ oo          oo   dP   oo          dP oo
+                  88               88
+ dP 88d888b. dP d8888P dP .d8888b. 88 dP d888888b .d8888b.
+ 88 88'  `88 88   88   88 88'  `88 88 88    .d8P' 88ooood8
+ 88 88    88 88   88   88 88.  .88 88 88  .Y8P    88.  ...
+ dP dP    dP dP   dP   dP `88888P8 dP dP d888888P `88888P'
+
+*/
+
+async function noop(): Promise<object> {
+    return {};
 }
 
+/** Register known locales.
+ * Only required translations and settings are dynamically loaded into memory
+ * when {@link i18n.applyLocale} is called.
+ * */
 export function registerBaseLocales(): void {
     registerLanguage("de", () => import("./de"));
     registerLanguage("en", () => import("./en"));
@@ -186,8 +180,8 @@ export function registerBaseLocales(): void {
     registerLanguage("ru", () => import("./ru"));
     registerLanguage("uk", () => import("./uk"));
 
-    registerLocale("de-DE", () => noop());
-    registerLocale("el-GR", () => noop());
+    registerLocale("de-DE", noop);
+    registerLocale("el-GR", noop);
     registerLocale("en-CA", () => import("./en-CA"));
     registerLocale("en-GB", () => import("./en-GB"));
     registerLocale("en-US", () => import("./en-US"));
@@ -196,8 +190,8 @@ export function registerBaseLocales(): void {
     registerLocale("es-US", () => import("./es-US"));
     registerLocale("fr-FR", () => import("./fr-FR"));
     registerLocale("fr-CA", () => import("./fr-CA"));
-    registerLocale("it-IT", () => noop());
-    registerLocale("pl-PL", () => noop());
-    registerLocale("ru-RU", () => noop());
-    registerLocale("uk-UA", () => noop());
+    registerLocale("it-IT", noop);
+    registerLocale("pl-PL", noop);
+    registerLocale("ru-RU", noop);
+    registerLocale("uk-UA", noop);
 }

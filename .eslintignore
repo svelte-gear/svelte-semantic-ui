@@ -7,7 +7,6 @@ node_modules.*
 /dist
 /static
 /doc/api
-/examples
 .env
 .env.*
 !.env.example
@@ -16,3 +15,7 @@ node_modules.*
 pnpm-lock.yaml
 package-lock.json
 yarn.lock
+
+# examples folders have their own projects
+/examples
+

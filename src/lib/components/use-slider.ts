@@ -6,8 +6,9 @@
 import { get, writable } from "svelte/store";
 
 import type { ActionReturnType, JQueryApi, DataController } from "../data/common";
-import { jQueryElem, uid, SVELTE_DATA_STORE, SettingsHelper } from "../data/common";
-import type { SliderSettings } from "$lib/data/semantic-types";
+import type { SliderSettings } from "../data/semantic-types";
+import { jQueryElem, uid, SVELTE_DATA_STORE } from "../data/common";
+import { SettingsHelper } from "../data/settings";
 
 export const sliderDefaults: SettingsHelper<SliderSettings> = new SettingsHelper("slider");
 
@@ -85,14 +86,20 @@ export function slider(node: Element, settings?: SliderSettings): ActionReturnTy
 
     */
 
-    type OnChangeFn = (newValue: number) => void;
+    // type OnChangeFn = (newValue: number) => void;
 
-    function onSliderChange(newValue: number): void {
-        if (sliderDefaults.onChange) {
-            (sliderDefaults.onChange as OnChangeFn)(newValue);
+    function onSliderChange(
+        this: JQuery<HTMLElement>,
+        newValue: number,
+        th1: number,
+        th2: number
+    ): void {
+        const def: SliderSettings = sliderDefaults.read();
+        if (def.onChange) {
+            def.onChange.call(this, newValue, th1, th2);
         }
         if (settings && settings.onChange) {
-            (settings.onChange as OnChangeFn)(newValue);
+            settings.onChange.call(this, newValue, th1, th2);
         }
         holder.onChange(newValue);
     }

@@ -17,8 +17,8 @@ import {
     DateFmt,
     format,
     rule,
-    fmt,
 } from "$lib";
+import { isoDate, isoTime } from "../../lib/data/common";
 
 const options: string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
@@ -66,8 +66,8 @@ $: {
         gender: gender,
         income: income !== undefined ? income : "",
         agree: chb,
-        date: `${fmt.isoDate(dat)}_${fmt.isoTime(dat)}`,
-        time: fmt.isoTime(tim),
+        date: `${isoDate(dat)}_${isoTime(dat)}`,
+        time: isoTime(tim),
         rating: rating,
     })
         .replace(/,"/g, ', "')
@@ -83,6 +83,8 @@ function toggleActive(): void {
 }
 let valid: boolean = false;
 </script>
+
+<!------------------------------------------------------------------------------------------------>
 
 <main>
     <h1>Form sample</h1>

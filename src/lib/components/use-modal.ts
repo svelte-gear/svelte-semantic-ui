@@ -7,7 +7,8 @@ import { get, writable } from "svelte/store";
 
 import type { ActionReturnType, JQueryApi, DataController } from "../data/common";
 import type { ModalSettings } from "../data/semantic-types";
-import { jQueryElem, uid, SettingsHelper, SVELTE_DATA_STORE } from "../data/common";
+import { jQueryElem, uid, SVELTE_DATA_STORE } from "../data/common";
+import { SettingsHelper } from "../data/settings";
 
 export const modalDefaults: SettingsHelper<ModalSettings> = new SettingsHelper("modal");
 
@@ -97,8 +98,9 @@ export function modal(node: Element, settings?: ModalSettings): ActionReturnType
     type OnChangeFn = () => void;
 
     function onModalShow(): void {
-        if (modalDefaults.onShow) {
-            (modalDefaults.onShow as OnChangeFn)();
+        const def: ModalSettings = modalDefaults.read();
+        if (def.onShow) {
+            (def.onShow as OnChangeFn)();
         }
         if (settings && settings.onShow) {
             (settings.onShow as OnChangeFn)();
@@ -107,8 +109,9 @@ export function modal(node: Element, settings?: ModalSettings): ActionReturnType
     }
 
     function onModalHidden(): void {
-        if (modalDefaults.onHidden) {
-            (modalDefaults.onHidden as OnChangeFn)();
+        const def: ModalSettings = modalDefaults.read();
+        if (def.onHidden) {
+            (def.onHidden as OnChangeFn)();
         }
         if (settings && settings.onHidden) {
             (settings.onHidden as OnChangeFn)();

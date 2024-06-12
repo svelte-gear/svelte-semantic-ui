@@ -18,3 +18,6 @@ yarn.lock
 # don't touch config files
 package.json
 tsconfig.json
+
+# examples folders have their own projects
+/examples

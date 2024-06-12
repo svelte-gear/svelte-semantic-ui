@@ -1,0 +1,10 @@
+.DS_Store
+node_modules
+/.svelte-kit
+/build
+/dist
+/doc/api
+.env
+.env.*
+!.env.example
+yarn-error.log
