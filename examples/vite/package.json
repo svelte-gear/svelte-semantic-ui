@@ -1,6 +1,6 @@
 {
     "name": "svelte-semantic-ui-examples-vite",
-    "version": "0.0.6-alpha",
+    "version": "0.0.7-alpha",
     "type": "module",
     "license": "MIT",
     "description": "svelte-semantic-ui example with vite (no svelte-kit)",
@@ -12,7 +12,7 @@
         "checks": "svelte-check --tsconfig ./tsconfig.json"
     },
     "dependencies": {
-        "@svelte-gear/svelte-semantic-ui": "0.0.6-alpha"
+        "@svelte-gear/svelte-semantic-ui": "0.0.7-alpha"
     },
     "devDependencies": {
         "@sveltejs/vite-plugin-svelte": "3.1.1",

@@ -1,8 +1,8 @@
 {
   "name": "svelte-app",
-  "version": "0.0.6-alpha",
+  "version": "0.0.7-alpha",
   "dependencies": {
-    "@svelte-gear/svelte-semantic-ui": "0.0.6-alpha"
+    "@svelte-gear/svelte-semantic-ui": "0.0.7-alpha"
   },
   "devDependencies": {
     "cross-env": "7.0.3",
