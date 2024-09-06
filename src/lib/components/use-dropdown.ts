@@ -64,7 +64,7 @@ export function dropdown(node: Element, settings?: DropdownSettings): ActionRetu
         store: writable(),
 
         /** Push value into the dropdown. */
-        doUpdate(value: string | string[]) {
+        doUpdate(value: string | string[]): void {
             const curValue: string | string[] = elem.dropdown("get value") as string | string[];
             if (Array.isArray(value)) {
                 // multi-select
@@ -74,7 +74,7 @@ export function dropdown(node: Element, settings?: DropdownSettings): ActionRetu
                     elem.dropdown("set exactly", value);
                 }
             } else {
-                //single-select
+                // single-select
                 if (curValue !== value) {
                     console.debug(`  update(${this.uid}) -> dropdown = ${value}`);
                     // elem.dropdown("set selected", value);
@@ -105,7 +105,8 @@ export function dropdown(node: Element, settings?: DropdownSettings): ActionRetu
                 if (value !== newValue) {
                     console.debug(`  store(${this.uid}) <- dropdown = ${newValue}`);
                     if (DROPDOWN_PREVENT_CLEARING_BAD_DATA) {
-                        const exists: unknown = elem.dropdown("get item", newValue); // FIXME: JQueryApi
+                        const exists: unknown = elem.dropdown("get item", newValue);
+                        // FIXME: JQueryApi
                         if (exists) {
                             this.store.set(newValue);
                         }
@@ -176,20 +177,18 @@ export function dropdown(node: Element, settings?: DropdownSettings): ActionRetu
     const labelFor: string = field.find("label").prop("for");
     if (labelFor === "_") {
         field.on("click", "label", handleClick);
-        return {
-            destroy() {
-                field.off("click", "label", handleClick);
-            },
-        };
     }
-    // return {
-    //     destroy() {
-    //         console.debug("  action - destroy");
-    //         const field = elem.parent().filter(".field");
-    //         const labelFor = field.find("label").prop("for");
-    //         if (labelFor === "_") {
-    //             field.off("click", "label", handleClick);
-    //         }
-    //     },
-    // };
+
+    return {
+        destroy() {
+            // console.debug("  >>>>>> dropdown - destroy");
+            if (labelFor === "_") {
+                field.off("click", "label", handleClick);
+            }
+            // release the controlled memory
+            elem.removeData(SVELTE_DATA_STORE);
+        },
+    };
+    // const field = elem.parent().filter(".field");
+    // const labelFor = field.find("label").prop("for");
 }

@@ -1,3 +1,5 @@
+// typedoc.json
+
 {
     "entryPoints": ["src/lib/**/*.ts"],
     // "excludePrivate": true,

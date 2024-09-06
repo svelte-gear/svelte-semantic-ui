@@ -43,13 +43,9 @@ export const fmt: {
     // money:  (val: number | undefined) => string;
     // list: (val: string[] | undefined) => string;
 } = {
-    date: (d: Date | undefined): string => {
-        return getDefaultDateFmt().format(d);
-    },
+    date: (d: Date | undefined): string => getDefaultDateFmt().format(d),
 
-    time: (d: Date | undefined): string => {
-        return getDefaultTimeFmt().format(d);
-    },
+    time: (d: Date | undefined): string => getDefaultTimeFmt().format(d),
 };
 
 /*
@@ -99,6 +95,7 @@ export const parse: {
 /* prettier-ignore */
 // eslint-disable-next-line @typescript-eslint/typedef
 export const rule = {
+/* eslint-disable key-spacing */
     empty:      (): string => "empty",
     checked:    (): string => "checked",
 
@@ -133,6 +130,8 @@ export const rule = {
     maxCount:    (n: number): string => `maxCount[${n}]`,
 
     // TODO: add custom rules
+
+    /* eslint-enable */
 };
 
 /*

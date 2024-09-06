@@ -3,7 +3,7 @@
  * @module components/use-popup
  */
 
-import type { PopupSettings } from "$lib/data/semantic-types";
+import type { PopupSettings } from "../data/semantic-types";
 import type { JQueryApi } from "../data/common";
 import { jQueryElem } from "../data/common";
 import { SettingsHelper } from "../data/settings";

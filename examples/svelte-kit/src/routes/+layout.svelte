@@ -2,7 +2,7 @@
 // +layout.svelte
 // Common navigation component.
 
-// eslint-disable-next-line import/extensions
+// eslint-disable-next-line import/extensions, import/no-unresolved
 import { page } from "$app/stores";
 </script>
 

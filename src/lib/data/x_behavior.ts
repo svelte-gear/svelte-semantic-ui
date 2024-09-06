@@ -5,7 +5,9 @@
  * @experimental
  */
 
-/* eslint-disable @typescript-eslint/lines-between-class-members */
+/* eslint-disable_ @typescript-eslint/lines-between-class-members */
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-multi-spaces */
 
 import type { JQueryApi, RuleDefinition, SemanticCommand } from "./common";
 import { jQueryElem } from "./common";
@@ -98,6 +100,7 @@ export function behavior(node: Element, bhv: SemanticBehavior): void {
 
     if (!bound) {
         throw new Error(
+            // eslint-disable-next-line max-len
             "'use:behavior' can only be called on one of the following components: 'checkbox', 'dropdown', 'modal', 'popup', 'sticky', 'calendar', 'slider', 'form'"
         );
     }

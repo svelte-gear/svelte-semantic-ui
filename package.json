@@ -1,6 +1,6 @@
 {
     "name":        "@svelte-gear/svelte-semantic-ui",
-    "version":     "0.0.6-alpha",
+    "version":     "0.0.7-alpha",
     "type":        "module",
     "license":     "MIT",
     "description": "svelte actions and bindings for semantic-ui or fomantic-ui (work in progress)",
@@ -19,22 +19,7 @@
     "types": "dist/index.d.ts",
 
     "_exports": {
-        ".": "export root folder",
-        "./behavior": {
-            "types":  "./dist/use-behavior.d.ts",
-            "svelte": "./dist/use-behavior.js" },
-        "./i18n": {
-            "types":  "./dist/i18n/index.d.ts",
-            "import": "./dist/i18n/index.js"
-        },
-        "./settings": {
-            "types":  "./dist/data/settings.d.ts",
-            "svelte": "./dist/data/settings.js"
-        },
-        "./types": {
-            "types":  "./dist/data/semantic-types.d.ts",
-            "svelte": "./dist/data/semantic-types.js"
-        }
+        ".": "export root folder; other expoerts must start with './' as well"
     },
     "exports": {
         ".": {
@@ -66,18 +51,16 @@
         "semantic-ui-css": "for semantic-ui, add optional fomantic modules: calendar, slider, toast, and form"
     },
     "peerDependencies": {
-        "svelte":          "^3.12.1 || ^4.0.0",
-        "jquery":          "^3.6.0",
+        "svelte":          "^3.12.1 || ^4.2.18",
+        "jquery":          "^3.7.1",
         "fomantic-ui-css": "^2.9.3"
     },
 
     "_dependencies": {
-        "_none": "the library has no npm dependencies, but jQuery and senamtic-ui must be present at runtime",
-        "tslib":                 "2.9.0 - would be required if importHelpers == true in tsconfig.json",
-        "jquery":                "3.7.1 - doesn't seem to work, needs to be imported in app.html",
-        "fomantic-ui-css":       "2.9.3 - required for import variants C, D, E",
-        "semantic-ui-css":       "2.5.0 - required for import variants D, E",
-        "@rollup/plugin-inject": "5.0.5 - to make jQuery globally available"
+        "_none":           "the library has no npm dependencies, but jQuery and senamtic-ui must be present at runtime",
+        "jquery":          "3.7.1 - doesn't seem to work, needs to be imported in app.html",
+        "fomantic-ui-css": "2.9.3 - required for import variants C, D, E",
+        "semantic-ui-css": "2.5.0 - required for import variants D, E"
     },
     "dependencies": {
     },
@@ -90,9 +73,9 @@
         "_svelte":            "svelte, typescript, and packager tools",
         "_typedoc":           "types information and api docs",
 
-        "eslint-config-prettier": "9.1.0 - not used; we prefer modifying eslint rules to match prettier",
+        "eslint-config-prettier": "9.1.0 - is not used; we prefer modifying eslint rules to match prettier",
         "npm-run-all":            "4.1.5 - allows to run npm tasks sequentially or in parallel; not yet required",
-        "eslint":                           "9.4.0 - not yet compatible with ___, keep version 8 for now"
+        "eslint":                 "9.5.0 - v9 requires config file cganges, will do it later; 8.53 has many changes"
     },
     "devDependencies": {
         "@sveltejs/adapter-static":     "3.0.1",

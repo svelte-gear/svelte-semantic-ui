@@ -33,8 +33,12 @@ async function translate(locale: string): Promise<void> {
     }
 }
 
+type LocaleObj = {
+    locale: string;
+};
+
 /** Runs before the application is displayed, saves loaded locale into the context */
-export async function load({ params }: LoadEvent): Promise<{ locale: string }> {
+export async function load({ params }: LoadEvent): Promise<LocaleObj> {
     void params;
     let res: string | null = null;
 

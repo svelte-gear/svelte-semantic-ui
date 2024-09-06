@@ -40,6 +40,7 @@ function isObject(value: unknown): boolean {
 
 /** Recursive function to copy only matching fields. */
 function copyFields(target: SettingsObject, source: SettingsObject, logName: string): void {
+    // eslint-disable-next-line no-restricted-syntax
     for (const key in source) {
         if (Object.prototype.hasOwnProperty.call(target, key)) {
             const to: boolean = isObject(target[key]);
@@ -157,10 +158,11 @@ export function applyAllSettings(json: AllSettingsJson): void {
         throw new Error("jQuery is not initialized.");
     }
     ensureNumberSettings(jQuery);
+    // eslint-disable-next-line no-restricted-syntax, guard-for-in
     for (const name in json) {
         const settings: SettingsObject | undefined = jQuery.fn[name]?.settings as SettingsObject;
         if (!settings) {
-            console.log("Ignoring unrecognized Semantic UI component: ${name}");
+            console.log(`Ignoring unrecognized Semantic UI component: ${name}`);
         } else {
             copyFields(settings, json[name], name);
         }

@@ -1,14 +1,12 @@
 .DS_Store
-node_modules
-/.svelte-kit
-/.vscode
+node_modules*
+.svelte-kit
+.vscode
+
 /build
 /dist
 /static
 /doc/api
-.env
-.env.*
-!.env.example
 
 # ignore files for PNPM, NPM and YARN
 pnpm-lock.yaml
@@ -20,4 +18,9 @@ package.json
 tsconfig.json
 
 # examples folders have their own projects
-/examples
+/examples/**/build
+/examples/**/dist
+/examples/**/node_modules
+/examples/**/.svelte-kit
+/examples/**/.cache
+/examples/**/.vscode

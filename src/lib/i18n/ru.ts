@@ -7,6 +7,8 @@
  * @module i18n/ru-RU
  */
 
+/* eslint-disable max-len */
+
 import type {
     CalendarSettings,
     CalendarText,

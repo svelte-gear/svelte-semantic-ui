@@ -62,6 +62,8 @@ The line below is required for typedoc.sh to work
 import type { Unsubscriber } from "svelte/store";
 import { onMount, afterUpdate, onDestroy } from "svelte";
 
+import { format as formatAction } from "../components/use-format";
+import { validate as validateAction } from "../components/use-validate";
 import type { DataController, DataTypes, Formatter, JQueryApi, RuleDefinition } from "./common";
 import {
     equalDataTypes,
@@ -71,8 +73,6 @@ import {
     jQueryElemById,
     SVELTE_DATA_STORE,
 } from "./common";
-import { format as formatAction } from "../components/use-format";
-import { validate as validateAction } from "../components/use-validate";
 
 /** Two-way binding for controlling and reading the Dropdown selection
     - see {@link components/use-dropdown} */
@@ -187,9 +187,10 @@ onMount(() => {
         }
     } else {
         // attempt find preceding input or textarea
-        elem = jQueryElem(span).prev("input"); //TODO: add textarea
+        elem = jQueryElem(span).prev("input, textarea");
         if (elem.length === 0) {
             throw new Error(
+                // eslint-disable-next-line max-len
                 "Parent element of <Data> component must have 'use:dropdown', 'use:modal', 'use:calendar', 'use:slider', or <Data> must follow <input> or <textarea>."
             );
         }
@@ -197,7 +198,8 @@ onMount(() => {
         if (watcher) {
             if (watcher.mode !== "input") {
                 throw new Error(
-                    `Preceding <input> of <Data> component has unrecognized store type: ${watcher.mode}`
+                    // eslint-disable-next-line max-len
+                    `Preceding <input>||<textarea> of <Data> component has unrecognized store type: ${watcher.mode}`
                 );
             }
         } else {
@@ -238,7 +240,7 @@ onMount(() => {
 
     */
 
-/** When store value changes, modify the corresponding prop.*/
+/** When store value changes, modify the corresponding prop. */
 function onSubscriptionChange(storeValue: DataTypes): void {
     console.debug(`data : ${watcher.mode} <- store(${watcher.uid}) = ${toStr(storeValue)}`);
 

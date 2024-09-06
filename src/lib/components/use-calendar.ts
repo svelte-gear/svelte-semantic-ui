@@ -50,7 +50,7 @@ type CalendarApi = {
 */
 export function calendar(
     node: Element,
-    settings?: CalendarSettings /*& DateFormatSettings*/
+    settings?: CalendarSettings /* & DateFormatSettings */
 ): ActionReturnType {
     const elem: JQueryApi & CalendarApi = jQueryElem(node) as JQueryApi & CalendarApi;
     if (!elem.calendar) {
@@ -183,20 +183,18 @@ export function calendar(
     const labelFor: string = field.find("label").prop("for");
     if (labelFor === "_") {
         field.on("click", "label", handleClick);
-        return {
-            destroy(): void {
-                field.off("click", "label", handleClick);
-            },
-        };
     }
-    // return {
-    //     destroy() {
-    //         console.debug("  action - destroy");
-    //         const field = elem.parent().filter(".field");
-    //         const labelFor = field.find("label").prop("for");
-    //         if (labelFor === "_") {
-    //             field.off("click", "label", handleClick);
-    //         }
-    //     },
-    // };
+
+    return {
+        destroy(): void {
+            // console.debug("  >>>>>> calendar - destroy");
+            if (labelFor === "_") {
+                field.off("click", "label", handleClick);
+            }
+            // release the controlled memory
+            elem.removeData(SVELTE_DATA_STORE);
+        },
+    };
+    // const field = elem.parent().filter(".field");
+    // const labelFor = field.find("label").prop("for");
 }

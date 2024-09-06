@@ -61,7 +61,7 @@ export function format(node: Element, fmt: Formatter): ActionReturnType {
             }
             const curValue: string = elem.val();
             const newValue: string = fmt.format(value);
-            if (/*newValue &&*/ newValue !== curValue) {
+            if (/* newValue && */ newValue !== curValue) {
                 console.debug(`  update(${this.uid}) -> input = ${newValue}`);
                 elem.val(newValue ?? "");
             }

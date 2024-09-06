@@ -2,7 +2,7 @@
 // dialog/+page.svelte
 // Sample dialog page.
 
-import { modal, Data } from "$lib";
+import { modal, Data } from "../../lib";
 
 let show: boolean = true;
 

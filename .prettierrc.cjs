@@ -9,7 +9,7 @@ module.exports = {
     // singleQuote: false,
     // quoteProps: "as-needed", // suggested: "consistent"
     // jsxSingleQuote: false,
-    trailingComma: "es5", // default: "all" // suggested: "none"
+    trailingComma: "es5", // default: "all"
     // bracketSpacing: true,
     // bracketSameLine: false,
     // arrowParens: "always",

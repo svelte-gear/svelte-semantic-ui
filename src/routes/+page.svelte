@@ -2,8 +2,7 @@
 // +page.svelte
 // Home page, allows to change locale.
 
-import { dropdown, Data } from "$lib";
-
+import { dropdown, Data } from "../lib";
 import { applyLocale, getLocale, supportedLocales } from "../lib/i18n";
 
 let currLocale: string = getLocale();

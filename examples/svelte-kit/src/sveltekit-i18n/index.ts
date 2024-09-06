@@ -39,7 +39,11 @@ import type { Readable } from "svelte/store";
 import type { Config } from "sveltekit-i18n";
 import i18n from "sveltekit-i18n";
 
-const langList: { [key: string]: string } = {
+type StringMap = {
+    [key: string]: string;
+};
+
+const langList: StringMap = {
     en: "English",
     es: "Español",
     cs: "Česky",
@@ -47,12 +51,9 @@ const langList: { [key: string]: string } = {
 
 const config: Config = {
     translations: {
-        en: langList,
-        es: langList,
-        cs: langList,
-        // en: { en: "English",  es: "Spanish",   cs: "Czech" },
-        // es: { en: "Inglés",   es: "Español",   cs: "Checo" },
-        // cs: { en: "Anglicky", es: "Španělsky", cs: "Česky" },
+        en: langList, // en: { en: "English",  es: "Spanish",   cs: "Czech" },
+        es: langList, // es: { en: "Inglés",   es: "Español",   cs: "Checo" },
+        cs: langList, // cs: { en: "Anglicky", es: "Španělsky", cs: "Česky" },
     },
     loaders: [
         { locale: "en", key: "", loader: async () => (await import("./en.json")).default },
@@ -62,20 +63,33 @@ const config: Config = {
 };
 
 // type definition of i18n is enormous, there is no need to re-document it
-// eslint-disable-next-line @typescript-eslint/typedef
+// eslint-disable-next-line @typescript-eslint/typedef, new-cap
 const ski18n = new i18n(config);
 
 type LtRes = Promise<void | void[]> | undefined;
 
+type AnyMap = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [key: string]: any;
+};
+
 /** Translation function used in the application  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const t: Readable<(key: string, ...params: { [key: string]: any }[]) => any> = ski18n.t;
+export const t: Readable<(key: string, ...params: AnyMap[]) => any> = ski18n.t;
 
 /** Load translation files for locale and path. */
 export const loadTranslations: (locale: string, route?: string) => LtRes = ski18n.loadTranslations;
 
+type GetStringArray = {
+    get: () => string[];
+};
+
 /** List of locales configured in sveltekit-i18n. */
-export const locales: Readable<string[]> & { get: () => string[] } = ski18n.locales;
+export const locales: Readable<string[]> & GetStringArray = ski18n.locales;
+
+type GetString = {
+    get: () => string;
+};
 
 /** Currntly applied locale. */
-export const locale: Readable<string> & { get: () => string } = ski18n.locale;
+export const locale: Readable<string> & GetString = ski18n.locale;

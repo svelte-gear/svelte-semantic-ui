@@ -3,7 +3,7 @@
  * @module components/use-checkbox
  */
 
-import type { CheckboxSettings } from "$lib/data/semantic-types";
+import type { CheckboxSettings } from "../data/semantic-types";
 import type { JQueryApi } from "../data/common";
 import { SettingsHelper } from "../data/settings";
 import { jQueryElem } from "../data/common";

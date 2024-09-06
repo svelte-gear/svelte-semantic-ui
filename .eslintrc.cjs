@@ -1,8 +1,14 @@
 // .eslintrc.cjs
 // https://typescript-eslint.io/linting/typed-linting/
 
+// TODO: consider https://github.com/sveltejs/eslint-config/blob/master/index.js
+
 /* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+// eslint-disable-next-line @typescript-eslint/typedef, @typescript-eslint/no-var-requires
+const rules = require("./.eslint_rules.cjs");
 
 module.exports = {
     root: true,
@@ -10,18 +16,25 @@ module.exports = {
     parserOptions: {
         sourceType: "module",
         ecmaVersion: 2020,
-        project: ["tsconfig.eslint.json"],
+        project: [
+            // library project
+            "tsconfig.json",
+            "tsconfig_eslint.json",
+            // example projects are linted from the root project to keep thier config minimal
+            "examples/vite/tsconfig.json",
+            "examples/svelte-kit/tsconfig.json",
+            // TODO: minimal webpack config - "examples/webpack/tsconfig.eslint.json",
+        ],
         tsconfigRootDir: __dirname, // current folder in node
         extraFileExtensions: [".svelte"],
     },
-    plugins: ["@typescript-eslint", "react", "import", "jsx-a11y", "promise"],
+    plugins: ["@typescript-eslint", "import", "jsx-a11y", "promise"], // "react"
     extends: [
         "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:@typescript-eslint/recommended-type-checked", // includes "recommended"
         "plugin:svelte/recommended",
-        "airbnb-typescript",
-        // "prettier", // make rules the same instead of disabling them
+        "airbnb-base", //                                    has rules not incl in airbnb-typescript
+        "airbnb-typescript/base", //                         base doesn't reference react
     ],
     overrides: [
         {
@@ -36,65 +49,5 @@ module.exports = {
         browser: true,
         es2020: true,
     },
-    rules: {
-        "@typescript-eslint/comma-dangle": ["warn", "only-multiline"],
-        // "@typescript-eslint/indent": ["warn", 4],
-        "@typescript-eslint/quotes": ["warn", "double", { avoidEscape: true }],
-
-        "@typescript-eslint/ban-ts-comment": "off", // it is there on purpose
-        "@typescript-eslint/no-inferrable-types": "off", // extra check is good
-        "@typescript-eslint/restrict-template-expressions": "off", // complains about string[]
-
-        "@typescript-eslint/explicit-function-return-type": ["warn", { allowExpressions: true }],
-        "@typescript-eslint/explicit-module-boundary-types": "warn",
-        "@typescript-eslint/typedef": [
-            "warn",
-            {
-                arrayDestructuring: true,
-                arrowParameter: true,
-                memberVariableDeclaration: true,
-                objectDestructuring: true,
-                parameter: true,
-                propertyDeclaration: true,
-                variableDeclaration: true,
-                variableDeclarationIgnoreFunction: false,
-            },
-        ],
-        "@typescript-eslint/indent": [
-            "warn",
-            4,
-            {
-                flatTernaryExpressions: false,
-                ignoredNodes: ["TSTypeParameterInstantiation"],
-                SwitchCase: 1,
-            },
-        ],
-        // indent: [
-        //     "warn",
-        //     4,
-        //     {
-        //         SwitchCase: 1,
-        //         // VariableDeclarator: 1,
-        //         // outerIIFEBody: 1,
-        //         // MemberExpression: 1,
-        //         // FunctionDeclaration: {
-        //         //     parameters: 1,
-        //         //     body: 1,
-        //         // },
-        //         // FunctionExpression: {
-        //         //     parameters: 1,
-        //         //     body: 1,
-        //         // },
-        //         // CallExpression: {
-        //         //     arguments: 1,
-        //         // },
-        //         // ArrayExpression: 1,
-        //         // ObjectExpression: 1,
-        //         // ImportDeclaration: 1,
-        //         // flatTernaryExpressions: false,
-        //         // // ignoredNodes: ["TemplateLiteral *"],
-        //         // offsetTernaryExpressions: true,
-        //     },
-        // ],
-    },
+    rules: rules,
 };

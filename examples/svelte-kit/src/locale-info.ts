@@ -11,8 +11,9 @@ export function saveLocaleCookie(value: string): void {
 }
 
 export function readLocaleCookie(): string | null {
-    const nameEQ: string = localeCookieName + "=";
+    const nameEQ: string = `${localeCookieName}=`;
     const ca: string[] = document.cookie.split(";");
+    // eslint-disable-next-line no-restricted-syntax
     for (const c of ca) {
         const cookie: string = c.trim();
         if (cookie.startsWith(nameEQ)) {
@@ -53,6 +54,7 @@ export function cookieMatch(supportedLocales: string[]): string | null {
 
 export function browserMatch(supportedLocales: string[]): string | null {
     // look for exact match
+    // eslint-disable-next-line no-restricted-syntax
     for (const browserLocale of navigator.languages) {
         if (supportedLocales.includes(browserLocale)) {
             return browserLocale;
@@ -60,6 +62,7 @@ export function browserMatch(supportedLocales: string[]): string | null {
     }
     // try partial matching by language
     const supportedLanguages: string[] = getLanguages(supportedLocales);
+    // eslint-disable-next-line no-restricted-syntax
     for (const browserLocale of navigator.languages) {
         const browserLanguage: string = getLanguage(browserLocale);
         if (supportedLanguages.includes(browserLanguage)) {

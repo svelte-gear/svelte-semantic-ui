@@ -1,15 +1,14 @@
 // svelte.config.js
-// https://kit.svelte.dev/docs/integrations#preprocessors
-// https://kit.svelte.dev/docs/adapters
 
-/* eslint-disable import/no-extraneous-dependencies, @typescript-eslint/typedef */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable import/no-unresolved */
+/* eslint-disable @typescript-eslint/typedef */
 
 import staticAdapter from "@sveltejs/adapter-static";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-    // https://svelte.dev/docs#compile-time-svelte-preprocess
     preprocess: vitePreprocess(),
 
     kit: {

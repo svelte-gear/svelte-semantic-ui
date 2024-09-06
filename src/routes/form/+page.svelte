@@ -17,7 +17,7 @@ import {
     DateFmt,
     format,
     rule,
-} from "$lib";
+} from "../../lib";
 import { isoDate, isoTime } from "../../lib/data/common";
 
 const options: string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
@@ -26,6 +26,7 @@ let rank: string;
 let teams: string[];
 let country: string;
 let gender: string;
+let text3: string;
 let income: number | undefined;
 let chb: boolean;
 let dat: Date | undefined;
@@ -37,6 +38,7 @@ function init(): void {
     teams = ["1", "2", "3"];
     country = "ar";
     gender = "";
+    text3 = "";
     income = 12345;
     chb = true;
     dat = new Date("2022-02-01 13:00");
@@ -64,6 +66,7 @@ $: {
         teams: teams,
         country: country,
         gender: gender,
+        text: text3,
         income: income !== undefined ? income : "",
         agree: chb,
         date: `${isoDate(dat)}_${isoTime(dat)}`,
@@ -375,6 +378,12 @@ Formatter replaces you input with correct string or empties it.
                     use:format={new MoneyFmt()}
                 />
                 <Data bind:value={income} validate={[rule.empty()]} />
+            </div>
+
+            <div class="field">
+                <label for="g3"> Text </label>
+                <textarea name="text-3" placeholder="describe" rows="3" id="g3" />
+                <Data bind:value={text3} validate={[rule.empty()]} />
             </div>
 
             <!-- direct <input bind:value may be used for simple string value -->

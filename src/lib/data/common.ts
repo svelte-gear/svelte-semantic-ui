@@ -8,10 +8,10 @@
 // Getting element by id seems to fix the problem.
 // This maybe caused by 'modal' component moving the element up in dom...
 
+import type { Writable } from "svelte/store";
+
 export const SVELTE_DATA_STORE: string = "svelte_data_store";
 export const SVELTE_FORM_STORE: string = "svelte_form_store";
-
-import type { Writable } from "svelte/store";
 
 /** Return type for a simple svelte action; with destroy(), but without update(). */
 export type ActionReturnType = {
@@ -25,7 +25,10 @@ export interface Formatter {
 }
 
 /** Validation rule object: rule string and custom error prompt */
-export type RuleObj = { type: string; prompt?: string };
+export type RuleObj = {
+    type: string;
+    prompt?: string;
+};
 
 /** Rule definition takes array or single instance of string or RuleObj */
 export type RuleDefinition = string | string[] | RuleObj | RuleObj[]; // | BaseSchema;
@@ -59,6 +62,7 @@ export interface JQueryApi {
     off(event: string, selector: string | null, handler: () => void): void;
     data(key: string, value: unknown): void;
     data(key: string): unknown;
+    removeData(key: string): void;
 
     each(fn: (idx: number, elem: Element) => void): void;
     text(): string;
@@ -72,7 +76,9 @@ export interface JQueryApi {
 
 /** Gets jQuery element by id attribute. */
 export function jQueryElemById(id: string): JQueryApi {
-    type WithJQuerySelector = { jQuery(selector: string): JQueryApi };
+    type WithJQuerySelector = {
+        jQuery(selector: string): JQueryApi;
+    };
     // eslint-disable-next-line @typescript-eslint/unbound-method, @typescript-eslint/typedef
     const jQuery = (window as unknown as WithJQuerySelector).jQuery;
     if (!jQuery) {
@@ -83,7 +89,9 @@ export function jQueryElemById(id: string): JQueryApi {
 
 /** Gets jQuery element by dom node. */
 export function jQueryElem(node: Element): JQueryApi {
-    type WithJQueryNode = { jQuery(node: Element): JQueryApi };
+    type WithJQueryNode = {
+        jQuery(node: Element): JQueryApi;
+    };
     // eslint-disable-next-line @typescript-eslint/unbound-method, @typescript-eslint/typedef
     const jQuery = (window as unknown as WithJQueryNode).jQuery;
     if (!jQuery) {
@@ -172,7 +180,7 @@ export function uid(): string {
 /** Compare two arrays, two Date objects, or two primitives */
 export function equalDataTypes(a1: DataTypes | undefined, a2: DataTypes | undefined): boolean {
     if (Array.isArray(a1) && Array.isArray(a2)) {
-        if (a1.length != a2.length) {
+        if (a1.length !== a2.length) {
             return false;
         }
         for (let i: number = 0; i < a1.length; i++) {
@@ -183,7 +191,7 @@ export function equalDataTypes(a1: DataTypes | undefined, a2: DataTypes | undefi
         return true;
     }
     if (a1 instanceof Date && a2 instanceof Date) {
-        return a1.getTime() == a2.getTime();
+        return a1.getTime() === a2.getTime();
     }
     return a1 === a2;
 }
@@ -191,7 +199,7 @@ export function equalDataTypes(a1: DataTypes | undefined, a2: DataTypes | undefi
 export function pad(n: number, size: number): string {
     let str: string = n.toString();
     while (str.length < size) {
-        str = "0" + str;
+        str = `0${str}`;
     }
     return str;
 }

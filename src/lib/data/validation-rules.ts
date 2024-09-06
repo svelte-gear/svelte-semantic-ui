@@ -28,7 +28,7 @@ import { formDefaults } from "./use-form-validation";
 function isoDateFn(value: string): boolean {
     let d: Date | undefined = undefined;
     try {
-        d = new Date(value + " 13:00"); // TODO: use better hack
+        d = new Date(`${value} 13:00`); // TODO: use better hack
     } catch (ex) {
         d = undefined;
     }
@@ -42,7 +42,7 @@ function startFn(value: string, ruleValue: string): boolean {
 
 // Add custom rule
 function startEndFn(value: string, ruleValue: string): boolean {
-    console.info("startEnd : " + value + " - " + ruleValue);
+    console.info(`startEnd : ${value} - ${ruleValue}`);
     return value.startsWith(ruleValue);
 }
 

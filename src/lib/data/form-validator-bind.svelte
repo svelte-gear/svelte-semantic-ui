@@ -99,7 +99,7 @@ onMount(() => {
 
     */
 
-/** When store value changes, modify the corresponding prop.*/
+/** When store value changes, modify the corresponding prop. */
 function onValidChange(storeValue: boolean): void {
     if (storeValue !== valid) {
         console.debug(`form : ${watcher.mode} <- store(${watcher.uid}).valid = ${storeValue}`);
@@ -107,7 +107,7 @@ function onValidChange(storeValue: boolean): void {
     }
 }
 
-/** When store value changes, modify the corresponding prop.*/
+/** When store value changes, modify the corresponding prop. */
 function onErrorsChange(storeValue: string[]): void {
     if (!equalDataTypes(storeValue, errors)) {
         console.debug(`form : ${watcher.mode} <- store(${watcher.uid}).errs = [${storeValue}]`);

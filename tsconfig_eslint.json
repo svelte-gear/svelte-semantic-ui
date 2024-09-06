@@ -1,0 +1,15 @@
+// tsconfig_eslint.json
+// https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/parser/README.md#configuration
+// lets eslint parse config files (whixh are not processed by ts)
+
+{
+    "include": [
+        "*.js",
+        "*.?js",
+        ".*.?js",
+        "examples/**/*.js",
+        "examples/**/*.?js",
+        // "examples/**/.*.?js",
+        "examples/**/vite.config.ts"
+    ]
+}

@@ -1,21 +1,15 @@
 // vite.config.js
 
 /* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
 
 import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig } from "vite";
-// import inject from "@rollup/plugin-inject";
 
 export default defineConfig({
-    plugins: [
-        sveltekit(),
-        // inject({
-        //     $: "jquery",
-        //     jQuery: "jquery",
-        // }),
-    ],
-    // build: {
-    //     sourcemap: true,
-    // },
-    // ssr: { target: "webworker" },
+    plugins: [sveltekit()],
+    build: {
+        sourcemap: true,
+    },
 });

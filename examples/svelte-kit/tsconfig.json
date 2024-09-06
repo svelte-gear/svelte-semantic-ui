@@ -1,6 +1,7 @@
 // tsconfig.json
 // https://github.com/tsconfig/bases/blob/main/bases/svelte.json
 // https://www.typescriptlang.org/tsconfig
+// https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/parser/README.md#configuration
 
 {
     "extends": "./.svelte-kit/tsconfig.json",

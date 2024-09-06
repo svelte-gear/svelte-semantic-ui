@@ -102,7 +102,9 @@ export function formValidation(node: Element, settings?: FormSettings): void {
      * `fieldChange()` function is called by `validator` action when any of the fileds changes.
      * `validateForm()` function is performs form validation.
      */
-    const ctrl: FormController & { active: boolean } = {
+    const ctrl: FormController & {
+        active: boolean;
+    } = {
         uid: uid(),
         mode: "sui-form",
         valid: writable<boolean>(),
@@ -115,10 +117,12 @@ export function formValidation(node: Element, settings?: FormSettings): void {
         },
         setActive(newValue: boolean): void {
             console.log("SET ACTIVE", this.active, "->", newValue);
+            // eslint-disable-next-line eqeqeq
             if (this.active == false && newValue == true) {
                 // start validating
                 this.doValidateForm();
             }
+            // eslint-disable-next-line eqeqeq
             if (this.active == true && newValue == false) {
                 // remove validation highlights
                 elem.find(".field.error").removeClass("error");

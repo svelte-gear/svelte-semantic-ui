@@ -3,10 +3,10 @@
  * @module data/input-formatter
  */
 
+import { calendarDefaults } from "../components/use-calendar";
 import type { CalendarSettings, DateFormatFn, DateParseFn, NumberSettings } from "./semantic-types";
 import type { DataTypes, Formatter } from "./common";
 import { SettingsHelper } from "./settings";
-import { calendarDefaults } from "../components/use-calendar";
 
 export const numberDefaults: SettingsHelper<NumberSettings> = new SettingsHelper("number");
 
@@ -38,7 +38,8 @@ export class NumberFmt implements Formatter {
     }
 
     // TODO: move format / parse number into format.ts
-    parse(val: string): number | undefined {
+    parse(value: string): number | undefined {
+        let val: string = value;
         val = val.replace(/\s/g, ""); // remove whitespace
         val = val.split(this.separator).join(""); // replace all
         const num: number = parseFloat(val);
@@ -55,7 +56,7 @@ export class NumberFmt implements Formatter {
             return "";
         }
         if (typeof val !== "number") {
-            throw new Error("numberFormatter expects number as data type, got " + typeof val);
+            throw new Error(`numberFormatter expects number as data type, got ${typeof val}`);
         }
         let str: string = val.toFixed(Math.max(this.precision, 0)); // `${val}`;
         const len: number = str.length;
@@ -101,8 +102,8 @@ export class MoneyFmt implements Formatter {
         this.numFormatter = new NumberFmt(moneyPrec);
         this.prefix = pref !== undefined ? pref : def.moneyPrefix ?? "$";
         this.suffix = suff !== undefined ? suff : def.moneySuffix ?? "";
-        this.prefixRegex = new RegExp("^\\s*" + escapeRegExp(this.prefix) + "\\s*");
-        this.suffixRegex = new RegExp("\\s*" + escapeRegExp(this.suffix) + "\\s*$");
+        this.prefixRegex = new RegExp(`^\\s*${escapeRegExp(this.prefix)}\\s*`);
+        this.suffixRegex = new RegExp(`\\s*${escapeRegExp(this.suffix)}\\s*$`);
     }
 
     // TODO: add precision
@@ -136,7 +137,7 @@ export type CaseMode = "upper" | "lower" | "title";
 
 export class TextFmt implements Formatter {
     caseMode: CaseMode;
-    //TODO: ascii only, id, id_, id_-, no tags, no-sq, no-dq, max-len
+    // TODO: ascii only, id, id_, id_-, no tags, no-sq, no-dq, max-len
 
     constructor(caseMode: CaseMode) {
         this.caseMode = caseMode;
@@ -157,6 +158,8 @@ export class TextFmt implements Formatter {
                     .split(" ")
                     .map((s: string) => s.charAt(0).toUpperCase() + s.substring(1).toLowerCase())
                     .join(" ");
+            default:
+                throw new Error(`Unrecognized case ${this.caseMode}`);
         }
     }
 }
@@ -194,7 +197,7 @@ export class ListFmt implements Formatter {
 
     format(val: DataTypes): string {
         if (!Array.isArray(val)) {
-            throw new Error("listFormatter expects string[] as data type, got " + typeof val);
+            throw new Error(`listFormatter expects string[] as data type, got ${typeof val}`);
         }
         const str: string = val.reduce(
             (res: string, curr: string) => res + this.separator + curr,
@@ -228,17 +231,21 @@ export class DateFmt implements Formatter {
         };
     }
 
+    /* eslint-disable one-var */
+    /* eslint-disable prefer-template */
+    /* eslint-disable no-nested-ternary */
+    /* eslint-disable @typescript-eslint/typedef */
+
     // this function is copied from fomantic-ui calendar component v2.9.3
     protected weekOfYear(weekYear: number, weekMonth: number, weekDay: number): number {
+        void this;
         // adapted from http://www.merlyn.demon.co.uk/weekcalc.htm
-        /* eslint-disable @typescript-eslint/typedef */
         const ms1d = 24 * 3600 * 1000,
             ms7d = 7 * ms1d,
             DC3 = Date.UTC(weekYear, weekMonth, weekDay + 3) / ms1d, // an absolute day number
             AWN = Math.floor(DC3 / 7), // an absolute week number
-            Wyr = new Date(AWN * ms7d).getUTCFullYear();
-        /* eslint-enable */
-        return AWN - Math.floor(Date.UTC(Wyr, 0, 7) / ms7d) + 1;
+            WYR = new Date(AWN * ms7d).getUTCFullYear();
+        return AWN - Math.floor(Date.UTC(WYR, 0, 7) / ms7d) + 1;
     }
 
     // this function is copied from fomantic-ui calendar component v2.9.3
@@ -257,7 +264,6 @@ export class DateFmt implements Formatter {
             return format.call(this, date, settings);
             // TODO: sest if it works with formatter function
         }
-        /* eslint-disable @typescript-eslint/typedef, @typescript-eslint/quotes */
         const D = date.getDate(),
             M = date.getMonth(),
             Y = date.getFullYear(),
@@ -265,7 +271,7 @@ export class DateFmt implements Formatter {
             H = date.getHours(),
             m = date.getMinutes(),
             s = date.getSeconds(),
-            w = /*module.get.*/ this.weekOfYear(Y, M, D + 1 - settings.firstDayOfWeek),
+            w = /* module.get. */ this.weekOfYear(Y, M, D + 1 - settings.firstDayOfWeek),
             h = H % 12 || 12,
             a = H < 12 ? settings.text.am!.toLowerCase() : settings.text.pm!.toLowerCase(),
             tokens = {
@@ -301,16 +307,22 @@ export class DateFmt implements Formatter {
                 w: w,
                 ww: ("0" + w).slice(-2),
             };
-        /* eslint-enable */
 
+        // eslint-disable-next-line func-names, prefer-arrow-callback
         return format.replace(settings.regExp.token!, function (match: string): string {
             if (match in tokens) {
-                return (tokens as unknown as { [key: string]: string })[match];
+                return (
+                    tokens as unknown as {
+                        [key: string]: string;
+                    }
+                )[match];
             }
 
             return match.slice(1, -1);
         });
     }
+
+    /* eslint-enable */
 
     parse(val: string): Date | undefined {
         if (!val) {
@@ -325,7 +337,7 @@ export class DateFmt implements Formatter {
             return "";
         }
         if (!(val instanceof Date)) {
-            throw new Error("dateFormatter expects Date as data type, got " + typeof val);
+            throw new Error(`dateFormatter expects Date as data type, got ${typeof val}`);
         }
         const type: string = this.settings.type!;
         type SettingsFormatter = {
