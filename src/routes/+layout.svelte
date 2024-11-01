@@ -1,9 +1,18 @@
+<!-- <svelte:options runes={true} /> -->
+
 <script lang="ts">
 // +layout.svelte
 // Common navigation component.
 
 // eslint-disable-next-line import/extensions, import/no-unresolved
 import { page } from "$app/stores";
+
+// interface Props {
+//     children?: import("svelte").Snippet;
+// }
+
+// eslint-disable-next-line prefer-const
+// let { children }: Props = $props();
 </script>
 
 <!------------------------------------------------------------------------------------------------>
@@ -14,11 +23,12 @@ import { page } from "$app/stores";
         <a href="/form" class="ui button basic">Form</a>
         <a href="/dialog" class="ui button basic">Dialog</a>
     </nav>
-    <div class="ui divider" />
+    <div class="ui divider"></div>
 
     <slot />
+    <!-- {@render children?.()} -->
 
-    <div class="ui divider" />
+    <div class="ui divider"></div>
     <p class="footer">Sample App, &nbsp; <i>location</i> = {$page.route.id}</p>
 </div>
 

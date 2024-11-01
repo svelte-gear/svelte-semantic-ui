@@ -13,11 +13,11 @@ import { page } from "$app/stores";
         <a href="/dialog" class="ui button basic">Dialog</a>
         <a href="/xxx" class="ui button basic">Wrong</a>
     </nav>
-    <div class="ui divider" />
+    <div class="ui divider"></div>
 
     <slot />
 
-    <div class="ui divider" />
+    <div class="ui divider"></div>
     <p class="footer">Sample App, &nbsp; <i>location</i> = {$page.route.id}</p>
 </div>
 

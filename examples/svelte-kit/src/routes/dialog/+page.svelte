@@ -59,7 +59,7 @@ $: console.log(`SHOW : ${show}`);
     >
         <Data bind:active={show} />
         <div class="ui icon header">
-            <i class="archive icon" />
+            <i class="archive icon"></i>
             {$t("archive-old-messages")}
         </div>
         <div class="content">
@@ -72,11 +72,11 @@ $: console.log(`SHOW : ${show}`);
         </div>
         <div class="actions">
             <div class="ui red basic cancel inverted button">
-                <i class="remove icon" />
+                <i class="remove icon"></i>
                 {$t("btn.no")}
             </div>
             <div class="ui green ok inverted button">
-                <i class="checkmark icon" />
+                <i class="checkmark icon"></i>
                 {$t("btn.yes")}
             </div>
         </div>

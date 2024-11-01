@@ -1,3 +1,5 @@
+<!-- <svelte:options runes={true} /> -->
+
 <script lang="ts">
 // form/+page.svelte
 // Sample form page with components, data binding, and validation.
@@ -22,16 +24,65 @@ import { isoDate, isoTime } from "../../lib/data/common";
 
 const options: string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
-let rank: string;
-let teams: string[];
-let country: string;
-let gender: string;
-let text3: string;
-let income: number | undefined;
-let chb: boolean;
-let dat: Date | undefined;
-let tim: Date | undefined;
-let rating: number;
+// REACTIVE -------------------------------------------------------------------
+/* eslint-disable prefer-const */
+
+// let rank: string = $state("");
+// let teams: string[] = $state([]);
+// let country: string = $state("");
+// let gender: string = $state("");
+// let text3: string = $state("");
+// let income: number | undefined = $state();
+// let chb: boolean = $state(false);
+// let dat: Date | undefined = $state();
+// let tim: Date | undefined = $state();
+// let rating: number = $state(0);
+
+let rank: string = "";
+let teams: string[] = [];
+let country: string = "";
+let gender: string = "";
+let text3: string = "";
+let income: number | undefined = undefined;
+let chb: boolean = false;
+let dat: Date | undefined = undefined;
+let tim: Date | undefined = undefined;
+let rating: number = 0;
+
+// form validation
+// let active: boolean = $state(false);
+// let valid: boolean = $state(false);
+
+let active: boolean = false;
+let valid: boolean = false;
+
+// let json: string = $derived(
+let json: string = "";
+$: {
+    json = JSON.stringify({
+        rank: rank,
+        teams: teams,
+        country: country,
+        gender: gender,
+        text: text3,
+        income: income !== undefined ? income : "",
+        agree: chb,
+        date: `${isoDate(dat)}_${isoTime(dat)}`,
+        time: isoTime(tim),
+        rating: rating,
+    })
+        .replace(/,"/g, ', "')
+        .replace("{", "{ ")
+        .replace("}", " }");
+
+    console.log(`nums [${teams.toString()}]`);
+}
+
+/* eslint-enable */
+
+// $effect(() => {
+//     console.log(`nums [${teams.toString()}]`);
+// });
 
 function init(): void {
     rank = "5";
@@ -58,33 +109,15 @@ function reset(): void {
     });
 }
 
-let json: string;
-
-$: {
-    json = JSON.stringify({
-        rank: rank,
-        teams: teams,
-        country: country,
-        gender: gender,
-        text: text3,
-        income: income !== undefined ? income : "",
-        agree: chb,
-        date: `${isoDate(dat)}_${isoTime(dat)}`,
-        time: isoTime(tim),
-        rating: rating,
-    })
-        .replace(/,"/g, ', "')
-        .replace("{", "{ ")
-        .replace("}", " }");
-}
-
-$: console.log(`nums [${teams.toString()}]`);
-
-let active: boolean = false;
 function toggleActive(): void {
     active = !active;
 }
-let valid: boolean = false;
+
+function blur(): void {
+    if (document.activeElement) {
+        (document.activeElement as HTMLElement).blur();
+    }
+}
 </script>
 
 <!------------------------------------------------------------------------------------------------>
@@ -141,12 +174,12 @@ let valid: boolean = false;
                     >
                         {#if active}
                             Validating
-                            <i class="icon" class:check={valid} class:close={!valid} />
+                            <i class="icon" class:check={valid} class:close={!valid}></i>
                         {:else}
                             Validate
                         {/if}
                     </button>
-                    <div class="ui message error" />
+                    <div class="ui message error"></div>
                 </div>
             </div>
 
@@ -216,24 +249,24 @@ let valid: boolean = false;
                 >
                     <Data bind:selected={country} />
                     <input type="hidden" name="country" />
-                    <i class="dropdown icon" />
+                    <i class="dropdown icon"></i>
                     <div class="default text">Select Country</div>
                     <div class="menu">
-                        <div class="item" data-value="af"><i class="af flag" />Afghanistan</div>
-                        <div class="item" data-value="ax"><i class="ax flag" />Aland Isl.</div>
-                        <div class="item" data-value="al"><i class="al flag" />Albania</div>
-                        <div class="item" data-value="dz"><i class="dz flag" />Algeria</div>
-                        <div class="item" data-value="as"><i class="as flag" />Amer. Samoa</div>
-                        <div class="item" data-value="ad"><i class="ad flag" />Andorra</div>
-                        <div class="item" data-value="ao"><i class="ao flag" />Angola</div>
-                        <div class="item" data-value="ai"><i class="ai flag" />Anguilla</div>
-                        <div class="item" data-value="ag"><i class="ag flag" />Antigua</div>
-                        <div class="item" data-value="ar"><i class="ar flag" />Argentina</div>
-                        <div class="item" data-value="am"><i class="am flag" />Armenia</div>
-                        <div class="item" data-value="aw"><i class="aw flag" />Aruba</div>
-                        <div class="item" data-value="au"><i class="au flag" />Australia</div>
-                        <div class="item" data-value="at"><i class="at flag" />Austria</div>
-                        <div class="item" data-value="az"><i class="az flag" />Azerbaijan</div>
+                        <div class="item" data-value="af"><i class="af flag"></i>Afghanistan</div>
+                        <div class="item" data-value="ax"><i class="ax flag"></i>Aland Isl.</div>
+                        <div class="item" data-value="al"><i class="al flag"></i>Albania</div>
+                        <div class="item" data-value="dz"><i class="dz flag"></i>Algeria</div>
+                        <div class="item" data-value="as"><i class="as flag"></i>Amer. Samoa</div>
+                        <div class="item" data-value="ad"><i class="ad flag"></i>Andorra</div>
+                        <div class="item" data-value="ao"><i class="ao flag"></i>Angola</div>
+                        <div class="item" data-value="ai"><i class="ai flag"></i>Anguilla</div>
+                        <div class="item" data-value="ag"><i class="ag flag"></i>Antigua</div>
+                        <div class="item" data-value="ar"><i class="ar flag"></i>Argentina</div>
+                        <div class="item" data-value="am"><i class="am flag"></i>Armenia</div>
+                        <div class="item" data-value="aw"><i class="aw flag"></i>Aruba</div>
+                        <div class="item" data-value="au"><i class="au flag"></i>Australia</div>
+                        <div class="item" data-value="at"><i class="at flag"></i>Austria</div>
+                        <div class="item" data-value="az"><i class="az flag"></i>Azerbaijan</div>
                     </div>
                 </div>
             </div>
@@ -255,12 +288,12 @@ let valid: boolean = false;
                 >
                     <Data bind:selected={gender} validate={[rule.not("male")]} />
                     <input type="hidden" id="gend" />
-                    <i class="dropdown icon" />
+                    <i class="dropdown icon"></i>
                     <div class="default text">Gender</div>
                 </div>
             </div>
 
-            <div class="ui divider" />
+            <div class="ui divider"></div>
 
             <!--
        dP            dP
@@ -285,7 +318,7 @@ let valid: boolean = false;
                 >
                     <Data bind:date={dat} />
                     <div class="ui input right icon">
-                        <i class="dropdown icon" />
+                        <i class="dropdown icon"></i>
                         <input type="text" placeholder="Date" />
                     </div>
                 </div>
@@ -303,7 +336,7 @@ let valid: boolean = false;
                     >
                         <Data bind:date={dat} />
                         <div class="ui input right icon">
-                            <i class="calendar outline icon" />
+                            <i class="calendar outline icon"></i>
                             <input type="text" placeholder="Date" />
                         </div>
                     </div>
@@ -320,14 +353,14 @@ let valid: boolean = false;
                     >
                         <Data bind:date={tim} validate={[rule.empty(), rule.not("00:00")]} />
                         <div class="ui input right icon" id="x16">
-                            <i class="clock outline icon" />
+                            <i class="clock outline icon"></i>
                             <input type="text" placeholder="Time" />
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="ui divider" />
+            <div class="ui divider"></div>
 
             <!--
  oo                              dP
@@ -382,7 +415,7 @@ Formatter replaces you input with correct string or empties it.
 
             <div class="field">
                 <label for="g3"> Text </label>
-                <textarea name="text-3" placeholder="describe" rows="3" id="g3" />
+                <textarea name="text-3" placeholder="describe" rows="3" id="g3"></textarea>
                 <Data bind:value={text3} validate={[rule.empty()]} />
             </div>
 
@@ -402,7 +435,8 @@ Formatter replaces you input with correct string or empties it.
                             position: "bottom right",
                         }}
                     />
-                    <Data bind:value={rank} validate="start[A]" />
+                    <Data bind:value={rank} />
+                    <!-- <Data bind:value={rank} validate="start[A]" /> -->
                 </div>
             {/if}
             <!--
@@ -486,6 +520,7 @@ Formatter replaces you input with correct string or empties it.
                     use:slider={{ min: 0, max: 10 }}
                 >
                     <!-- validate={yup.number().required()} -->
+
                     <Data
                         forId="sl"
                         bind:position={rating}
@@ -495,6 +530,9 @@ Formatter replaces you input with correct string or empties it.
             </div>
 
             <!-- <div class="ui message error" /> -->
+            <button class="ui button primary fluid" on:mouseover={blur} on:focus={() => {}}>
+                Save
+            </button>
         </form>
     </div>
 </main>

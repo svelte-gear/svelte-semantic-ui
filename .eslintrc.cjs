@@ -23,7 +23,7 @@ module.exports = {
             // example projects are linted from the root project to keep thier config minimal
             "examples/vite/tsconfig.json",
             "examples/svelte-kit/tsconfig.json",
-            // TODO: minimal webpack config - "examples/webpack/tsconfig.eslint.json",
+            "examples/webpack/tsconfig.json",
         ],
         tsconfigRootDir: __dirname, // current folder in node
         extraFileExtensions: [".svelte"],

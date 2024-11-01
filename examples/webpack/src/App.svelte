@@ -1,9 +1,9 @@
 <script>
 /* eslint-disable @typescript-eslint/typedef */
-/* eslint-disable @typescript-eslint/typedef */
-/* eslint-disable @typescript-eslint/typedef */
 /* eslint-disable no-undef-init */
 /* eslint-disable import/no-mutable-exports */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
 import { calendar, Data, DateFmt, format, rule } from "@svelte-gear/svelte-semantic-ui";
 
@@ -13,6 +13,8 @@ export let name;
 let dat = undefined;
 </script>
 
+/** eslint-disable @typescript-eslint/no-unsafe-call */ /** eslint-disable
+@typescript-eslint/no-unsafe-call */
 <main>
     <h1>Hello {name}!</h1>
     <p>
@@ -34,7 +36,7 @@ let dat = undefined;
         >
             <Data bind:date={dat} />
             <div class="ui input right icon">
-                <i class="dropdown icon" />
+                <i class="dropdown icon"></i>
                 <input type="text" placeholder="Date" />
             </div>
         </div>

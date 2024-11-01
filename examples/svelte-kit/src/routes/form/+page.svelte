@@ -138,12 +138,12 @@ let valid: boolean = false;
                     >
                         {#if active}
                             Validating
-                            <i class="icon" class:check={valid} class:close={!valid} />
+                            <i class="icon" class:check={valid} class:close={!valid}></i>
                         {:else}
                             Validate
                         {/if}
                     </button>
-                    <div class="ui message error" />
+                    <div class="ui message error"></div>
                 </div>
             </div>
 
@@ -213,24 +213,24 @@ let valid: boolean = false;
                 >
                     <Data bind:selected={country} />
                     <input type="hidden" name="country" />
-                    <i class="dropdown icon" />
+                    <i class="dropdown icon"></i>
                     <div class="default text">Select Country</div>
                     <div class="menu">
-                        <div class="item" data-value="af"><i class="af flag" />Afghanistan</div>
-                        <div class="item" data-value="ax"><i class="ax flag" />Aland Isl.</div>
-                        <div class="item" data-value="al"><i class="al flag" />Albania</div>
-                        <div class="item" data-value="dz"><i class="dz flag" />Algeria</div>
-                        <div class="item" data-value="as"><i class="as flag" />Amer. Samoa</div>
-                        <div class="item" data-value="ad"><i class="ad flag" />Andorra</div>
-                        <div class="item" data-value="ao"><i class="ao flag" />Angola</div>
-                        <div class="item" data-value="ai"><i class="ai flag" />Anguilla</div>
-                        <div class="item" data-value="ag"><i class="ag flag" />Antigua</div>
-                        <div class="item" data-value="ar"><i class="ar flag" />Argentina</div>
-                        <div class="item" data-value="am"><i class="am flag" />Armenia</div>
-                        <div class="item" data-value="aw"><i class="aw flag" />Aruba</div>
-                        <div class="item" data-value="au"><i class="au flag" />Australia</div>
-                        <div class="item" data-value="at"><i class="at flag" />Austria</div>
-                        <div class="item" data-value="az"><i class="az flag" />Azerbaijan</div>
+                        <div class="item" data-value="af"><i class="af flag"></i>Afghanistan</div>
+                        <div class="item" data-value="ax"><i class="ax flag"></i>Aland Isl.</div>
+                        <div class="item" data-value="al"><i class="al flag"></i>Albania</div>
+                        <div class="item" data-value="dz"><i class="dz flag"></i>Algeria</div>
+                        <div class="item" data-value="as"><i class="as flag"></i>Amer. Samoa</div>
+                        <div class="item" data-value="ad"><i class="ad flag"></i>Andorra</div>
+                        <div class="item" data-value="ao"><i class="ao flag"></i>Angola</div>
+                        <div class="item" data-value="ai"><i class="ai flag"></i>Anguilla</div>
+                        <div class="item" data-value="ag"><i class="ag flag"></i>Antigua</div>
+                        <div class="item" data-value="ar"><i class="ar flag"></i>Argentina</div>
+                        <div class="item" data-value="am"><i class="am flag"></i>Armenia</div>
+                        <div class="item" data-value="aw"><i class="aw flag"></i>Aruba</div>
+                        <div class="item" data-value="au"><i class="au flag"></i>Australia</div>
+                        <div class="item" data-value="at"><i class="at flag"></i>Austria</div>
+                        <div class="item" data-value="az"><i class="az flag"></i>Azerbaijan</div>
                     </div>
                 </div>
             </div>
@@ -252,12 +252,12 @@ let valid: boolean = false;
                 >
                     <Data bind:selected={gender} validate={[rule.not("male")]} />
                     <input type="hidden" id="gend" />
-                    <i class="dropdown icon" />
+                    <i class="dropdown icon"></i>
                     <div class="default text">Gender</div>
                 </div>
             </div>
 
-            <div class="ui divider" />
+            <div class="ui divider"></div>
 
             <!--
        dP            dP
@@ -282,7 +282,7 @@ let valid: boolean = false;
                 >
                     <Data bind:date={dat} />
                     <div class="ui input right icon">
-                        <i class="dropdown icon" />
+                        <i class="dropdown icon"></i>
                         <input type="text" placeholder="Date" />
                     </div>
                 </div>
@@ -300,7 +300,7 @@ let valid: boolean = false;
                     >
                         <Data bind:date={dat} />
                         <div class="ui input right icon">
-                            <i class="calendar outline icon" />
+                            <i class="calendar outline icon"></i>
                             <input type="text" placeholder="Date" />
                         </div>
                     </div>
@@ -317,14 +317,14 @@ let valid: boolean = false;
                     >
                         <Data bind:date={tim} validate={[rule.empty(), rule.not("00:00")]} />
                         <div class="ui input right icon" id="x16">
-                            <i class="clock outline icon" />
+                            <i class="clock outline icon"></i>
                             <input type="text" placeholder="Time" />
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="ui divider" />
+            <div class="ui divider"></div>
 
             <!--
  oo                              dP

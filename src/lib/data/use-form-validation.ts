@@ -49,6 +49,8 @@ export function formValidation(node: Element, settings?: FormSettings): void {
         form(command: string, arg1?: unknown, arg2?: unknown): unknown;
     };
     const elem: FormApi = jQueryElem(node) as FormApi;
+    // console.log("F:node", node);
+    // console.log("F:elem(jQuery", elem);
     if (!elem.form) {
         throw new Error("Semantic form is not initialized");
     }

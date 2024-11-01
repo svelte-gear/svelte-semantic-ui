@@ -13,5 +13,5 @@ export const prerender: boolean = true;
 /** Runs before the application is displayed, saves loaded locale into the context */
 export async function load(): Promise<void> {
     await initializeFramework();
-    await applyLocale("en");
+    await applyLocale("en-CA");
 }

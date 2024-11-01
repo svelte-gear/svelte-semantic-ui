@@ -69,14 +69,14 @@ export function dropdown(node: Element, settings?: DropdownSettings): ActionRetu
             if (Array.isArray(value)) {
                 // multi-select
                 if (value && !equalDataTypes(value, curValue)) {
-                    console.debug(`  update(${this.uid}) -> dropdown = ${value}`);
+                    console.debug(` | update(${this.uid}) -> dropdown = ${value}`);
                     // use 'set exactly' instead of 'set selected'!!!
                     elem.dropdown("set exactly", value);
                 }
             } else {
                 // single-select
                 if (curValue !== value) {
-                    console.debug(`  update(${this.uid}) -> dropdown = ${value}`);
+                    console.debug(` | update(${this.uid}) -> dropdown = ${value}`);
                     // elem.dropdown("set selected", value);
                     const exists: unknown = elem.dropdown("get item", value); // FIXME: JQueryApi ?
                     if (exists) {
@@ -91,19 +91,18 @@ export function dropdown(node: Element, settings?: DropdownSettings): ActionRetu
 
         /** Return updated value from the dropdown */
         onChange(newValue: string | string[]) {
-            console.debug(`  onChange(${this.uid}) = ${newValue}`);
             if (Array.isArray(newValue)) {
                 // multi-select
                 const value: string[] = get(this.store) as string[];
                 if (!value || !equalDataTypes(value, newValue)) {
-                    console.debug(`  store(${this.uid}) <- dropdown = [${newValue}]`);
+                    console.debug(` | store(${this.uid}) <- dropdown = [${newValue}]`);
                     this.store.set(newValue);
                 }
             } else {
                 // single-select
                 const value: string = get(this.store) as string;
                 if (value !== newValue) {
-                    console.debug(`  store(${this.uid}) <- dropdown = ${newValue}`);
+                    console.debug(` | store(${this.uid}) <- dropdown = ${newValue}`);
                     if (DROPDOWN_PREVENT_CLEARING_BAD_DATA) {
                         const exists: unknown = elem.dropdown("get item", newValue);
                         // FIXME: JQueryApi
@@ -136,7 +135,6 @@ export function dropdown(node: Element, settings?: DropdownSettings): ActionRetu
         text: string,
         choice: JQuery
     ): void {
-        // console.info("ON DROPDOWN CHANGE", this, newValue, text, choice);
         const def: DropdownSettings = dropdownDefaults.read();
         if (def.onChange) {
             def.onChange.call(this, newValue, text, choice);
@@ -166,7 +164,7 @@ export function dropdown(node: Element, settings?: DropdownSettings): ActionRetu
     });
 
     // Attach store holder to jQuery element
-    console.debug(`  store(${holder.uid}) - ${holder.mode} created`);
+    console.debug(` | store(${holder.uid}) - ${holder.mode} created`);
     elem.data(SVELTE_DATA_STORE, holder);
 
     // show dropdown on label click, if for="_"
@@ -181,7 +179,7 @@ export function dropdown(node: Element, settings?: DropdownSettings): ActionRetu
 
     return {
         destroy() {
-            // console.debug("  >>>>>> dropdown - destroy");
+            console.debug(" | dropdown - destroy");
             if (labelFor === "_") {
                 field.off("click", "label", handleClick);
             }

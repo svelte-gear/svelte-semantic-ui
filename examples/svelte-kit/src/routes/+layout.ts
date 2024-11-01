@@ -46,6 +46,8 @@ export async function load({ params }: LoadEvent): Promise<LocaleObj> {
     // You can add more locales without to you project
     registerExtraLocales();
 
+    // console.log("supportedLocales()", supportedLocales());
+
     // Read cookie, check if the locale is supported by the framework
     const cookieLocale: string | null = cookieMatch(supportedLocales());
     if (cookieLocale) {

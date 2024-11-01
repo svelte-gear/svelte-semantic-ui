@@ -143,6 +143,6 @@ export default {
         message: dropdownMessages,
     },
     progress: {
-        test: progressTexts,
+        text: progressTexts,
     },
 };

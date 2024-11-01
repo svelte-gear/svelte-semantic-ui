@@ -28,6 +28,10 @@ Svelte actions and data bindings for Semantic UI components
     </form>
 ```
 
+## Versions
+
+Version 0.4.x is compiled in svelte 4, but may be used in Svelte 5 project.
+
 ## Design
 
 -   Keep familiar Semantic UI syntax

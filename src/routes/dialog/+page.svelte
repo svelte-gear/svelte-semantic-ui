@@ -1,19 +1,31 @@
+<!-- <svelte:options runes={true} /> -->
+
 <script lang="ts">
+import { afterUpdate } from "svelte";
 // dialog/+page.svelte
 // Sample dialog page.
 
 import { modal, Data } from "../../lib";
 
-let show: boolean = true;
+// REACTIVE -------------------------------------------------------------------
+/* eslint-disable prefer-const */
+
+let show: boolean = true; // $state(true);
+
+/* eslint-enable */
+
+afterUpdate(() => {
+    // $effect(() => {
+    console.log(`SHOW : ${show}`);
+});
 
 function okFn(): void {
     console.log("ok");
 }
+
 function noFn(): void {
     console.log("no");
 }
-
-$: console.log(`SHOW : ${show}`);
 </script>
 
 <!------------------------------------------------------------------------------------------------>
@@ -54,7 +66,7 @@ $: console.log(`SHOW : ${show}`);
     >
         <Data bind:active={show} />
         <div class="ui icon header">
-            <i class="archive icon" />
+            <i class="archive icon"></i>
             Archive Old Messages
         </div>
         <div class="content">
@@ -65,11 +77,11 @@ $: console.log(`SHOW : ${show}`);
         </div>
         <div class="actions">
             <div class="ui red basic cancel inverted button">
-                <i class="remove icon" />
+                <i class="remove icon"></i>
                 No
             </div>
             <div class="ui green ok inverted button">
-                <i class="checkmark icon" />
+                <i class="checkmark icon"></i>
                 Yes
             </div>
         </div>

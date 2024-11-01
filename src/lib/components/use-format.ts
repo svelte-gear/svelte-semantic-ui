@@ -94,7 +94,9 @@ export function format(node: Element, fmt: Formatter): ActionReturnType {
 
     return {
         destroy() {
+            console.log(" | input - destroy");
             elem.off("change", null, formatElement);
+            elem.removeData(SVELTE_DATA_STORE);
         },
     };
 }

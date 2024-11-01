@@ -34,7 +34,7 @@ export class NumberFmt implements Formatter {
             }
             this.precision = prec;
         }
-        this.separator = sep !== undefined ? sep : numberDefaults.read().thousandSeparator ?? " ";
+        this.separator = sep !== undefined ? sep : (numberDefaults.read().thousandSeparator ?? " ");
     }
 
     // TODO: move format / parse number into format.ts
@@ -98,10 +98,10 @@ export class MoneyFmt implements Formatter {
 
     constructor(prec?: number, pref?: string, suff?: string) {
         const def: NumberSettings = numberDefaults.read();
-        const moneyPrec: number = prec !== undefined ? prec : def.moneyPrecision ?? 2;
+        const moneyPrec: number = prec !== undefined ? prec : (def.moneyPrecision ?? 2);
         this.numFormatter = new NumberFmt(moneyPrec);
-        this.prefix = pref !== undefined ? pref : def.moneyPrefix ?? "$";
-        this.suffix = suff !== undefined ? suff : def.moneySuffix ?? "";
+        this.prefix = pref !== undefined ? pref : (def.moneyPrefix ?? "$");
+        this.suffix = suff !== undefined ? suff : (def.moneySuffix ?? "");
         this.prefixRegex = new RegExp(`^\\s*${escapeRegExp(this.prefix)}\\s*`);
         this.suffixRegex = new RegExp(`\\s*${escapeRegExp(this.suffix)}\\s*$`);
     }

@@ -48,7 +48,7 @@ let dat: Date | undefined;
             <div class="ui calendar" use:calendar={{ type: "date", maxDate: new Date() }}>
                 <Data bind:date={dat} validate={rule.empty()} />
                 <div class="ui input right icon">
-                    <i class="dropdown icon" />
+                    <i class="dropdown icon"></i>
                     <input type="text" placeholder="Date" />
                 </div>
             </div>

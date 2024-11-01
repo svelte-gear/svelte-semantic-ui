@@ -1,22 +1,39 @@
+<!-- <svelte:options runes={true} /> -->
+
 <script lang="ts">
+import { afterUpdate } from "svelte";
 // +page.svelte
 // Home page, allows to change locale.
 
 import { dropdown, Data } from "../lib";
 import { applyLocale, getLocale, supportedLocales } from "../lib/i18n";
 
-let currLocale: string = getLocale();
-let newLocale: string = currLocale;
+// REACTIVE -------------------------------------------------------------------
+/* eslint-disable prefer-const */
 
-$: {
-    // execute on locale change
-    void (async () => {
-        if (newLocale && newLocale !== currLocale) {
-            await applyLocale(newLocale);
-            currLocale = newLocale;
-        }
-    })();
-}
+let newLocale: string = getLocale(); // $state(getLocale());
+
+/* eslint-enable */
+
+let currLocale: string = getLocale();
+
+afterUpdate(() => {
+    // $effect(() => {
+    // execute only on locale change
+    if (newLocale !== currLocale) {
+        console.log(`apply new locale: ${newLocale}`);
+        void applyLocale(newLocale);
+        currLocale = newLocale;
+    } else {
+        console.log(`effect misfired for locale: ${newLocale}`);
+    }
+    // void (async () => {
+    //     if (newLocale && newLocale !== currLocale) {
+    //         await applyLocale(newLocale);
+    //         currLocale = newLocale;
+    //     }
+    // })();
+});
 </script>
 
 <!------------------------------------------------------------------------------------------------>
@@ -43,4 +60,4 @@ $: {
     </select>
 </form>
 <br />
-<p>current locale = {currLocale}</p>
+<p>current locale = {newLocale}</p>

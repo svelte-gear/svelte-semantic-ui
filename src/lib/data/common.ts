@@ -43,7 +43,7 @@ export type RuleDefinition = string | string[] | RuleObj | RuleObj[]; // | BaseS
  dP       dP                             d8888P
 */
 
-/** Small subset of jQuery functions used in this library. */
+/** Small subset of jQuery functions used by this library. */
 export interface JQueryApi {
     parent(): JQueryApi;
     filter(selector: string): JQueryApi;
