@@ -1,7 +1,7 @@
 <!-- <svelte:options runes={true} /> -->
+<svelte:options runes={true} />
 
 <script lang="ts">
-import { afterUpdate } from "svelte";
 // +page.svelte
 // Home page, allows to change locale.
 
@@ -11,14 +11,13 @@ import { applyLocale, getLocale, supportedLocales } from "../lib/i18n";
 // REACTIVE -------------------------------------------------------------------
 /* eslint-disable prefer-const */
 
-let newLocale: string = getLocale(); // $state(getLocale());
+let newLocale: string = $state(getLocale());
 
 /* eslint-enable */
 
 let currLocale: string = getLocale();
 
-afterUpdate(() => {
-    // $effect(() => {
+$effect(() => {
     // execute only on locale change
     if (newLocale !== currLocale) {
         console.log(`apply new locale: ${newLocale}`);

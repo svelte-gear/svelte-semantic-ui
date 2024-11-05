@@ -1,7 +1,7 @@
 <!-- <svelte:options runes={true} /> -->
+<svelte:options runes={true} />
 
 <script lang="ts">
-import { afterUpdate } from "svelte";
 // dialog/+page.svelte
 // Sample dialog page.
 
@@ -10,12 +10,11 @@ import { modal, Data } from "../../lib";
 // REACTIVE -------------------------------------------------------------------
 /* eslint-disable prefer-const */
 
-let show: boolean = true; // $state(true);
+let show: boolean = $state(true);
 
 /* eslint-enable */
 
-afterUpdate(() => {
-    // $effect(() => {
+$effect(() => {
     console.log(`SHOW : ${show}`);
 });
 
@@ -39,7 +38,7 @@ function noFn(): void {
     </p>
     <button
         class="ui button"
-        on:click={() => {
+        onclick={() => {
             show = true;
         }}
     >

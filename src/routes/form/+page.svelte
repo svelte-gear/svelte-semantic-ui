@@ -1,4 +1,5 @@
 <!-- <svelte:options runes={true} /> -->
+<svelte:options runes={true} />
 
 <script lang="ts">
 // form/+page.svelte
@@ -27,39 +28,23 @@ const options: string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10
 // REACTIVE -------------------------------------------------------------------
 /* eslint-disable prefer-const */
 
-// let rank: string = $state("");
-// let teams: string[] = $state([]);
-// let country: string = $state("");
-// let gender: string = $state("");
-// let text3: string = $state("");
-// let income: number | undefined = $state();
-// let chb: boolean = $state(false);
-// let dat: Date | undefined = $state();
-// let tim: Date | undefined = $state();
-// let rating: number = $state(0);
-
-let rank: string = "";
-let teams: string[] = [];
-let country: string = "";
-let gender: string = "";
-let text3: string = "";
-let income: number | undefined = undefined;
-let chb: boolean = false;
-let dat: Date | undefined = undefined;
-let tim: Date | undefined = undefined;
-let rating: number = 0;
+let rank: string = $state("");
+let teams: string[] = $state([]);
+let country: string = $state("");
+let gender: string = $state("");
+let text3: string = $state("");
+let income: number | undefined = $state();
+let chb: boolean = $state(false);
+let dat: Date | undefined = $state();
+let tim: Date | undefined = $state();
+let rating: number = $state(0);
 
 // form validation
-// let active: boolean = $state(false);
-// let valid: boolean = $state(false);
+let active: boolean = $state(false);
+let valid: boolean = $state(false);
 
-let active: boolean = false;
-let valid: boolean = false;
-
-// let json: string = $derived(
-let json: string = "";
-$: {
-    json = JSON.stringify({
+let json: string = $derived(
+    JSON.stringify({
         rank: rank,
         teams: teams,
         country: country,
@@ -73,10 +58,12 @@ $: {
     })
         .replace(/,"/g, ', "')
         .replace("{", "{ ")
-        .replace("}", " }");
+        .replace("}", " }")
+);
 
+$effect(() => {
     console.log(`nums [${teams.toString()}]`);
-}
+});
 
 /* eslint-enable */
 
@@ -163,14 +150,14 @@ function blur(): void {
                     <div class="ui message" style:font-family="monospace">
                         {json}
                     </div>
-                    <button class="ui button blue" type="button" on:click={reset}> Reset </button>
+                    <button class="ui button blue" type="button" onclick={reset}> Reset </button>
                     <button
                         class="ui button icon"
                         class:yellow={!active}
                         class:green={active && valid}
                         class:red={active && !valid}
                         type="button"
-                        on:click={toggleActive}
+                        onclick={toggleActive}
                     >
                         {#if active}
                             Validating
@@ -530,7 +517,7 @@ Formatter replaces you input with correct string or empties it.
             </div>
 
             <!-- <div class="ui message error" /> -->
-            <button class="ui button primary fluid" on:mouseover={blur} on:focus={() => {}}>
+            <button class="ui button primary fluid" onmouseover={blur} onfocus={() => {}}>
                 Save
             </button>
         </form>

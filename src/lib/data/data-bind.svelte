@@ -73,7 +73,7 @@ For `<input>` / textarea / select `use:validate` on the element will produce the
 <input /><Data bind:parsed={val} validate={...}>
 ```
 -->
-<!-- <svelte:options runes={false} /> -->
+<svelte:options runes={true} />
 
 <script lang="ts">
 /**
@@ -81,7 +81,7 @@ The line below is for typedoc.sh
 @module data/Svelte::Data
 */
 
-import { onMount, onDestroy, tick, afterUpdate } from "svelte";
+import { onMount, onDestroy, tick } from "svelte";
 import type { Unsubscriber } from "svelte/store";
 
 import { format as formatAction } from "../components/use-format";
@@ -103,77 +103,48 @@ import {
     SVELTE_DATA_STORE,
 } from "./common";
 
-// // DON'T USE $props yet
-// interface Props {
-//     /** Two-way binding for controlling and reading the Dropdown selection
-//     - see {@link components/use-dropdown} */
-//     selected?: string | string[];
+interface Props {
+    /** Two-way binding for controlling and reading the Dropdown selection
+    - see {@link components/use-dropdown} */
+    selected?: string | string[];
 
-//     /** Two-way binding for controlling and reading the Modal state
-//     - see {@link components/use-modal} */
-//     active?: boolean;
+    /** Two-way binding for controlling and reading the Modal state
+    - see {@link components/use-modal} */
+    active?: boolean;
 
-//     /** Two-way binding for controlling and reading the Calendar date, time, or datetime
-//     - see {@link components/use-calendar} */
-//     date?: Date;
+    /** Two-way binding for controlling and reading the Calendar date, time, or datetime
+    - see {@link components/use-calendar} */
+    date?: Date;
 
-//     /** Two-way binding for controlling and reading the Slider value
-//     - see {@link components/use-slider} */
-//     position?: number;
+    /** Two-way binding for controlling and reading the Slider value
+    - see {@link components/use-slider} */
+    position?: number;
 
-//     /** Two-way binding for controlling and reading input / textarea value.
-//     May be used together with {@link components/use-format}. */
-//     value?: DataTypes; // TODO: Explain the diffrence with bind:value on the input e;ement
+    /** Two-way binding for controlling and reading input / textarea value.
+    May be used together with {@link components/use-format}. */
+    value?: DataTypes; // TODO: Explain the diffrence with bind:value on the input e;ement
 
-//     /** Optional value validator. Uses Semantic UI validator syntax.
-//     The same as {@link components/use-validate}.
-//     Ususally takes the value generated with {@link data/helpers.rule}. */
-//     validate?: RuleDefinition;
+    /** Optional value validator. Uses Semantic UI validator syntax.
+    The same as {@link components/use-validate}.
+    Ususally takes the value generated with {@link data/helpers.rule}. */
+    validate?: RuleDefinition;
 
-//     /** Id of the input element, takes precendence over tag position */
-//     forId?: string;
-// }
+    /** Id of the input element, takes precendence over tag position */
+    forId?: string;
+}
 
 // REACTIVE -------------------------------------------------------------------
 /* eslint-disable prefer-const */
 
-// let {
-//     selected = $bindable(undefined),
-//     active = $bindable(undefined),
-//     date = $bindable(undefined),
-//     position = $bindable(undefined),
-//     value = $bindable(undefined),
-//     validate = undefined,
-//     forId = undefined,
-// }: Props = $props();
-
-/** Two-way binding for controlling and reading the Dropdown selection
-    - see {@link components/use-dropdown} */
-export let selected: string | string[] | undefined = undefined;
-
-/** Two-way binding for controlling and reading the Modal state
-    - see {@link components/use-modal} */
-export let active: boolean | undefined = undefined;
-
-/** Two-way binding for controlling and reading the Calendar date, time, or datetime
-    - see {@link components/use-calendar} */
-export let date: Date | undefined = undefined;
-
-/** Two-way binding for controlling and reading the Slider value
-    - see {@link components/use-slider} */
-export let position: number | undefined = undefined;
-
-/** Two-way binding for controlling and reading input / textarea value.
-May be used together with {@link components/use-format}. */
-export let value: DataTypes | undefined = undefined; // TODO: Explain the diffrence with bind:value on the input element
-
-/** Optional value validator. Uses Semantic UI validator syntax.
-The same as {@link components/use-validate}.
-Ususally takes the value generated with {@link data/helpers.rule}. */
-export let validate: RuleDefinition | undefined = undefined;
-
-/** Id of the input element, takes precendence over tag position */
-export let forId: string | undefined = undefined;
+let {
+    selected = $bindable(undefined),
+    active = $bindable(undefined),
+    date = $bindable(undefined),
+    position = $bindable(undefined),
+    value = $bindable(undefined),
+    validate = undefined,
+    forId = undefined,
+}: Props = $props();
 
 /** Invisible dom element created by this component. */
 let span: Element | undefined = undefined; // $state();
@@ -392,8 +363,8 @@ onMount(async () => {
     */
 
 /** When a prop value changes, update the Semantic UI element. */
-afterUpdate(() => {
-    // $effect(() => {
+// afterUpdate(() => {
+$effect(() => {
     // listen to prop changes
     void value;
     void selected;

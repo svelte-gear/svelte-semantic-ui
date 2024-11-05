@@ -1,35 +1,60 @@
-import { SvelteComponent } from "svelte";
+import { SvelteComponentTyped } from "svelte";
 
 interface Props {
-    /** Two-way binding for controlling and reading the Dropdown selection
-    - see {@link components/use-dropdown} */
-    selected?: string | string[];
+    /** Determines if any field change will cause form re-validation. */
+    active: boolean;
 
-    /** Two-way binding for controlling and reading the Modal state
-    - see {@link components/use-modal} */
-    active?: boolean;
+    /** Read-only binding indicating validation result. */
+    valid?: boolean;
 
-    /** Two-way binding for controlling and reading the Calendar date, time, or datetime
-    - see {@link components/use-calendar} */
-    date?: Date;
-
-    /** Two-way binding for controlling and reading the Slider value
-    - see {@link components/use-slider} */
-    position?: number;
-
-    /** Two-way binding for controlling and reading input / textarea value.
-    May be used together with {@link components/use-format}. */
-    value?: DataTypes; // TODO: Explain the diffrence with bind:value on the input e;ement
-
-    /** Optional value validator. Uses Semantic UI validator syntax.
-    The same as {@link components/use-validate}.
-    Ususally takes the value generated with {@link data/helpers.rule}. */
-    validate?: RuleDefinition;
-
-    /** Id of the input element, takes precendence over tag position */
-    forId?: string;
+    /** Read-only binding for validation error messages. */
+    errors?: string[];
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-declare const DataBind: SvelteComponent<Props, object, object>;
-export default DataBind;
+declare const propDef: {
+    props: Props;
+    events: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        [evt: string]: CustomEvent<any>;
+    };
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    slots: {};
+};
+export type FormValidatorBindProps = typeof propDef.props;
+export type FormValidatorBindEvents = typeof propDef.events;
+export type FormValidatorBindSlots = typeof propDef.slots;
+/**
+ * Provides Svelte bindings for Semantic-UI Form validator or Yup validator.
+ * In both cases the <FormValidationData> tag must be a child of the Semantic UI form component.
+ *
+ * https://semantic-ui.com/behaviors/form.html
+ *
+ * https://github.com/jquense/yup
+ *
+ * Example:
+ * ```
+ * <form calss="ui form" use:formValidation={{ inline: true }}>
+ *     <FormValidationData // TODO FormValidator
+ *         active={isActive}
+ *         bind:valid={isValid}
+ *         bind:errors={errors}
+ *     />
+ *     ...
+ * </form>
+ * <p>This form {#if isValid} is good {:else} has errors {/if} </p>
+ * ```
+ */
+
+/* eslint-disable @typescript-eslint/indent */
+export default class FormValidatorBind extends SvelteComponentTyped<
+    FormValidatorBindProps,
+    FormValidatorBindEvents,
+    FormValidatorBindSlots
+> {}
+/* eslint-enable */
+
+export {};
+
+// // eslint-disable-next-line @typescript-eslint/naming-convention
+// declare const FormValidator: Component<Props, object, "">;
+// export default FormValidator;

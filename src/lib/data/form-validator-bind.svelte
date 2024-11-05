@@ -20,7 +20,7 @@ Example:
     <p>This form {#if isValid} is good {:else} has errors {/if} </p>
 ```
 -->
-<!-- <svelte:options runes={false} /> -->
+<svelte:options runes={true} />
 
 <script lang="ts">
 /**
@@ -29,39 +29,30 @@ The line below is for typedoc.sh
 */
 
 import type { Unsubscriber } from "svelte/store";
-import { onMount, onDestroy, tick, afterUpdate } from "svelte";
+import { onMount, onDestroy, tick } from "svelte";
 
 import type { FormController, JQueryApi } from "./common";
 import { equalDataTypes, jQueryElem, SVELTE_FORM_STORE } from "./common";
 
-// interface Props {
-//     /** Determines if any field change will cause form re-validation. */
-//     active: boolean;
+interface Props {
+    /** Determines if any field change will cause form re-validation. */
+    active: boolean;
 
-//     /** Read-only binding indicating validation result. */
-//     valid?: boolean;
+    /** Read-only binding indicating validation result. */
+    valid?: boolean;
 
-//     /** Read-only binding for validation error messages. */
-//     errors?: string[];
-// }
+    /** Read-only binding for validation error messages. */
+    errors?: string[];
+}
 
 // REACTIVE -------------------------------------------------------------------
 /* eslint-disable prefer-const */
 
-// let {
-//     active = $bindable(),
-//     valid = $bindable(undefined),
-//     errors = $bindable([]),
-// }: Props = $props();
-
-/** Determines if any field change will cause form re-validation. */
-export let active: boolean;
-
-/** Read-only binding indicating validation result. */
-export let valid: boolean = true;
-
-/** Read-only binding for validation error messages. */
-export let errors: string[] = [];
+let {
+    active = $bindable(),
+    valid = $bindable(undefined),
+    errors = $bindable([]),
+}: Props = $props();
 
 /** Invisible dom element created by this component. */
 let span: Element;
@@ -157,8 +148,7 @@ onMount(async () => {
     */
 
 /** When 'active' prop changes, update the Semantic UI form watcher. */
-afterUpdate(() => {
-    // $effect(() => {
+$effect(() => {
     // listen to prop change
     void active;
 

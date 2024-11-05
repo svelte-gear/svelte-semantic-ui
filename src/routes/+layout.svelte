@@ -1,4 +1,5 @@
 <!-- <svelte:options runes={true} /> -->
+<svelte:options runes={true} />
 
 <script lang="ts">
 // +layout.svelte
@@ -7,12 +8,12 @@
 // eslint-disable-next-line import/extensions, import/no-unresolved
 import { page } from "$app/stores";
 
-// interface Props {
-//     children?: import("svelte").Snippet;
-// }
+interface Props {
+    children?: import("svelte").Snippet;
+}
 
 // eslint-disable-next-line prefer-const
-// let { children }: Props = $props();
+let { children }: Props = $props();
 </script>
 
 <!------------------------------------------------------------------------------------------------>
@@ -25,8 +26,7 @@ import { page } from "$app/stores";
     </nav>
     <div class="ui divider"></div>
 
-    <slot />
-    <!-- {@render children?.()} -->
+    {@render children?.()}
 
     <div class="ui divider"></div>
     <p class="footer">Sample App, &nbsp; <i>location</i> = {$page.route.id}</p>
