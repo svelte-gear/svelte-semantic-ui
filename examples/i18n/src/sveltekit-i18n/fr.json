@@ -1,14 +1,10 @@
 {
-    "welcome-to-your-lib": "Bienvenue dans votre projet de bibliothèque",
-    "cont.title": "Bienvenue dans SvelteKit",
-    "cont.text": "Visitez \"{{link}}\" pour lire la documentation",
-    "menu.notification": "Vous avez {{count:gt; 0:{{count}} {{count; 1:nouveau message; default:nouveaux messages}} !; default:aucun message...}}",
-    "translation-locales": "Langues de traduction :",
-    "nav-home": "Accueil",
-    "visit-svelte": "Visitez le <a href=\"{{link}}\">Tutoriel Svelte</a> pour apprendre à créer des applications Svelte.",
-    "modal-is-if-active": "Le modal {{isActive; false:n'est pas; default:est}} actif",
-    "your-inbox-is-getting-full": "Votre boîte de réception est presque pleine, souhaitez-vous que nous activions l'archivage automatique des anciens messages ?",
-    "btn.no": "Non",
-    "btn.yes": "Oui",
-    "archive-old-messages": "\"Archiver les anciens messages\""
+  "cont.title": "Bienvenue dans SvelteKit",
+  "cont.text": "Visitez <a href={{link}}>{{link}}</a> pour lire la documentation",
+  "menu.notification": "Vous avez {{count:gt; 0:{{count}} {{count; 1:nouveau message; default:nouveaux messages}} !; default:aucun message...}}",
+  "translation-locales": "Langue de l'interface utilisateur :",
+  "modal-if-active": "Le modal {{isActive; false:n'est pas; default:est}} actif",
+  "select-your-locale": "Sélectionnez votre région :",
+  "field.date": "Date:",
+  "field.currency": "Devise:"
 }

@@ -314,7 +314,9 @@ onMount(async () => {
             // create new input watcher with a blank formatter
             const actRes: ActionReturnType = formatAction(elem.get(0), trimFormatter);
             watcher = elem.data(SVELTE_DATA_STORE) as DataController<DataTypes>;
-            destroyFormat = actRes?.destroy ?? null;
+            if (actRes) {
+                destroyFormat = actRes.destroy ?? null;
+            }
         }
     }
     validatePropsAndStoreMatch();
@@ -338,13 +340,17 @@ onMount(async () => {
         //     : elem.find("input");
         const actRes: ActionReturnType = validateAction(elem.get(0), validate);
         console.log(">>>", validate, elem.get(0));
-        destroyValidate = actRes?.destroy ?? null;
+        if (actRes) {
+            destroyValidate = actRes.destroy ?? null;
+        }
     } else {
         // FIXME: this makes the console warning go away, but why ?!
         if (["calendar", "slider"].includes(watcher.mode)) {
             const actRes: ActionReturnType = validateAction(elem.get(0), []);
             console.log(">>>", [], elem.get(0));
-            destroyValidate = actRes?.destroy ?? null;
+            if (actRes) {
+                destroyValidate = actRes.destroy ?? null;
+            }
         }
     }
 

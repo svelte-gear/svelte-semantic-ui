@@ -13,6 +13,7 @@ import {
     calendar,
     MoneyFmt,
     format,
+    formValidation,
 } from "@svelte-gear/svelte-semantic-ui";
 
 import { readLocaleCookie, saveLocaleCookie } from "../locale-info";
@@ -22,7 +23,7 @@ let currLocale: string = readLocaleCookie() ?? "";
 
 let newLocale: string = $state(currLocale);
 
-// let dat: Date | undefined = $state();
+let dat: Date | undefined = $state(new Date());
 
 let income: number | undefined = $state(12345.67);
 
@@ -70,7 +71,7 @@ const count: Writable<number> = writable(3);
 <div class="ui divider"></div>
 
 <form>
-    <label for="loc_select">Select your locale:</label>
+    <label for="loc_select">{$t("select-your-locale")}</label>
     <select class="ui selection dropdown" use:dropdown={{ clearable: true }} id="loc_select">
         <Data bind:selected={newLocale} />
         {#each supportedLocales() as locStr}
@@ -81,8 +82,9 @@ const count: Writable<number> = writable(3);
 
 <br />
 
-{$t("translation-locales")}:
-{newLocale} -&gt;
+{$t("translation-locales")}
+{newLocale}
+-&gt;
 {#each $locales as locStr}
     <span>
         &nbsp;
@@ -118,11 +120,11 @@ const count: Writable<number> = writable(3);
 <div class="ui divider"></div>
 
 {#if !hide}
-    <form class="ui form">
+    <form class="ui form" use:formValidation>
         <div class="field">
-            <label for="fn1">Date:</label>
+            <label for="fn1">{$t("field.date")}</label>
             <div class="ui calendar" use:calendar id="fn1">
-                <!-- <Data bind:date={dat} /> --><!-- FIXME: THIS FREEZES THE PAGE !! -->
+                <Data bind:date={dat} /><!-- FIXME: THIS FREEZES THE PAGE !! -->
                 <div class="ui input right icon">
                     <i class="calendar outline icon"></i>
                     <input type="text" />
@@ -131,7 +133,7 @@ const count: Writable<number> = writable(3);
         </div>
 
         <div class="field">
-            <label for="fn2">Currency:</label>
+            <label for="fn2">{$t("field.currency")}</label>
             <input
                 class="ui input"
                 type="text"

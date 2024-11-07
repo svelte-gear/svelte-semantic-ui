@@ -1,5 +1,18 @@
 {
     "i18n-ally.localesPaths": [
         "src/sveltekit-i18n"
+    ],
+    "i18n-ally.keystyle": "flat",
+    
+    "i18n-ally.extract.ignoredByFiles": {
+        "src/routes/+page.svelte": [
+            " {\n        $count = Math.max($count - 1, 0);\n    }}\n>\n    ",
+            " {\n        $count = $count + 1;\n    }}\n>\n    +\n",
+            "&nbsp;\n        {#if locStr === $locale}\n            ",
+            "\n\n{$t(\"translation-locales\")}\n{newLocale}\n-",
+            ">"
+        ]
+    },
+    "i18n-ally.extract.ignored": [
     ]
 }
