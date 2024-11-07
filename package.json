@@ -35,10 +35,9 @@
         "preview": "vite preview --host",
         "format": "prettier --write .",
         "lint": "prettier --check . && echo Linting... && eslint .",
-        "types": "tsc",
         "docs": "./typedoc.sh",
         "svelte": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-        "package": "eslint . && vite build > /dev/null && echo Packaging... && svelte-kit sync && svelte-package && publint && ./pre-publish.sh",
+        "package": "vite build > /dev/null && echo Packaging... && svelte-kit sync && svelte-package && publint && ./pre-publish.sh",
         "prepublishOnly": "svelte-kit sync && svelte-package && publint && ./pre-publish.sh"
     },
     "_peerDependencies": {
@@ -48,7 +47,7 @@
         "semantic-ui-css": "for semantic-ui, add optional fomantic modules: calendar, slider, toast, and form"
     },
     "peerDependencies": {
-        "svelte": "^3.12.1 || ^4.2.18 || ^5.1.8",
+        "svelte": "^3.59.2 || ^4.2.18 || ^5.1.10",
         "jquery": "^3.7.1",
         "fomantic-ui-css": "^2.9.3"
     },
@@ -72,11 +71,11 @@
     },
     "devDependencies": {
         "@sveltejs/adapter-static": "3.0.6",
-        "@sveltejs/kit": "2.7.3",
+        "@sveltejs/kit": "2.7.7",
         "@sveltejs/package": "2.3.7",
-        "@sveltejs/vite-plugin-svelte": "^4.0.0",
+        "@sveltejs/vite-plugin-svelte": "4.0.0",
         "eslint": "8.57.0",
-        "eslint-plugin-svelte": "^2.46.0",
+        "eslint-plugin-svelte": "2.46.0",
         "@typescript-eslint/eslint-plugin": "7.18.0",
         "@typescript-eslint/parser": "7.18.0",
         "eslint-config-airbnb-typescript": "18.0.0",
@@ -86,13 +85,13 @@
         "eslint-plugin-react": "7.37.2",
         "prettier": "3.3.3",
         "prettier-plugin-svelte": "3.2.7",
-        "svelte": "5.1.9",
+        "svelte": "5.1.10",
         "svelte-check": "4.0.5",
         "publint": "0.2.12",
         "typescript": "5.6.3",
         "vite": "5.4.10",
-        "typedoc": "0.26.10",
-        "@types/node": "22.8.6",
+        "typedoc": "0.26.11",
+        "@types/node": "22.9.0",
         "fomantic-ui-css": "2.9.3",
         "@types/jquery": "3.5.32"
     }

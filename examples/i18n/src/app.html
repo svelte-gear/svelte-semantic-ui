@@ -1,0 +1,40 @@
+<!doctype html>
+<!-- app.html -->
+<!-- Html template for the sample application to show/test the library. -->
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" href="/favicon.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.3/semantic.min.css"
+        />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.3/semantic.min.js"></script>
+
+        <!-- A: fomantic
+        <link rel="stylesheet" href="/fomantic-ui-2.8.8/semantic.min.css" />
+        <script src="/fomantic-ui-2.8.8/semantic.min.js"></script> -->
+
+        <!-- B: semantic + fomantic components
+        <link rel="stylesheet" href="/semantic-ui-2.4.1/semantic.min.css" />
+        <script src="/semantic-ui-2.4.1/semantic.min.js"></script>
+
+        <link rel="stylesheet" href="/fomantic-ui/components/calendar.min.css" />
+        <link rel="stylesheet" href="/fomantic-ui/components/slider.min.css" />
+        <link rel="stylesheet" href="/fomantic-ui/components/toast.min.css" />
+        <link rel="stylesheet" href="/fomantic-ui/components/form.min.css" />
+        <script src="/fomantic-ui/components/calendar.min.js"></script>
+        <script src="/fomantic-ui/components/slider.min.js"></script>
+        <script src="/fomantic-ui/components/toast.min.js"></script>
+        <script src="/fomantic-ui/components/form.min.js"></script> -->
+
+        %sveltekit.head%
+    </head>
+    <body data-sveltekit-preload-data="hover">
+        <div>%sveltekit.body%</div>
+    </body>
+</html>

@@ -136,6 +136,18 @@ onMount(async () => {
     subscribed.push(watcher.errors.subscribe(onErrorsChange));
 });
 
+/** Remove the subscripion */
+onDestroy(() => {
+    if (subscribed.length > 0) {
+        // unsubscribe
+        console.debug(`data : ${watcher.mode} - unsubscribe(${watcher.uid})`);
+        subscribed.forEach((unsubscribe: Unsubscriber) => {
+            unsubscribe();
+        });
+    }
+    subscribed = [];
+});
+
 /*
                          dP            dP
                          88            88
@@ -161,18 +173,6 @@ $effect(() => {
         console.debug(`form : ${watcher.mode} -> update(${watcher.uid}).active = ${active}`);
         watcher.setActive(active);
     }
-});
-
-/** Remove the subscripion */
-onDestroy(() => {
-    if (subscribed.length > 0) {
-        // unsubscribe
-        console.debug(`data : ${watcher.mode} - unsubscribe(${watcher.uid})`);
-        subscribed.forEach((unsubscribe: Unsubscriber) => {
-            unsubscribe();
-        });
-    }
-    subscribed = [];
 });
 </script>
 

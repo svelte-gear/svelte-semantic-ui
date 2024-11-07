@@ -60,7 +60,6 @@ export function calendar(
     // TODO: review this function scope, can it be simpyfied ?
     /** Format as date, time, or datetime depending on type */
     function format(d: Date | undefined): string {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const cType: CalendarType | undefined =
             (settings && settings.type) ?? calendarDefaults.read().type;
         switch (cType) {

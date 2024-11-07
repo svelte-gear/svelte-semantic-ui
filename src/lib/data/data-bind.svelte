@@ -351,6 +351,27 @@ onMount(async () => {
     // TODO: Remove, or create a hidden input for the parsed (formatted) value
 });
 
+/** Remove the subscripion */
+onDestroy(() => {
+    if (subscribed) {
+        // unsubscribe
+        console.debug(`data : ${watcher?.mode} - unsubscribe(${watcher?.uid})`);
+        subscribed();
+        subscribed = null;
+    }
+
+    // release the controlled memory
+    if (destroyFormat) {
+        destroyFormat();
+        destroyFormat = null;
+    }
+
+    if (destroyValidate) {
+        destroyValidate();
+        destroyValidate = null;
+    }
+});
+
 /*
                          dP            dP
                          88            88
@@ -380,27 +401,6 @@ $effect(() => {
     const propValue: DataTypes = getPropValue();
     console.debug(`data : ${watcher.mode} -> update(${watcher.uid}) = ${toStr(propValue)}`);
     watcher.doUpdate(propValue);
-});
-
-/** Remove the subscripion */
-onDestroy(() => {
-    if (subscribed) {
-        // unsubscribe
-        console.debug(`data : ${watcher?.mode} - unsubscribe(${watcher?.uid})`);
-        subscribed();
-        subscribed = null;
-    }
-
-    // release the controlled memory
-    if (destroyFormat) {
-        destroyFormat();
-        destroyFormat = null;
-    }
-
-    if (destroyValidate) {
-        destroyValidate();
-        destroyValidate = null;
-    }
 });
 </script>
 
