@@ -1,3 +1,5 @@
+<svelte:options runes={true} />
+
 <script lang="ts">
 import {
     calendar,
@@ -12,8 +14,8 @@ import svelteLogo from "./img/svelte.svg";
 import viteLogo from "./img/vite.svg";
 import semanticLogo from "./img/semantic.png";
 
-let validate: boolean = false;
-let dat: Date | undefined;
+let validate: boolean = $state(false);
+let dat: Date | undefined = $state();
 </script>
 
 <main>

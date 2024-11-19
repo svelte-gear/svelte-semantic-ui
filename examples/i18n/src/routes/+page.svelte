@@ -1,3 +1,5 @@
+<svelte:options runes={true} />
+
 <script lang="ts">
 // +page.svelte
 // Home page, allows to change locale.

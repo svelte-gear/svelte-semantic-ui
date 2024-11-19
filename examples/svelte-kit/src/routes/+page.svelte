@@ -1,3 +1,5 @@
+<svelte:options runes={true} />
+
 <script lang="ts">
 // form/+page.svelte
 // Sample form page with components, data binding, and validation.
@@ -20,13 +22,13 @@ import {
 
 const options: string[] = ["1", "2", "3", "4", "5"];
 
-let selectedStr: string;
-let rating: number;
-let teams: string[];
-let dat: Date | undefined;
-let income: number | undefined;
-let gender: string;
-let chb: boolean;
+let selectedStr: string | undefined = $state();
+let rating: number = $state(0);
+let teams: string[] = $state([]);
+let dat: Date | undefined = $state();
+let income: number | undefined = $state();
+let gender: string = $state("male");
+let chb: boolean = $state(false);
 
 function reset(): void {
     selectedStr = "one";
@@ -39,10 +41,9 @@ function reset(): void {
 }
 reset();
 
-let json: string;
-
-$: {
-    json = JSON.stringify({
+// eslint-disable-next-line prefer-const
+let json: string = $derived(
+    JSON.stringify({
         select: selectedStr ?? "",
         multi_select: teams,
         date: `${isoDate(dat)}`,
@@ -53,16 +54,18 @@ $: {
     })
         .replace(/,"/g, ', "')
         .replace("{", "{ ")
-        .replace("}", " }");
-}
+        .replace("}", " }")
+);
 
-$: console.log(`nums [${teams.toString()}]`);
+$effect(() => {
+    console.log(`nums [${teams.toString()}]`);
+});
 
-let active: boolean = false;
+let active: boolean = $state(false);
 function toggleActive(): void {
     active = !active;
 }
-let valid: boolean = false;
+let valid: boolean = $state(false);
 </script>
 
 <!------------------------------------------------------------------------------------------------>
@@ -205,14 +208,14 @@ let valid: boolean = false;
         <div class="ui message" style:font-family="monospace">
             {json}
         </div>
-        <button class="ui button blue" type="button" on:click={reset}> Reset </button>
+        <button class="ui button blue" type="button" onclick={reset}> Reset </button>
         <button
             class="ui button icon"
             class:yellow={!active}
             class:green={active && valid}
             class:red={active && !valid}
             type="button"
-            on:click={toggleActive}
+            onclick={toggleActive}
         >
             {#if active}
                 Validating
