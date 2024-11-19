@@ -5,8 +5,6 @@
 // Home page, allows to change locale.
 
 import { tick } from "svelte";
-import type { Writable } from "svelte/store";
-import { writable } from "svelte/store";
 import {
     dropdown,
     Data,
@@ -61,17 +59,15 @@ $effect(() => {
     void changeLocale(newLocale);
 });
 
-const link: string = "https://kit.svelte.dev";
-const count: Writable<number> = writable(3);
-
-/* eslint-disable svelte/no-at-html-tags */
+// eslint-disable-next-line prefer-const
+let count: number = $state(3);
 </script>
 
 <h1>
     <img src="/sveltekit-i18n.png" alt="logo" />
     {$t("cont.title")}
 </h1>
-<p>{@html $t("cont.text", { link: link })}</p>
+<p>{$t("cont.text")}</p>
 
 <div class="ui divider"></div>
 
@@ -122,16 +118,16 @@ const count: Writable<number> = writable(3);
 <button
     class="ui circular compact button"
     onclick={() => {
-        $count = Math.max($count - 1, 0);
+        count = Math.max(count - 1, 0);
     }}
 >
     &ndash;
 </button>
-{$t("menu.notification", { count: $count })}
+{$t("menu.notification", { count: count })}
 <button
     class="ui circular compact button"
     onclick={() => {
-        $count = $count + 1;
+        count = count + 1;
     }}
 >
     +

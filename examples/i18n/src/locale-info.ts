@@ -1,6 +1,8 @@
 // locale-info.ts
 // Helper functions for storing selected locale in a cookie and matching browser locale.
 
+/* eslint-disable implicit-arrow-linebreak, function-paren-newline  */
+
 const localeCookieName: string = "ssui_locale";
 const localeCookieExpDays: number = 90;
 
@@ -11,16 +13,12 @@ export function saveLocaleCookie(value: string): void {
 }
 
 export function readLocaleCookie(): string | null {
-    const nameEQ: string = `${localeCookieName}=`;
-    const ca: string[] = document.cookie.split(";");
-    // eslint-disable-next-line no-restricted-syntax
-    for (const c of ca) {
-        const cookie: string = c.trim();
-        if (cookie.startsWith(nameEQ)) {
-            return cookie.substring(nameEQ.length);
-        }
-    }
-    return null;
+    const nameEquals: string = `${localeCookieName}=`;
+    const cookieArray: string[] = document.cookie.split(";");
+    const cookie: string | undefined = cookieArray.find((c: string) =>
+        c.trim().startsWith(nameEquals)
+    );
+    return cookie ? cookie.trim().slice(nameEquals.length) : null;
 }
 
 function getLanguage(locale: string): string {
@@ -54,22 +52,24 @@ export function cookieMatch(supportedLocales: string[]): string | null {
 
 export function browserMatch(supportedLocales: string[]): string | null {
     // look for exact match
-    // eslint-disable-next-line no-restricted-syntax
-    for (const browserLocale of navigator.languages) {
-        if (supportedLocales.includes(browserLocale)) {
-            return browserLocale;
-        }
+    const exactMatch: string | undefined = navigator.languages.find((browserLocale: string) =>
+        supportedLocales.includes(browserLocale)
+    );
+    if (exactMatch) {
+        return exactMatch;
     }
+
     // try partial matching by language
     const supportedLanguages: string[] = getLanguages(supportedLocales);
-    // eslint-disable-next-line no-restricted-syntax
-    for (const browserLocale of navigator.languages) {
-        const browserLanguage: string = getLanguage(browserLocale);
-        if (supportedLanguages.includes(browserLanguage)) {
-            console.debug(`Partial browser locale match: ${browserLocale} ~= ${browserLanguage}`);
-            return browserLanguage;
-        }
+    const partialMatch: string | undefined = navigator.languages.find((browserLocale: string) =>
+        supportedLanguages.includes(getLanguage(browserLocale))
+    );
+    if (partialMatch) {
+        const lang: string = getLanguage(partialMatch);
+        console.debug(`Partial browser locale match: ${partialMatch} -> ${lang}`);
+        return lang;
     }
+
     // no match found
     return null;
 }
