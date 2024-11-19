@@ -1,10 +1,10 @@
 {
-  "cont.title": "Bienvenue dans SvelteKit",
-  "cont.text": "Visitez <a href={{link}}>{{link}}</a> pour lire la documentation",
-  "menu.notification": "Vous avez {{count:gt; 0:{{count}} {{count; 1:nouveau message; default:nouveaux messages}} !; default:aucun message...}}",
-  "translation-locales": "Langue de l'interface utilisateur :",
-  "modal-if-active": "Le modal {{isActive; false:n'est pas; default:est}} actif",
-  "select-your-locale": "Sélectionnez votre région :",
-  "field.date": "Date:",
-  "field.currency": "Devise:"
+    "cont.title": "Exemple d'internationalisation",
+    "cont.text": "Svelte Semantic UI prend en charge 14 paramètres régionaux prêts à l'emploi. \nCet exemple ajoute 4 paramètres régionaux supplémentaires et montre comment modifier un paramètre régional. \nDe plus, l'exemple fournit une traduction de l'interface utilisateur pour l'espagnol et le français. \nLa valeur par défaut est l'anglais pour les autres paramètres régionaux.",
+    "field.date": "Date:",
+    "field.currency": "Devise:",
+    "menu.notification": "Vous avez {{count:gt; 0:{{count}} {{count; 1:nouveau message; default:nouveaux messages}} !; default:aucun message...}}",
+    "select-your-locale": "Sélectionnez votre région:",
+    "translation-locales": "Langue de l'IU:",
+    "modal-if-active": "Le modal {{isActive; false:n'est pas; default:est}} actif"
 }

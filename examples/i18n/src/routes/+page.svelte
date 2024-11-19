@@ -65,39 +65,57 @@ const count: Writable<number> = writable(3);
 /* eslint-disable svelte/no-at-html-tags */
 </script>
 
-<h1>{$t("cont.title")}</h1>
+<h1>
+    <img src="/sveltekit-i18n.png" alt="logo" />
+    {$t("cont.title")}
+</h1>
 <p>{@html $t("cont.text", { link: link })}</p>
 
 <div class="ui divider"></div>
 
-<form>
-    <label for="loc_select">{$t("select-your-locale")}</label>
-    <select class="ui selection dropdown" use:dropdown={{ clearable: true }} id="loc_select">
-        <Data bind:selected={newLocale} />
-        {#each supportedLocales() as locStr}
-            <option value={locStr}>{locStr}</option>
-        {/each}
-    </select>
-</form>
+<table width="100%">
+    <tbody>
+        <tr>
+            <td>
+                <label for="loc_select">{$t("select-your-locale")}</label>
+            </td>
+            <td>
+                <form>
+                    <select
+                        class="ui selection dropdown"
+                        use:dropdown={{ clearable: true }}
+                        id="loc_select"
+                    >
+                        <Data bind:selected={newLocale} />
+                        {#each supportedLocales().sort() as locStr}
+                            <option value={locStr}>{locStr}</option>
+                        {/each}
+                    </select>
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {$t("translation-locales")}
+            </td>
+            <td>
+                &nbsp;{newLocale}&nbsp;&nbsp;&rightarrow;
+                {#each $locales as locStr}
+                    <span>
+                        &nbsp;
+                        {#if locStr === $locale}
+                            <b><u>{locStr}</u></b>
+                        {:else}
+                            {locStr}
+                        {/if}
+                    </span>
+                {/each}
+            </td>
+        </tr>
+    </tbody>
+</table>
 
-<br />
-
-{$t("translation-locales")}
-{newLocale}
--&gt;
-{#each $locales as locStr}
-    <span>
-        &nbsp;
-        {#if locStr === $locale}
-            <b><u>{locStr}</u></b>
-        {:else}
-            {locStr}
-        {/if}
-    </span>
-{/each}
-
-<br />
-<br />
+<div class="ui divider"></div>
 
 <button
     class="ui circular compact button"
@@ -150,6 +168,9 @@ const count: Writable<number> = writable(3);
 :global(body) {
     padding: 10px !important;
     max-width: 360px;
+}
+img {
+    float: left;
 }
 label {
     text-align: left;

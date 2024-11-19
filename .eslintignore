@@ -20,3 +20,7 @@ yarn.lock
 /examples/**/.svelte-kit
 /examples/**/.cache
 /examples/**/.vscode
+
+# don't ignore
+!.prettierrc.cjs
+!.eslint_rules.cjs

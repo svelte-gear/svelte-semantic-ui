@@ -26,7 +26,7 @@ interface Props {
 
     /** Two-way binding for controlling and reading input / textarea value.
     May be used together with {@link components/use-format}. */
-    value?: DataTypes; // TODO: Explain the diffrence with bind:value on the input e;ement
+    value?: DataTypes; // TODO: Explain the diffrence with bind:value on the input element
 
     /** Optional value validator. Uses Semantic UI validator syntax.
     The same as {@link components/use-validate}.

@@ -344,14 +344,14 @@ onMount(async () => {
             destroyValidate = actRes.destroy ?? null;
         }
     } else {
-        // FIXME: this makes the console warning go away, but why ?!
-        if (["calendar", "slider"].includes(watcher.mode)) {
-            const actRes: ActionReturnType = validateAction(elem.get(0), []);
-            console.log(">>>", [], elem.get(0));
-            if (actRes) {
-                destroyValidate = actRes.destroy ?? null;
-            }
-        }
+        // // FIXME: this makes the console warning go away, but why ?!
+        // if (["calendar", "slider"].includes(watcher.mode)) {
+        //     const actRes: ActionReturnType = validateAction(elem.get(0), []);
+        //     console.log(">>>", [], elem.get(0));
+        //     if (actRes) {
+        //         destroyValidate = actRes.destroy ?? null;
+        //     }
+        // }
     }
 
     // TODO: Remove, or create a hidden input for the parsed (formatted) value

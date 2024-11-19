@@ -1,7 +1,4 @@
 <script lang="ts">
-/* _eslint-disable import/no-unresolved */
-/* _eslint-disable_ @typescript-eslint/naming-convention */
-
 import {
     calendar,
     Data,
@@ -38,7 +35,16 @@ let dat: Date | undefined;
             <img src="favicon.png" class="logo" alt="Svelte Semantic UI Logo" />
         </a>
     </div>
+
     <h1>Vite + Svelte + Semantic UI</h1>
+    <p>
+        This project uses <a href="https://www.npmjs.com/package/@svelte-gear/svelte-semantic-ui">
+            svelte-semantic-ui
+        </a> library to integrate Semantic UI into the Svelte app. It utilizes Vite to compile the application
+        and doesn't require Svelte Kit. jQuery and Semantic UI are loaded statically.
+    </p>
+
+    <div class="ui divider"></div>
 
     <form class="ui form" use:formValidation>
         <FormValidator active={validate} />
@@ -53,13 +59,12 @@ let dat: Date | undefined;
                 </div>
             </div>
         </div>
-        <p>Selected date value: {isoDate(dat)}</p>
+        <p>Selected date value: <b>{isoDate(dat)}</b></p>
 
-        <hr />
+        <div class="ui divider"></div>
 
         <div class="ui checkbox">
             <input type="checkbox" id="ch" bind:checked={validate} />
-            <!-- TODO: Data bind for checkbox -->
             <label for="ch">validate form</label>
         </div>
 
@@ -79,5 +84,8 @@ let dat: Date | undefined;
 }
 .logo.svelte:hover {
     filter: drop-shadow(0 0 2em #ff3e00aa);
+}
+main {
+    width: 360px;
 }
 </style>

@@ -1,10 +1,10 @@
 {
-  "cont.title": "Welcome to SvelteKit",
-  "cont.text": "Visit <a href={{link}}>{{link}}</a> to read the documentation",
-  "menu.notification": "You have {{count:gt; 0:{{count}} new {{count; 1:message; default:messages}}!; default:no messages :( }}",
-  "translation-locales": "UI language:",
-  "modal-if-active": "Modal {{isActive; false:isn't; default:is}} active",
-  "select-your-locale": "Select your locale:",
-  "field.date": "Date:",
-  "field.currency": "Currency:"
+    "cont.title": "Internationalization Example ",
+    "cont.text": "Svelte Semantic UI supports 14 locales out of the box. This example add 4 more locales and demonstrates how to modify a locale. Additionally the example provides UI transaltion for Spanish and French. It defaults to English for other locales.",
+    "field.currency": "Currency:",
+    "field.date": "Date:",
+    "menu.notification": "You have {{count:gt; 0:{{count}} new {{count; 1:message; default:messages}}!; default:no messages :( }}",
+    "select-your-locale": "Select your locale:",
+    "translation-locales": "UI language:",
+    "modal-if-active": "Modal {{isActive; false:isn't; default:is}} active"
 }
