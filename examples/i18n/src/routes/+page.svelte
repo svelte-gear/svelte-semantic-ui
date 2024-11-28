@@ -30,8 +30,6 @@ let income: number | undefined = $state(12345.67);
 // eslint-disable-next-line prefer-const
 let hide: boolean = $state(false);
 
-// TODO: check why prettier isn't working in the subproject
-
 export async function changeLocale(loc: string): Promise<void> {
     if (loc && loc !== currLocale) {
         await applyLocale(loc);
@@ -140,7 +138,7 @@ let count: number = $state(3);
         <div class="field">
             <label for="fn1">{$t("field.date")}</label>
             <div class="ui calendar" use:calendar id="fn1">
-                <Data bind:date={dat} /><!-- FIXME: THIS FREEZES THE PAGE !! -->
+                <Data bind:date={dat} />
                 <div class="ui input right icon">
                     <i class="calendar outline icon"></i>
                     <input type="text" />

@@ -5,15 +5,28 @@
 // +layout.svelte
 // Common navigation component.
 
-// eslint-disable-next-line import/extensions, import/no-unresolved
-import { page } from "$app/stores";
+import type { Snippet } from "svelte";
+import { applyLocale, getLocale, supportedLocales } from "../lib/i18n";
 
 interface Props {
-    children?: import("svelte").Snippet;
+    children: Snippet;
 }
 
 // eslint-disable-next-line prefer-const
 let { children }: Props = $props();
+
+let refresh: boolean = $state(false);
+
+let currLocale: string = $state(getLocale());
+
+async function apply(locale: string): Promise<void> {
+    await applyLocale(locale);
+    currLocale = locale;
+
+    refresh = true;
+    await Promise.resolve();
+    refresh = false;
+}
 </script>
 
 <!------------------------------------------------------------------------------------------------>
@@ -21,15 +34,29 @@ let { children }: Props = $props();
 <div class="app-layout">
     <nav class="ui buttons">
         <a href="/" class="ui button basic">Home</a>
-        <a href="/form" class="ui button basic">Form</a>
-        <a href="/dialog" class="ui button basic">Dialog</a>
+        <a href="/select" class="ui button basic">Select</a>
+        <a href="/date" class="ui button basic">Date</a>
+        <a href="/input" class="ui button basic">Input</a>
+        <a href="/more" class="ui button basic">More</a>
     </nav>
     <div class="ui divider"></div>
 
-    {@render children?.()}
+    {#if !refresh}
+        {@render children?.()}
+    {/if}
 
     <div class="ui divider"></div>
-    <p class="footer">Sample App, &nbsp; <i>location</i> = {$page.route.id}</p>
+
+    <a id="locale" aria-label="locale"></a>
+    {#each supportedLocales().sort() as locale}
+        <a href="#locale" onclick={() => apply(locale)}>
+            {#if locale === currLocale}
+                <b><u>{locale}</u></b>
+            {:else}
+                {locale}
+            {/if}
+        </a> &nbsp;
+    {/each}
 </div>
 
 <!------------------------------------------------------------------------------------------------>
@@ -39,6 +66,7 @@ div.app-layout {
     text-align: center;
     max-width: 360px;
     width: 100%;
+    padding-bottom: 10px;
 }
 @media (max-width: 639px) {
     div.app-layout {

@@ -40,9 +40,13 @@ function isObject(value: unknown): boolean {
 
 /** Recursive function to copy only matching fields. */
 function copyFields(target: SettingsObject, source: SettingsObject, logName: string): void {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const key in source) {
-        if (Object.prototype.hasOwnProperty.call(target, key)) {
+    const sourceKeys: string[] = Object.keys(source);
+    const targetKeys: string[] = Object.keys(target);
+    if (sourceKeys.length === 0 || targetKeys.length === 0) {
+        return;
+    }
+    sourceKeys.forEach((key: string) => {
+        if (targetKeys.includes(key)) {
             const to: boolean = isObject(target[key]);
             const so: boolean = isObject(source[key]);
             if (to) {
@@ -69,7 +73,7 @@ function copyFields(target: SettingsObject, source: SettingsObject, logName: str
         } else {
             console.log(`Unrecognized setting: '${key}' in ${logName}.`);
         }
-    }
+    });
 }
 
 // /** Utility type to mark all fields and sub-objects Readonly. */
@@ -158,15 +162,18 @@ export function applyAllSettings(json: AllSettingsJson): void {
         throw new Error("jQuery is not initialized.");
     }
     ensureNumberSettings(jQuery);
+    if (!json) {
+        return;
+    }
     // eslint-disable-next-line no-restricted-syntax, guard-for-in
-    for (const name in json) {
+    Object.keys(json).forEach((name: string) => {
         const settings: SettingsObject | undefined = jQuery.fn[name]?.settings as SettingsObject;
         if (!settings) {
             console.log(`Ignoring unrecognized Semantic UI component: ${name}`);
         } else {
             copyFields(settings, json[name], name);
         }
-    }
+    });
 }
 
 /*

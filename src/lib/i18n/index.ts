@@ -172,6 +172,7 @@ async function noop(): Promise<object> {
  * */
 export function registerBaseLocales(): void {
     registerLanguage("de", () => import("./de"));
+    registerLanguage("el", () => import("./el"));
     registerLanguage("en", () => import("./en"));
     registerLanguage("es", () => import("./es"));
     registerLanguage("fr", () => import("./fr"));

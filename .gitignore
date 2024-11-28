@@ -6,7 +6,8 @@ node_modules.*
 
 /build
 /dist
-/doc/api
+/static/api
+/static/code
 
 /examples/**/build
 /examples/**/dist

@@ -6,5 +6,5 @@
     // "excludeProtected": true,
     // "excludeExternals": true,
     // "disableSources": true,
-    "out": "doc/api"
+    "out": "static/api"
 }

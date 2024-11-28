@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { mount } from "svelte";
 import "./app.css";
 // eslint-disable-next-line @typescript-eslint/naming-convention

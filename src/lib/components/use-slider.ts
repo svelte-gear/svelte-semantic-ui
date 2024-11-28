@@ -35,6 +35,7 @@ export function slider(node: Element, settings?: SliderSettings): ActionReturnTy
     if (!elem.slider) {
         throw new Error("Semantic UI is not initialized");
     }
+    // FIXME: Why do I need this input ?
     elem.append('<input type="hidden" />');
     const input: JQueryApi = elem.find("input");
 
@@ -71,7 +72,7 @@ export function slider(node: Element, settings?: SliderSettings): ActionReturnTy
             if (value !== newValue) {
                 console.debug(`  store(${this.uid}) <- slider = ${newValue}`);
                 this.store.set(newValue);
-                input.val(`${newValue}`);
+                input.val(`${newValue}`); // TODO: apply to dropdown, calendar, input/format ?!
             }
         },
     };
@@ -85,8 +86,6 @@ export function slider(node: Element, settings?: SliderSettings): ActionReturnTy
  `88888P' 8888P'   `88888P' dP    dP   dP
 
     */
-
-    // type OnChangeFn = (newValue: number) => void;
 
     function onSliderChange(
         this: JQuery<HTMLElement>,
@@ -103,6 +102,7 @@ export function slider(node: Element, settings?: SliderSettings): ActionReturnTy
         }
         holder.onChange(newValue);
     }
+
     /*
  oo          oo   dP
                   88

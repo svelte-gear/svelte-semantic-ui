@@ -77,8 +77,7 @@ export function dropdown(node: Element, settings?: DropdownSettings): ActionRetu
                 // single-select
                 if (curValue !== value) {
                     console.debug(` | update(${this.uid}) -> dropdown = ${value}`);
-                    // elem.dropdown("set selected", value);
-                    const exists: unknown = elem.dropdown("get item", value); // FIXME: JQueryApi ?
+                    const exists: unknown = elem.dropdown("get item", value);
                     if (exists) {
                         elem.dropdown("set selected", value);
                     } else {
@@ -105,7 +104,6 @@ export function dropdown(node: Element, settings?: DropdownSettings): ActionRetu
                     console.debug(` | store(${this.uid}) <- dropdown = ${newValue}`);
                     if (DROPDOWN_PREVENT_CLEARING_BAD_DATA) {
                         const exists: unknown = elem.dropdown("get item", newValue);
-                        // FIXME: JQueryApi
                         if (exists) {
                             this.store.set(newValue);
                         }
@@ -157,8 +155,6 @@ export function dropdown(node: Element, settings?: DropdownSettings): ActionRetu
 
     // Initialize Semantic component
     elem.dropdown({
-        // FIXME
-        // ...dropdownDefaults,
         ...settings,
         onChange: onDropdownChange,
     });

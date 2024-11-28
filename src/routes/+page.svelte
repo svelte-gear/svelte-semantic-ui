@@ -5,8 +5,7 @@
 // +page.svelte
 // Home page, allows to change locale.
 
-import { dropdown, Data } from "../lib";
-import { applyLocale, getLocale, supportedLocales } from "../lib/i18n";
+import { getLocale } from "../lib/i18n";
 
 // REACTIVE -------------------------------------------------------------------
 /* eslint-disable prefer-const */
@@ -14,49 +13,37 @@ import { applyLocale, getLocale, supportedLocales } from "../lib/i18n";
 let newLocale: string = $state(getLocale());
 
 /* eslint-enable */
-
-let currLocale: string = getLocale();
-
-$effect(() => {
-    // execute only on locale change
-    if (newLocale !== currLocale) {
-        console.log(`apply new locale: ${newLocale}`);
-        void applyLocale(newLocale);
-        currLocale = newLocale;
-    } else {
-        console.log(`effect misfired for locale: ${newLocale}`);
-    }
-    // void (async () => {
-    //     if (newLocale && newLocale !== currLocale) {
-    //         await applyLocale(newLocale);
-    //         currLocale = newLocale;
-    //     }
-    // })();
-});
 </script>
 
 <!------------------------------------------------------------------------------------------------>
 
-<h1>Home</h1>
-<p><b>Svelte Semantic UI</b> - demo and test pages</p>
+<main>
+    <h1>Home</h1>
+    <p><b>Svelte Semantic UI</b> - demo and test pages</p>
 
-<p>
-    <a href="https://svelte.dev/tutorial">Svelte</a> |
-    <a href="https://semantic-ui.com/introduction/getting-started.html">Semantic UI</a> |
-    <a href="https://fomantic-ui.com/introduction/getting-started.html">Fomantic UI</a>
-    <br />
-    <a href="https://github.com/svelte-gear/svelte-semantic-ui">GitHub</a> |
-    <a href="https://www.npmjs.com/package/@svelte-gear/svelte-semantic-ui">npm</a>
-</p>
+    Libraries:
+    <ul>
+        <li><a href="https://svelte.dev/tutorial">Svelte</a></li>
+        <li><a href="https://semantic-ui.com/introduction/getting-started.html">Semantic UI</a></li>
+        <li><a href="https://fomantic-ui.com/introduction/getting-started.html">Fomantic UI</a></li>
+    </ul>
 
-<form>
-    <p>Change locale:</p>
-    <select class="ui selection dropdown" use:dropdown={{ clearable: true }}>
-        <Data bind:selected={newLocale} />
-        {#each supportedLocales() as locStr}
-            <option value={locStr}>{locStr}</option>
-        {/each}
-    </select>
-</form>
-<br />
-<p>current locale = {newLocale}</p>
+    Project:
+    <ul>
+        <li><a href="https://github.com/svelte-gear/svelte-semantic-ui">GitHub</a></li>
+        <li><a href="https://www.npmjs.com/package/@svelte-gear/svelte-semantic-ui">npm</a></li>
+        <li><a href="api/index.html">API docs</a></li>
+    </ul>
+</main>
+<div class="ui divider"></div>
+<p>Semantic UI locale = {newLocale}</p>
+
+<style>
+main {
+    text-align: left;
+    padding: 0 10px;
+}
+h1 {
+    text-align: center;
+}
+</style>

@@ -37,7 +37,7 @@ export type FormValidatorBindSlots = typeof propDef.slots;
  * Example:
  * ```
  * <form calss="ui form" use:formValidation={{ inline: true }}>
- *     <FormValidationData // TODO FormValidator
+ *     <FormValidationData
  *         active={isActive}
  *         bind:valid={isValid}
  *         bind:errors={errors}

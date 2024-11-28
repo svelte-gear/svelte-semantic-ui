@@ -1,22 +1,22 @@
 # inspiration
 
--   Keep Semantic UI syntax.
--   Replace `jQuery.component()` calls with Svelte `use:component`.
--   Many component (input, checkbox) may be bound directly.
--   Where necessary, provide additional Svelte bindings (dropdown, calendar).
+- Keep Semantic UI syntax.
+- Replace `jQuery.component()` calls with Svelte `use:component`.
+- Many component (input, checkbox) may be bound directly.
+- Where necessary, provide additional Svelte bindings (dropdown, calendar).
 
 Imperative API
 
--   There is no need to access jQuery in Svelte projects.
--   Imperative API is available through `use:controller`.
--   Furthermore, we encourage usage of Svelte bindings instead of the API.
+- There is no need to access jQuery in Svelte projects.
+- Imperative API is available through `use:controller`.
+- Furthermore, we encourage usage of Svelte bindings instead of the API.
 
 # implementation
 
--   TypeScript code is safer and allows for auto-completion.
--   In the first phase component options and controller behaviours are NOT yet enumerated.
--   Semantic UI and Fomantic UI look very similar, but Semantic seems more stable (focus events).
--   Few new components are imported from Fomantic UI: calendar, slider, toast.
+- TypeScript code is safer and allows for auto-completion.
+- In the first phase component options and controller behaviours are NOT yet enumerated.
+- Semantic UI and Fomantic UI look very similar, but Semantic seems more stable (focus events).
+- Few new components are imported from Fomantic UI: calendar, slider, toast.
 
 # modules
 
@@ -45,7 +45,7 @@ utils  <---  use-action    <---  index         <---  pages
 
 # example
 
-```svelte
+```html
     <form class="ui form" use:formValidation={{...}}>
         <FormValidationData
             active={...}

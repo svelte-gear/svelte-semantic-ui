@@ -1,8 +1,6 @@
 // .eslintrc.cjs
 // https://typescript-eslint.io/linting/typed-linting/
 
-// TODO: consider https://github.com/sveltejs/eslint-config/blob/master/index.js
-
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -21,7 +19,7 @@ module.exports = {
             "tsconfig.json",
             "tsconfig_eslint.json",
             // example projects are linted from the root project to keep thier config minimal
-            "examples/svelte-kit/tsconfig.json",
+            "examples/sveltekit/tsconfig.json",
             "examples/i18n/tsconfig.json",
             "examples/vite/tsconfig.json",
         ],

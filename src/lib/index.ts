@@ -40,10 +40,12 @@ export { formValidation } from "./data/use-form-validation";
 export { default as Data } from "./data/data-bind.svelte";
 export { default as FormValidator } from "./data/form-validator-bind.svelte";
 
+export { default as InitCalendar } from "./data/init-calendar.svelte";
+
 // HELPERS
 
 export { fmt, parse, rule } from "./data/helpers";
-export { isoDate, isoTime } from "./data/common";
+export { isoDate, isoTime, setComponentInitMode } from "./data/common";
 
 // TYPES
 

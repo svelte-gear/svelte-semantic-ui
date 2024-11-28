@@ -6,9 +6,6 @@
 import type { DateFormatFn, DateParseFn } from "./semantic-types";
 import { DateFmt } from "./input-formatter";
 
-// TODO: Global fmt and parse objects with default formatting settings.
-// Lazily initialized, to give user the chance to change defaults.
-
 /*
  .8888b              dP
  88   "              88
@@ -18,6 +15,9 @@ import { DateFmt } from "./input-formatter";
  dP     dP  dP  dP   dP
 
 */
+
+// Global fmt and parse objects with default formatting settings.
+// Lazily initialized, to give user the chance to change defaults.
 
 let defaultDateFmt: DateFmt | null = null;
 function getDefaultDateFmt(): DateFmt {
@@ -92,6 +92,7 @@ export const parse: {
                                                        dP
 */
 
+/** Autocomplete helper for validation rules */
 /* prettier-ignore */
 // eslint-disable-next-line @typescript-eslint/typedef
 export const rule = {
@@ -110,13 +111,13 @@ export const rule = {
     // integer:    (min?: number, max?: number): string =>
     //     min == undefined && max == undefined ? "integer" : `integer[${min}..${max}]`,
 
-    is:             (val: string): string => `is[${val}]`,
-    isExactly:      (val: string): string => `isExactly[${val}]`,
-    not:            (val: string): string => `not[${val}]`,
-    notExactly:     (val: string): string => `notExactly[${val}]`,
-    contain:        (val: string): string => `contain[${val}]`,
-    containExactly: (val: string): string => `containExactly[${val}]`,
-    doesntContain:  (val: string): string => `doesntContain[${val}]`,
+    is:              (val: string): string => `is[${val}]`,
+    isExactly:       (val: string): string => `isExactly[${val}]`,
+    not:             (val: string): string => `not[${val}]`,
+    notExactly:      (val: string): string => `notExactly[${val}]`,
+    contains:        (val: string): string => `contains[${val}]`,
+    containsExactly: (val: string): string => `containsExactly[${val}]`,
+    doesntContain:   (val: string): string => `doesntContain[${val}]`,
     doesntContainExactly: (val: string): string => `doesntContainExactly[${val}]`,
 
     match:          (fld: string): string => `match[${fld}]`,
@@ -129,8 +130,16 @@ export const rule = {
     exactCount:  (n: number): string => `exactCount[${n}]`,
     maxCount:    (n: number): string => `maxCount[${n}]`,
 
-    // TODO: add custom rules
+    // helpers for custom rules
+    start:    (val: string): string => `start[${val}]`,
+    isoDate:             (): string => "isoDate",
+    startEnd: (val: string): string => `startEnd[${val}]`,
 
+    // TODO: investigate these rules
+    range: "",
+    maxValue: "",
+    minValue: "",
+    size: "",
     /* eslint-enable */
 };
 

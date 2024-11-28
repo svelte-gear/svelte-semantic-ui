@@ -21,7 +21,7 @@ export type ActionReturnType = {
 /** Format function, must return null if it can't parse value and doesn't want to override it. */
 export interface Formatter {
     format: (val: DataTypes) => string;
-    parse?: (val: string) => DataTypes | undefined; // FIXME: use null instead?
+    parse?: (val: string) => DataTypes;
 }
 
 /** Validation rule object: rule string and custom error prompt */
@@ -45,10 +45,11 @@ export type RuleDefinition = string | string[] | RuleObj | RuleObj[]; // | BaseS
 
 /** Small subset of jQuery functions used by this library. */
 export interface JQueryApi {
-    parent(): JQueryApi;
+    parent(selector?: string): JQueryApi;
     filter(selector: string): JQueryApi;
     find(selector: string): JQueryApi;
     prev(selector: string): JQueryApi;
+    is(selector: string): boolean;
     remove(): void;
 
     prop(name: string): string;
@@ -72,15 +73,17 @@ export interface JQueryApi {
     get(inx: number): Element;
     val(): string;
     val(val: string): void;
+
+    trigger(event: string): void;
 }
 
 /** Gets jQuery element by id attribute. */
 export function jQueryElemById(id: string): JQueryApi {
+    type SelectorFn = (selector: string) => JQueryApi;
     type WithJQuerySelector = {
-        jQuery(selector: string): JQueryApi;
+        jQuery: SelectorFn;
     };
-    // eslint-disable-next-line @typescript-eslint/unbound-method, @typescript-eslint/typedef
-    const jQuery = (window as unknown as WithJQuerySelector).jQuery;
+    const jQuery: SelectorFn = (window as unknown as WithJQuerySelector).jQuery;
     if (!jQuery) {
         throw new Error("jQuery is not initialized");
     }
@@ -89,15 +92,68 @@ export function jQueryElemById(id: string): JQueryApi {
 
 /** Gets jQuery element by dom node. */
 export function jQueryElem(node: Element): JQueryApi {
+    type NodeFn = (node: Element) => JQueryApi;
     type WithJQueryNode = {
-        jQuery(node: Element): JQueryApi;
+        jQuery: NodeFn;
     };
-    // eslint-disable-next-line @typescript-eslint/unbound-method, @typescript-eslint/typedef
-    const jQuery = (window as unknown as WithJQueryNode).jQuery;
+    const jQuery: NodeFn = (window as unknown as WithJQueryNode).jQuery;
     if (!jQuery) {
         throw new Error("jQuery is not initialized");
     }
     return jQuery(node);
+}
+
+//-----------------------------------------------------------------------------
+
+type ComponentInitMode = "parent" | "child" | "sibling";
+const ALL_MODES: ComponentInitMode[] = ["parent", "child", "sibling"];
+
+/** Global setting for finding corresponding Semantic UI component */
+let COMPONENT_INIT_MODES: ComponentInitMode[] = ["sibling"];
+
+/** Change component finding algorithm.
+Setting to all modes will find component in any of the 3 locations.
+Setting to empty array make <InitComp work only using forId. */
+export function setComponentInitMode(modes: ComponentInitMode[]): void {
+    modes.forEach((mode: ComponentInitMode) => {
+        if (!ALL_MODES.includes(mode)) {
+            throw new Error(`Invalid component init mode: ${mode}`);
+        }
+    });
+    COMPONENT_INIT_MODES = modes;
+}
+
+/** Find corresponding Semantic UI component,
+where the 'span' Element is a parent, child, or next sibling of the component */
+export function findComponent(span: Element, selector: string, id?: string): JQueryApi {
+    let elem: JQueryApi;
+    if (id) {
+        // use "forId" attribute to find the element to connect to
+        elem = jQueryElemById(id);
+        if (elem.length && elem.is(selector)) {
+            return elem;
+        }
+        throw new Error(`Can't find '${selector}' component with id="${id}"`);
+    }
+    if (COMPONENT_INIT_MODES.includes("parent")) {
+        elem = jQueryElem(span).find(selector);
+        if (elem.length) {
+            return elem;
+        }
+    }
+    if (COMPONENT_INIT_MODES.includes("child")) {
+        elem = jQueryElem(span).parent(selector);
+        if (elem.length) {
+            return elem;
+        }
+    }
+    if (COMPONENT_INIT_MODES.includes("sibling")) {
+        elem = jQueryElem(span).prev(selector);
+        if (elem.length) {
+            return elem;
+        }
+    }
+    throw new Error(`Can't find '${selector}' component as a ${COMPONENT_INIT_MODES.join(", ")}`);
 }
 
 /*

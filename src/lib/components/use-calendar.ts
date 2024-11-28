@@ -35,7 +35,8 @@ type CalendarApi = {
  *
  * https://fomantic-ui.com/modules/calendar.html
  *
- * Bing using `<Data bind:date` inside the component tag.
+ * Bind using `<Data bind:date` inside the component tag.
+ * <label for="_" inside a <field is atomatically assigned to the calendar input.
  *
  * Example:
 ```
@@ -57,9 +58,8 @@ export function calendar(
         throw new Error("Semantic UI is not initialized");
     }
 
-    // TODO: review this function scope, can it be simpyfied ?
-    /** Format as date, time, or datetime depending on type */
-    function format(d: Date | undefined): string {
+    /** Format as ISO date, time, or datetime depending on type, used locally, to show clandar value */
+    function formatCal(d: Date | undefined): string {
         const cType: CalendarType | undefined =
             (settings && settings.type) ?? calendarDefaults.read().type;
         switch (cType) {
@@ -94,17 +94,17 @@ export function calendar(
         doUpdate(value: Date) {
             const curValue: Date = elem.calendar("get date") as Date;
             if (!equalDataTypes(curValue, value)) {
-                console.debug(`  update(${this.uid}) -> calendar = ${format(value)}`);
+                console.debug(`  update(${this.uid}) -> calendar = ${formatCal(value)}`);
                 elem.calendar("set date", value);
             }
         },
 
         /** Return updated value from the calendar */
         onChange(newValue: Date) {
-            console.debug(`  onChange(${this.uid}) = ${format(newValue)}`);
+            console.debug(`  onChange(${this.uid}) = ${formatCal(newValue)}`);
             const value: Date = get(this.store);
             if (!equalDataTypes(value, newValue)) {
-                console.debug(`  store(${this.uid}) <- calendar = ${format(newValue)}`);
+                console.debug(`  store(${this.uid}) <- calendar = ${formatCal(newValue)}`);
                 this.store.set(newValue);
             }
         },
@@ -126,18 +126,18 @@ export function calendar(
         text: string,
         mode: string
     ): void {
+        // global calendar settings
         const def: CalendarSettings = calendarDefaults.read();
         if (def.onChange) {
             def.onChange.call(this, newValue, text, mode);
         }
-        // FIXME: would def.onChange be called twice?
+        // user-specifed handler for this component
         if (settings && settings.onChange) {
             settings.onChange.call(this, newValue, text, mode);
         }
+        // data binding
         ctrl.onChange(newValue);
     }
-
-    // TODO: check other component's onChange methods
 
     function onCalendarHidden(this: JQuery<HTMLElement>): void {
         const def: CalendarSettings = calendarDefaults.read();

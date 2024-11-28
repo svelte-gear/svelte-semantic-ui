@@ -37,6 +37,7 @@ function isoDateFn(value: string): boolean {
 
 // Add custom rule
 function startFn(value: string, ruleValue: string): boolean {
+    console.log("---", value);
     return value.startsWith(ruleValue);
 }
 

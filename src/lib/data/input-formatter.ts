@@ -47,7 +47,7 @@ export class NumberFmt implements Formatter {
             return undefined;
         }
         const pwr: number = 10.0 ** -this.precision;
-        console.log("PWR", pwr, val, num, Math.round(num / pwr) * pwr);
+        // console.log("PWR", pwr, val, num, Math.round(num / pwr) * pwr);
         return Math.round(num / pwr) * pwr;
     }
 

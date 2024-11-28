@@ -324,7 +324,7 @@ onMount(async () => {
 
     // push initial value into the Semantic UI element
     const propValue: DataTypes = getPropValue();
-    console.debug(`data : ${watcher.mode} -> update(${watcher.uid}) = ${toStr(propValue)}`);
+    console.debug(`data : ${watcher.mode} -> initial(${watcher.uid}) = ${toStr(propValue)}`);
     watcher.doUpdate(propValue);
 
     // subsribe for further changes

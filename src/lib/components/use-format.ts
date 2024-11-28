@@ -49,6 +49,7 @@ export function format(node: Element, fmt: Formatter): ActionReturnType {
     }
 
     // create store to push data back to the binder
+    // data type depends on the formatter, my be string, number, string[], Date
     const ctrl: DataController<DataTypes> = {
         uid: uid(),
         mode: "input",
@@ -64,19 +65,28 @@ export function format(node: Element, fmt: Formatter): ActionReturnType {
             if (/* newValue && */ newValue !== curValue) {
                 console.debug(`  update(${this.uid}) -> input = ${newValue}`);
                 elem.val(newValue ?? "");
+                // trigger bind:value update with formatted value
+                elem.get(0).dispatchEvent(new CustomEvent("input"));
             }
         },
 
-        /** Return updated value from the input */
-        onChange(text: DataTypes) {
+        /** Return user-updated value from the input */
+        onChange(data: DataTypes) {
+            // data is a string for input formatters
+            const text: string = data as string;
             console.debug(`  onChange(${this.uid}) = ${text}`);
-            const newValue: DataTypes = fmt.parse ? fmt.parse(text as string) : text;
+            // parse the value to number / Date or format the string
+            const newValue: DataTypes = fmt.parse ? fmt.parse(text) : fmt.format(text);
             const value: DataTypes = get(this.store);
+            // update the data in store
             if (!equalDataTypes(newValue, value)) {
                 console.debug(`  store(${this.uid}) <- input = ${newValue}`);
                 this.store.set(newValue);
             }
-            this.doUpdate(newValue);
+            // push format changes into input, data may or maynot have changed
+            if (fmt.format(newValue) !== text) {
+                this.doUpdate(newValue);
+            }
         },
     };
 

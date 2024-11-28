@@ -10,7 +10,7 @@ import { modal, Data } from "../../lib";
 // REACTIVE -------------------------------------------------------------------
 /* eslint-disable prefer-const */
 
-let show: boolean = $state(true);
+let show: boolean = $state(false);
 
 /* eslint-enable */
 
@@ -30,7 +30,7 @@ function noFn(): void {
 <!------------------------------------------------------------------------------------------------>
 
 <main>
-    <h1>Dialog</h1>
+    <h1>More</h1>
     <p>
         Modal dialog is
         {#if !show}NOT{/if}
@@ -43,6 +43,17 @@ function noFn(): void {
         }}
     >
         Show Dialog
+    </button>
+
+    <div class="ui divider"></div>
+
+    <button
+        class="ui button"
+        onclick={() => {
+            show = true;
+        }}
+    >
+        Show Toast
     </button>
 
     <!--

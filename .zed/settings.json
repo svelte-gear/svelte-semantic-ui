@@ -7,7 +7,7 @@
     "tab_size": 4,
     "show_whitespaces": "boundary",
     "file_types": {
-        "JSONC": ["tsconfig_*.json", "typedoc.json"]
+        "JSONC": ["tsconfig_*.json", "typedoc.json", "settings.json"]
     }
     // "git": {
     //     "inline_blame": {

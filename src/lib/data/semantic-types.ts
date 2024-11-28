@@ -125,6 +125,7 @@ export type FormText = FomanticUI.Form.Settings.Texts;
  dP    dP `88888P' dP  dP  dP 88Y8888' `88888P' dP
 
 */
+
 /** Settings contriolling number, money, and list formatting. */
 export interface NumberSettings {
     decimal: string;

@@ -30,8 +30,8 @@ const formPrompt: FormPropmt = {
     isExactly: "{name} must be exactly '{ruleValue}'",
     not: "{name} cannot be set to '{ruleValue}'",
     notExactly: "{name} cannot be set to exactly '{ruleValue}'",
-    contains: "{name} cannot contain '{ruleValue}'",
-    containsExactly: "{name} cannot contain exactly '{ruleValue}'",
+    contains: "{name} must contain '{ruleValue}'", // TODO: fix other translations (cannot -> must)
+    containsExactly: "{name} must contain exactly '{ruleValue}'",
     doesntContain: "{name} must contain  '{ruleValue}'",
     doesntContainExactly: "{name} must contain exactly '{ruleValue}'",
     minLength: "{name} must be at least {ruleValue} characters",

@@ -2,7 +2,7 @@
     jquery: "3.6.0"
     length: 0
 
-DOM Settingsl:
+DOM Settings:
     className: { active: "active", addition: "addition", animating: "animating", … } # Class names used to attach style to state
     fields: { disabled: "disabled", ... }
     metadata:
@@ -464,6 +464,11 @@ form:
         range: "{name} must be in a range from {min} to {max}"
         regExp: "{name} is not formatted correctly"
         url: "{name} must be a valid url"
+
+        addErrors: "{name}: {error}"
+        range_: "{name} must be in a range from {min} to {max}"
+        size: "{name} must have a length between {min} and {max} characters"
+
     text:
         and: "and"
         leavingMessage: "There are unsaved changes on this page which will be discarded if you continue."

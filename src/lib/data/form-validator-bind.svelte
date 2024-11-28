@@ -9,8 +9,8 @@ https://github.com/jquense/yup
 
 Example:
 ```
-    <form calss="ui form" use:formValidation={{ inline: true }}>
-        <FormValidationData // TODO FormValidator
+    <form clsss="ui form" use:formValidation={{ inline: true }}>
+        <FormValidationData
             active={isActive}
             bind:valid={isValid}
             bind:errors={errors}
