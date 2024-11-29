@@ -333,11 +333,12 @@ export class DateFmt implements Formatter {
     }
 
     format(val: DataTypes): string {
-        if (val === undefined) {
+        if (val === undefined || val === null) {
             return "";
         }
         if (!(val instanceof Date)) {
-            throw new Error(`dateFormatter expects Date as data type, got ${typeof val}`);
+            console.log("VAL", val);
+            throw new Error(`dateFormatter expects Date as data type, got ${typeof val} = ${val}`);
         }
         const type: string = this.settings.type!;
         type SettingsFormatter = {

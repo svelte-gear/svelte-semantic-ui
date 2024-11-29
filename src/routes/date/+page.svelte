@@ -166,10 +166,7 @@ function toggleActive(): void {
                 <div class="ui calendar">
                     <InitCalendar
                         bind:value={dat}
-                        settings={{
-                            type: "datetime",
-                            maxDate: new Date(),
-                        }}
+                        settings={{ type: "datetime", maxDate: new Date() }}
                     />
                     <div class="ui input right icon">
                         <i class="dropdown icon"></i>

@@ -20,24 +20,17 @@ NOTE: `validate` param in `<InitCalendar>` validates the formatted text (not Dat
 <script lang="ts">
 /**
 The line below is for typedoc.sh
-@module data/Svelte::CalendarData
+@module data/Svelte::InitCalendar
 */
 
 import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
-import type { Unsubscriber } from "svelte/store";
 
-import { calendar as calendarAction } from "../components/use-calendar";
 import { validate as validateAction } from "../components/use-validate";
-import type {
-    ActionReturnType,
-    DataController,
-    DataTypes,
-    JQueryApi,
-    RuleDefinition,
-} from "./common";
-import { equalDataTypes, isoDate, isoTime, findComponent, SVELTE_DATA_STORE } from "./common";
+import type { ActionReturnType, DataTypes, JQueryApi, RuleDefinition } from "./common";
+import { equalDataTypes, isoDate, isoTime, findComponent } from "./common";
 import type { CalendarSettings } from "./semantic-types";
+import { calendarDefaults } from "./settings";
 
 interface Props {
     /** Two-way binding for controlling and reading the Calendar date, time, or datetime */
@@ -75,15 +68,14 @@ let span: Element | undefined = undefined; // $state();
 
 // DATA -----------------------------------------------------------------------
 
-/** Object containing svelte store and update function. */
-let watcher: DataController<DataTypes> | null = null;
+type CalendarApi = {
+    calendar(settings: CalendarSettings): void;
+    calendar(command: string, arg1?: unknown): unknown;
+};
+/** jQuery calendar component */
+let elem: JQueryApi & CalendarApi;
 
-/** Unsubscriber function. */
-let subscribed: Unsubscriber | null = null;
-
-/** Desctroys jQuery data with the store, is created from this component. */
-let destroyAction: (() => void) | null = null;
-let destroyFormat: (() => void) | null = null;
+/** Remove validation logic from the form. */
 let destroyValidate: (() => void) | null = null;
 
 // FUNCTIONS ------------------------------------------------------------------
@@ -99,65 +91,98 @@ function toStr(val: DataTypes): string {
     return `${val}`;
 }
 
-/*
-                   dP
-                   88
- .d8888b. dP    dP 88d888b. .d8888b. .d8888b. 88d888b.
- Y8ooooo. 88    88 88'  `88 Y8ooooo. 88'  `"" 88'  `88
-       88 88.  .88 88.  .88       88 88.  ... 88
- `88888P' `88888P' 88Y8888' `88888P' `88888P' dP
+//-----------------------------------------------------------------------------
 
-    */
-
-/** When store value changes, modify the corresponding prop. */
-function onSubscriptionChange(storeValue: DataTypes): void {
-    console.debug(`data : ${watcher!.mode} <- store(${watcher!.uid}) = ${toStr(storeValue)}`);
-
-    // store in appropriate prop, if the value is different
-    if (!equalDataTypes(value, storeValue)) {
-        value = storeValue as Date;
+function svelteToInput(newValue: Date | undefined): void {
+    if (elem) {
+        const val: Date = elem!.calendar("get date") as Date;
+        if (!equalDataTypes(newValue, val)) {
+            console.debug(`InitCalendar -> prop change = ${toStr(value)}`);
+            elem.calendar("set date", value);
+        }
     }
 }
 
-/*
-                                         dP
-                                         88
- 88d8b.d8b. .d8888b. dP    dP 88d888b. d8888P
- 88'`88'`88 88'  `88 88    88 88'  `88   88
- 88  88  88 88.  .88 88.  .88 88    88   88
- dP  dP  dP `88888P' `88888P' dP    dP   dP
+$effect(() => {
+    svelteToInput(value);
+});
 
-    */
+//-----------------------------------------------------------------------------
+
+/** When input value changes, modify the svelte prop */
+function inputToSvelte(val: Date): void {
+    // store in the prop only if the value is different
+    if (!equalDataTypes(value, val)) {
+        console.debug(`InitCalendar <- input = ${toStr(val)}`);
+        value = val;
+    }
+}
+
+/** New calendar value is selected - push the value into the svelte component */
+function onCalendarChange(
+    // eslint-disable-next-line no-undef
+    this: JQuery<HTMLElement>,
+    newValue: Date,
+    text: string,
+    mode: string
+): void {
+    // global calendar settings
+    const def: CalendarSettings = calendarDefaults.read();
+    if (def.onChange) {
+        def.onChange.call(this, newValue, text, mode);
+    }
+    // user-specifed handler for this component
+    if (settings && settings.onChange) {
+        settings.onChange.call(this, newValue, text, mode);
+    }
+    // data binding
+    inputToSvelte(newValue);
+}
+
+/** Calendar is closed before the final selection - restore the original value */
+// eslint-disable-next-line no-undef
+function onCalendarHidden(this: JQuery<HTMLElement>): void {
+    const def: CalendarSettings = calendarDefaults.read();
+    if (def.onHidden) {
+        def.onHidden.call(this);
+    }
+    if (settings && settings.onHidden) {
+        settings.onHidden.call(this);
+    }
+    svelteToInput(value);
+    // // FIXME: can i sue 'this' instead of elem ?
+    // const calendarValue: Date | Date[] = this.calendar("get date") as Date | Date[];
+    // if (Array.isArray(calendarValue)) {
+    //     console.log("GOT ARRAY", calendarValue);
+    //     inputToSvelte(calendarValue[0]); // [0] = new, [1] = old
+    // } else {
+    //     inputToSvelte(calendarValue);
+    // }
+}
+
+//-----------------------------------------------------------------------------
 
 onMount(async () => {
-    // delay initialization till use:action is run on Semantic UI element
+    // delay initialization till all DOM UI elements are ready
     await tick();
 
-    const elem: JQueryApi = findComponent(span!, ".ui.calendar", forId);
-    const actRes: ActionReturnType = calendarAction(elem.get(0), settings);
-    if (actRes) {
-        destroyAction = actRes.destroy ?? null;
-    }
-    // await tick();
+    // find Seamtic UI component using id or as parent, child, or sibling
+    elem = findComponent(span!, ".ui.calendar", forId) as JQueryApi & CalendarApi;
 
-    // extract the value watcher (store and controller) from the parent's jQuery data
-    watcher = elem.data(SVELTE_DATA_STORE) as DataController<DataTypes>;
-    if (watcher.mode !== "calendar") {
-        throw new Error(`Invalid 'date' prop in <Data> for '${watcher.mode}'`);
-    }
-    console.debug(`data : ${watcher.mode} - found watcher(${watcher.uid})`);
+    // Initialize Semantic component and subscibe for changes
+    elem.calendar({
+        ...settings,
+        onChange: onCalendarChange,
+        onHidden: onCalendarHidden,
+    } as CalendarSettings);
 
     // push initial value into the Semantic UI element
-    console.debug(`data : ${watcher.mode} -> prop init(${watcher.uid}) = ${toStr(value)}`);
-    watcher.doUpdate(value);
+    svelteToInput(value);
 
-    // subsribe for further changes
-    console.debug(`data : ${watcher.mode} - subscribe(${watcher.uid})`);
-    subscribed = watcher.store.subscribe(onSubscriptionChange);
-
+    // wait for form to initialize
     await tick();
 
-    // apply validation rule if the rule is supplied in <Data>
+    // apply validation rule if the rule is supplied in <Init** >
     if (validate) {
         const valRes: ActionReturnType = validateAction(elem.get(0), validate);
         // console.log(">>>", validate, elem.get(0));
@@ -171,53 +196,15 @@ onMount(async () => {
 
 /** Remove the subscripion */
 onDestroy(() => {
-    if (subscribed) {
-        // unsubscribe
-        console.debug(`data : ${watcher?.mode} - unsubscribe(${watcher?.uid})`);
-        subscribed();
-        subscribed = null;
-    }
-
-    if (destroyAction) {
-        destroyAction();
-        destroyAction = null;
-    }
-
-    if (destroyFormat) {
-        destroyFormat();
-        destroyFormat = null;
+    // remove onChange and onHidden
+    if (elem) {
+        elem!.calendar("destroy");
     }
 
     if (destroyValidate) {
         destroyValidate();
         destroyValidate = null;
     }
-});
-
-/*
-                         dP            dP
-                         88            88
- dP    dP 88d888b. .d888b88 .d8888b. d8888P .d8888b.
- 88    88 88'  `88 88'  `88 88'  `88   88   88ooood8
- 88.  .88 88.  .88 88.  .88 88.  .88   88   88.  ...
- `88888P' 88Y888P' `88888P8 `88888P8   dP   `88888P'
-          88
-          dP
-    */
-
-/** When a prop value changes, update the Semantic UI element. */
-// afterUpdate(() => {
-$effect(() => {
-    // listen to prop changes
-    void value;
-
-    // skip the initial prop update, as semntic component is not ready yet
-    if (!watcher) {
-        return;
-    }
-    // update Semantic component
-    console.debug(`data : ${watcher.mode} -> prop effect(${watcher.uid}) = ${toStr(value)}`);
-    watcher.doUpdate(value);
 });
 </script>
 

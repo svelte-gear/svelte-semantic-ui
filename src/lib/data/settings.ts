@@ -3,6 +3,8 @@
  * @module data/settings
  */
 
+import type { CalendarSettings } from "./semantic-types";
+
 /*
                      dP     dP   oo
                      88     88
@@ -186,9 +188,16 @@ export function applyAllSettings(json: AllSettingsJson): void {
 
 */
 
+export const calendarDefaults: SettingsHelper<CalendarSettings> = new SettingsHelper("calendar");
+
 /** Must be called after DOM is initailized. Like in sveltekit rotes/layout.ts load(). */
 export function applyDefaultSettings(locale?: string): void {
     void locale;
+    calendarDefaults.apply({
+        type: "date",
+        touchReadonly: false,
+        minTimeGap: 5,
+    });
     applyAllSettings({
         calendar: {
             type: "date",

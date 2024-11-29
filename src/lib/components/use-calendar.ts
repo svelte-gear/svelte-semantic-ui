@@ -147,8 +147,12 @@ export function calendar(
         if (settings && settings.onHidden) {
             settings.onHidden.call(this);
         }
-        const value: Date = elem.calendar("get date") as Date;
-        ctrl.onChange(value);
+        const value: Date | Date[] = elem.calendar("get date") as Date | Date[];
+        if (Array.isArray(value)) {
+            ctrl.onChange(value[0]);
+        } else {
+            ctrl.onChange(value);
+        }
     }
 
     /*
