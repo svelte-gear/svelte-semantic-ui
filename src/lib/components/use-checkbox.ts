@@ -3,12 +3,9 @@
  * @module components/use-checkbox
  */
 
-import type { CheckboxSettings } from "../data/semantic-types";
-import type { JQueryApi } from "../data/common";
-import { SettingsHelper } from "../data/settings";
+import type { CheckboxSettings, JQueryApi } from "../data/semantic-types";
 import { jQueryElem } from "../data/common";
-
-export const checkboxDefaults: SettingsHelper<CheckboxSettings> = new SettingsHelper("checkbox");
+import { getOrAssignKey } from "../data/field-controller";
 
 /** Svelte action to initialize Semantic UI Checkbox component.
  *
@@ -36,4 +33,7 @@ export function checkbox(node: Element, settings?: CheckboxSettings): void {
         // ...checkboxDefaults,
         ...settings,
     });
+
+    // make sure the field has an id
+    getOrAssignKey(elem);
 }

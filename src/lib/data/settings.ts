@@ -3,7 +3,18 @@
  * @module data/settings
  */
 
-import type { CalendarSettings } from "./semantic-types";
+import type {
+    CalendarSettings,
+    CheckboxSettings,
+    DropdownSettings,
+    FormSettings,
+    ModalSettings,
+    NumberSettings,
+    PopupSettings,
+    SliderSettings,
+    StickySettings,
+    ToastSettings,
+} from "./semantic-types";
 
 /*
                      dP     dP   oo
@@ -189,6 +200,15 @@ export function applyAllSettings(json: AllSettingsJson): void {
 */
 
 export const calendarDefaults: SettingsHelper<CalendarSettings> = new SettingsHelper("calendar");
+export const checkboxDefaults: SettingsHelper<CheckboxSettings> = new SettingsHelper("checkbox");
+export const dropdownDefaults: SettingsHelper<DropdownSettings> = new SettingsHelper("dropdown");
+export const formDefaults: SettingsHelper<FormSettings> = new SettingsHelper("form");
+export const modalDefaults: SettingsHelper<ModalSettings> = new SettingsHelper("modal");
+export const numberDefaults: SettingsHelper<NumberSettings> = new SettingsHelper("number");
+export const popupDefaults: SettingsHelper<PopupSettings> = new SettingsHelper("popup");
+export const sliderDefaults: SettingsHelper<SliderSettings> = new SettingsHelper("slider");
+export const stickyDefaults: SettingsHelper<StickySettings> = new SettingsHelper("sticky");
+export const toastDefaults: SettingsHelper<ToastSettings> = new SettingsHelper("toast");
 
 /** Must be called after DOM is initailized. Like in sveltekit rotes/layout.ts load(). */
 export function applyDefaultSettings(locale?: string): void {
@@ -198,14 +218,7 @@ export function applyDefaultSettings(locale?: string): void {
         touchReadonly: false,
         minTimeGap: 5,
     });
-    applyAllSettings({
-        calendar: {
-            type: "date",
-            touchReadonly: false,
-            minTimeGap: 5,
-        },
-        form: {
-            keyboardShortcuts: false,
-        },
+    formDefaults.apply({
+        keyboardShortcuts: false,
     });
 }

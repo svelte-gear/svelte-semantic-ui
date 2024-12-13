@@ -105,12 +105,12 @@ const calendarSettings: CalendarSettings = {
 };
 
 const numberSettings: NumberSettings = {
-    decimal: ".",
+    decimalSeparator: ".",
     thousandSeparator: " ",
     moneyPrefix: "$",
     moneySuffix: "",
-    listSeparator: ",",
     moneyPrecision: 2,
+    listSeparator: ",",
 };
 
 // TODO: transpalte to other languages

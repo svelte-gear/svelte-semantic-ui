@@ -54,6 +54,7 @@ export async function changeLocale(loc: string): Promise<void> {
 }
 
 $effect(() => {
+    void newLocale;
     void changeLocale(newLocale);
 });
 

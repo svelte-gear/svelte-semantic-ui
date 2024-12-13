@@ -10,6 +10,8 @@
 /// <reference types="jquery" />
 /// <reference types="fomantic-ui-css" />
 
+import type { RuleDefinition } from "./common";
+
 /*
                    dP                         dP
                    88                         88
@@ -19,6 +21,9 @@
  `88888P' `88888P8 dP `88888P' dP    dP `88888P8 `88888P8 dP
 
 */
+
+/** jQuery */
+export type JQueryApi = JQuery<HTMLElement>;
 
 export type DateFormatFn = (d: Date | undefined, settings?: CalendarSettings) => string;
 export type DateParseFn = (
@@ -96,6 +101,7 @@ export type FormRules = {
  * @see {@link https://fomantic-ui.com/behaviors/form.html#/settings}
  */
 export type FormSettings = Partial<FomanticUI.FormSettings> & {
+    fields?: Record<string, RuleDefinition>;
     rules?: FormRules;
 };
 
@@ -128,13 +134,19 @@ export type FormText = FomanticUI.Form.Settings.Texts;
 
 /** Settings contriolling number, money, and list formatting. */
 export interface NumberSettings {
-    decimal: string;
+    decimalSeparator: string;
     thousandSeparator: string;
-    listSeparator: string;
     moneyPrefix: string;
     moneySuffix: string;
     moneyPrecision: number;
-} // TODO: Partial<> ?
+    listSeparator: string;
+}
+
+/** Settings used to initailaze a number input component. */
+export interface NumberInputSettings extends Partial<NumberSettings> {
+    type?: "integer" | "decimal" | "money";
+    precision?: number;
+}
 
 /*
        dP                                  dP

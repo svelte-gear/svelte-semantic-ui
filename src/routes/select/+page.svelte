@@ -7,7 +7,7 @@
 
 // eslint-disable-next-line import/no-unresolved, import/extensions
 import { page } from "$app/stores";
-import { checkbox, sticky, dropdown, formValidation, Data, FormValidator, rule } from "../../lib";
+import { checkbox, sticky, FormValidation, rule, InitDropdown, InitTextInput } from "../../lib";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import ShowCode from "../show-code.svelte";
 
@@ -21,12 +21,17 @@ let teams: string[] = $state([]);
 let country: string = $state("");
 let gender: string = $state("");
 let chb: boolean = $state(false);
+let test: string = $state("");
 
 let example: string = $state("");
 
 // form validation
 let active: boolean = $state(false);
 let valid: boolean = $state(false);
+let errors: string[] = $state([]);
+
+/* Hide or show inputs */
+let showGender: boolean = $state(true);
 
 let json: string = $derived(
     JSON.stringify({
@@ -35,6 +40,8 @@ let json: string = $derived(
         country: country,
         gender: gender,
         agree: chb,
+        test: test,
+        errors: errors,
     })
         .replace(/,"/g, ', "')
         .replace("{", "{ ")
@@ -44,6 +51,7 @@ let json: string = $derived(
 /* eslint-enable */
 
 $effect(() => {
+    void teams;
     // adding to multi-select ids done one item at a time
     console.log(`nums [${teams.toString()}]`);
 });
@@ -65,6 +73,7 @@ function reset(): void {
     country = "ar";
     gender = "";
     chb = true;
+    test = "";
 }
 reset();
 
@@ -87,21 +96,26 @@ function toggleActive(): void {
     <!-- https://github.com/noahsalvi/svelte-use-form -->
 
     <div style:max-width="360px" style:margin="0 auto" style:text-align="left">
-        <form
-            class="ui form"
-            use:formValidation={{
-                // keyboardShortcuts: false,
-                inline: true,
-                on: "change",
-                autoCheckRequired: true,
-            }}
-        >
-            <FormValidator active={active} bind:valid={valid} />
+        <form class="ui form">
+            <FormValidation
+                active={active}
+                bind:valid={valid}
+                bind:errors={errors}
+                settings={{
+                    // keyboardShortcuts: false,
+                    inline: true,
+                    on: "change",
+                    autoCheckRequired: true,
+                    fields: {
+                        xx3: "empty",
+                    },
+                }}
+            />
 
             {#if example === ""}
                 <div class="ui right rail" id="side">
                     <div class="ui segment sticky" use:sticky={{ offset: 10 }}>
-                        <h1>Data bindings</h1>
+                        <!-- <h1>Data bindings</h1> -->
                         <div class="ui message" style:font-family="monospace">
                             {json}
                         </div>
@@ -140,19 +154,19 @@ function toggleActive(): void {
 
             <!-- example-select -->
             <div class="field">
-                <label for="numb3"> Rank </label>
-                <select
-                    id="numb3"
-                    class="ui selection dropdown"
-                    use:dropdown={{
-                        clearable: true,
-                    }}
-                >
-                    <Data bind:selected={rank} />
+                <label for="numb1"> Rank 1 </label>
+                <select id="numb1" class="ui selection dropdown">
                     {#each options as m}
                         <option value={m}>Number {m}</option>
                     {/each}
                 </select>
+                <InitDropdown
+                    bind:value={rank}
+                    validate={[rule.not("1")]}
+                    settings={{
+                        clearable: true,
+                    }}
+                />
                 <div class="help_text">
                     single select with 'clear' option -
                     <ShowCode file="select" component="select" bind:selected={example} />
@@ -160,15 +174,38 @@ function toggleActive(): void {
             </div>
             <!-- example-select -->
 
+            <!-- example-select_2 -->
+            <div class="field">
+                <label for="numb2"> Rank 2 </label>
+                <InitDropdown
+                    bind:value={rank}
+                    validate={[rule.not("1")]}
+                    settings={{
+                        clearable: true,
+                    }}
+                >
+                    <select id="numb2" class="ui selection dropdown">
+                        {#each options as m}
+                            <option value={m}>Number {m}</option>
+                        {/each}
+                    </select>
+                </InitDropdown>
+                <div class="help_text">
+                    single select with 'clear' option -
+                    <ShowCode file="select" component="select_2" bind:selected={example} />
+                </div>
+            </div>
+            <!-- example-select_2 -->
+
             <!-- example-multiselect -->
             <div class="field" id="x">
-                <label for="numb2"> Teams </label>
-                <select id="numb2" class="ui selection dropdown fluid" multiple use:dropdown>
-                    <Data bind:selected={teams} validate={[rule.empty()]} />
+                <label for="numb3"> Teams </label>
+                <select id="numb3" class="ui selection dropdown fluid" multiple>
                     {#each options as m}
                         <option value={m}>Num {m}</option>
                     {/each}
                 </select>
+                <InitDropdown bind:value={teams} validate={[rule.empty()]} />
                 <div class="help_text">
                     multi-select -
                     <ShowCode file="select" component="multiselect" bind:selected={example} />
@@ -190,13 +227,7 @@ function toggleActive(): void {
             <!-- example-select_with_flags -->
             <div class="field">
                 <label for="_"> Country </label>
-                <div
-                    class="ui search selection dropdown"
-                    use:dropdown={{
-                        fullTextSearch: "exact",
-                    }}
-                >
-                    <Data bind:selected={country} />
+                <div class="ui search selection dropdown">
                     <input type="hidden" name="country" />
                     <i class="dropdown icon"></i>
                     <div class="default text">Select Country</div>
@@ -218,6 +249,12 @@ function toggleActive(): void {
                         </div>
                     </div>
                 </div>
+                <InitDropdown
+                    bind:value={country}
+                    settings={{
+                        fullTextSearch: "exact",
+                    }}
+                />
                 <div class="help_text">
                     decorated dropdown with search -
                     <ShowCode file="select" component="select_with_flags" bind:selected={example} />
@@ -229,34 +266,78 @@ function toggleActive(): void {
             -->
             <!-- example-select_with_flags -->
 
-            <!-- example-select_with_JS -->
-            <div class="field">
-                <!-- class:error={gender == "male"} -->
-                <label for="_"> Gender </label>
-                <div
-                    class="ui selection dropdown"
-                    use:dropdown={{
-                        values: [
-                            { name: "Male", value: "male" },
-                            { name: "Female", value: "female" },
-                        ],
-                    }}
-                >
-                    <Data bind:selected={gender} validate={[rule.not("male")]} />
-                    <input type="hidden" id="gend" />
-                    <i class="dropdown icon"></i>
-                    <div class="default text"></div>
-                </div>
-                <div class="help_text">
-                    dropddown with options from array -
-                    <ShowCode file="select" component="select_with_JS" bind:selected={example} />
-                </div>
+            <div class="ui divider"></div>
+
+            <div style="float:right">
+                <input type="checkbox" bind:checked={showGender} use:checkbox /> Show gender
             </div>
-            <!--
+
+            {#if showGender}
+                <!-- example-select_with_JS -->
+                <div class="field">
+                    <!-- class:error={gender == "male"} -->
+                    <label for="_"> Gender </label>
+                    <div class="ui selection dropdown">
+                        <input type="hidden" id="gend" />
+                        <i class="dropdown icon"></i>
+                        <div class="default text"></div>
+                    </div>
+                    <InitDropdown
+                        bind:value={gender}
+                        validate={[rule.not("male")]}
+                        settings={{
+                            values: [
+                                { name: "Male", value: "male" },
+                                { name: "Female", value: "female" },
+                            ],
+                        }}
+                    />
+                    <div class="help_text">
+                        dropddown with options from array -
+                        <ShowCode
+                            file="select"
+                            component="select_with_JS"
+                            bind:selected={example}
+                        />
+                    </div>
+                </div>
+                <!--
                 includes hiddent input, icon, and div for text display,
                 values are supplied from JS
             -->
-            <!-- example-select_with_JS -->
+                <!-- example-select_with_JS -->
+
+                <!-- example-select_with_JS_2 -->
+                <div class="field">
+                    <!-- class:error={gender == "male"} -->
+                    <label for="_"> Gender </label>
+                    <InitDropdown
+                        bind:value={gender}
+                        validate={[rule.not("male")]}
+                        settings={{
+                            values: [
+                                { name: "Male", value: "male" },
+                                { name: "Female", value: "female" },
+                            ],
+                        }}
+                    >
+                        <div class="ui selection dropdown">
+                            <input type="hidden" id="gend2" />
+                            <i class="dropdown icon"></i>
+                            <div class="default text"></div>
+                        </div>
+                    </InitDropdown>
+                    <div class="help_text">
+                        dropddown with options from array -
+                        <ShowCode
+                            file="select"
+                            component="select_with_JS_2"
+                            bind:selected={example}
+                        />
+                    </div>
+                </div>
+                <!-- example-select_with_JS_2 -->
+            {/if}
 
             <div class="ui divider"></div>
 
@@ -315,6 +396,26 @@ function toggleActive(): void {
                     checkbox group -
                     <ShowCode file="select" component="checkbox_group" bind:selected={example} />
                 </div>
+            </div>
+
+            <div class="field">
+                <label for="xx1"> Test 1 </label>
+                <input id="xx1" />
+                <InitTextInput bind:value={test} validate={[rule.empty()]} />
+            </div>
+            <div class="field">
+                <label for="xx2"> Test 2 </label>
+                <input id="xx2" bind:value={test} />
+                <InitTextInput validate={[rule.empty()]} />
+            </div>
+            <div class="field">
+                <label for="xx3"> Test 3 </label>
+                <input id="xx3" bind:value={test} />
+            </div>
+            <div class="field">
+                <label for="xx4"> Test 4 </label>
+                <input id="xx4" />
+                <InitTextInput bind:value={test} validate={[rule.empty()]} />
             </div>
 
             <div></div>

@@ -35,7 +35,3 @@ https://martyice.github.io/svelte-tutorial-part-4/
 https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks/Svelte_getting_started
 
 https://github.com/sveltejs/svelte-eslint-parser
-
-## Back
-
-- [Readme](../README) - [Readme](../index.html)

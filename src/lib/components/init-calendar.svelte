@@ -1,0 +1,211 @@
+<!--
+@component
+Svelte data binder and initializer for Semantic-UI `Calendar` components.
+(see detailed description in init-calendar.svelte.d.ts )
+-->
+<svelte:options runes={true} />
+
+<script lang="ts">
+import type { Snippet } from "svelte";
+import { onMount, onDestroy, tick } from "svelte";
+
+import type { RuleDefinition } from "../data/common";
+import type { CalendarSettings, JQueryApi } from "../data/semantic-types";
+import { equalDataTypes, isoDate, isoTime, findComponent, uid } from "../data/common";
+import { calendarDefaults } from "../data/settings";
+import { FieldController } from "../data/field-controller";
+
+const FIELD_PREFIX: string = "f_calendar";
+
+interface Props {
+    value: Date | undefined;
+    settings?: CalendarSettings;
+    validate?: RuleDefinition;
+    forId?: string;
+    children?: Snippet;
+}
+
+// REACTIVE -------------------------------------------------------------------
+/* eslint-disable prefer-const */
+
+let {
+    value = $bindable(),
+    settings = undefined,
+    validate = undefined,
+    forId = undefined,
+    children = undefined,
+}: Props = $props();
+
+/** Invisible dom element created by this component. */
+let span: Element | undefined = undefined; // $state();
+
+/* eslint-enable */
+
+// DATA -----------------------------------------------------------------------
+
+type CalendarApi = {
+    calendar(settings: CalendarSettings): void;
+    calendar(command: string, arg1?: unknown): unknown;
+};
+/** jQuery calendar component */
+let elem: (JQueryApi & CalendarApi) | undefined = undefined;
+
+/** Inner input for form validation */
+let input: JQueryApi | undefined = undefined;
+
+/** Field descriptor and validator */
+let fieldCtrl: FieldController | undefined = undefined;
+
+// FUNCTIONS ------------------------------------------------------------------
+
+/** Textual presentation of the value. */
+function toStr(val: Date | Date[] | undefined): string {
+    if (val instanceof Date) {
+        return `${isoDate(val)} ${isoTime(val)}`;
+    }
+    if (Array.isArray(val)) {
+        return `[${val.map((d: Date) => `${isoDate(d)} ${isoTime(d)}`).toString()}]`;
+    }
+    return `${val}`;
+}
+
+//-----------------------------------------------------------------------------
+
+/** Propagate prop change to UI component */
+function svelteToInput(newValue: Date | undefined): void {
+    if (!elem) {
+        // effect and svelteToInput may be called before onMount()
+        return;
+    }
+    let val: Date | Date[] = elem.calendar("get date") as Date;
+    if (Array.isArray(val)) {
+        console.log("GOT ARRAY", val);
+        val = val[0] as Date;
+    }
+    if (!equalDataTypes(newValue, val)) {
+        console.debug(`InitCalendar -> prop change = ${toStr(newValue)}`, newValue, val);
+        elem.calendar("set date", newValue);
+    }
+}
+
+/** The effect rune calls svelteToInput when prop value changes */
+$effect(() => {
+    void value;
+    svelteToInput(value);
+});
+
+//-----------------------------------------------------------------------------
+
+/** When input value changes, modify the svelte prop */
+function inputToSvelte(inputValue: Date): void {
+    // store in the prop only if the value is different
+    if (!equalDataTypes(value, inputValue)) {
+        console.debug(`InitCalendar <- input = ${toStr(inputValue)}`);
+        value = inputValue;
+    }
+}
+
+/** The callback function is calls inputToSvelte when calendar value is changed by user. */
+function onCalendarChange(this: JQueryApi, newValue: Date, text: string, mode: string): void {
+    // global calendar settings
+    const def: CalendarSettings = calendarDefaults.read();
+    if (def.onChange) {
+        def.onChange.call(this, newValue, text, mode);
+    }
+    // user-specifed handler for this component
+    if (settings && settings.onChange) {
+        settings.onChange.call(this, newValue, text, mode);
+    }
+    // update data binding
+    inputToSvelte(newValue);
+}
+
+/** Callback for calendar closed before the final selection - restore the original value */
+function onCalendarHidden(this: JQueryApi): void {
+    const def: CalendarSettings = calendarDefaults.read();
+    if (def.onHidden) {
+        def.onHidden.call(this);
+    }
+    if (settings && settings.onHidden) {
+        settings.onHidden.call(this);
+    }
+    // restore the value
+    svelteToInput(value);
+
+    // const calendarValue: Date | Date[] = this.calendar("get date") as Date | Date[];
+    // if (Array.isArray(calendarValue)) {
+    //     console.log("GOT ARRAY", calendarValue);
+    //     inputToSvelte(calendarValue[0]); // [0] = new, [1] = old
+    // } else {
+    //     inputToSvelte(calendarValue);
+    // }
+}
+
+//-----------------------------------------------------------------------------
+
+function labelClick(): void {
+    elem?.calendar("focus");
+}
+
+onMount(async () => {
+    // delay initialization till all DOM UI elements are ready
+    await tick();
+
+    // Initialize Semantic component and subscibe for changes
+    elem = findComponent(span!, ".ui.calendar", forId) as JQueryApi & CalendarApi;
+    if (!elem.calendar) {
+        throw new Error("Semantic calendar is not initialized");
+    }
+    elem.calendar({
+        ...settings,
+        onChange: onCalendarChange,
+        onHidden: onCalendarHidden,
+    });
+
+    // Add attribute to inner input to enable calendar value validation
+    input = elem.find("input");
+    const inputId: string | undefined =
+        input.attr("id") ?? input.attr("name") ?? input.attr("data-validate");
+    if (!inputId) {
+        const calendarId: string | undefined =
+            elem.attr("id") ?? elem.attr("name") ?? elem.attr("data-validate");
+        input.attr("data-validate", `${FIELD_PREFIX}_${calendarId ? calendarId : uid()}`);
+    }
+
+    // show dropdown on label click, if for="_"
+    const field: JQueryApi = elem.parent().filter(".field");
+    const labelFor: string | undefined = field.find("label").attr("for");
+    if (labelFor === "_") {
+        field.on("click", "label", labelClick);
+    }
+
+    // apply validation rule if the rule is supplied in <InitCalendar >
+    fieldCtrl = new FieldController(input, validate);
+    // push initial value into the Semantic UI element
+    svelteToInput(value);
+});
+
+/** Remove the subscripion */
+onDestroy(() => {
+    if (fieldCtrl) {
+        fieldCtrl.removeRules();
+    }
+    if (elem) {
+        elem.calendar("destroy");
+
+        const field: JQueryApi = elem.parent().filter(".field");
+        const labelFor: string | undefined = field.find("label").attr("for");
+        if (labelFor === "_") {
+            field.off("click", "label", labelClick);
+        }
+    }
+});
+</script>
+
+<span class="InitCalendar" class:hidden={!children} bind:this={span}>{@render children?.()}</span>
+
+<style>
+.hidden {
+    display: none;
+}
+</style>

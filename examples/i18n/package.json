@@ -1,6 +1,6 @@
 {
     "name": "@svelte-gear/svelte-semantic-ui-examples-svelte-kit",
-    "version": "0.5.2-alpha",
+    "version": "0.6.0-alpha",
     "type": "module",
     "license": "MIT",
     "description": "Sample application using sveltekit-i18n and svelte-semantic-ui with extra locales",
@@ -13,7 +13,7 @@
     },
     "dependencies": {
         "svelte": "5.1.10",
-        "@svelte-gear/svelte-semantic-ui": "0.5.2-alpha",
+        "@svelte-gear/svelte-semantic-ui": "0.6.0-alpha",
         "sveltekit-i18n": "2.4.2"
     },
     "devDependencies": {

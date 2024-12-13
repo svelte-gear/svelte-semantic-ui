@@ -1,18 +1,18 @@
 # typedoc.sh
 # generates html documentation for the project
 
-# pre-process *.svelte components
-WRK_DIR="src/lib/data"
-PREFIX="_svelte-"
-for file in "$WRK_DIR"/*.svelte; do
-  filename=$(basename "$file")
-  dest_file="$WRK_DIR/$PREFIX${filename%.svelte}.ts"
-  cat "$WRK_DIR/$filename" \
-  | sed -z s/.*@component/\\/**/ \
-  | sed -z s/--\>.*@module/@module/ \
-  | sed -z s/\<\\/script\>.*// \
-  > "$dest_file"
-done
+# # pre-process *.svelte components
+# WRK_DIR="src/lib/data"
+# PREFIX="_svelte-"
+# for file in "$WRK_DIR"/*.svelte; do
+#   filename=$(basename "$file")
+#   dest_file="$WRK_DIR/$PREFIX${filename%.svelte}.ts"
+#   cat "$WRK_DIR/$filename" \
+#   | sed -z s/.*@component/\\/**/ \
+#   | sed -z s/--\>.*@module/@module/ \
+#   | sed -z s/\<\\/script\>.*// \
+#   > "$dest_file"
+# done
 
 # pre-process *.md documents
 SRC_DIR="doc"
@@ -31,4 +31,4 @@ yarn typedoc
 
 # clean up
 rm -r src/lib/man
-rm $WRK_DIR/$PREFIX*
+# rm $WRK_DIR/$PREFIX*

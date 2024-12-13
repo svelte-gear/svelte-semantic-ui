@@ -9,6 +9,7 @@
 // This maybe caused by 'modal' component moving the element up in dom...
 
 import type { Writable } from "svelte/store";
+import type { JQueryApi } from "./semantic-types";
 
 export const SVELTE_DATA_STORE: string = "svelte_data_store";
 export const SVELTE_FORM_STORE: string = "svelte_form_store";
@@ -24,6 +25,25 @@ export interface Formatter {
     parse?: (val: string) => DataTypes;
 }
 
+export interface TextFormatter {
+    format: (val: string) => string;
+}
+
+export interface NumberFormatter {
+    format: (val: number | undefined) => string;
+    parse: (val: string) => number | undefined;
+}
+
+export interface DateFormatter {
+    format: (val: Date | undefined) => string;
+    parse: (val: string) => Date | undefined;
+}
+
+export interface ListFormatter {
+    format: (val: string[]) => string;
+    parse: (val: string) => string[];
+}
+
 /** Validation rule object: rule string and custom error prompt */
 export type RuleObj = {
     type: string;
@@ -32,50 +52,6 @@ export type RuleObj = {
 
 /** Rule definition takes array or single instance of string or RuleObj */
 export type RuleDefinition = string | string[] | RuleObj | RuleObj[]; // | BaseSchema;
-
-/*
- oo
- dP .d8888b. dP    dP .d8888b. 88d888b. dP    dP
- 88 88'  `88 88    88 88ooood8 88'  `88 88    88
- 88 88.  .88 88.  .88 88.  ... 88       88.  .88
- 88 `8888P88 `88888P' `88888P' dP       `8888P88
- 88       88                                 .88
- dP       dP                             d8888P
-*/
-
-/** Small subset of jQuery functions used by this library. */
-export interface JQueryApi {
-    parent(selector?: string): JQueryApi;
-    filter(selector: string): JQueryApi;
-    find(selector: string): JQueryApi;
-    prev(selector: string): JQueryApi;
-    is(selector: string): boolean;
-    remove(): void;
-
-    prop(name: string): string;
-    attr(name: string): string;
-    attr(name: string, value: string): void;
-    hasClass(className: string): boolean;
-    removeClass(className: string): void;
-    length: number;
-
-    on(event: string, selector: string | null, handler: () => void): void;
-    off(event: string, selector: string | null, handler: () => void): void;
-    data(key: string, value: unknown): void;
-    data(key: string): unknown;
-    removeData(key: string): void;
-
-    each(fn: (idx: number, elem: Element) => void): void;
-    text(): string;
-    html(val: string): void;
-    append(html: string): void;
-
-    get(inx: number): Element;
-    val(): string;
-    val(val: string): void;
-
-    trigger(event: string): void;
-}
 
 /** Gets jQuery element by id attribute. */
 export function jQueryElemById(id: string): JQueryApi {
@@ -105,11 +81,16 @@ export function jQueryElem(node: Element): JQueryApi {
 
 //-----------------------------------------------------------------------------
 
-type ComponentInitMode = "parent" | "child" | "sibling";
+export type ComponentInitMode = "parent" | "child" | "sibling";
 const ALL_MODES: ComponentInitMode[] = ["parent", "child", "sibling"];
 
 /** Global setting for finding corresponding Semantic UI component */
 let COMPONENT_INIT_MODES: ComponentInitMode[] = ["sibling"];
+
+/** How Init** components are looking for a Semantic UI input */
+export function getComponentInitMode(): ComponentInitMode[] {
+    return COMPONENT_INIT_MODES;
+}
 
 /** Change component finding algorithm.
 Setting to all modes will find component in any of the 3 locations.
@@ -124,8 +105,14 @@ export function setComponentInitMode(modes: ComponentInitMode[]): void {
 }
 
 /** Find corresponding Semantic UI component,
-where the 'span' Element is a parent, child, or next sibling of the component */
-export function findComponent(span: Element, selector: string, id?: string): JQueryApi {
+where the `span` Element is a parent, child, or next sibling of the component.
+Search mode is usually set in setComponentInitMode(), but may be overriden by `search` paremeter. */
+export function findComponent(
+    span: Element,
+    selector: string,
+    id?: string,
+    search?: ComponentInitMode[]
+): JQueryApi {
     let elem: JQueryApi;
     if (id) {
         // use "forId" attribute to find the element to connect to
@@ -135,25 +122,26 @@ export function findComponent(span: Element, selector: string, id?: string): JQu
         }
         throw new Error(`Can't find '${selector}' component with id="${id}"`);
     }
-    if (COMPONENT_INIT_MODES.includes("parent")) {
+    const searchModes: ComponentInitMode[] = search ? search : COMPONENT_INIT_MODES;
+    if (searchModes.includes("parent")) {
         elem = jQueryElem(span).find(selector);
-        if (elem.length) {
+        if (elem.length > 0) {
             return elem;
         }
     }
-    if (COMPONENT_INIT_MODES.includes("child")) {
+    if (searchModes.includes("child")) {
         elem = jQueryElem(span).parent(selector);
-        if (elem.length) {
+        if (elem.length > 0) {
             return elem;
         }
     }
-    if (COMPONENT_INIT_MODES.includes("sibling")) {
+    if (searchModes.includes("sibling")) {
         elem = jQueryElem(span).prev(selector);
-        if (elem.length) {
+        if (elem.length > 0) {
             return elem;
         }
     }
-    throw new Error(`Can't find '${selector}' component as a ${COMPONENT_INIT_MODES.join(", ")}`);
+    throw new Error(`Can't find '${selector}' component as a ${searchModes.join("|")}`);
 }
 
 /*
@@ -167,20 +155,24 @@ export function findComponent(span: Element, selector: string, id?: string): JQu
 */
 
 /** Possible data types for the store */
-export type DataTypes = string | string[] | boolean | Date | number | undefined;
+export type DataTypes = string | string[] | boolean | Date | number | number[] | undefined;
 
 /** Controls Semantic UI form element and it's data validation. */
 export interface FormController {
-    uid: string;
-    mode: "sui-form" | "yup-form";
-    valid: Writable<boolean>;
-    errors: Writable<string[]>;
-    getActive(): boolean;
-    setActive(val: boolean): void;
+    // uid: string;
+    // mode: "sui-form" | "yup-form";
+    // valid: Writable<boolean>;
+    // errors: Writable<string[]>;
+    // getActive(): boolean;
+    // setActive(val: boolean): void;
     addRule: (key: string, rules: RuleDefinition) => void;
+    removeRule: (key: string, rules: RuleDefinition) => void;
     doValidateField: (key: string) => void;
     doValidateForm: () => void;
     onFieldChange: (key: string) => void;
+
+    validCallback?: (valid: boolean) => void;
+    errorsCallback?: (errors: string[]) => void;
 }
 
 /** Holds Svelte `store` allowing the `Data` component to subscribe to data changes */

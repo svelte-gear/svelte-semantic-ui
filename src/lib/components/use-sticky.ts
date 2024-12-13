@@ -3,30 +3,21 @@
  * @module components/use-sticky
  */
 
-import type { JQueryApi } from "../data/common";
-import type { StickySettings } from "../data/semantic-types";
+import type { StickySettings, JQueryApi } from "../data/semantic-types";
 import { jQueryElem } from "../data/common";
-import { SettingsHelper } from "../data/settings";
-
-export const stickyDefaults: SettingsHelper<StickySettings> = new SettingsHelper("sticky");
 
 /** Svelte action to initialize Semantic UI Sticky component.
- *
- * https://semantic-ui.com/modules/sticky.html
- *
- * By defult attaches itself to the parent component.
- *
- * Example:
+
+https://fomantic-ui.com/modules/sticky.html
+
+By defult attaches itself to the parent component.
 ```
-    <form class="ui form">
-        <div class="ui right rail">
-            <div class="ui segment sticky" use:sticky={{ offset: 10 }}>
-                <div class="ui message">...</div>
-                <button class="ui button red" on:click={reset}>Reset</button>
-            </div>
+    <div class="ui right rail">
+        <div class="ui segment sticky" use:sticky={{ offset: 10 }}>
+            <div class="ui message">...</div>
+            <button class="ui button red" on:click={reset}>Reset</button>
         </div>
-        ...
-    </form>
+    </div>
 ```
 */
 export function sticky(node: Element, settings?: StickySettings): void {
@@ -41,4 +32,6 @@ export function sticky(node: Element, settings?: StickySettings): void {
         // ...stickyDefaults,
         ...settings,
     });
+
+    // FIXME: do i need to remove it if hidden ?
 }

@@ -1,9 +1,9 @@
 {
     "name": "@svelte-gear/svelte-semantic-ui",
-    "version": "0.5.2-alpha",
+    "version": "0.6.0-alpha",
     "type": "module",
     "license": "MIT",
-    "description": "svelte actions and bindings for semantic-ui or fomantic-ui (for svelte 5, work in progress)",
+    "description": "svelte bindings for semantic-ui or fomantic-ui (work in progress)",
     "author": "AK",
     "_files": "files to be included when the library is installed as a dependency",
     "files": [
@@ -36,11 +36,11 @@
         "format": "prettier --write .",
         "lint": "prettier --check . && echo Linting... && eslint .",
         "docs": "./typedoc.sh",
-        "svelte": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-        "package": "yarn build && echo Packaging... && svelte-kit sync && svelte-package && publint && ./pre-publish.sh",
+        "svelte": "export NODE_ENV=development && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+        "package": "export NODE_ENV=production && yarn build && echo Packaging... && svelte-kit sync && svelte-package && publint && ./pre-publish.sh",
         "prebuild": "yarn copy-code",
         "predev": "yarn copy-code",
-        "copy-code": "npx cpy 'src/routes/**/+page.svelte' 'static/code/' --rename=page.html"
+        "copy-code": "yarn cpy 'src/routes/**/+page.svelte' 'static/code/' --rename=page.html"
     },
     "_peerDependencies": {
         "svelte": "see app.html and /routes folder for examples; the library can be used without svelte-kit",
@@ -49,7 +49,7 @@
         "semantic-ui-css": "for semantic-ui, add optional fomantic modules: calendar, slider, toast, and form"
     },
     "peerDependencies": {
-        "svelte": "^3.59.2 || ^4.2.18 || ^5.1.10",
+        "svelte": "^3.59.2 || ^4.2.18 || ^5.11.1",
         "jquery": "^3.7.1",
         "fomantic-ui-css": "^2.9.3"
     },
@@ -69,32 +69,33 @@
         "_typedoc": "types information and api docs",
         "eslint-config-prettier": "9.1.0 - is not used; we prefer modifying eslint rules to match prettier",
         "npm-run-all": "4.1.5 - allows to run npm tasks sequentially or in parallel; not yet required",
-        "eslint": "9.5.0 - v9 requires config file changes, not compartible with airbnb rules (8.53 has many changes)"
+        "eslint": "9.5.0 - v9 requires config file changes, not compartible with airbnb rules (8.53 has many changes)",
+        "typescript": "5.7.2 - not yet supported by eslint and typedoc"
     },
     "devDependencies": {
         "@sveltejs/adapter-static": "3.0.6",
-        "@sveltejs/kit": "2.8.4",
+        "@sveltejs/kit": "2.11.0",
         "@sveltejs/package": "2.3.7",
-        "@sveltejs/vite-plugin-svelte": "5.0.1",
+        "@sveltejs/vite-plugin-svelte": "5.0.2",
         "eslint": "8.57.0",
-        "eslint-plugin-svelte": "2.46.0",
+        "eslint-plugin-svelte": "2.46.1",
         "@typescript-eslint/eslint-plugin": "7.18.0",
         "@typescript-eslint/parser": "7.18.0",
         "eslint-config-airbnb-typescript": "18.0.0",
         "eslint-plugin-import": "2.31.0",
         "eslint-plugin-jsx-a11y": "6.10.2",
-        "eslint-plugin-promise": "7.2.0",
+        "eslint-plugin-promise": "7.2.1",
         "eslint-plugin-react": "7.37.2",
-        "prettier": "3.4.1",
+        "prettier": "3.4.2",
         "prettier-plugin-svelte": "3.3.2",
-        "svelte": "5.2.9",
-        "svelte-check": "4.1.0",
+        "svelte": "5.11.2",
+        "svelte-check": "4.1.1",
         "publint": "0.2.12",
-        "typescript": "5.7.2",
-        "vite": "6.0.0",
+        "typescript": "5.6.3",
+        "vite": "6.0.3",
         "cpy-cli": "5.0.0",
-        "typedoc": "0.26.11",
-        "@types/node": "22.10.0",
+        "typedoc": "0.27.4",
+        "@types/node": "22.10.2",
         "@types/jquery": "3.5.32",
         "fomantic-ui-css": "2.9.3"
     }

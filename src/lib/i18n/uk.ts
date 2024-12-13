@@ -102,12 +102,12 @@ const calendarSettings: CalendarSettings = {
 };
 
 const numberSettings: NumberSettings = {
-    decimal: ",",
+    decimalSeparator: ",",
     thousandSeparator: " ",
     moneyPrefix: "",
     moneySuffix: " ₴",
-    listSeparator: ",",
     moneyPrecision: 0,
+    listSeparator: ",",
 };
 
 export default {

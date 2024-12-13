@@ -1,4 +1,3 @@
-<!-- <svelte:options runes={true} /> -->
 <svelte:options runes={true} />
 
 <script lang="ts">
@@ -11,17 +10,14 @@ import { page } from "$app/stores";
 import {
     popup,
     sticky,
-    formValidation,
-    Data,
-    FormValidator,
-    MoneyFmt,
-    DateFmt,
-    NumberFmt,
-    TextFmt,
-    format,
+    FormValidation,
     rule,
-    slider,
+    InitSlider,
+    InitNumberInput,
     isoDate,
+    checkbox,
+    InitDateInput,
+    InitTextInput,
 } from "../../lib";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -32,25 +28,31 @@ import ShowCode from "../show-code.svelte";
 
 let dat: Date | undefined = $state();
 let income: number | undefined = $state();
+let incomeRaw: string = $state("");
 let text3: string = $state("");
 let text4: string = $state("");
 let text5: string = $state("");
-let rating: number = $state(0);
+let ratings: number[] = $state([0, 0]);
 
+/* Hide or show slider */
+let showSlider: boolean = $state(true);
+
+/** Which example to show */
 let example: string = $state("");
 
 // form validation
-let active: boolean = $state(false);
+let active: boolean = $state(true);
 let valid: boolean = $state(false);
 
 let json: string = $derived(
     JSON.stringify({
         date: isoDate(dat),
         income: income !== undefined ? income : "",
+        incomeRaw: incomeRaw,
         text: text3,
         input: text4,
         input_live: text5,
-        rating: rating,
+        ratings: ratings.join(","),
     })
         .replace(/,"/g, ', "')
         .replace("{", "{ ")
@@ -71,9 +73,14 @@ function reset(): void {
     income = 12345;
     text3 = "";
     text4 = "";
-    rating = 3;
+    ratings = [1, 5];
 }
-reset();
+
+setTimeout(() => {
+    // FIXME: without setTimeout, changing rating[0] doesn't trigger effect on rating
+    // FIXME: with setTimeout, the change is propagated in both directions
+    reset();
+}, 0);
 
 function toggleActive(): void {
     active = !active;
@@ -88,16 +95,17 @@ function toggleActive(): void {
     <!-- https://github.com/noahsalvi/svelte-use-form -->
 
     <div style:max-width="360px" style:margin="0 auto" style:text-align="left">
-        <form
-            class="ui form"
-            use:formValidation={{
-                // keyboardShortcuts: false,
-                inline: true,
-                on: "change",
-                autoCheckRequired: true,
-            }}
-        >
-            <FormValidator active={active} bind:valid={valid} />
+        <form class="ui form">
+            <FormValidation
+                active={active}
+                bind:valid={valid}
+                settings={{
+                    // keyboardShortcuts: false,
+                    inline: true,
+                    on: "change",
+                    autoCheckRequired: true,
+                }}
+            />
 
             {#if example === ""}
                 <div class="ui right rail">
@@ -144,14 +152,8 @@ function toggleActive(): void {
                 <label for="z1">
                     Date Input <span class="explain">(format)</span>
                 </label>
-                <input
-                    type="text"
-                    name="calendar-date"
-                    placeholder="date"
-                    id="z1"
-                    use:format={new DateFmt()}
-                />
-                <Data bind:value={dat} validate={[rule.empty()]} />
+                <input type="text" name="calendar-date" placeholder="date" id="z1" />
+                <InitDateInput bind:value={dat} validate={[rule.empty()]} />
                 <div class="help_text">
                     date formatter -
                     <ShowCode file="input" component="date" bind:selected={example} />
@@ -161,15 +163,19 @@ function toggleActive(): void {
 
             <!-- example-money -->
             <div class="field">
-                <label for="fn2"> Income </label>
+                <label for="_"> Income </label>
                 <input
                     type="text"
                     name="first-name"
                     placeholder="money"
                     id="fn2"
-                    use:format={new MoneyFmt()}
+                    bind:value={incomeRaw}
                 />
-                <Data bind:value={income} validate={[rule.empty()]} />
+                <InitNumberInput
+                    bind:value={income}
+                    validate={[rule.empty()]}
+                    settings={{ type: "money", precision: -2 }}
+                />
                 <div class="help_text">
                     money formatter -
                     <ShowCode file="input" component="money" bind:selected={example} />
@@ -181,7 +187,7 @@ function toggleActive(): void {
             <div class="field">
                 <label for="g3"> Text Area </label>
                 <textarea name="text-3" placeholder="describe" rows="3" id="g3"></textarea>
-                <Data bind:value={text3} validate={[rule.empty(), rule.contains("X")]} />
+                <InitTextInput bind:value={text3} validate={[rule.empty(), rule.contains("X")]} />
                 <div class="help_text">
                     text, uppercase formatter -
                     <ShowCode file="input" component="text" bind:selected={example} />
@@ -201,10 +207,9 @@ function toggleActive(): void {
                     name="text-4"
                     placeholder="describe"
                     id="g4"
-                    use:format={new TextFmt("lower")}
                     bind:value={text5}
                 />
-                <Data bind:value={text4} />
+                <InitTextInput bind:value={text4} settings={{ case: "lower" }} />
                 <div class="help_text">
                     inpit, lowercase formatter -
                     <ShowCode file="input" component="input" bind:selected={example} />
@@ -228,9 +233,8 @@ function toggleActive(): void {
                         content: "this input shares data bind with the slider",
                         position: "bottom right",
                     }}
-                    use:format={new NumberFmt()}
                 />
-                <Data bind:value={rating} />
+                <InitNumberInput bind:value={ratings[0]} />
                 <div class="help_text">
                     number formatter -
                     <ShowCode file="input" component="number" bind:selected={example} />
@@ -247,27 +251,45 @@ function toggleActive(): void {
  `88888P' dP dP `88888P8 `88888P' dP
 
             -->
+            <div class="ui divider"></div>
 
-            <!-- example-slider -->
-            <div class="field">
-                <label for="sl"> Rating Slider </label>
-                <div
-                    id="sl"
-                    class="ui labeled ticked slider bottom aligned"
-                    use:slider={{ min: 0, max: 10 }}
-                >
-                    <Data
-                        forId="sl"
-                        bind:position={rating}
+            <div style="float:right">
+                <input type="checkbox" bind:checked={showSlider} use:checkbox /> Show Sliders
+            </div>
+
+            {#if showSlider}
+                <!-- example-slider -->
+                <div class="field">
+                    <label for="_"> Rating Slider </label>
+                    <div id="sl1" class="ui labeled ticked slider bottom aligned"></div>
+                    <InitSlider
+                        settings={{ min: 0, max: 10 }}
+                        bind:value={ratings[0]}
                         validate={[rule.not("0"), rule.not("1")]}
                     />
+                    <div class="help_text" style="margin-top: 5px;">
+                        number with slider UI -
+                        <ShowCode file="input" component="slider" bind:selected={example} />
+                    </div>
                 </div>
-                <div class="help_text" style="margin-top: 5px;">
-                    number with slider UI -
-                    <ShowCode file="input" component="slider" bind:selected={example} />
+                <!-- example-slider -->
+
+                <!-- example-range_slider -->
+                <div class="field">
+                    <label for="_"> Rating Slider </label>
+                    <div class="ui labeled ticked slider bottom aligned range"></div>
+                    <InitSlider
+                        settings={{ min: 0, max: 10 }}
+                        bind:value={ratings}
+                        validate={[rule.not("1,3")]}
+                    />
+                    <div class="help_text" style="margin-top: 5px;">
+                        number with slider UI -
+                        <ShowCode file="input" component="range_slider" bind:selected={example} />
+                    </div>
                 </div>
-            </div>
-            <!-- example-slider -->
+                <!-- example-range_slider -->
+            {/if}
             &nbsp;
         </form>
     </div>
@@ -290,5 +312,9 @@ form {
     font-style: italic;
     color: grey;
     float: right;
+}
+
+.ui.divider {
+    clear: both;
 }
 </style>

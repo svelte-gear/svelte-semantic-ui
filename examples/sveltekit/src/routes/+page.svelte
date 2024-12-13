@@ -58,6 +58,7 @@ let json: string = $derived(
 );
 
 $effect(() => {
+    void teams;
     console.log(`nums [${teams.toString()}]`);
 });
 

@@ -5,7 +5,7 @@
 // dialog/+page.svelte
 // Sample dialog page.
 
-import { modal, Data } from "../../lib";
+import { InitModal, toast } from "../../lib";
 
 // REACTIVE -------------------------------------------------------------------
 /* eslint-disable prefer-const */
@@ -14,16 +14,12 @@ let show: boolean = $state(false);
 
 /* eslint-enable */
 
-$effect(() => {
-    console.log(`SHOW : ${show}`);
-});
-
 function okFn(): void {
-    console.log("ok");
+    console.log("dialog - ok");
 }
 
 function noFn(): void {
-    console.log("no");
+    console.log("dialog - no");
 }
 </script>
 
@@ -50,31 +46,18 @@ function noFn(): void {
     <button
         class="ui button"
         onclick={() => {
-            show = true;
+            toast({
+                class: "success",
+                title: "Congradulations!",
+                message: "You're using the good framework!",
+                displayTime: 3000,
+            });
         }}
     >
         Show Toast
     </button>
 
-    <!--
-                           dP          dP
-                           88          88
- 88d8b.d8b. .d8888b. .d888b88 .d8888b. 88
- 88'`88'`88 88'  `88 88'  `88 88'  `88 88
- 88  88  88 88.  .88 88.  .88 88.  .88 88
- dP  dP  dP `88888P' `88888P8 `88888P8 dP
-
-    -->
-    <div
-        id="md"
-        class="ui basic modal"
-        use:modal={{
-            onApprove: okFn,
-            onDeny: noFn,
-            closable: false,
-        }}
-    >
-        <Data bind:active={show} />
+    <div id="md" class="ui basic modal">
         <div class="ui icon header">
             <i class="archive icon"></i>
             Archive Old Messages
@@ -96,4 +79,12 @@ function noFn(): void {
             </div>
         </div>
     </div>
+    <InitModal
+        bind:show={show}
+        settings={{
+            onApprove: okFn,
+            onDeny: noFn,
+            closable: false,
+        }}
+    />
 </main>

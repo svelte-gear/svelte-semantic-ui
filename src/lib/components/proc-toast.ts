@@ -3,23 +3,8 @@
  * @module components/proc-toast
  */
 
-import type { ToastSettings } from "../data/semantic-types";
-import type { JQueryApi } from "../data/common";
-import { SettingsHelper } from "../data/settings";
+import type { ToastSettings, JQueryApi } from "../data/semantic-types";
 import { jQueryElem } from "../data/common";
-
-/*
-   dP                                dP
-   88                                88
- d8888P .d8888b. .d8888b. .d8888b. d8888P
-   88   88'  `88 88'  `88 Y8ooooo.   88
-   88   88.  .88 88.  .88       88   88
-   dP   `88888P' `88888P8 `88888P'   dP
-
-*/
-
-/** Default toast settings */
-export const toastDefaults: SettingsHelper<ToastSettings> = new SettingsHelper("toast");
 
 /** Imperative function to display Semantic UI Toast component.
  *

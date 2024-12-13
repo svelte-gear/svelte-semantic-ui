@@ -100,12 +100,12 @@ const calendarSettings: CalendarSettings = {
 };
 
 const numberSettings: NumberSettings = {
-    decimal: ",",
+    decimalSeparator: ",",
     thousandSeparator: " ",
     moneyPrefix: "",
     moneySuffix: " р.",
-    listSeparator: ",",
     moneyPrecision: 2,
+    listSeparator: ",",
 };
 
 export default {

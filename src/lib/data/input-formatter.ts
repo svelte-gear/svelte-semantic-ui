@@ -3,12 +3,21 @@
  * @module data/input-formatter
  */
 
-import { calendarDefaults } from "../components/use-calendar";
-import type { CalendarSettings, DateFormatFn, DateParseFn, NumberSettings } from "./semantic-types";
-import type { DataTypes, Formatter } from "./common";
-import { SettingsHelper } from "./settings";
-
-export const numberDefaults: SettingsHelper<NumberSettings> = new SettingsHelper("number");
+import type {
+    DataTypes,
+    DateFormatter,
+    ListFormatter,
+    NumberFormatter,
+    TextFormatter,
+} from "../data/common";
+import type {
+    CalendarSettings,
+    DateFormatFn,
+    DateParseFn,
+    NumberSettings,
+    NumberInputSettings,
+} from "../data/semantic-types";
+import { calendarDefaults, numberDefaults } from "../data/settings";
 
 /*
                               dP
@@ -20,105 +29,85 @@ export const numberDefaults: SettingsHelper<NumberSettings> = new SettingsHelper
 
 */
 
-export class NumberFmt implements Formatter {
+/** Encode . * + ? ^ $ { } ( ) | [ ] \ to do litral match in regex */
+function escapeRegExp(val: string): string {
+    return val.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").trim();
+}
+
+export class NumberFmt implements NumberFormatter {
+    type: "integer" | "decimal" | "money";
+
     precision: number;
 
-    separator: string;
+    settings: NumberSettings;
 
-    constructor(prec?: number, sep?: string) {
-        if (!prec) {
-            this.precision = 0;
-        } else {
-            if (Math.abs(prec) > 6) {
-                throw new Error(`Unsupported precision number ${prec}`);
-            }
-            this.precision = prec;
+    prefixRegex: RegExp | undefined;
+
+    suffixRegex: RegExp | undefined;
+
+    constructor(inputSettings: NumberInputSettings) {
+        if (inputSettings.type && !["integer", "decimal", "money"].includes(inputSettings.type)) {
+            throw new Error(`Unsupported number type: ${inputSettings.type}`);
         }
-        this.separator = sep !== undefined ? sep : (numberDefaults.read().thousandSeparator ?? " ");
+        if (inputSettings.precision && Math.abs(inputSettings.precision) > 6) {
+            throw new Error(`Unsupported precision number ${inputSettings.precision}`);
+        }
+
+        const def: NumberSettings = numberDefaults.read();
+        this.settings = {
+            ...def,
+            ...inputSettings,
+        };
+
+        this.type = inputSettings.type ?? "integer";
+
+        this.precision =
+            inputSettings.precision ?? (this.type === "money" ? this.settings.moneyPrecision : 0);
+
+        if (this.type === "money") {
+            this.prefixRegex = new RegExp(`^\\s*${escapeRegExp(this.settings.moneyPrefix)}\\s*`);
+            this.suffixRegex = new RegExp(`\\s*${escapeRegExp(this.settings.moneySuffix)}\\s*$`);
+        }
     }
 
     // TODO: move format / parse number into format.ts
     parse(value: string): number | undefined {
         let val: string = value;
+        if (this.type === "money") {
+            val = val.replace(this.prefixRegex!, "").replace(this.suffixRegex!, "");
+        }
         val = val.replace(/\s/g, ""); // remove whitespace
-        val = val.split(this.separator).join(""); // replace all
+        val = val.split(this.settings.thousandSeparator).join(""); // replace all
         const num: number = parseFloat(val);
         if (Number.isNaN(num)) {
             return undefined;
         }
         const pwr: number = 10.0 ** -this.precision;
         // console.log("PWR", pwr, val, num, Math.round(num / pwr) * pwr);
-        return Math.round(num / pwr) * pwr;
+        const res: number = Math.round(num / pwr) * pwr;
+        return Number(res.toFixed(6));
     }
 
-    format(val: DataTypes): string {
+    format(val: number | undefined): string {
         if (val === undefined) {
             return "";
         }
         if (typeof val !== "number") {
             throw new Error(`numberFormatter expects number as data type, got ${typeof val}`);
         }
-        let str: string = val.toFixed(Math.max(this.precision, 0)); // `${val}`;
+        let str: string = val.toFixed(Math.max(this.precision, 0));
         const len: number = str.length;
         const firstPos: number = this.precision > 0 ? this.precision + 1 : 0;
         for (let n: number = 3 + firstPos; n < len; n += 3) {
-            str = str.substring(0, len - n) + this.separator + str.substring(len - n);
+            str =
+                str.substring(0, len - n) +
+                this.settings.thousandSeparator +
+                str.substring(len - n);
+        }
+        if (this.type === "money") {
+            str = this.settings.moneyPrefix + str + this.settings.moneySuffix;
         }
         return str;
-    }
-}
-
-/*
-
- 88d8b.d8b. .d8888b. 88d888b. .d8888b. dP    dP
- 88'`88'`88 88'  `88 88'  `88 88ooood8 88    88
- 88  88  88 88.  .88 88    88 88.  ... 88.  .88
- dP  dP  dP `88888P' dP    dP `88888P' `8888P88
-                                            .88
-                                        d8888P
-*/
-
-/** Encode . * + ? ^ $ { } ( ) | [ ] \ to do litral match in regex */
-function escapeRegExp(val: string): string {
-    return val.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").trim();
-}
-
-export class MoneyFmt implements Formatter {
-    numFormatter: NumberFmt;
-
-    /** For exmaple: '$' */
-    prefix: string;
-
-    /** For example 'CAD' */
-    suffix: string;
-
-    prefixRegex: RegExp;
-
-    suffixRegex: RegExp;
-
-    constructor(prec?: number, pref?: string, suff?: string) {
-        const def: NumberSettings = numberDefaults.read();
-        const moneyPrec: number = prec !== undefined ? prec : (def.moneyPrecision ?? 2);
-        this.numFormatter = new NumberFmt(moneyPrec);
-        this.prefix = pref !== undefined ? pref : (def.moneyPrefix ?? "$");
-        this.suffix = suff !== undefined ? suff : (def.moneySuffix ?? "");
-        this.prefixRegex = new RegExp(`^\\s*${escapeRegExp(this.prefix)}\\s*`);
-        this.suffixRegex = new RegExp(`\\s*${escapeRegExp(this.suffix)}\\s*$`);
-    }
-
-    // TODO: add precision
-    parse(val: string): number | undefined {
-        const numStr: string = val.replace(this.prefixRegex, "").replace(this.suffixRegex, "");
-        return this.numFormatter.parse(numStr);
-    }
-
-    format(val: DataTypes): string {
-        const str: string = this.numFormatter.format(val);
-        console.log("fmt", str);
-        if (!str) {
-            return "";
-        }
-        return this.prefix + str + this.suffix;
     }
 }
 
@@ -133,21 +122,26 @@ export class MoneyFmt implements Formatter {
 */
 
 /** How to upper-case the text */
-export type CaseMode = "upper" | "lower" | "title";
+export type TextFormatSettings = {
+    case?: "upper" | "lower" | "title" | "none";
+    char?: "ascii" | "id" | "id-under" | "id-dash" | "notags" | "no-squote" | "no-dquote"; // TODO: implement char
+    // maxLen?: number;
+};
 
-export class TextFmt implements Formatter {
-    caseMode: CaseMode;
-    // TODO: ascii only, id, id_, id_-, no tags, no-sq, no-dq, max-len
+export class TextFmt implements TextFormatter {
+    caseMode: TextFormatSettings["case"];
 
-    constructor(caseMode: CaseMode) {
-        this.caseMode = caseMode;
+    constructor(settings?: TextFormatSettings) {
+        this.caseMode = settings?.case ?? "none";
     }
 
     format(val: DataTypes): string {
         if (typeof val !== "string") {
-            throw new Error("CaseFormatter expects string as data type");
+            throw new Error("textFormatter expects string as data type");
         }
         switch (this.caseMode) {
+            case "none":
+                return val;
             case "upper":
                 return val.trim().toUpperCase();
             case "lower":
@@ -174,7 +168,7 @@ export class TextFmt implements Formatter {
 
 */
 
-export class ListFmt implements Formatter {
+export class ListFmt implements ListFormatter {
     separator: string;
 
     constructor(sep?: string) {
@@ -199,14 +193,7 @@ export class ListFmt implements Formatter {
         if (!Array.isArray(val)) {
             throw new Error(`listFormatter expects string[] as data type, got ${typeof val}`);
         }
-        const str: string = val.reduce(
-            (res: string, curr: string) => res + this.separator + curr,
-            ""
-        );
-        if (str === "") {
-            return "";
-        }
-        return str.substring(this.separator.length);
+        return val.join(this.separator);
     }
 }
 
@@ -220,7 +207,7 @@ export class ListFmt implements Formatter {
 
  */
 
-export class DateFmt implements Formatter {
+export class DateFmt implements DateFormatter {
     private settings: CalendarSettings;
 
     constructor(settings?: CalendarSettings) {
@@ -337,7 +324,6 @@ export class DateFmt implements Formatter {
             return "";
         }
         if (!(val instanceof Date)) {
-            console.log("VAL", val);
             throw new Error(`dateFormatter expects Date as data type, got ${typeof val} = ${val}`);
         }
         const type: string = this.settings.type!;

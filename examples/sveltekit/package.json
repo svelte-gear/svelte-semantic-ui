@@ -1,6 +1,6 @@
 {
     "name": "@svelte-gear/svelte-semantic-ui-examples-svelte-kit",
-    "version": "0.5.2-alpha",
+    "version": "0.6.0-alpha",
     "type": "module",
     "license": "MIT",
     "description": "Sample svelte kit application using svelte-semantic-ui",
@@ -12,7 +12,7 @@
         "svelte": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
     },
     "dependencies": {
-        "@svelte-gear/svelte-semantic-ui": "0.5.2-alpha",
+        "@svelte-gear/svelte-semantic-ui": "0.6.0-alpha",
         "sveltekit-i18n": "2.4.2"
     },
     "devDependencies": {

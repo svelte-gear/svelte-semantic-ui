@@ -3,10 +3,10 @@
  * @module data/validation-rules
  */
 
-import type { FormPropmt, FormSettings, RuleFunc } from "./semantic-types";
-import type { SettingsObject } from "./settings";
-import { isoDate } from "./common";
-import { formDefaults } from "./use-form-validation";
+import type { FormPropmt, FormSettings, RuleFunc } from "../data/semantic-types";
+import type { SettingsObject } from "../data/settings";
+import { formDefaults } from "../data/settings";
+import { isoDate } from "../data/common";
 
 /*
                               dP                                            dP

@@ -3,22 +3,16 @@
  * @module components/use-popup
  */
 
-import type { PopupSettings } from "../data/semantic-types";
-import type { JQueryApi } from "../data/common";
+import type { PopupSettings, JQueryApi } from "../data/semantic-types";
 import { jQueryElem } from "../data/common";
-import { SettingsHelper } from "../data/settings";
-
-export const popupDefaults: SettingsHelper<PopupSettings> = new SettingsHelper("popup");
 
 /** Svelte action to initialize Semantic UI `Popup` component.
- *
- * https://semantic-ui.com/modules/popup.html
- *
- * Supply popup parameters using a settings object or throught data-* attributes.
- *
- * Example:
+
+https://semantic-ui.com/modules/popup.html
+
+Supply popup parameters using a settings object or throught data-* attributes.
 ```
-    <input type="text" bind:value={nm2}
+    <input type="text" bind:value={name2}
         use:popup={{
             content: "Please enter given name",
             position: "bottom right"

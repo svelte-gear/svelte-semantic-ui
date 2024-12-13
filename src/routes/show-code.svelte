@@ -144,6 +144,8 @@ async function loadCode(): Promise<void> {
 }
 
 $effect(() => {
+    void selected;
+    void code;
     if (selected === component && code === "") {
         void loadCode();
     }

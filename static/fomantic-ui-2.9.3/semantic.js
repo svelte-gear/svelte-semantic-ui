@@ -744,6 +744,7 @@
                             allValid = true
                         ;
                         $field.each(function (index, el) {
+                            console.info("EL", el); // AK
                             var $el = $(el),
                                 validation = module.get.validation($el) || {},
                                 identifier = module.get.identifier(validation, $el)

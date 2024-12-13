@@ -1,4 +1,3 @@
-<!-- <svelte:options runes={true} /> -->
 <svelte:options runes={true} />
 
 <script lang="ts">
@@ -8,17 +7,7 @@
 // eslint-disable-next-line import/no-unresolved, import/extensions
 import { page } from "$app/stores";
 
-import {
-    sticky,
-    calendar,
-    formValidation,
-    Data,
-    FormValidator,
-    DateFmt,
-    format,
-    rule,
-    InitCalendar,
-} from "../../lib";
+import { sticky, FormValidation, rule, InitCalendar, checkbox, InitDateInput } from "../../lib";
 import { isoDate, isoTime } from "../../lib/data/common";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import ShowCode from "../show-code.svelte";
@@ -30,10 +19,14 @@ let dat: Date | undefined = $state();
 let tim: Date | undefined = $state();
 let dateText: string = $state("");
 
+/* Hide or show slider */
+let showDate: boolean = $state(true);
+
+/** Which code example is shown */
 let example: string = $state("");
 
 // form validation
-let active: boolean = $state(false);
+let active: boolean = $state(true);
 let valid: boolean = $state(false);
 
 let json: string = $derived(
@@ -79,16 +72,17 @@ function toggleActive(): void {
     <!-- https://github.com/noahsalvi/svelte-use-form -->
 
     <div style:max-width="360px" style:margin="0 auto" style:text-align="left">
-        <form
-            class="ui form"
-            use:formValidation={{
-                // keyboardShortcuts: false,
-                inline: true,
-                on: "change",
-                autoCheckRequired: true,
-            }}
-        >
-            <FormValidator active={active} bind:valid={valid} />
+        <form class="ui form">
+            <FormValidation
+                active={active}
+                bind:valid={valid}
+                settings={{
+                    // keyboardShortcuts: false,
+                    inline: true,
+                    on: "change",
+                    autoCheckRequired: true,
+                }}
+            />
 
             {#if example === ""}
                 <div class="ui right rail">
@@ -131,65 +125,7 @@ function toggleActive(): void {
 
             <!-- example-datetime -->
             <div class="field" id="y">
-                <label for="_"> Date-time 1 </label>
-                <div
-                    class="ui calendar"
-                    use:calendar={{
-                        type: "datetime",
-                        maxDate: new Date(),
-                    }}
-                >
-                    <Data bind:date={dat} />
-                    <div class="ui input right icon">
-                        <i class="dropdown icon"></i>
-                        <input type="text" placeholder="Date" />
-                    </div>
-                </div>
-                <div class="help_text">
-                    datetime -
-                    <ShowCode file="date" component="datetime" bind:selected={example} />
-                </div>
-            </div>
-            <!--
-                One <Data > component is used for all bindings
-                    (Calendar, Dropdown, Slider)
-                It uses different optional props for each type
-                    (date, selected, position).
-                Pros: One component for all data ?!
-                Cons: Optional bindings, runtime checks.
-            -->
-            <!-- example-datetime -->
-
-            <!-- example-datetime_2 -->
-            <div class="field" id="y">
-                <label for="_"> Date-time 2 </label>
-                <div class="ui calendar">
-                    <InitCalendar
-                        bind:value={dat}
-                        settings={{ type: "datetime", maxDate: new Date() }}
-                    />
-                    <div class="ui input right icon">
-                        <i class="dropdown icon"></i>
-                        <input type="text" placeholder="Date" />
-                    </div>
-                </div>
-                <div class="help_text">
-                    datetime -
-                    <ShowCode file="date" component="datetime_2" bind:selected={example} />
-                </div>
-            </div>
-            <!--
-                Separate Data components for data bindings
-                    (CalendarData, DropdownData, SliderData)
-                They all have value prop, but it may have different type
-                    (Date, number, string, string[])
-                Orovides better type support and autocomplete.
-            -->
-            <!-- example-datetime_2 -->
-
-            <!-- example-datetime_3 -->
-            <div class="field" id="y">
-                <label for="_"> Date-time 3 </label>
+                <label for="_"> Date-time </label>
                 <div class="ui calendar">
                     <div class="ui input right icon">
                         <i class="dropdown icon"></i>
@@ -202,36 +138,13 @@ function toggleActive(): void {
                 />
                 <div class="help_text">
                     datetime -
-                    <ShowCode file="date" component="datetime_3" bind:selected={example} />
+                    <ShowCode file="date" component="datetime" bind:selected={example} />
                 </div>
             </div>
             <!--
-                Initialization is done using components instead of use:action
-                    ( InitCalendar, InitDropdown, InitSlider).
-                Init* follows the component. Data binding is done using the same component.
+                'InitCalendar' follows the Semantic UI component.
             -->
-            <!-- example-datetime_3 -->
-
-            <!-- example-datetime_4 -->
-            <div class="field" id="y">
-                <label for="_"> Date-time 4 </label>
-                <InitCalendar bind:value={dat} settings={{ type: "datetime", maxDate: new Date() }}>
-                    <div class="ui calendar">
-                        <div class="ui input right icon">
-                            <i class="dropdown icon"></i>
-                            <input type="text" placeholder="Date" />
-                        </div>
-                    </div>
-                </InitCalendar>
-                <div class="help_text">
-                    datetime -
-                    <ShowCode file="date" component="datetime_4" bind:selected={example} />
-                </div>
-            </div>
-            <!--
-                <InitCalendar > as a wrapper component.
-            -->
-            <!-- example-datetime_4 -->
+            <!-- example-datetime -->
 
             <div style="clear: both;"></div>
 
@@ -239,13 +152,8 @@ function toggleActive(): void {
             <div class="two fields">
                 <div class="field">
                     <label for="_"> Date </label>
-                    <div
-                        class="ui calendar"
-                        use:calendar={{
-                            type: "date",
-                        }}
-                    >
-                        <Data bind:date={dat} />
+                    <div class="ui calendar">
+                        <InitCalendar bind:value={dat} settings={{ type: "date" }} />
                         <div class="ui input right icon">
                             <i class="calendar outline icon"></i>
                             <input type="text" placeholder="Date" />
@@ -255,60 +163,67 @@ function toggleActive(): void {
 
                 <div class="field">
                     <label for="_"> Time </label>
-                    <div
-                        id="x15"
-                        class="ui calendar"
-                        use:calendar={{
+                    <InitCalendar
+                        bind:value={dat}
+                        settings={{
                             type: "time",
                             onChange: (date: Date, text: string, mode: string) => {
                                 console.log(`time changed: ${text} | ${date} | ${mode}`);
                             },
                         }}
+                        validate={[rule.empty(), rule.not("00:00")]}
                     >
-                        <Data bind:date={dat} validate={[rule.empty(), rule.not("00:00")]} />
-                        <div class="ui input right icon" id="x16">
-                            <i class="clock outline icon"></i>
-                            <input type="text" placeholder="Time" />
+                        <div class="ui calendar">
+                            <div class="ui input right icon" id="x16">
+                                <i class="clock outline icon"></i>
+                                <input type="text" placeholder="Time" />
+                            </div>
                         </div>
-                    </div>
+                    </InitCalendar>
                 </div>
             </div>
             <div class="help_text">
-                date and time -
+                child in date, parent in time, with event handler
                 <ShowCode file="date" component="date_and_time" bind:selected={example} />
             </div>
             <!--
-                if two components are bound to the same Date variable,
+                two components are bound to the same Date variable,
                 each of them updates only their portion (date or time)
             -->
             <!-- example-date_and_time -->
 
-            <!-- example-year_first -->
-            <div class="field">
-                <label for="_"> Year first </label>
-                <div
-                    class="ui calendar"
-                    use:calendar={{
-                        type: "date",
-                        startMode: "year",
-                    }}
-                >
-                    <Data bind:date={dat} />
-                    <div class="ui input right icon">
-                        <i class="calendar outline icon"></i>
-                        <input type="text" placeholder="Date" />
-                    </div>
-                </div>
-                <div class="help_text">
-                    year first -
-                    <ShowCode file="date" component="year_first" bind:selected={example} />
-                </div>
-            </div>
-            <!-- example-year_first -->
-
             <div class="ui divider"></div>
 
-            <!--
+            <div style="float:right">
+                <input type="checkbox" bind:checked={showDate} use:checkbox /> Show Date
+            </div>
+
+            {#if showDate}
+                <!-- example-year_first -->
+                <div class="field">
+                    <label for="_"> Year first </label>
+                    <div class="ui calendar" id="cal">
+                        <div class="ui input right icon">
+                            <i class="calendar outline icon"></i>
+                            <input type="text" placeholder="Date" />
+                        </div>
+                    </div>
+                    <div class="help_text">
+                        year first, uses forId to find Semantic component
+                        <ShowCode file="date" component="year_first" bind:selected={example} />
+                    </div>
+                </div>
+                <InitCalendar
+                    forId="cal"
+                    settings={{ type: "date", startMode: "year" }}
+                    bind:value={dat}
+                    validate={[rule.start("19")]}
+                />
+                <!-- example-year_first -->
+
+                <div class="ui divider"></div>
+
+                <!--
  oo                              dP
                                  88
  dP 88d888b. 88d888b. dP    dP d8888P
@@ -318,8 +233,8 @@ function toggleActive(): void {
              88
              dP
             -->
-            <!-- example-date_input -->
-            <!--
+                <!-- example-date_input -->
+                <!--
                 Don't use <input bind:value with formatter,
                 as you would get the string value before formatting.
                 And it updates only on user interaction.
@@ -335,25 +250,20 @@ function toggleActive(): void {
                 Validator complaints about the wrong input, but leaves it unchanged.
                 Formatter replaces you input with correct string or empties it.
             -->
-            <div class="field">
-                <label for="z1"> Date input </label>
-                <input
-                    type="text"
-                    name="calendar-date"
-                    placeholder="date"
-                    id="z1"
-                    use:format={new DateFmt()}
-                />
-                <Data bind:value={dat} validate={[rule.empty()]} />
-                <div class="help_text">
-                    date input -
-                    <ShowCode file="date" component="date_input" bind:selected={example} />
+                <div class="field">
+                    <label for="z1"> Date input </label>
+                    <input type="text" name="calendar-date" placeholder="date" id="z1" />
+                    <InitDateInput bind:value={dat} validate={[rule.empty()]} />
+                    <div class="help_text">
+                        date input -
+                        <ShowCode file="date" component="date_input" bind:selected={example} />
+                    </div>
                 </div>
-            </div>
-            <!--
+                <!--
                 this will sett time portion to 00:00
             -->
-            <!-- example-date_input -->
+                <!-- example-date_input -->
+            {/if}
             &nbsp;
         </form>
     </div>
