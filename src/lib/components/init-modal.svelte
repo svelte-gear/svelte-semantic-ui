@@ -25,13 +25,19 @@ import { modalDefaults } from "../data/settings";
 interface Props {
     show: boolean;
     settings?: ModalSettings;
+    forId?: string;
     children?: Snippet;
 }
 
 // REACTIVE -------------------------------------------------------------------
 /* eslint-disable prefer-const */
 
-let { show = $bindable(false), settings = undefined, children = undefined }: Props = $props();
+let {
+    show = $bindable(false),
+    settings = undefined,
+    forId = undefined,
+    children = undefined,
+}: Props = $props();
 
 /** Invisible dom element created by this component. */
 let span: Element | undefined = undefined; // $state();
@@ -110,7 +116,7 @@ onMount(async () => {
     await tick();
 
     // Initialize Semantic component and subscibe for changes
-    elem = findComponent(span!, ".ui.modal") as JQueryApi & ModalApi;
+    elem = findComponent(span!, ".ui.modal", forId) as JQueryApi & ModalApi;
     if (!elem.modal) {
         throw new Error("Semantic UI modal is not initialized");
     }

@@ -6,16 +6,12 @@
 
 import { tick } from "svelte";
 import {
-    dropdown,
-    Data,
     applyLocale,
     supportedLocales,
-    calendar,
-    MoneyFmt,
-    format,
-    formValidation,
+    InitForm,
     InitCalendar,
     InitNumberInput,
+    InitDropdown,
 } from "@svelte-gear/svelte-semantic-ui";
 
 import { readLocaleCookie, saveLocaleCookie } from "../locale-info";
@@ -80,16 +76,12 @@ let count: number = $state(3);
             </td>
             <td>
                 <form>
-                    <select
-                        class="ui selection dropdown"
-                        use:dropdown={{ clearable: true }}
-                        id="loc_select"
-                    >
-                        <Data bind:selected={newLocale} />
+                    <select class="ui selection dropdown" id="loc_select">
                         {#each supportedLocales().sort() as locStr}
                             <option value={locStr}>{locStr}</option>
                         {/each}
                     </select>
+                    <InitDropdown bind:value={newLocale} settings={{ clearable: true }} />
                 </form>
             </td>
         </tr>
@@ -137,7 +129,8 @@ let count: number = $state(3);
 <div class="ui divider"></div>
 
 {#if !hide}
-    <form class="ui form" use:formValidation>
+    <form class="ui form">
+        <InitForm />
         <div class="field">
             <label for="fn1">{$t("field.date")}</label>
             <div class="ui calendar" id="fn1">

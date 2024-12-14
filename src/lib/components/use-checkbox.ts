@@ -20,6 +20,14 @@ import { getOrAssignKey } from "../data/field-controller";
         <label for="ch">Agree to terms and Conditions</label>
     </div>
 ```
+Svelte allows to bind checkbox ands radio inputs in two different ways:
+```
+    <input type="checkbox" bind:checked={boolVal} />
+    <input type="radio" bind:checked={boolValTwo} />
+
+    <input type="checkbox" bind:group={arrayVal} />
+    <input type="radio" bind:group={strVal} />
+```
 */
 export function checkbox(node: Element, settings?: CheckboxSettings): void {
     type CheckboxInitializer = JQueryApi & {

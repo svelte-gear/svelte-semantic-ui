@@ -6,7 +6,7 @@
 import type { StickySettings, JQueryApi } from "../data/semantic-types";
 import { jQueryElem } from "../data/common";
 
-/** Svelte action to initialize Semantic UI Sticky component.
+/** Svelte action to initialize Semantic UI `Sticky` component.
 
 https://fomantic-ui.com/modules/sticky.html
 
