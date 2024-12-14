@@ -14,6 +14,8 @@ import {
     MoneyFmt,
     format,
     formValidation,
+    InitCalendar,
+    InitNumberInput,
 } from "@svelte-gear/svelte-semantic-ui";
 
 import { readLocaleCookie, saveLocaleCookie } from "../locale-info";
@@ -138,25 +140,19 @@ let count: number = $state(3);
     <form class="ui form" use:formValidation>
         <div class="field">
             <label for="fn1">{$t("field.date")}</label>
-            <div class="ui calendar" use:calendar id="fn1">
-                <Data bind:date={dat} />
+            <div class="ui calendar" id="fn1">
                 <div class="ui input right icon">
                     <i class="calendar outline icon"></i>
                     <input type="text" />
                 </div>
             </div>
+            <InitCalendar bind:value={dat} />
         </div>
 
         <div class="field">
             <label for="fn2">{$t("field.currency")}</label>
-            <input
-                class="ui input"
-                type="text"
-                name="first-name"
-                id="fn2"
-                use:format={new MoneyFmt()}
-            />
-            <Data bind:value={income} />
+            <input class="ui input" type="text" name="first-name" id="fn2" />
+            <InitNumberInput bind:value={income} settings={{ type: "money" }} />
         </div>
     </form>
 {/if}

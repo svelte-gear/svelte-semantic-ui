@@ -10,7 +10,7 @@ import { page } from "$app/stores";
 import {
     popup,
     sticky,
-    FormValidation,
+    InitForm,
     rule,
     InitSlider,
     InitNumberInput,
@@ -96,7 +96,7 @@ function toggleActive(): void {
 
     <div style:max-width="360px" style:margin="0 auto" style:text-align="left">
         <form class="ui form">
-            <FormValidation
+            <InitForm
                 active={active}
                 bind:valid={valid}
                 settings={{
@@ -149,9 +149,7 @@ function toggleActive(): void {
 
             <!-- example-date -->
             <div class="field">
-                <label for="z1">
-                    Date Input <span class="explain">(format)</span>
-                </label>
+                <label for="z1"> Date Input </label>
                 <input type="text" name="calendar-date" placeholder="date" id="z1" />
                 <InitDateInput bind:value={dat} validate={[rule.empty()]} />
                 <div class="help_text">
@@ -296,11 +294,6 @@ function toggleActive(): void {
 </main>
 
 <style>
-.explain {
-    font-weight: 300;
-    font-style: italic;
-}
-
 form {
     padding: 0.75rem;
     background-color: #f7f7f7;

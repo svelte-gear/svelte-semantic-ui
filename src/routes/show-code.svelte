@@ -28,25 +28,34 @@ let rows: number = $state(5);
 
 function getImportList(text: string): string[] {
     const imports: string[] = [];
-    const actions: string[] = ["calendar", "dropdown", "validate", "format", "checkbox"];
+    const actions: string[] = ["checkbox", "popup", "sticky"];
+    const components: string[] = [
+        "InitForm",
+        "InitCalendar",
+        "InitDropdown",
+        "InitSlider",
+        "InitModal",
+        "InitDateInput",
+        "InitNumberInput",
+        "InitTextInput",
+    ];
+    const functions: string[] = ["toast"];
+    const objects: string[] = ["rule"];
     actions.forEach((action: string) => {
         if (text.includes(`use:${action}`)) {
             imports.push(action);
         }
     });
-    const components: string[] = ["Data", "FormValidator"];
     components.forEach((comp: string) => {
         if (text.includes(`<${comp}`)) {
             imports.push(comp);
         }
     });
-    const functions: string[] = ["toast"];
     functions.forEach((funct: string) => {
         if (text.includes(`${funct}(`)) {
             imports.push(funct);
         }
     });
-    const objects: string[] = ["rule"];
     objects.forEach((objec: string) => {
         if (text.includes(`${objec}.`)) {
             imports.push(objec);

@@ -7,9 +7,12 @@
 
 // eslint-disable-next-line import/no-unresolved, import/extensions
 import { page } from "$app/stores";
-import { checkbox, sticky, FormValidation, rule, InitDropdown, InitTextInput } from "../../lib";
+import type { JQueryApi } from "../../lib/data/semantic-types";
+import { checkbox, sticky, InitForm, rule, InitDropdown, InitTextInput } from "../../lib";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import ShowCode from "../show-code.svelte";
+import { jQueryElem, SVELTE_FORM_STORE, type FormController } from "../../lib/data/common";
+import { getParentForm } from "../../lib/data/field-controller";
 
 const options: string[] = ["1", "2", "3", "4", "5"];
 
@@ -26,7 +29,7 @@ let test: string = $state("");
 let example: string = $state("");
 
 // form validation
-let active: boolean = $state(false);
+let active: boolean = $state(true);
 let valid: boolean = $state(false);
 let errors: string[] = $state([]);
 
@@ -51,16 +54,16 @@ let json: string = $derived(
 /* eslint-enable */
 
 $effect(() => {
-    void teams;
-    // adding to multi-select ids done one item at a time
-    console.log(`nums [${teams.toString()}]`);
-});
-
-$effect(() => {
     const hash: string = $page.url.hash;
     if (hash.length > 1) {
         example = hash.slice(1);
     }
+});
+
+$effect(() => {
+    void teams;
+    // adding to multi-select ids done one item at a time
+    console.log(`inspect: teams [${teams.toString()}]`);
 });
 
 // $effect(() => {
@@ -68,7 +71,7 @@ $effect(() => {
 // });
 
 function reset(): void {
-    rank = "5";
+    rank = "1";
     teams = ["1", "2", "3"];
     country = "ar";
     gender = "";
@@ -79,6 +82,16 @@ reset();
 
 function toggleActive(): void {
     active = !active;
+}
+
+function validateForm(e: MouseEvent): void {
+    if (!e.target) {
+        return;
+    }
+    const elem: JQueryApi = jQueryElem(e.target as Element);
+    const form: JQueryApi = getParentForm(elem);
+    const ctrl: FormController = form.data(SVELTE_FORM_STORE) as FormController;
+    ctrl.doValidateForm();
 }
 
 // function blur(): void {
@@ -97,7 +110,7 @@ function toggleActive(): void {
 
     <div style:max-width="360px" style:margin="0 auto" style:text-align="left">
         <form class="ui form">
-            <FormValidation
+            <InitForm
                 active={active}
                 bind:valid={valid}
                 bind:errors={errors}
@@ -136,6 +149,9 @@ function toggleActive(): void {
                             {:else}
                                 Validate
                             {/if}
+                        </button>
+                        <button class="ui icon button" onclick={validateForm} aria-label="relaod">
+                            <i class="icon redo"></i>
                         </button>
                         <div class="ui message error"></div>
                     </div>
@@ -398,9 +414,20 @@ function toggleActive(): void {
                 </div>
             </div>
 
+            <!--
+ oo                              dP
+                                 88
+ dP 88d888b. 88d888b. dP    dP d8888P
+ 88 88'  `88 88'  `88 88    88   88
+ 88 88    88 88.  .88 88.  .88   88
+ dP dP    dP 88Y888P' `88888P'   dP
+             88
+             dP
+-->
+
             <div class="field">
-                <label for="xx1"> Test 1 </label>
-                <input id="xx1" />
+                <label for="xx5"> Test 1 </label>
+                <input id="xx5" />
                 <InitTextInput bind:value={test} validate={[rule.empty()]} />
             </div>
             <div class="field">
@@ -410,7 +437,8 @@ function toggleActive(): void {
             </div>
             <div class="field">
                 <label for="xx3"> Test 3 </label>
-                <input id="xx3" bind:value={test} />
+                <input id="xx3" bind:value={test} /><!-- validation rule in form -->
+                <InitTextInput />
             </div>
             <div class="field">
                 <label for="xx4"> Test 4 </label>

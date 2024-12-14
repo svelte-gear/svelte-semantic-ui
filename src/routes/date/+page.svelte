@@ -7,7 +7,7 @@
 // eslint-disable-next-line import/no-unresolved, import/extensions
 import { page } from "$app/stores";
 
-import { sticky, FormValidation, rule, InitCalendar, checkbox, InitDateInput } from "../../lib";
+import { sticky, InitForm, rule, InitCalendar, checkbox, InitDateInput } from "../../lib";
 import { isoDate, isoTime } from "../../lib/data/common";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import ShowCode from "../show-code.svelte";
@@ -49,10 +49,6 @@ $effect(() => {
     }
 });
 
-// $effect(() => {
-//     console.log(`nums [${teams.toString()}]`);
-// });
-
 function reset(): void {
     dat = new Date("2022-02-01 13:00");
     tim = undefined;
@@ -73,7 +69,7 @@ function toggleActive(): void {
 
     <div style:max-width="360px" style:margin="0 auto" style:text-align="left">
         <form class="ui form">
-            <FormValidation
+            <InitForm
                 active={active}
                 bind:valid={valid}
                 settings={{

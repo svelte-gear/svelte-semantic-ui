@@ -159,7 +159,7 @@ export type DataTypes = string | string[] | boolean | Date | number | number[] |
 
 /** Controls Semantic UI form element and it's data validation. */
 export interface FormController {
-    // uid: string;
+    // formId: string;
     // mode: "sui-form" | "yup-form";
     // valid: Writable<boolean>;
     // errors: Writable<string[]>;

@@ -89,7 +89,6 @@ let formCtrl: SuiFormController | undefined = undefined;
 $effect(() => {
     void active;
     if (formCtrl && active !== formCtrl.isActive) {
-        console.debug(`form : prop -> active = ${active}`);
         formCtrl.setActive(active);
     }
 });
@@ -97,26 +96,26 @@ $effect(() => {
 /** When store value changes, modify the corresponding prop. */
 function onValidChange(ctrlValue: boolean): void {
     if (ctrlValue !== valid) {
-        console.debug(`form : valid <- input(${formCtrl!.uid}) = ${ctrlValue}`);
+        console.debug(`${formCtrl!.formId} : valid <- ${ctrlValue}`);
         valid = ctrlValue;
     }
 }
 
 /** When store value changes, modify the corresponding prop. */
-function onErrorsChange(storeValue: string[]): void {
-    if (!equalDataTypes(storeValue, errors)) {
-        console.debug(`form : errors <- input(${formCtrl!.uid}) = [${storeValue}]`);
-        errors = storeValue;
+function onErrorsChange(ctrlValue: string[]): void {
+    if (!equalDataTypes(ctrlValue, errors)) {
+        console.debug(`${formCtrl!.formId} : errors <- [ ${ctrlValue.join(" | ")} ]`);
+        errors = ctrlValue;
     }
 }
 
 function onSuccessCallback(this: JQueryApi, event: Event, fields: object[]): void {
-    console.log("SUCCESS", event);
+    console.log("SUCCESS");
     const def: FormSettings = formDefaults.read();
     if (def.onSuccess) {
         def.onSuccess.call(this, event, fields);
     }
-    // user-specifed handler for this component
+    // useformIdpecifed handler for this component
     if (settings && settings.onSuccess) {
         settings.onSuccess.call(this, event, fields);
     }
@@ -125,7 +124,7 @@ function onSuccessCallback(this: JQueryApi, event: Event, fields: object[]): voi
 }
 
 function onFailureCallback(this: JQueryApi, formErrors: object[], fields: object[]): void {
-    console.log("FAILURE", formErrors);
+    console.log("FAILURE");
     const def: FormSettings = formDefaults.read();
     if (def.onFailure) {
         def.onFailure.call(this, formErrors, fields);
@@ -146,15 +145,10 @@ onMount(async () => {
     // delay initialization till use:action is run on Semantic UI form
     await tick();
 
-    // const modes: ComponentInitMode[] = getComponentInitMode();
-    // if (!modes.includes("child")) {
-    //     modes.push("child");
-    // }
-
-    // Initialize Semantic component and subscibe for changes
+    // Initialize Semantic component and subscibe for changes, always allow to be a child
     elem = findComponent(span!, ".ui.form", forId, [...getComponentInitMode(), "child"]);
     if (!elem.form) {
-        throw new Error("Semantic form validation is not initialized");
+        throw new Error("Semantic UI form is not initialized");
     }
     elem.form({
         ...settings,
@@ -166,15 +160,14 @@ onMount(async () => {
     // store controller in jQuery data for fields to access
     elem.data(SVELTE_FORM_STORE, formCtrl);
 
-    console.debug(`FormValidation : prop -> active = ${active}`);
     formCtrl.setActive(active);
 
-    await tick();
-    await tick();
     // make sure all inputs have ids, so form validation dpesn't shoaw warnings
     // FIXME: check if it runs AFTER all the fields are initialized, no matterip parent, child, or sibling
-    elem.find("input").each((_idx: number, inp: Element): false | void => {
-        getOrAssignKey(jQueryElem(inp));
+    await tick();
+    await tick();
+    elem.find("input").each((_idx: number, input: Element): void => {
+        getOrAssignKey(jQueryElem(input));
     });
 });
 
@@ -186,7 +179,7 @@ onDestroy(() => {
 });
 </script>
 
-<span class="FormValidation" class:hidden={!children} bind:this={span}>{@render children?.()}</span>
+<span class="InitForm" class:hidden={!children} bind:this={span}>{@render children?.()}</span>
 
 <style>
 .hidden {

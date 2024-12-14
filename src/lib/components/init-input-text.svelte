@@ -53,7 +53,7 @@ let fieldCtrl: FieldController | undefined = undefined;
 
 // FUNCTIONS ------------------------------------------------------------------
 
-function valueToInput(newValue: string): void {
+function svelteToInput(newValue: string): void {
     if (!elem || !formatter) {
         // effect and svelteToInput may be called before onMount()
         return;
@@ -61,7 +61,7 @@ function valueToInput(newValue: string): void {
     const formattedStr: string = formatter.format(newValue);
     const inputText: string = `${elem?.val()}`;
     if (formattedStr !== inputText) {
-        console.debug(`InitTextInput -> value = ${newValue}`);
+        console.debug(`TextInput(${fieldCtrl?.key}) : value -> ${newValue}`);
         elem.val(formattedStr);
         elem.get(0)!.dispatchEvent(new CustomEvent("input"));
     }
@@ -69,11 +69,12 @@ function valueToInput(newValue: string): void {
     if (formattedStr !== value) {
         value = formattedStr;
     }
+    fieldCtrl?.revalidate(); // AK 01
 }
 
 $effect(() => {
     void value;
-    valueToInput(value);
+    svelteToInput(value);
 });
 
 //-----------------------------------------------------------------------------
@@ -83,7 +84,7 @@ function inputToSvelte(inputText: string): void {
     // store in the prop only if the value is different
     const formattedStr: string = formatter!.format(inputText);
     if (formattedStr !== value) {
-        console.debug(`InitTextInput <- input = ${inputText}`);
+        console.debug(`TextInput(${fieldCtrl?.key}) : value <- ${inputText}`);
         value = formattedStr;
     }
     // update input if the formatted text is different
@@ -91,6 +92,7 @@ function inputToSvelte(inputText: string): void {
         elem?.val(formattedStr);
         elem?.get(0)!.dispatchEvent(new CustomEvent("input"));
     }
+    fieldCtrl?.revalidate(); // AK 01
 }
 
 /** The callback function is calls inputToSvelte when input value is changed by user. */
@@ -121,7 +123,9 @@ onMount(async () => {
     }
 
     if (settings && formatter) {
-        throw new Error("Custom formatter will override settings, don't use both at the same time");
+        throw new Error(
+            `TextInput(${fieldCtrl?.key}) : 'formatter' will override 'settings', don't use both at the same time`
+        );
     }
     // create a default formatter based on settings, or use supplied custom formatter
     if (!formatter) {
@@ -133,7 +137,7 @@ onMount(async () => {
 
     // push initial value into the Semantic UI element
     if (value) {
-        valueToInput(value);
+        svelteToInput(value);
     }
 });
 

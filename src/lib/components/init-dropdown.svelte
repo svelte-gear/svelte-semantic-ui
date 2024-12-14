@@ -87,7 +87,7 @@ function svelteToInput(newValue: string | string[] | undefined): void {
             throw new Error(`Multi-value dropdown expects string[] value, got ${newValue}`);
         }
         if (!equalDataTypes(newValue, curValue)) {
-            console.debug(`InitDropdown(${fieldCtrl?.key}) -> prop = ${toStr(newValue)}`);
+            console.debug(`Dropdown(${fieldCtrl?.key}) : value -> ${toStr(newValue)}`);
             // NOTE: use 'set exactly' instead of 'set selected'!!!
             elem.dropdown("set exactly", newValue);
             fieldCtrl?.revalidate();
@@ -98,7 +98,7 @@ function svelteToInput(newValue: string | string[] | undefined): void {
             throw new Error(`Simple-value dropdown expects string value, got ${toStr(newValue)}`);
         }
         if (curValue !== newValue) {
-            console.debug(`InitDropdown(${fieldCtrl?.key}) -> prop = ${toStr(newValue)}`);
+            console.debug(`Dropdown(${fieldCtrl?.key}) : value -> ${toStr(newValue)}`);
             const exists: unknown = elem.dropdown("get item", value);
             if (exists) {
                 elem.dropdown("set selected", value);
@@ -137,13 +137,13 @@ function inputToSvelte(inputValue: string | string[] | undefined): void {
     // store in the prop only if the value is different
     if (multi) {
         if (!equalDataTypes(value, inputValue)) {
-            console.debug(`InitDropdown(${fieldCtrl?.key}) <- input = ${toStr(inputValue)}`);
+            console.debug(`Dropdown(${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
             value = inputValue;
             fieldCtrl?.revalidate();
         }
     } else {
         if (value !== inputValue) {
-            console.debug(`InitDropdown(${fieldCtrl?.key}) <- input = ${toStr(inputValue)}`);
+            console.debug(`Dropdown(${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
             if (DROPDOWN_PREVENT_CLEARING_BAD_DATA) {
                 const exists: unknown = elem.dropdown("get item", inputValue);
                 if (exists) {
@@ -193,7 +193,7 @@ onMount(async () => {
     // Initialize Semantic component and subscibe for changes
     elem = findComponent(span!, ".ui.dropdown", forId) as JQueryApi & DropdownApi;
     if (!elem.dropdown) {
-        throw new Error("Semantic calendar is not initialized");
+        throw new Error("Semantic UI dropdown is not initialized");
     }
     elem.dropdown({
         ...settings,

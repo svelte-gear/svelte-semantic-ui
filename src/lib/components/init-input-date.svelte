@@ -61,7 +61,7 @@ function valueToInput(newValue: Date | undefined): void {
     const formattedStr: string = formatter.format(newValue);
     const inputText: string = `${elem?.val()}`;
     if (formattedStr !== inputText) {
-        console.debug(`InitDateInput -> value = ${newValue}`);
+        console.debug(`DateInput(${fieldCtrl?.key}) : value -> ${newValue}`);
         elem.val(formattedStr);
         elem.get(0)!.dispatchEvent(new CustomEvent("input"));
     }
@@ -70,6 +70,7 @@ function valueToInput(newValue: Date | undefined): void {
     // if (roundedValue !== value) {
     //     value = roundedValue;
     // }
+    fieldCtrl?.revalidate(); // AK 01
 }
 
 $effect(() => {
@@ -84,7 +85,7 @@ function inputToSvelte(inputText: string): void {
     // store in the prop only if the value is different
     const dateValue: Date | undefined = formatter!.parse(inputText);
     if (dateValue !== value) {
-        console.debug(`InitDateInput <- input = ${inputText}`);
+        console.debug(`DateInput(${fieldCtrl?.key}) : value <- {inputText}`);
         value = dateValue;
     }
     // update input if the formatted text is different
@@ -93,6 +94,7 @@ function inputToSvelte(inputText: string): void {
         elem?.val(formattedStr);
         elem?.get(0)!.dispatchEvent(new CustomEvent("input"));
     }
+    fieldCtrl?.revalidate(); // AK 01
 }
 
 /** The callback function is calls inputToSvelte when input value is changed by user. */
@@ -123,7 +125,9 @@ onMount(async () => {
     }
 
     if (settings && formatter) {
-        throw new Error("Custom formatter will override settings, don't use both at the same time");
+        throw new Error(
+            `InitDateInput(${fieldCtrl?.key}) : 'formatter' will override 'settings', don't use both at the same time`
+        );
     }
     // create locale-aware date formatter based on settings, or use supplied custom formatter
     if (!formatter) {

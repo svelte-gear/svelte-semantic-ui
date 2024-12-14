@@ -57,11 +57,6 @@ let json: string = $derived(
         .replace("}", " }")
 );
 
-$effect(() => {
-    void teams;
-    console.log(`nums [${teams.toString()}]`);
-});
-
 let active: boolean = $state(false);
 function toggleActive(): void {
     active = !active;

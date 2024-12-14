@@ -74,7 +74,6 @@ export class FieldController {
     /** Validate the new field value, if the field is validated */
     revalidate(): void {
         if (this.formCtrl) {
-            console.log("REVALIDATE", this.key);
             this.formCtrl.onFieldChange(this.key!);
         }
     }

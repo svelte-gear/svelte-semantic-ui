@@ -79,13 +79,14 @@ function svelteToInput(newValue: Date | undefined): void {
     }
     let val: Date | Date[] = elem.calendar("get date") as Date;
     if (Array.isArray(val)) {
-        console.log("GOT ARRAY", val);
+        console.log(`Calendar(${fieldCtrl?.key}) : GOT ARRAY`, val);
         val = val[0] as Date;
     }
     if (!equalDataTypes(newValue, val)) {
-        console.debug(`InitCalendar -> prop change = ${toStr(newValue)}`, newValue, val);
+        console.debug(`Calendar(${fieldCtrl?.key}) value -> ${toStr(newValue)}`);
         elem.calendar("set date", newValue);
     }
+    // no need to revalidate calendar component
 }
 
 /** The effect rune calls svelteToInput when prop value changes */
@@ -100,9 +101,10 @@ $effect(() => {
 function inputToSvelte(inputValue: Date): void {
     // store in the prop only if the value is different
     if (!equalDataTypes(value, inputValue)) {
-        console.debug(`InitCalendar <- input = ${toStr(inputValue)}`);
+        console.debug(`Calendar(${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
         value = inputValue;
     }
+    // no need to revalidate calendar component
 }
 
 /** The callback function is calls inputToSvelte when calendar value is changed by user. */

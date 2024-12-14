@@ -98,12 +98,12 @@ function ensureNumberSettings(jQuery: JQuerySettings): void {
     if (!jQuery.fn.number) {
         jQuery.fn.number = {
             settings: {
-                decimal: ".", // TODO: implement decimal
+                decimalSeparator: ".", // TODO: implement onfigurable separator
                 thousandSeparator: " ",
-                listSeparator: ", ",
                 moneyPrefix: "$",
                 moneySuffix: "",
                 moneyPrecision: 2,
+                listSeparator: ", ",
             },
         };
     }
