@@ -182,7 +182,11 @@ onDestroy(() => {
 <span class="InitForm" class:hidden={!children} bind:this={span}>{@render children?.()}</span>
 
 <style>
-.hidden {
+.InitForm {
+    /* TODO: test how it works */
+    display: contents;
+}
+.InitForm.hidden {
     display: none;
 }
 </style>

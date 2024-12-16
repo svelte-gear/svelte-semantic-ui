@@ -5,71 +5,74 @@ Svelte actions and data bindings for Semantic UI components
 ## Example
 
 ```html
-    <form class="ui form" use:formValidation={{...}}>
-        <FormValidationData
-            active={isActive}
+    <form class="ui form"
+        <InitForm
+            active={validationIsActive}
             bind:valid={isValid}
             bind:errors={errMsg}
+            settings={{...}}>
         />
 
-        <select class="ui dropdown selection" use:dropdown={{...}}>
-            <Data
-                bind:selected={country}
-                validate={["empty", "not[USA]"]}
-            />
+        <select class="ui dropdown selection">
             ...
         </select>
+        <InitDropdown
+            bind:value={country}
+            validate={["empty", "not[USA]"]}
+            settings={{...}}>
+        />
 
-        <input type="text class="ui input use:format={camelcaseFormatter} />
-        <Data
-            bind:value={firstName}
+
+        <input type="text" class="ui input" />
+        <InitNumberInput
+            bind:value={salary}
             validate={["empty", "minLengh[5]"]}
+            options={{ type: "money" }}
         />
     </form>
 ```
 
 ## Versions
 
+Version 0.6.x introduces new simpler sysntax and more tupe checks.
+Version 0.5.x is using svelte 5 and runes.
 Version 0.4.x is compiled in svelte 4, but may be used in Svelte 5 project.
 
 ## Design
 
 - Keep familiar Semantic UI syntax
 
-    - We are NOT using wrapping Svelte components for each Semantic UI element.
-    - Instead of that we keep Semantic HTML layout and replace jQuery-based module initializers with `use:` actions.
-    - As a result, Svelte HTML (before compilation)
-        - looks similar to vanilla Semantic UI,
-        - is auto-completed in IDE,
-        - and is properly rendered in browser.
+    - We are NOT creating a replacement Svelte component for each Semantic UI element.
+    - Instead of that we keep Semantic HTML layout and add `<Init*>` components to replace jQuery initializers.
 
-- Separate field behavior and data binding
+- Data bindings
 
-    - Svelte `use:` actions modify input behaviour (for example enable dropdown).
-        - They are initialized before Svelte components.
-        - The actions create Svelte stores to hold data.
-        - They may work without `Data` binding components.
-    - `Data` binding components are nested inside the Semantic UI elements which they control.
-        - On initialization, these components find the parent's store and subsribe to changes.
-        - We use one `Data` component for all field types that have data bindings.
-        - Differnt `bind:` attributes of `Data` component (`value`, `selected`, `active`, `date`, `position`) are used for different UI elements.
-    - `Data` binding for inputs must immediteley follow the `input` or `textarea` tag.
+    - `<Init*>` components allow to set and receive data from Dropdown, Calendar, Slider components, inputs, or textarea.
+    - `InitModal` controlls Modal component through `show` binding.
+    - The Init should follow the Semantic UI compoonent, `input`, or `textarea` that it controls.
+        - The library may be configured to use Init as a parent or a child of the input.
 
-- Separate field formatting and form data validation
+- Settings
 
-    - We treat text formating as a field behavior.
-        - For example input with date formatter is very similar to calendar element, as both listen to user events and produce date object at the end.
-        - Use `<input use:format={formatterObject}` to define data parsing and text fomatting rules.
-    - Validation may work on field or form level and is closely related to data binding.
-        - We recommend to define validation rules on field level to improve code readability.
-        - Use `<Data validate={...}` to define the rules using Sematic UI syntax.
-        - Additional form-level rules and options may be added directly to `<form use:formValidation`.
+    - Javascript calls are replaced with `settings` prop in the `Init` component
 
-- Start small, improve later
-    - The library is written in TypeScript and we strongly recommend that you use type checking in your code. But it will work just fine with JavaScript : )
-    - You may call `use:behavior` on the UI element to access internal Semantic UI behaviors, but we believe that Svelte data bindings are sufficient for most tasks and are simpler to use.
+- Field formatting
+
+    - We treat text formating as a field behavior. <br/>
+      For example input with date formatter (`<InitDateInput>`) is very similar to calendar element, as both listen to user events and produce date object at the end.
+
+- Validation
+
+    - We recommend to define validation rules on field level to improve code readability.
+    - Use `<Init* validate={...}` to define the rules using Sematic UI syntax.
+    - You can regieter you own rules and use them in your app.
+
+- TyepScript
+
+    - The library is written in TypeScript and we strongly recommend that you use type checking in your code.
+    - But it will work just fine with JavaScript :)
 
 ## Read more
 
-- [Running the app](doc/RUNNING) - see {@link man/RUNNING}
-- [Refernces](doc/REFERENCES) - see {@link man/REFERENCES}
+- [Running the app](doc/RUNNING)
+- [Refernces](doc/REFERENCES)
