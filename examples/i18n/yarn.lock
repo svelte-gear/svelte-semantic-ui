@@ -268,9 +268,9 @@
   integrity sha512-ZvK2jBafvttJjoIdKm/Q/Bh7IJ1Ose9IBOwpOXcOvW3ikGTQGmKDgxTC6oCAzW6PynbkKP8+um1du81XJHZ0JA==
 
 "@svelte-gear/svelte-semantic-ui@0.6.1-alpha":
-  version "0.6.0-alpha"
-  resolved "https://registry.yarnpkg.com/@svelte-gear/svelte-semantic-ui/-/svelte-semantic-ui-0.6.0-alpha.tgz#49d2f5aeaee0a3cdf4a8a1643ffe4bd9ea163448"
-  integrity sha512-DfStmWnxMmaVG/rT1xvAuwlp5GKF6bEdaUtTp9C58WX0cpVW4BOQHbgC/DNHiCmGVs9ydzrh873D23AjVvRYYQ==
+  version "0.6.1-alpha"
+  resolved "https://registry.yarnpkg.com/@svelte-gear/svelte-semantic-ui/-/svelte-semantic-ui-0.6.1-alpha.tgz#c16c38c08aa599f564dc7e3bbe7af4275fc0c0fc"
+  integrity sha512-CIJQLKATFBExCA5YwmsZh3xBIxKSeA4cxB8YcSeketwEbbvyY+l6l47SEduz966TwUL3+KsitPCn7rHgYa2/cA==
 
 "@sveltejs/adapter-static@3.0.6":
   version "3.0.6"
