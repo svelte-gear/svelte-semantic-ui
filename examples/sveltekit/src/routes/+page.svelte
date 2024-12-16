@@ -7,17 +7,14 @@
 // import { number, reach } from "yup";
 import {
     checkbox,
-    dropdown,
-    calendar,
-    slider,
-    formValidation,
-    Data,
-    FormValidator,
-    MoneyFmt,
-    format,
+    InitDropdown,
+    InitCalendar,
+    InitSlider,
+    InitForm,
     rule,
     isoDate,
     getLocale,
+    InitNumberInput,
 } from "@svelte-gear/svelte-semantic-ui";
 
 const options: string[] = ["1", "2", "3", "4", "5"];
@@ -90,62 +87,67 @@ let valid: boolean = $state(false);
     <h1>Form sample</h1>
 
     <div style:max-width="360px" style:margin="0 auto" style:text-align="left">
-        <form
-            class="ui form"
-            use:formValidation={{
-                // keyboardShortcuts: false,
-                inline: true,
-            }}
-        >
-            <FormValidator active={active} bind:valid={valid} />
+        <form class="ui form">
+            <InitForm
+                active={active}
+                bind:valid={valid}
+                settings={{
+                    // keyboardShortcuts: false,
+                    inline: true,
+                }}
+            />
 
             <div class="field">
                 <label for="numb3"> Select </label>
-                <select
-                    id="numb3"
-                    class="ui selection dropdown"
-                    use:dropdown={{
-                        clearable: true,
-                    }}
-                >
+                <select id="numb3" class="ui selection dropdown">
                     <option value="one">One</option>
                     <option value="two">Two</option>
                     <option value="three">Three</option>
-                    <Data bind:selected={selectedStr} />
                 </select>
+                <InitDropdown
+                    bind:value={selectedStr}
+                    settings={{
+                        clearable: true,
+                    }}
+                />
             </div>
 
             <div class="field" id="x">
                 <label for="numb2"> Multi-select </label>
-                <select id="numb2" class="ui selection dropdown fluid" multiple use:dropdown>
+                <select id="numb2" class="ui selection dropdown fluid" multiple>
                     {#each options as m}
                         <option value={m}>Num {m}</option>
                     {/each}
-                    <Data bind:selected={teams} validate={[rule.empty()]} />
                 </select>
+                <InitDropdown bind:value={teams} validate={[rule.empty()]} />
             </div>
 
             <div class="field" id="y">
                 <label for="_"> Date </label>
-                <div
-                    class="ui calendar"
-                    use:calendar={{
-                        type: "date",
-                        maxDate: new Date(),
-                    }}
-                >
-                    <Data bind:date={dat} validate={[rule.empty()]} />
+                <div class="ui calendar">
                     <div class="ui input right icon">
                         <i class="dropdown icon"></i>
                         <input type="text" placeholder="Date" />
                     </div>
                 </div>
+                <InitCalendar
+                    bind:value={dat}
+                    validate={[rule.empty()]}
+                    settings={{
+                        type: "date",
+                        maxDate: new Date(),
+                    }}
+                />
             </div>
 
             <div class="field">
                 <label for="fn2"> Currency </label>
-                <input type="text" name="first-name" id="fn2" use:format={new MoneyFmt()} />
-                <Data bind:value={income} validate={[rule.empty()]} />
+                <input type="text" name="first-name" id="fn2" />
+                <InitNumberInput
+                    bind:value={income}
+                    validate={[rule.empty()]}
+                    settings={{ type: "money" }}
+                />
             </div>
 
             <div class="ui divider"></div>
@@ -183,16 +185,12 @@ let valid: boolean = $state(false);
 
             <div class="field">
                 <label for="sl"> Slider </label>
-                <div
-                    id="sl"
-                    class="ui labeled ticked slider bottom aligned"
-                    use:slider={{ min: 0, max: 10 }}
-                >
-                    <Data
-                        bind:position={rating}
-                        validate={[rule.not("1"), rule.not("2"), rule.not("3")]}
-                    />
-                </div>
+                <div id="sl" class="ui labeled ticked slider bottom aligned"></div>
+                <InitSlider
+                    bind:value={rating}
+                    validate={[rule.not("1"), rule.not("2"), rule.not("3")]}
+                    settings={{ min: 0, max: 10 }}
+                />
             </div>
             &nbsp;
         </form>

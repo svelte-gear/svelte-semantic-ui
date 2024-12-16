@@ -109,7 +109,7 @@ const numberSettings: NumberSettings = {
     thousandSeparator: " ",
     moneyPrefix: "",
     moneySuffix: " ₽",
-    moneyPrecision: 2,
+    moneyPrecision: 0,
     listSeparator: ",",
 };
 

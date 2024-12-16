@@ -1,14 +1,7 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
-import {
-    calendar,
-    Data,
-    formValidation,
-    FormValidator,
-    isoDate,
-    rule,
-} from "@svelte-gear/svelte-semantic-ui";
+import { InitCalendar, InitForm, isoDate, rule } from "@svelte-gear/svelte-semantic-ui";
 
 import svelteLogo from "./img/svelte.svg";
 import viteLogo from "./img/vite.svg";
@@ -48,18 +41,22 @@ let dat: Date | undefined = $state();
 
     <div class="ui divider"></div>
 
-    <form class="ui form" use:formValidation>
-        <FormValidator active={validate} />
+    <form class="ui form">
+        <InitForm active={validate} />
 
         <div class="field">
             <label for="_"> Semantic UI Date Picker: </label>
-            <div class="ui calendar" use:calendar={{ type: "date", maxDate: new Date() }}>
-                <Data bind:date={dat} validate={rule.empty()} />
+            <div class="ui calendar">
                 <div class="ui input right icon">
                     <i class="dropdown icon"></i>
                     <input type="text" placeholder="Date" />
                 </div>
             </div>
+            <InitCalendar
+                bind:value={dat}
+                validate={rule.empty()}
+                settings={{ type: "date", maxDate: new Date() }}
+            />
         </div>
         <p>Selected date value: <b>{isoDate(dat)}</b></p>
 

@@ -78,6 +78,7 @@ export class NumberFmt implements NumberFormatter {
         }
         val = val.replace(/\s/g, ""); // remove whitespace
         val = val.split(this.settings.thousandSeparator).join(""); // replace all
+        val = val.replace(this.settings.decimalSeparator, ".");
         const num: number = parseFloat(val);
         if (Number.isNaN(num)) {
             return undefined;
@@ -96,6 +97,7 @@ export class NumberFmt implements NumberFormatter {
             throw new Error(`numberFormatter expects number as data type, got ${typeof val}`);
         }
         let str: string = val.toFixed(Math.max(this.precision, 0));
+        str = str.replace(".", this.settings.decimalSeparator);
         const len: number = str.length;
         const firstPos: number = this.precision > 0 ? this.precision + 1 : 0;
         for (let n: number = 3 + firstPos; n < len; n += 3) {

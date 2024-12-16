@@ -86,7 +86,8 @@ function svelteToInput(newValue: Date | undefined): void {
         console.debug(`Calendar(${fieldCtrl?.key}) value -> ${toStr(newValue)}`);
         elem.calendar("set date", newValue);
     }
-    // no need to revalidate calendar component
+    // TODO: no need to revalidate calendar component ?
+    fieldCtrl?.revalidate();
 }
 
 /** The effect rune calls svelteToInput when prop value changes */
@@ -104,7 +105,8 @@ function inputToSvelte(inputValue: Date): void {
         console.debug(`Calendar(${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
         value = inputValue;
     }
-    // no need to revalidate calendar component
+    // TODO: no need to revalidate calendar component ?
+    fieldCtrl?.revalidate();
 }
 
 /** The callback function is calls inputToSvelte when calendar value is changed by user. */

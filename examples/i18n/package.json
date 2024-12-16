@@ -12,18 +12,18 @@
         "svelte": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
     },
     "dependencies": {
-        "svelte": "5.1.10",
-        "@svelte-gear/svelte-semantic-ui": "0.6.0-alpha",
+        "svelte": "5.14.0",
+        "@svelte-gear/svelte-semantic-ui": "0.6.1-alpha",
         "sveltekit-i18n": "2.4.2"
     },
     "devDependencies": {
         "@sveltejs/adapter-static": "3.0.6",
-        "@sveltejs/kit": "2.7.7",
+        "@sveltejs/kit": "2.11.1",
         "@sveltejs/package": "2.3.7",
-        "@sveltejs/vite-plugin-svelte": "4.0.0",
+        "@sveltejs/vite-plugin-svelte": "5.0.2",
         "publint": "0.2.12",
-        "svelte-check": "4.0.5",
+        "svelte-check": "4.1.1",
         "typescript": "5.6.3",
-        "vite": "5.4.10"
+        "vite": "6.0.3"
     }
 }

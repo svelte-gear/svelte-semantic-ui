@@ -130,7 +130,7 @@ let count: number = $state(3);
 
 {#if !hide}
     <form class="ui form">
-        <InitForm />
+        <InitForm active={false} />
         <div class="field">
             <label for="fn1">{$t("field.date")}</label>
             <div class="ui calendar" id="fn1">

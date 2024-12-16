@@ -172,7 +172,7 @@ function toggleActive(): void {
                 <InitNumberInput
                     bind:value={income}
                     validate={[rule.empty()]}
-                    settings={{ type: "money", precision: -2 }}
+                    settings={{ type: "money" /* , precision: -2 */ }}
                 />
                 <div class="help_text">
                     money formatter -
