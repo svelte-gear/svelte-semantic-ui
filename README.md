@@ -34,7 +34,7 @@ Svelte actions and data bindings for Semantic UI components
 
 ## Versions
 
-Version 0.6.x introduces new simpler sysntax and more tupe checks.
+Version 0.6.x introduces new simpler syntax and more type checks.
 Version 0.5.x is using svelte 5 and runes.
 Version 0.4.x is compiled in svelte 4, but may be used in Svelte 5 project.
 
@@ -48,8 +48,8 @@ Version 0.4.x is compiled in svelte 4, but may be used in Svelte 5 project.
 - Data bindings
 
     - `<Init*>` components allow to set and receive data from Dropdown, Calendar, Slider components, inputs, or textarea.
-    - `InitModal` controlls Modal component through `show` binding.
-    - The Init should follow the Semantic UI compoonent, `input`, or `textarea` that it controls.
+    - `InitModal` controls Modal component through `show` binding.
+    - The Init should follow the Semantic UI component, `input`, or `textarea` that it controls.
         - The library may be configured to use Init as a parent or a child of the input.
 
 - Settings
@@ -58,7 +58,7 @@ Version 0.4.x is compiled in svelte 4, but may be used in Svelte 5 project.
 
 - Field formatting
 
-    - We treat text formating as a field behavior. <br/>
+    - We treat text formatting as a field behaviour. <br/>
       For example input with date formatter (`<InitDateInput>`) is very similar to calendar element, as both listen to user events and produce date object at the end.
 
 - Validation
