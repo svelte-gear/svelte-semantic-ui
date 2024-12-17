@@ -13,7 +13,7 @@
     },
     "dependencies": {
         "svelte": "5.14.0",
-        "@svelte-gear/svelte-semantic-ui": "0.6.1-alpha"
+        "@svelte-gear/svelte-semantic-ui": "0.6.2-alpha"
     },
     "devDependencies": {
         "@sveltejs/vite-plugin-svelte": "5.0.2",

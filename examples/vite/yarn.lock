@@ -262,10 +262,10 @@
   resolved "https://registry.yarnpkg.com/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.28.1.tgz#4dff5c4259ebe6c5b4a8f2c5bc3829b7a8447ff0"
   integrity sha512-ZvK2jBafvttJjoIdKm/Q/Bh7IJ1Ose9IBOwpOXcOvW3ikGTQGmKDgxTC6oCAzW6PynbkKP8+um1du81XJHZ0JA==
 
-"@svelte-gear/svelte-semantic-ui@0.6.0-alpha":
-  version "0.6.0-alpha"
-  resolved "https://registry.yarnpkg.com/@svelte-gear/svelte-semantic-ui/-/svelte-semantic-ui-0.6.0-alpha.tgz#49d2f5aeaee0a3cdf4a8a1643ffe4bd9ea163448"
-  integrity sha512-DfStmWnxMmaVG/rT1xvAuwlp5GKF6bEdaUtTp9C58WX0cpVW4BOQHbgC/DNHiCmGVs9ydzrh873D23AjVvRYYQ==
+"@svelte-gear/svelte-semantic-ui@0.6.2-alpha":
+  version "0.6.2-alpha"
+  resolved "https://registry.yarnpkg.com/@svelte-gear/svelte-semantic-ui/-/svelte-semantic-ui-0.6.2-alpha.tgz#a735b3b2ee4f14b8d68312cfbc832d77c60a21a7"
+  integrity sha512-1/+dsb6plBMFMxQ8+VaoHMF9swPVQ/UIRAiSFaIf/cMacLJhRFl1izs3PXd1wuJ5sOD0c82fo/k05lIfAfXLHQ==
 
 "@sveltejs/vite-plugin-svelte-inspector@^4.0.1":
   version "4.0.1"

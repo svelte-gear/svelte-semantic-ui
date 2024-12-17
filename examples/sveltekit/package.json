@@ -12,7 +12,7 @@
         "svelte": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
     },
     "dependencies": {
-        "@svelte-gear/svelte-semantic-ui": "0.6.1-alpha"
+        "@svelte-gear/svelte-semantic-ui": "0.6.2-alpha"
     },
     "devDependencies": {
         "@sveltejs/adapter-static": "3.0.6",
