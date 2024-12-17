@@ -9,7 +9,7 @@
 
 4. https://www.npmjs.com/package/@techmely/eslint-config-svelte-ts
 
-5. to make eslint validate .svelte in vscode - add to settings:
+5. to make eslint validate .svelte in vscode - add this to settings:
 
 ```
     "eslint.validate": [

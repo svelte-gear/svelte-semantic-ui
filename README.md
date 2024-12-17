@@ -66,30 +66,30 @@ https://svelte.dev/
 #### Settings
 
 - Javascript initialization calls used by Semantic UI are replaced with `settings` prop in the `Init*` component.
-- There are default settings fro each component. A component may optinaly override the settings.
+- There are default settings for each component. A component may optionally override the settings.
 
 ## Features
 
 #### Field formatting
 
-- The library introduces `InitDateInput`, `InitNumberInput`, and `InitTextInput` with field formating behavior.
-- `InitDateInput` works very similar to calendar component, as both take user input and produce date object.
+- The library introduces `InitDateInput`, `InitNumberInput`, and `InitTextInput` with field formatting behavior.
+- `InitDateInput` works very similar to the calendar component, as both take user input and produce a date object.
 - `InitNumberInput` supports integer, decimal and money formats controlled by i18n number settings.
 - `InitTextInput` may be used for simple formatting or validation.
-- You may override settings for individual input or create and use you own formatter.
+- You may override settings for individual input or create and use your own formatter.
 
 #### Validation
 
 - While formatting is strict and will remove invalid input, validation leaves entered data as is and displays a warning.
-- We recommend to define validation rules on field level to improve code readability.
-- Use `<Init* validate={...}` to define the rules using Sematic UI syntax (see https://fomantic-ui.com/behaviors/form.html#/settings)
+- We recommend defining validation rules on field level to improve code readability.
+- Use `<Init* validate={...}` to define the rules using Semantic UI syntax (see https://fomantic-ui.com/behaviors/form.html#/settings)
 - You can register you own rules and use them in your app (see `src/lib/data/validation-rules.ts` )
 
 #### i18n
 
-- Semantic UI allows to set custom messages and formats.
-- svelte-semantic-ui uses this function to supports multiple locales.
-- A locale changes date and number formattinga swell as validation maessages.
+- Semantic UI allows setting custom messages and formats.
+- svelte-semantic-ui uses this function to support multiple locales.
+- A locale changes date and number formatting as well as validation messages.
 - You can add more locales yourself (see `examples/i18n/src/extra-locales/` )
 
 #### TypeScript

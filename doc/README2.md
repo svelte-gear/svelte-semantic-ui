@@ -2,7 +2,7 @@
 
 - Keep Semantic UI syntax.
 - Replace `jQuery.component()` calls with Svelte `<InitComponent>`.
-- Some component (input, checkbox, textarea) may be bound directly.
+- Some components (input, checkbox, textarea) may be bound directly.
 - Where necessary, provide additional Svelte bindings (dropdown, calendar, slider).
 
 ### Imperative API
@@ -16,7 +16,7 @@
 - TypeScript code is safer and allows for auto-completion.
 - In the first phase component options and controller behaviours are NOT yet enumerated.
 - Semantic UI and Fomantic UI look very similar, but Semantic seems more stable (focus events).
-- Fomantic UI has usefull new components: calendar, slider, toast.
+- Fomantic UI has useful unique components: calendar, slider, toast.
 
 ### Modules
 
