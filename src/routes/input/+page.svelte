@@ -15,9 +15,9 @@ import {
     InitSlider,
     InitNumberInput,
     isoDate,
-    checkbox,
     InitDateInput,
     InitTextInput,
+    InitCheckbox,
 } from "../../lib";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -252,7 +252,11 @@ function toggleActive(): void {
             <div class="ui divider"></div>
 
             <div style="float:right">
-                <input type="checkbox" bind:checked={showSlider} use:checkbox /> Show Sliders
+                <div class="ui checkbox">
+                    <input type="checkbox" bind:checked={showSlider} class="ui checkbox" />
+                    <label for="_">Show Sliders</label>
+                </div>
+                <InitCheckbox />
             </div>
 
             {#if showSlider}

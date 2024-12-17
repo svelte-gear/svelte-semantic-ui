@@ -6,8 +6,6 @@ Svelte data binder and initializer for Semantic-UI `Dropdowm` components.
 <svelte:options runes={true} />
 
 <script lang="ts">
-/// <reference types="jquery" />
-
 import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
@@ -251,59 +249,9 @@ onDestroy(() => {
 });
 </script>
 
-<span class="InitDropdown" class:hidden={!children} bind:this={span}>{@render children?.()}</span>
+<span class="InitDropdown" style:display={children ? "contents" : "none"} bind:this={span}
+    >{@render children?.()}</span
+>
 
 <style>
-.hidden {
-    display: none;
-}
-
-/* fix dropdown alignment for InitDropdown as a parent */
-:global(.InitDropdown) {
-    min-width: auto;
-    width: 100%;
-}
-:global(.ui.form .field > .InitDropdown > .selection.dropdown:not(.compact)) {
-    min-width: auto;
-    width: 100%;
-}
-:global(.ui.form .field > .InitDropdown > .selection.dropdown > .dropdown.icon) {
-    float: right;
-}
-:global(.ui.form .inline.field > .InitDropdown > .selection.dropdown),
-:global(.ui.form .inline.fields .field > .InitDropdown > .selection.dropdown) {
-    width: auto;
-}
-:global(.ui.form .inline.field > .InitDropdown > .selection.dropdown > .dropdown.icon),
-:global(.ui.form .inline.fields .field > .InitDropdown > .selection.dropdown > .dropdown.icon) {
-    float: none;
-}
-
-/*
-.ui.form .required.field>.checkbox::after,
-.ui.form .required.fields:not(.grouped):not(.inline)>.field>.checkbox::after {
-    margin:-.2em 0 0 .2em;
-    content:"*";
-    color:#db2828
-}
-.ui.form .required.field>.checkbox::after,
-.ui.form .required.fields:not(.grouped):not(.inline)>.field>.checkbox::after {
-  position:absolute;
-    top:0;
-    left:100%
-}
-
-.ui.form .inline.field>input,
-.ui.form .inline.fields .field>input {
-    display:inline-block;
-    width:auto;
-    margin-top:0;
-    margin-bottom:0;
-    vertical-align:middle;
-    font-size:1em
-}
-.ui.form .inline.fields .wide.field>input {
-    width:100%
-}
-*/
 </style>

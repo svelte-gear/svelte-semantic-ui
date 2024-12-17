@@ -8,7 +8,7 @@
 // eslint-disable-next-line import/no-unresolved, import/extensions
 import { page } from "$app/stores";
 import type { JQueryApi } from "../../lib/data/semantic-types";
-import { checkbox, sticky, InitForm, rule, InitDropdown, InitTextInput } from "../../lib";
+import { sticky, InitForm, rule, InitDropdown, InitTextInput, InitCheckbox } from "../../lib";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import ShowCode from "../show-code.svelte";
 import { jQueryElem, SVELTE_FORM_STORE, type FormController } from "../../lib/data/common";
@@ -25,6 +25,7 @@ let country: string = $state("");
 let gender: string = $state("");
 let chb: boolean = $state(false);
 let test: string = $state("");
+let test3: string = $state("");
 
 let example: string = $state("");
 
@@ -119,9 +120,7 @@ function validateForm(e: MouseEvent): void {
                     inline: true,
                     on: "change",
                     autoCheckRequired: true,
-                    fields: {
-                        xx3: "empty",
-                    },
+                    // fields: { xx3: "empty" },
                 }}
             />
 
@@ -284,8 +283,12 @@ function validateForm(e: MouseEvent): void {
 
             <div class="ui divider"></div>
 
-            <div style="float:right">
-                <input type="checkbox" bind:checked={showGender} use:checkbox /> Show gender
+            <div style="float:right" id="zz">
+                <div class="ui checkbox">
+                    <input type="checkbox" bind:checked={showGender} id="zx" />
+                    <label for="_">Show gender</label>
+                </div>
+                <InitCheckbox />
             </div>
 
             {#if showGender}
@@ -353,6 +356,20 @@ function validateForm(e: MouseEvent): void {
                     </div>
                 </div>
                 <!-- example-select_with_JS_2 -->
+
+                <!-- example-checkbox -->
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" id="ch" bind:checked={chb} />
+                        <label for="ch"> I Agree </label>
+                    </div>
+                    <InitCheckbox validate={[rule.checked()]} />
+                    <div class="help_text">
+                        single checkbox -
+                        <ShowCode file="select" component="checkbox" bind:selected={example} />
+                    </div>
+                </div>
+                <!-- example-checkbox -->
             {/if}
 
             <div class="ui divider"></div>
@@ -369,34 +386,23 @@ function validateForm(e: MouseEvent): void {
 
             <!-- example-radio -->
             <div class="field">
-                <div class="ui radio checkbox" use:checkbox>
+                <div class="ui radio checkbox">
                     <input type="radio" id="ch1" bind:group={gender} value="male" />
                     <label for="ch1">Male</label>
                 </div>
+                <InitCheckbox />
                 &nbsp;
-                <div class="ui radio checkbox" use:checkbox>
+                <div class="ui radio checkbox">
                     <input type="radio" id="ch2" bind:group={gender} value="female" />
                     <label for="ch2">Female</label>
                 </div>
+                <InitCheckbox />
                 <div class="help_text">
                     radio checkboxes -
                     <ShowCode file="select" component="radio" bind:selected={example} />
                 </div>
             </div>
             <!-- example-radio -->
-
-            <!-- example-checkbox -->
-            <div class="field">
-                <div class="ui checkbox" use:checkbox>
-                    <input type="checkbox" id="ch" bind:checked={chb} />
-                    <label for="ch"> I Agree </label>
-                </div>
-                <div class="help_text">
-                    single checkbox -
-                    <ShowCode file="select" component="checkbox" bind:selected={example} />
-                </div>
-            </div>
-            <!-- example-checkbox -->
 
             <!-- example-checkbox_group -->
             <div class="field">
@@ -437,24 +443,11 @@ function validateForm(e: MouseEvent): void {
             </div>
             <div class="field">
                 <label for="xx3"> Test 3 </label>
-                <input id="xx3" bind:value={test} /><!-- validation rule in form -->
-                <InitTextInput />
-            </div>
-            <div class="field">
-                <label for="xx4"> Test 4 </label>
-                <input id="xx4" />
-                <InitTextInput bind:value={test} validate={[rule.empty()]} />
+                <input id="xx3" bind:value={test3} />
+                <InitTextInput validate={[rule.empty()]} />
             </div>
 
             <div></div>
-            <!-- example-checkbox_group -->
-
-            <!-- <div class="ui divider"></div> -->
-
-            <!-- <div class="ui message error" /> -->
-            <!-- <button class="ui button primary fluid" onmouseover={blur} onfocus={() => {}}>
-                Save
-            </button> -->
         </form>
     </div>
 </main>

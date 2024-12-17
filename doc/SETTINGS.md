@@ -1,8 +1,6 @@
 # SUI Setting Hierarchy
 
 ```
-sveltekit-i18n.load("fr.json")       -- application messages (see i18n-ally)
-
 sveltekit-i18n.load("fr-sui.json")   -- SUI calendar and validation messages
     -> $.fn.form.settings.prompt     -- validation promps translation
     -> $.fn.form.settings.text       -- general form logic translation
@@ -12,7 +10,7 @@ sveltekit-i18n.load("fr-CA")         -- locale format settings
     -> $.fn.calendar.settings.*      -- default SUI settings
     -> $.fn.calendar.settings.format -- formatters
 
-use:calendar(settings) -- settings override
+use:calendar(settings)               -- settings override
 
 extentRules()
     -> $.fn.form.settings.rules      -- add adte validation and value comparison rules

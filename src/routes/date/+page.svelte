@@ -7,7 +7,7 @@
 // eslint-disable-next-line import/no-unresolved, import/extensions
 import { page } from "$app/stores";
 
-import { sticky, InitForm, rule, InitCalendar, checkbox, InitDateInput } from "../../lib";
+import { sticky, InitForm, rule, InitCalendar, InitDateInput, InitCheckbox } from "../../lib";
 import { isoDate, isoTime } from "../../lib/data/common";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import ShowCode from "../show-code.svelte";
@@ -191,7 +191,11 @@ function toggleActive(): void {
             <div class="ui divider"></div>
 
             <div style="float:right">
-                <input type="checkbox" bind:checked={showDate} use:checkbox /> Show Date
+                <div class="ui checkbox">
+                    <input type="checkbox" bind:checked={showDate} class="ui checkbox" />
+                    <label for="_">Show Date</label>
+                </div>
+                <InitCheckbox />
             </div>
 
             {#if showDate}

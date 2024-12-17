@@ -1,80 +1,59 @@
-# inspiration
+### Inspiration
 
 - Keep Semantic UI syntax.
-- Replace `jQuery.component()` calls with Svelte `use:component`.
-- Many component (input, checkbox) may be bound directly.
-- Where necessary, provide additional Svelte bindings (dropdown, calendar).
+- Replace `jQuery.component()` calls with Svelte `<InitComponent>`.
+- Some component (input, checkbox, textarea) may be bound directly.
+- Where necessary, provide additional Svelte bindings (dropdown, calendar, slider).
 
-Imperative API
+### Imperative API
 
 - There is no need to access jQuery in Svelte projects.
 - Imperative API is available through `use:controller`.
 - Furthermore, we encourage usage of Svelte bindings instead of the API.
 
-# implementation
+### Implementation
 
 - TypeScript code is safer and allows for auto-completion.
 - In the first phase component options and controller behaviours are NOT yet enumerated.
 - Semantic UI and Fomantic UI look very similar, but Semantic seems more stable (focus events).
-- Few new components are imported from Fomantic UI: calendar, slider, toast.
+- Fomantic UI has usefull new components: calendar, slider, toast.
 
-# modules
-
-```
-utils  <---  use-action    <---  index         <---  pages
-             use-dropdown        (re-export)
-             use-modal
-             use-calendar        behavior
-             use-slider          (optional)
-
-             data-bind.svelte
-             form-data.svelte
-```
-
-# data binding
+### Modules
 
 ```
-                                <select class="ui dropdown" use:dropdown>
+utils  <---  components    <---  index         <---  pages
+             InitDropdown        (re-export)
+             InitModal
+             InitCalendar        behavior
+             InitSlider          (optional)
 
-<Data bind:value={var}>         StoreHolder      dropdown(...)
-
-   prop  -->   onChange   -->   doUpdate()  -->  set value
-    |
-    --- <--  subscribed   <--   store       <--  onChange
+             InitForm
 ```
 
-# example
+### example
 
 ```html
-    <form class="ui form" use:formValidation={{...}}>
-        <FormValidationData
+    <form class="ui form">
+        <InitForm
             active={...}
             bind:valid={...}
             bind:errors={...}
+            settings={{...}}
         />
 
-        <select class="ui dropdown selection" use:dropdown={{...}}>
-            <Data
-                bind:selected={...}
-                validate={["empty", "not[USA]"]}
-            />
+        <select class="ui dropdown selection">
             ...
         </select>
-
-        <input type="text class="ui input use:format={upperCase}>
-            <Data
-                bind:value={...}
-                validate={["empty", "minLengh[5]"]}
-            />
-        </input>
-
-        <input type="text class="ui input"banting school
+        <Data
             bind:value={...}
-            use:validate={["empty", "minLengh[5]"]}
+            validate={["empty", "not[USA]"]}
+             settings={{...}}
+        />
+
+        <input type="text" class="ui input" />
+        <InitNumberInput
+            bind:value={...}
+            validate={["empty", "minLengh[5]"]}
         />
     </form>
 ```
-
-# Sequence diagram
-
-https://github.com/svelte-gear/svelte-semantic-ui/blob/main/doc/sequence-diagram.png?raw=true

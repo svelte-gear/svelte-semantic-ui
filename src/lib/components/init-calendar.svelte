@@ -206,10 +206,9 @@ onDestroy(() => {
 });
 </script>
 
-<span class="InitCalendar" class:hidden={!children} bind:this={span}>{@render children?.()}</span>
+<span class="InitCalendar" style:display={children ? "contents" : "none"} bind:this={span}
+    >{@render children?.()}</span
+>
 
 <style>
-.hidden {
-    display: none;
-}
 </style>

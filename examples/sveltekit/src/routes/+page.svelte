@@ -6,9 +6,9 @@
 
 // import { number, reach } from "yup";
 import {
-    checkbox,
     InitDropdown,
     InitCalendar,
+    InitCheckbox,
     InitSlider,
     InitForm,
     rule,
@@ -153,22 +153,25 @@ let valid: boolean = $state(false);
             <div class="ui divider"></div>
 
             <div class="field">
-                <div class="ui radio checkbox" use:checkbox>
+                <div class="ui radio checkbox">
                     <input type="radio" id="ch1" bind:group={gender} value="male" />
                     <label for="ch1">Male</label>
                 </div>
+                <InitCheckbox />
                 &nbsp;
-                <div class="ui radio checkbox" use:checkbox>
+                <div class="ui radio checkbox">
                     <input type="radio" id="ch2" bind:group={gender} value="female" />
                     <label for="ch2">Female</label>
                 </div>
+                <InitCheckbox />
             </div>
 
             <div class="field">
-                <div class="ui checkbox" use:checkbox>
+                <div class="ui checkbox">
                     <input type="checkbox" id="ch" bind:checked={chb} />
                     <label for="ch">Agreed to the terms of use</label>
                 </div>
+                <InitCheckbox />
             </div>
 
             <div class="field">
@@ -177,6 +180,7 @@ let valid: boolean = $state(false);
                         <input type="checkbox" id="ch{m}" bind:group={teams} value={m} />
                         <label for="ch{m}">{m}</label>
                     </div>
+                    <InitCheckbox />
                     &nbsp; &nbsp;
                 {/each}
             </div>

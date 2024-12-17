@@ -1,0 +1,47 @@
+/* fix dropdown alignment for InitDropdown as a parent */
+.InitDropdown {
+    min-width: auto;
+    width: 100%;
+}
+
+.ui.form .field > .InitDropdown > .selection.dropdown:not(.compact) {
+    min-width: auto;
+    width: 100%;
+}
+.ui.form .field > .InitDropdown > .selection.dropdown > .dropdown.icon {
+    float: right;
+}
+.ui.form .inline.field > .InitDropdown > .selection.dropdown,
+.ui.form .inline.fields .field > .InitDropdown > .selection.dropdown {
+    width: auto;
+}
+.ui.form .inline.field > .InitDropdown > .selection.dropdown > .dropdown.icon,
+.ui.form .inline.fields .field > .InitDropdown > .selection.dropdown > .dropdown.icon {
+    float: none;
+}
+
+.ui.form .required.field > .InitCheckbox > .checkbox::after,
+.ui.form .required.fields:not(.grouped):not(.inline)>.field>.checkbox::after {
+    margin:-.2em 0 0 .2em;
+    content:"*";
+    color:#db2828
+}
+.ui.form .required.field > .InitCheckbox > .checkbox::after,
+.ui.form .required.fields:not(.grouped):not(.inline) > .field > .InitCheckbox > .checkbox::after {
+  position:absolute;
+    top:0;
+    left:100%
+}
+
+.ui.form .inline.field > .InitInput > input,
+.ui.form .inline.fields .field > .InitInput > input {
+    display:inline-block;
+    width:auto;
+    margin-top:0;
+    margin-bottom:0;
+    vertical-align:middle;
+    font-size:1em
+}
+.ui.form .inline.fields .wide.field > .InitInput > input {
+    width:100%
+}

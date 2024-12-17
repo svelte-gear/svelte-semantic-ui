@@ -5,6 +5,7 @@
 
 // INITIALIZATION
 
+import { getComponentInitMode } from "./data/common";
 import { applyDefaultSettings } from "./data/settings";
 import { extendValidationRules } from "./data/validation-rules";
 import { registerBaseLocales } from "./i18n";
@@ -18,11 +19,13 @@ export async function initializeFramework(): Promise<void> {
     extendValidationRules();
     applyDefaultSettings();
     registerBaseLocales();
+    if (getComponentInitMode().includes("parent")) {
+        await import("./init-wrapper-fix.css");
+    }
 }
 
 // COMPONENTS
 
-export { checkbox } from "./components/use-checkbox";
 export { popup } from "./components/use-popup";
 export { sticky } from "./components/use-sticky";
 export { toast } from "./components/proc-toast";
@@ -32,6 +35,7 @@ export { toast } from "./components/proc-toast";
 export { default as InitForm } from "./data/init-form.svelte";
 
 export { default as InitCalendar } from "./components/init-calendar.svelte";
+export { default as InitCheckbox } from "./components/init-checkbox.svelte";
 export { default as InitDropdown } from "./components/init-dropdown.svelte";
 export { default as InitDateInput } from "./components/init-input-date.svelte";
 export { default as InitNumberInput } from "./components/init-input-number.svelte";

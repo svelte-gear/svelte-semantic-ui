@@ -4,11 +4,11 @@ There are 23 settings objects in JQuery:
 
 ## Implemented:
 
-### Init\*\* tag
+### <Init\*> tag
 
 ( after the input, may be inside or around )
 
-#### Semantic components
+#### Semantic UI components
 
 - form <br/>
   `<form ckass="ui form">...</form>` <br/>
@@ -29,25 +29,21 @@ There are 23 settings objects in JQuery:
 #### Inputs
 
 - input <br/>
-  `<input type="text" bind:value={..} />` <br/>
-  `<InitNumberInput format={..} bind:number={..} bind:text={..} />` ( type: number ) <br/>
+  `<input type="text" bind:value={..} />` ( text )<br/>
+  `<InitNumberInput bind:value={..} />` ( number ) <br/>
   <br/>
-  `<InitDateInput format={..} bind:date={..} bind:text={..} />` ( type: Date ) <br/>
-  `<InitTextInput format={..} bind:text={..} />` ( type: string ) <br/>
-  `<InitListInput format={..} bind:list={..} bind:text={..} />` ( type: string[] )
+  `<InitDateInput bind:value={..} />` ( Date ) <br/>
+  `<InitTextInput bind:value={..} />` ( string ) <br/>
 
 - checkbox <br/>
   `<input type="checkbox" bind:checked={..} />` <br/>
-  `<InitCheckbox settings={..}`
+  `<InitCheckbox settings={..}` // TODO
 
-### Ctrl wrapper
-
-( around the panel )
+### Modal
 
 - modal <br/>
-  `<WrapModal show={..} settings={..}>` <br/>
-  &nbsp; &nbsp; &nbsp; `<div>...</div>` <br/>
-  `</WrapModal>`
+  `<div class="ui modal>...</div>`
+  `<InitModal show={..} settings={..}>`
 
 ### use: action
 

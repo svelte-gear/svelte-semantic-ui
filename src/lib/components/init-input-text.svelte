@@ -158,11 +158,9 @@ onDestroy(() => {
 });
 </script>
 
-<span class="InitNumberInput" class:hidden={!children} bind:this={span}>{@render children?.()}</span
+<span class="InitInput" style:display={children ? "contents" : "none"} bind:this={span}
+    >{@render children?.()}</span
 >
 
 <style>
-.hidden {
-    display: none;
-}
 </style>

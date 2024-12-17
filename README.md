@@ -1,78 +1,98 @@
 # svelte-semantic-ui
 
-Svelte actions and data bindings for Semantic UI components
+Svelte actions and data bindings for Semantic UI components. <br/>
+https://fomantic-ui.com/ <br/>
+https://svelte.dev/
 
 ## Example
 
 ```html
+    <script lang="ts">
+        import { InitForm, InitDropdown, InitNumberInput } from "@svelte-gear/svelte-semantic-ui";
+
+        let liveValidation: boolean = $state(true);
+        let isValid: boolean = $state(true);
+        let country: string = $state("");
+        let salary: number | undefined = $state();
+    </script>
     <form class="ui form"
         <InitForm
-            active={validationIsActive}
+            active={liveValidation}
             bind:valid={isValid}
-            bind:errors={errMsg}
             settings={{...}}>
         />
 
         <select class="ui dropdown selection">
-            ...
+            <option value="CA">Canada</option>
+            <option value="MX">Mexico</option>
+            <option value="US">USA</option>
         </select>
         <InitDropdown
             bind:value={country}
-            validate={["empty", "not[USA]"]}
+            validate={["empty", "not[US]"]}
             settings={{...}}>
         />
-
 
         <input type="text" class="ui input" />
         <InitNumberInput
             bind:value={salary}
             validate={["empty", "minLengh[5]"]}
-            options={{ type: "money" }}
+            settings={{ type: "money" }}
         />
     </form>
 ```
 
 ## Versions
 
-Version 0.6.x introduces new simpler sysntax and more tupe checks.
-Version 0.5.x is using svelte 5 and runes.
-Version 0.4.x is compiled in svelte 4, but may be used in Svelte 5 project.
+- Version 0.6.x introduces new simpler sysntax and more type checks.
+- Version 0.5.x is using svelte 5 and runes.
+- Version 0.4.x is compiled in svelte 4, but may be used in Svelte 5 project.
 
-## Design
+## Design principles
 
-- Keep familiar Semantic UI syntax
+#### Keep Semantic UI syntax
 
-    - We are NOT creating a replacement Svelte component for each Semantic UI element.
-    - Instead of that we keep Semantic HTML layout and add `<Init*>` components to replace jQuery initializers.
+- We are NOT creating a replacement Svelte component for each Semantic UI element.
+- Instead of that we keep Semantic HTML layout and add `<Init*>` components to replace jQuery code. (see `doc/COMPONENTS.md`)
 
-- Data bindings
+#### Data bindings
 
-    - `<Init*>` components allow to set and receive data from Dropdown, Calendar, Slider components, inputs, or textarea.
-    - `InitModal` controlls Modal component through `show` binding.
-    - The Init should follow the Semantic UI compoonent, `input`, or `textarea` that it controls.
-        - The library may be configured to use Init as a parent or a child of the input.
+- `Init*` components allow to set and receive data from Dropdown, Calendar, Slider components, inputs, or textarea.
+- `InitModal` controlls Modal component visibility through `show` binding.
+- The `Init*` should follow the Semantic UI compoonent, input, or textarea that it controls.
+    - `InitForm` may additionally be used as a child of the form.
+    - The library may be configured to use Init as a parent or a child of the input.
 
-- Settings
+#### Settings
 
-    - Javascript calls are replaced with `settings` prop in the `Init` component
+- Javascript initialization calls used by Semantic UI are replaced with `settings` prop in the `Init*` component.
+- There are default settings fro each component. A component may optinaly override the settings.
 
-- Field formatting
+## Features
 
-    - We treat text formating as a field behavior. <br/>
-      For example input with date formatter (`<InitDateInput>`) is very similar to calendar element, as both listen to user events and produce date object at the end.
+#### Field formatting
 
-- Validation
+- The library introduces `InitDateInput`, `InitNumberInput`, and `InitTextInput` with field formating behavior.
+- `InitDateInput` works very similar to calendar component, as both take user input and produce date object.
+- `InitNumberInput` supports integer, decimal and money formats controlled by i18n number settings.
+- `InitTextInput` may be used for simple formatting or validation.
+- You may override settings for individual input or create and use you own formatter.
 
-    - We recommend to define validation rules on field level to improve code readability.
-    - Use `<Init* validate={...}` to define the rules using Sematic UI syntax.
-    - You can regieter you own rules and use them in your app.
+#### Validation
 
-- TyepScript
+- If formatting is strict and will remove invalid input, validation leaves entered data as is and displays a warning.
+- We recommend to define validation rules on field level to improve code readability.
+- Use `<Init* validate={...}` to define the rules using Sematic UI syntax (see https://fomantic-ui.com/behaviors/form.html#/settings)
+- You can register you own rules and use them in your app (see `src/lib/data/validation-rules.ts` )
 
-    - The library is written in TypeScript and we strongly recommend that you use type checking in your code.
-    - But it will work just fine with JavaScript :)
+#### i18n
 
-## Read more
+- Semantic UI allows to set custom messages and formats.
+- svelte-semantic-ui uses this function to supports multiple locales.
+- A locale changes date and number formattinga swell as validation maessages.
+- You can add more locales yourself (see `examples/i18n/src/extra-locales/` )
 
-- [Running the app](doc/RUNNING)
-- [Refernces](doc/REFERENCES)
+#### TypeScript
+
+- The library is written in TypeScript. It works for both TS and JS projects.
+- We strongly recommend that you use type checking in your code :)
