@@ -14,7 +14,7 @@ import type {
     SliderSettings,
     StickySettings,
     ToastSettings,
-} from "./semantic-types";
+} from "../data/semantic-types";
 
 /*
                      dP     dP   oo

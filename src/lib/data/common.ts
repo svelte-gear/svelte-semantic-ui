@@ -9,9 +9,8 @@
 // This maybe caused by 'modal' component moving the element up in dom...
 
 import type { Writable } from "svelte/store";
-import type { JQueryApi } from "./semantic-types";
+import type { JQueryApi } from "../data/semantic-types";
 
-export const SVELTE_DATA_STORE: string = "svelte_data_store";
 export const SVELTE_FORM_STORE: string = "svelte_form_store";
 
 /** Return type for a simple svelte action; with destroy(), but without update(). */

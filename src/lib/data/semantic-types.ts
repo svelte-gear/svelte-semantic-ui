@@ -10,7 +10,7 @@
 /// <reference types="jquery" />
 /// <reference types="fomantic-ui-css" />
 
-import type { RuleDefinition } from "./common";
+import type { RuleDefinition } from "../data/common";
 
 /*
                    dP                         dP

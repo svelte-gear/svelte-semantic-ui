@@ -4,7 +4,7 @@
  */
 
 import type { Snippet, Component } from "svelte";
-import type { FormSettings } from "./semantic-types";
+import type { FormSettings } from "../data/semantic-types";
 
 // Manual override for typescript declarations
 // Svelte 5.1.9 & svelte kit 2.7.5, still generate ```props: Record<string, never>;```

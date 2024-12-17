@@ -39,7 +39,7 @@ import {
     getComponentInitMode,
 } from "../data/common";
 import { getOrAssignKey } from "../data/field-controller";
-import { formDefaults } from "./settings";
+import { formDefaults } from "../data/settings";
 
 interface Props {
     /** Determines if any field change will cause form re-validation. */
@@ -82,6 +82,11 @@ let span: Element | undefined = undefined;
 let elem: JQueryApi | undefined = undefined;
 
 let formCtrl: SuiFormController | undefined = undefined;
+
+// fix CSS fir Init as a parent wrapper
+if (getComponentInitMode().includes("parent")) {
+    void import("../init-wrapper-fix.css");
+}
 
 // FUNCTIONS ------------------------------------------------------------------
 

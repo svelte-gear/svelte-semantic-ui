@@ -5,7 +5,6 @@
 
 // INITIALIZATION
 
-import { getComponentInitMode } from "./data/common";
 import { applyDefaultSettings } from "./data/settings";
 import { extendValidationRules } from "./data/validation-rules";
 import { registerBaseLocales } from "./i18n";
@@ -19,9 +18,6 @@ export async function initializeFramework(): Promise<void> {
     extendValidationRules();
     applyDefaultSettings();
     registerBaseLocales();
-    if (getComponentInitMode().includes("parent")) {
-        await import("./init-wrapper-fix.css");
-    }
 }
 
 // COMPONENTS

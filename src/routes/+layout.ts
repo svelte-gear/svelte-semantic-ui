@@ -13,6 +13,6 @@ export const prerender: boolean = true;
 /** Runs before the application is displayed, saves loaded locale into the context */
 export async function load(): Promise<void> {
     await initializeFramework();
-    setComponentInitMode(["parent", "child", "sibling"]);
+    setComponentInitMode(["parent", "child", "sibling"]); // allow all possible locations (for testing)
     await applyLocale("en-CA");
 }
