@@ -44,7 +44,7 @@ https://svelte.dev/
 
 ## Versions
 
-- Version 0.6.x introduces new simpler sysntax and more type checks.
+- Version 0.6.x introduces new simpler syntax and more type checks.
 - Version 0.5.x is using svelte 5 and runes.
 - Version 0.4.x is compiled in svelte 4, but may be used in Svelte 5 project.
 
@@ -58,8 +58,8 @@ https://svelte.dev/
 #### Data bindings
 
 - `Init*` components allow to set and receive data from Dropdown, Calendar, Slider components, inputs, or textarea.
-- `InitModal` controlls Modal component visibility through `show` binding.
-- The `Init*` should follow the Semantic UI compoonent, input, or textarea that it controls.
+- `InitModal` controls Modal component visibility through `show` binding.
+- The `Init*` should follow the Semantic UI component, input, or textarea that it controls.
     - `InitForm` may additionally be used as a child of the form.
     - The library may be configured to use Init as a parent or a child of the input.
 
@@ -80,7 +80,7 @@ https://svelte.dev/
 
 #### Validation
 
-- If formatting is strict and will remove invalid input, validation leaves entered data as is and displays a warning.
+- While formatting is strict and will remove invalid input, validation leaves entered data as is and displays a warning.
 - We recommend to define validation rules on field level to improve code readability.
 - Use `<Init* validate={...}` to define the rules using Sematic UI syntax (see https://fomantic-ui.com/behaviors/form.html#/settings)
 - You can register you own rules and use them in your app (see `src/lib/data/validation-rules.ts` )
