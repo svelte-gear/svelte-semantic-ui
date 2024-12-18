@@ -10,12 +10,12 @@
 import type {
     CalendarSettings,
     CalendarText,
-    FormPropmt,
+    FormPrompt,
     FormText,
     NumberSettings,
 } from "../data/semantic-types";
 
-const formPrompt: FormPropmt = {
+const formPrompt: FormPrompt = {
     empty: "{name} debe tener un valor",
     checked: "{name} debe estar marcado",
     email: "{name} debe ser un correo electrónico válido",

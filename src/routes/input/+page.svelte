@@ -179,22 +179,27 @@ function toggleActive(): void {
                     <ShowCode file="input" component="money" bind:selected={example} />
                 </div>
             </div>
+            <!--
+                <InitNumberInput bind:value> returns parsed number value,
+                while <input bind:value> return formatted text.
+            -->
+
             <!-- example-money -->
 
             <!-- example-text -->
             <div class="field">
                 <label for="g3"> Text Area </label>
                 <textarea name="text-3" placeholder="describe" rows="3" id="g3"></textarea>
-                <InitTextInput bind:value={text3} validate={[rule.empty(), rule.contains("X")]} />
+                <InitTextInput
+                    bind:value={text3}
+                    validate={[rule.empty(), rule.contains("X")]}
+                    settings={{ charset: "any", blockEmoji: true }}
+                />
                 <div class="help_text">
                     text, uppercase formatter -
                     <ShowCode file="input" component="text" bind:selected={example} />
                 </div>
             </div>
-            <!--
-                FIXME: why does it return data before formatting it ?
-                while Rank works as expected...
-            -->
             <!-- example-text -->
 
             <!-- example-input -->
@@ -209,14 +214,10 @@ function toggleActive(): void {
                 />
                 <InitTextInput bind:value={text4} settings={{ case: "lower" }} />
                 <div class="help_text">
-                    inpit, lowercase formatter -
+                    input, lowercase formatter -
                     <ShowCode file="input" component="input" bind:selected={example} />
                 </div>
             </div>
-            <!--
-                            why does it return data before formatting it ?
-                            while Rank works as expected...
-                        -->
             <!-- example-input -->
 
             <!-- example-number -->
@@ -226,7 +227,7 @@ function toggleActive(): void {
                     id="ln"
                     type="text"
                     name="rank"
-                    placeholder="entrr rank"
+                    placeholder="enter rank"
                     use:popup={{
                         content: "this input shares data bind with the slider",
                         position: "bottom right",
@@ -238,6 +239,7 @@ function toggleActive(): void {
                     <ShowCode file="input" component="number" bind:selected={example} />
                 </div>
             </div>
+            <!-- uses {ratings} array -->
             <!-- example-number -->
 
             <!--
@@ -269,11 +271,14 @@ function toggleActive(): void {
                         bind:value={ratings[0]}
                         validate={[rule.not("0"), rule.not("1")]}
                     />
-                    <div class="help_text" style="margin-top: 5px;">
-                        number with slider UI -
-                        <ShowCode file="input" component="slider" bind:selected={example} />
+                    <div class="help_text">
+                        <span style="display: block; margin-top: 5px;">
+                            number with slider UI -
+                            <ShowCode file="input" component="slider" bind:selected={example} />
+                        </span>
                     </div>
                 </div>
+                <!-- uses {ratings} array -->
                 <!-- example-slider -->
 
                 <!-- example-range_slider -->
@@ -285,9 +290,15 @@ function toggleActive(): void {
                         bind:value={ratings}
                         validate={[rule.not("1,3")]}
                     />
-                    <div class="help_text" style="margin-top: 5px;">
-                        number with slider UI -
-                        <ShowCode file="input" component="range_slider" bind:selected={example} />
+                    <div class="help_text">
+                        <span style="display: block; margin-top: 5px;">
+                            number with slider UI -
+                            <ShowCode
+                                file="input"
+                                component="range_slider"
+                                bind:selected={example}
+                            />
+                        </span>
                     </div>
                 </div>
                 <!-- example-range_slider -->

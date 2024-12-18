@@ -1,6 +1,7 @@
 /**
- * Re-export components, most common functions and objects.
- * @module index
+ * Public interface of the library.
+ * Re-exports components, most common functions and objects.
+ * @module _index
  */
 
 // INITIALIZATION
@@ -54,7 +55,7 @@ export type {
     DropdownMessages,
     FlyoutTexts,
     FormSettings,
-    FormPropmt,
+    FormPrompt,
     FormText,
     ModalSettings,
     NumberSettings,

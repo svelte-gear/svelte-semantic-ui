@@ -11,7 +11,7 @@ import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition } from "../data/common";
 import type { SliderSettings, JQueryApi } from "../data/semantic-types";
-import { equalDataTypes, findComponent, uid } from "../data/common";
+import { equalArrays, findComponent, uid } from "../data/common";
 import { sliderDefaults } from "../data/settings";
 import { FieldController } from "../data/field-controller";
 
@@ -80,7 +80,7 @@ function svelteToInput(newValue: number | number[]): void {
     // console.log(`Svelte->Slider(${fieldCtrl?.key})`, newValue);
     if (range) {
         if (!Array.isArray(newValue)) {
-            throw new Error(`Ranged slider expects numbre[] value, got ${newValue}`);
+            throw new Error(`Ranged slider expects number[] value, got ${newValue}`);
         }
         const val1: number = elem.slider("get thumbValue", "first");
         const val2: number = elem.slider("get thumbValue", "second");
@@ -107,7 +107,7 @@ function svelteToInput(newValue: number | number[]): void {
 /** The effect rune calls svelteToInput when prop value changes */
 $effect(() => {
     void value;
-    // trigger effect on array elemnt change if array wasn't assigned after init
+    // trigger effect on array element change if array wasn't assigned after init
     if (Array.isArray(value)) {
         void value[0];
         void value[1];
@@ -123,7 +123,7 @@ function inputToSvelte(inputValue: number | number[]): void {
         throw new Error("Slider is not initialized");
     }
     // store in the prop only if the value is different
-    if (!equalDataTypes(value, inputValue)) {
+    if (!equalArrays(value, inputValue)) {
         console.debug(`InitSlider <- input = ${toStr(inputValue)}`);
         value = inputValue;
         if (range && Array.isArray(inputValue)) {
@@ -148,7 +148,7 @@ function onSliderChange(
     if (def.onChange) {
         def.onChange.call(this, newValue, th1, th2);
     }
-    // user-specifed handler for this component
+    // user-specified handler for this component
     if (settings && settings.onChange) {
         settings.onChange.call(this, newValue, th1, th2);
     }
@@ -162,7 +162,7 @@ onMount(async () => {
     // delay initialization till all DOM UI elements are ready
     await tick();
 
-    // Initialize Semantic component and subscibe for changes
+    // Initialize Semantic component and subscribe for changes
     elem = findComponent(span!, ".ui.slider", forId) as JQueryApi & SliderApi;
     if (!elem.slider) {
         throw new Error("Semantic slider is not initialized");
@@ -172,7 +172,7 @@ onMount(async () => {
         onChange: onSliderChange,
     });
 
-    // check if it is a sinle value or range input
+    // check if it is a single value or range input
     range = elem.hasClass("range");
     if (range && !Array.isArray(value)) {
         throw new Error(`Range slider has a number[] 'value', got ${toStr(value)}`);
@@ -198,7 +198,7 @@ onMount(async () => {
     fieldCtrl.revalidate();
 });
 
-/** Remove the subscripion */
+/** Remove the subscription */
 onDestroy(() => {
     if (fieldCtrl) {
         fieldCtrl.removeRules();

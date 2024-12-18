@@ -3,19 +3,14 @@
  * @module data/input-formatter
  */
 
-import type {
-    DataTypes,
-    DateFormatter,
-    ListFormatter,
-    NumberFormatter,
-    TextFormatter,
-} from "../data/common";
+import type { DateFormatter, ListFormatter, NumberFormatter, TextFormatter } from "../data/common";
 import type {
     CalendarSettings,
     DateFormatFn,
     DateParseFn,
     NumberSettings,
     NumberInputSettings,
+    TextInputSettings,
 } from "../data/semantic-types";
 import { calendarDefaults, numberDefaults } from "../data/settings";
 
@@ -29,7 +24,7 @@ import { calendarDefaults, numberDefaults } from "../data/settings";
 
 */
 
-/** Encode . * + ? ^ $ { } ( ) | [ ] \ to do litral match in regex */
+/** Encode . * + ? ^ $ { } ( ) | [ ] \ to do literal match in regex */
 function escapeRegExp(val: string): string {
     return val.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").trim();
 }
@@ -123,25 +118,40 @@ export class NumberFmt implements NumberFormatter {
 
 */
 
-/** How to upper-case the text */
-export type TextFormatSettings = {
-    case?: "upper" | "lower" | "title" | "none";
-    char?: "ascii" | "id" | "id-under" | "id-dash" | "notags" | "no-squote" | "no-dquote"; // TODO: implement char
-    // maxLen?: number;
-};
+function escapeRegex(input: string): string {
+    return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
 
 export class TextFmt implements TextFormatter {
-    caseMode: TextFormatSettings["case"];
+    settings: TextInputSettings;
 
-    constructor(settings?: TextFormatSettings) {
-        this.caseMode = settings?.case ?? "none";
+    constructor(settings?: TextInputSettings) {
+        this.settings = settings ?? {};
+        if (!this.settings.case) {
+            this.settings.case = "none";
+        }
+        if (!this.settings.charset) {
+            this.settings.charset = "any";
+        }
+        if (this.settings.blockEmoji && this.settings.charset !== "any") {
+            console.error(
+                `TextFmt: invalid settings - blockEmoji doesn't effect charset: "${this.settings.charset}"`
+            );
+        }
+        if (this.settings.idAllowChars && this.settings.charset !== "id") {
+            console.error(
+                `TextFmt: invalid settings - idAllowChars doesn't effect charset: "${this.settings.charset}"`
+            );
+        }
+        if (this.settings.idBlockChars && this.settings.charset !== "id") {
+            console.error(
+                `TextFmt: invalid settings - idBlockChars doesn't effect charset: "${this.settings.charset}"`
+            );
+        }
     }
 
-    format(val: DataTypes): string {
-        if (typeof val !== "string") {
-            throw new Error("textFormatter expects string as data type");
-        }
-        switch (this.caseMode) {
+    private fixCase(val: string): string {
+        switch (this.settings.case) {
             case "none":
                 return val;
             case "upper":
@@ -155,8 +165,73 @@ export class TextFmt implements TextFormatter {
                     .map((s: string) => s.charAt(0).toUpperCase() + s.substring(1).toLowerCase())
                     .join(" ");
             default:
-                throw new Error(`Unrecognized case ${this.caseMode}`);
+                throw new Error(`Unrecognized case directive ${this.settings.case}`);
         }
+    }
+
+    private filterCharset(val: string): string {
+        switch (this.settings.charset) {
+            case "any":
+                return val;
+            case "ascii":
+                return val.replace(/[^\x20-\x7F]/g, "");
+            case "latin":
+                //                     ascii    latin-1      latin ext    symbols
+                return val.replace(/[^\x20-\x7F\u00C0-\u024F\u1E00-\u1EFF\u2000-\u22FF]/g, "");
+            case "euro":
+                return val.replace(
+                    //  ascii    latin-1      latin ext    greek        cyrillic     symbols
+                    /[^\x20-\x7F\u00C0-\u024F\u1E00-\u1EFF\u0370-\u03FF\u0400-\u04FF\u2000-\u22FF]/g,
+                    ""
+                );
+            default:
+                throw new Error(`Unrecognized charset directive ${this.settings.charset}`);
+        }
+    }
+
+    format(val: string): string {
+        if (typeof val !== "string") {
+            throw new Error("textFormatter expects string as data type");
+        }
+        let res: string = this.fixCase(val);
+        if (this.settings.charset === "id") {
+            let regexStr: string = "a-zA-Z0-9";
+            this.settings.idAllowChars?.forEach((char: string) => {
+                regexStr = regexStr + escapeRegex(char);
+            });
+            res = res.replace(new RegExp(`[^${regexStr}]`, "g"), "");
+            this.settings.idBlockChars?.forEach((char: string) => {
+                res = res.replace(char, "");
+            });
+        } else {
+            if (this.settings.charset === "ascii") {
+                if (this.settings.blockDoubleQuotes) {
+                    res = res.replace('"', "`");
+                }
+                if (this.settings.blockSingleQuotes) {
+                    res = res.replace("'", "`");
+                }
+                if (!this.settings.allowHtmlTags) {
+                    res = res.replace("<", "_").replace(">", "_");
+                }
+            } else {
+                if (this.settings.blockDoubleQuotes) {
+                    res = res.replace('"', "\u201D"); // right double quote
+                }
+                if (this.settings.blockSingleQuotes) {
+                    res = res.replace("'", "\u2019"); // right single quote
+                }
+                if (!this.settings.allowHtmlTags) {
+                    res = res.replace("<", "\u2039").replace(">", "\u203A");
+                }
+            }
+            if (this.settings.blockEmoji) {
+                // res = res.replace(/[\u1F000-\u1FFFF]/g, "");
+                res = res.replace(/[\p{Extended_Pictographic}]/gu, "");
+            }
+            res = this.filterCharset(res);
+        }
+        return res.trim();
     }
 }
 
@@ -191,7 +266,7 @@ export class ListFmt implements ListFormatter {
         return val.split(this.separator).map((item: string) => item.trim());
     }
 
-    format(val: DataTypes): string {
+    format(val: string[]): string {
         if (!Array.isArray(val)) {
             throw new Error(`listFormatter expects string[] as data type, got ${typeof val}`);
         }
@@ -251,7 +326,7 @@ export class DateFmt implements DateFormatter {
         }
         if (typeof format === "function") {
             return format.call(this, date, settings);
-            // TODO: sest if it works with formatter function
+            // TODO: test if it works with formatter function
         }
         const D = date.getDate(),
             M = date.getMonth(),
@@ -321,7 +396,7 @@ export class DateFmt implements DateFormatter {
         return dateParser(val, this.settings) ?? undefined;
     }
 
-    format(val: DataTypes): string {
+    format(val: Date | undefined): string {
         if (val === undefined || val === null) {
             return "";
         }

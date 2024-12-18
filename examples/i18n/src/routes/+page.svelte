@@ -44,7 +44,7 @@ export async function changeLocale(loc: string): Promise<void> {
         currLocale = loc;
         saveLocaleCookie(loc);
 
-        // refresh ui componets
+        // refresh ui components
         hide = true;
         await tick();
         hide = false;

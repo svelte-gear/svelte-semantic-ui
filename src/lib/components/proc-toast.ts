@@ -1,5 +1,5 @@
 /**
- * Imperative (procedural) function to display fomantic 'toast' component.
+ * Imperative (procedural) function to display Semantic UI `Toast` component.
  * @module components/proc-toast
  */
 

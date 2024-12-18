@@ -1,10 +1,10 @@
 /**
- * Svelte Component &lt;InitCalendar&gt;
- * @module components/<InitDropdown>
+ * Svelte Component &lt;InitTextInput&gt;
+ * @module components/<InitTextInput>
  */
 
 import type { Snippet, Component } from "svelte";
-import type { TextFormatSettings } from "../data/input-formatter";
+import type { TextInputSettings } from "../data/semantic-types";
 import type { RuleDefinition, TextFormatter } from "../data/common";
 
 /**
@@ -39,7 +39,7 @@ declare const InitDropdown: Component<{
     value?: string;
 
     /** Settings for date formatter, see https://fomantic-ui.com/modules/calendar.html#/settings */
-    settings?: TextFormatSettings;
+    settings?: TextInputSettings;
 
     /** Optional field value validator. Uses Semantic UI form validation syntax.
     See https://fomantic-ui.com/behaviors/form.html#/examples.
@@ -50,7 +50,7 @@ declare const InitDropdown: Component<{
     It will override `settings`, don't use both at the same time. */
     formatter?: TextFormatter;
 
-    /** Id of the Semantic UI input element, takes precendence over tag position */
+    /** Id of the Semantic UI input element, takes precedence over tag position */
     forId?: string;
 
     /** If InitTextInput is used as a parent, render the children components */

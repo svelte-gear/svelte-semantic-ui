@@ -234,22 +234,6 @@ function toggleActive(): void {
              dP
             -->
                 <!-- example-date_input -->
-                <!--
-                Don't use <input bind:value with formatter,
-                as you would get the string value before formatting.
-                And it updates only on user interaction.
-                :
-                <Data bind:value returns parsed value (Date, string, or number)
-                instead of formatted string.
-                :
-                <Data validate allows to add validation rules.
-                If formatter and validate are used at the same time,
-                keep in mind that validator sees the formatted string,
-                and not the parsed value.
-                :
-                Validator complaints about the wrong input, but leaves it unchanged.
-                Formatter replaces you input with correct string or empties it.
-            -->
                 <div class="field">
                     <label for="z1"> Date input </label>
                     <input type="text" name="calendar-date" placeholder="date" id="z1" />
@@ -260,8 +244,8 @@ function toggleActive(): void {
                     </div>
                 </div>
                 <!--
-                this will sett time portion to 00:00
-            -->
+                    this will sett time portion to 00:00
+                -->
                 <!-- example-date_input -->
             {/if}
             &nbsp;

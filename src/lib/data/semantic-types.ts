@@ -1,10 +1,10 @@
 /**
  * Semantic UI types and helper to access settings.
  *
- * Re-exports SemanitUI types from the module instead of namespaces.
+ * Re-exports Semantic UI types from the module instead of namespaces.
  *
  * Fixes type definition inconsistencies.
- * @module data/semantic-ui-types
+ * @module data/semantic-types
  */
 
 /// <reference types="jquery" />
@@ -33,7 +33,7 @@ export type DateParseFn = (
 
 /**
  * Fomantic UI Calendar settings.
- * Adds 'formatter' documetation and the fix for 'onChange' arguments.
+ * Adds 'formatter' documentation and the fix for 'onChange' arguments.
  *
  * @see {@link https://fomantic-ui.com/modules/calendar.html#/settings}
  */
@@ -109,7 +109,7 @@ export type FormSettings = Partial<FomanticUI.FormSettings> & {
 // Settings to modify default returned values.
 // Actually exclusively used with calendar fields(through the dateHandling: 'formatter' setting).
 
-export type FormPropmt = Omit<FomanticUI.Form.Settings.Prompts, "contain" | "containExactly"> & {
+export type FormPrompt = Omit<FomanticUI.Form.Settings.Prompts, "contain" | "containExactly"> & {
     // fixes
     contains: string;
     containsExactly: string;
@@ -132,7 +132,7 @@ export type FormText = FomanticUI.Form.Settings.Texts;
 
 */
 
-/** Settings contriolling number, money, and list formatting. */
+/** Settings controlling number, money, and list formatting. */
 export interface NumberSettings {
     decimalSeparator: string;
     thousandSeparator: string;
@@ -142,11 +142,23 @@ export interface NumberSettings {
     listSeparator: string;
 }
 
-/** Settings used to initailaze a number input component. */
+/** Settings used to initialize a number input component. */
 export interface NumberInputSettings extends Partial<NumberSettings> {
     type?: "integer" | "decimal" | "money";
     precision?: number;
 }
+
+export type TextInputSettings = {
+    case?: "upper" | "lower" | "title" | "none";
+    charset?: "any" | "euro" | "latin" | "ascii" | "id";
+    idAllowChars?: Array<"_" | "-" | ".">;
+    idBlockChars?: Array<"I" | "O" | "i" | "o" | "l">;
+    blockSingleQuotes?: boolean;
+    blockDoubleQuotes?: boolean;
+    allowHtmlTags?: boolean;
+    blockEmoji?: boolean; // works with charset: "any"
+    maxLen?: number; // for id only, in other cases it is often better to use validation
+};
 
 /*
        dP                                  dP

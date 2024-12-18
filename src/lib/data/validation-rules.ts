@@ -3,7 +3,7 @@
  * @module data/validation-rules
  */
 
-import type { FormPropmt, FormSettings, RuleFunc } from "../data/semantic-types";
+import type { FormPrompt, FormSettings, RuleFunc } from "../data/semantic-types";
 import type { SettingsObject } from "../data/settings";
 import { formDefaults } from "../data/settings";
 import { isoDate } from "../data/common";
@@ -20,9 +20,9 @@ import { isoDate } from "../data/common";
 
 // date: () => "date",
 // greaterThan   (type: "N"|"D"|"S", val: number|Date|string) -> greaterThan[D|2012-01-01]
-// greaterOrEqual(type: "N"|"D"|"S", val: number|Date|string) -> gretaerOrEqual[N|0]
+// greaterOrEqual(type: "N"|"D"|"S", val: number|Date|string) -> greaterOrEqual[N|0]
 // lessThan      (type: "N"|"D"|"S", val: number|Date|string) -> lessThan[S|Abc]
-// lessOrEqual   (type: "N"|"D"|"S", val: number|Date|string) -> lessOrEqueal[Abc]
+// lessOrEqual   (type: "N"|"D"|"S", val: number|Date|string) -> lessOrEqual[Abc]
 
 // Add custom rule
 function isoDateFn(value: string): boolean {
@@ -60,10 +60,10 @@ function startEndFn(value: string, ruleValue: string): boolean {
 export function registerRule(name: string, fn: RuleFunc, defaultPrompt: string): void {
     const def: FormSettings = formDefaults.read();
     def.rules![name] = fn;
-    (def.prompt as FormPropmt & SettingsObject)[name] = defaultPrompt;
+    (def.prompt as FormPrompt & SettingsObject)[name] = defaultPrompt;
 }
 
-/** Must be called after DOM is initailized. Like in sveltekit rotes/layout.ts load(). */
+/** Must be called after DOM is initialized. Like in sveltekit rotes/layout.ts load(). */
 export function extendValidationRules(): void {
     registerRule("start", startFn, "{name} must start with '{ruleValue}'");
     registerRule("isoDate", isoDateFn, "{name} must follow the 'YYYY-MM-DD' format");

@@ -11,7 +11,7 @@ There are 23 settings objects in JQuery:
 #### Semantic UI components
 
 - form <br/>
-  `<form ckass="ui form">...</form>` <br/>
+  `<form class="ui form">...</form>` <br/>
   `<InitForm bind:valid={..} settings={..} />`
 
 - calendar <br/>
@@ -39,7 +39,7 @@ There are 23 settings objects in JQuery:
   `<input type="checkbox" bind:checked={..} />` <br/>
   `<InitCheckbox settings={..}` // TODO
 
-### Modal
+#### Modal
 
 - modal <br/>
   `<div class="ui modal>...</div>`
@@ -60,35 +60,25 @@ There are 23 settings objects in JQuery:
 
 ## Have settings, not yet implemented:
 
-- accordion <br/>
-  `open: number[]`
+- accordion &mdash; `open: number[]`
 
-- dimmer <br/>
-  `show() / hide()`
+- dimmer &mdash; `show() / hide()`
 
-- flyout <br/>
-  `show() / hide()` (beta)
+- flyout &mdash; `show() / hide()` &nbsp; (beta)
 
-- nag <br/>
-  `show() / dismiss()`
+- nag &mdash; `show() / dismiss()`
 
-- progress <br/>
-  `value`
+- progress &mdash; `value`
 
-- rating <br/>
-  `value`
+- rating &mdash; `value`
 
-- search <br/>
-  `function()`
+- search &mdash; `function()`
 
-- shape <br/>
-  `3D object`
+- shape &mdash; `3D object`
 
-- sidebar <br/>
-  `show() / hide()`
+- sidebar &mdash; `show() / hide()`
 
-- tab <br/>
-  `path`
+- tab &mdash; `path`
 
 ## Special:
 

@@ -67,5 +67,24 @@
     ],
     "i18n-ally.extract.keygenStyle": "kebab-case",
     "i18n-ally.extract.keyMaxLength": 40,
+    "cSpell.words": [
+        "Fomantic",
+        "ooood",
+        "predev",
+        "publint"
+    ],
+    "cSpell.ignorePaths": [
+        "package-lock.json",
+        "node_modules",
+        "vscode-extension",
+        ".git/{info,lfs,logs,refs,objects}/**",
+        ".git/{index,*refs,*HEAD}",
+        ".vscode",
+        ".vscode-insiders",
+        "doc/SETTINGS.md".
+        "src/lib/i18n",
+        "**/sveltekit-i18n",
+        "**/extra-locales"
+    ],
 
 }

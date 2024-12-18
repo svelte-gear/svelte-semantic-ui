@@ -79,7 +79,7 @@ let valid: boolean = $state(false);
     <p>
         The app tries to configure Semantic UI to use your browser locale, defaults to international
         English.<br />
-        It is curremtly set to <b>{getLocale()}</b>
+        It is currently set to <b>{getLocale()}</b>
     </p>
 
     <!------------------------------------------------------------------------------------------------>

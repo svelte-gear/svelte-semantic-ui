@@ -113,7 +113,7 @@ onMount(async () => {
     // delay initialization till all DOM UI elements are ready
     await tick();
 
-    // Initialize Semantic component and subscibe for changes
+    // Initialize Semantic component and subscribe for changes
     elem = findComponent(span!, "input,textarea", forId);
     elem.on("change", onInputChange);
 
@@ -143,7 +143,7 @@ onMount(async () => {
     }
 });
 
-/** Remove the subscripion */
+/** Remove the subscription */
 onDestroy(() => {
     if (fieldCtrl) {
         fieldCtrl.removeRules();

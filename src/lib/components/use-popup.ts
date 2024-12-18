@@ -1,5 +1,5 @@
 /**
- * Svelte action to initialize semantic popup component.
+ * Svelte action to initialize Semantic UI `Popup` component.
  * @module components/use-popup
  */
 
@@ -10,7 +10,7 @@ import { jQueryElem } from "../data/common";
 
 https://semantic-ui.com/modules/popup.html
 
-Supply popup parameters using a settings object or throught data-* attributes.
+Supply popup parameters using a settings object or through data-* attributes.
 ```
     <input type="text" bind:value={name2}
         use:popup={{

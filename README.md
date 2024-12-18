@@ -36,7 +36,7 @@ https://svelte.dev/
         <input type="text" class="ui input" />
         <InitNumberInput
             bind:value={salary}
-            validate={["empty", "minLengh[5]"]}
+            validate={["empty", "minLength[5]"]}
             settings={{ type: "money" }}
         />
     </form>
@@ -57,16 +57,16 @@ https://svelte.dev/
 
 #### Data bindings
 
-- `Init*` components allow to set and receive data from Dropdown, Calendar, Slider components, inputs, or textarea.
+- `Init*` components allow to set and receive `value` from Dropdown, Calendar, Slider components, input, or textarea.
 - `InitModal` controls Modal component visibility through `show` binding.
 - The `Init*` should follow the Semantic UI component, input, or textarea that it controls.
     - `InitForm` may additionally be used as a child of the form.
-    - The library may be configured to use Init as a parent or a child of the input.
+    - The library may be configured to use `Init*` as a parent or a child of the component.
 
 #### Settings
 
 - Javascript initialization calls used by Semantic UI are replaced with `settings` prop in the `Init*` component.
-- There are default settings for each component. A component may optionally override the settings.
+- There are default settings for each component type, while each component may optionally override the settings.
 
 ## Features
 
@@ -76,7 +76,7 @@ https://svelte.dev/
 - `InitDateInput` works very similar to the calendar component, as both take user input and produce a date object.
 - `InitNumberInput` supports integer, decimal and money formats controlled by i18n number settings.
 - `InitTextInput` may be used for simple formatting or validation.
-- You may override settings for individual input or create and use your own formatter.
+- You may override format settings for individual input or create and use your own formatter.
 
 #### Validation
 

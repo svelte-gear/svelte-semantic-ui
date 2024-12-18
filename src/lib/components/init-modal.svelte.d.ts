@@ -1,6 +1,6 @@
 /**
- * Svelte Component &lt;InitCalendar&gt;
- * @module components/<InitDropdown>
+ * Svelte Component &lt;InitModal&gt;
+ * @module components/<InitModal>
  */
 
 import type { Snippet, Component } from "svelte";
@@ -14,7 +14,7 @@ import type { ModalSettings } from "../data/semantic-types";
  * <div id="md" class="ui modal page" use:modal>
  *     ...
  * </div>
- * <InitModal bind:show={show} />
+ * <InitModal bind:show={show} settings={{ onApprove: okFn, closable: false }} />
  *
  * `settings` prop allows to customize the Semantic component,
  * see https://fomantic-ui.com/modules/modal.html#/settings for details.
@@ -27,13 +27,13 @@ import type { ModalSettings } from "../data/semantic-types";
 /* eslint-disable @typescript-eslint/naming-convention, @typescript-eslint/ban-types */
 /* prettier-ignore */
 declare const InitModal: Component<{
-    /** Two-way binding for setting and reading back modal dialog visibillity */
+    /** Two-way binding for setting and reading back modal dialog visibility */
     show: boolean;
 
     /** Settings for Semantic UI component, see https://fomantic-ui.com/modules/modal.html#/settings */
     settings?: ModalSettings;
 
-    /** Id of the Semantic UI input element, takes precendence over tag position */
+    /** Id of the Semantic UI input element, takes precedence over tag position */
     forId?: string;
 
     /** If InitModal is used as a parent, render the children components */

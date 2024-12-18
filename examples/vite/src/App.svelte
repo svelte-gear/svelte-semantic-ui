@@ -7,6 +7,9 @@ import svelteLogo from "./img/svelte.svg";
 import viteLogo from "./img/vite.svg";
 import semanticLogo from "./img/semantic.png";
 
+// const calendarText = (window as any).jQuery.fn.calendar.settings.text;
+// console.log("SEMANTIC CALENDAR TEXT", calendarDefaults.read().text);
+
 let validate: boolean = $state(false);
 let dat: Date | undefined = $state();
 </script>

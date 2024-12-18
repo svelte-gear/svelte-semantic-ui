@@ -3,7 +3,7 @@
 
 /* eslint-disable implicit-arrow-linebreak, function-paren-newline  */
 
-const localeCookieName: string = "ssui_locale";
+const localeCookieName: string = "sui_locale";
 const localeCookieExpDays: number = 90;
 
 export function saveLocaleCookie(value: string): void {

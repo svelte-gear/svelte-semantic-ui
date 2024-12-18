@@ -1,6 +1,6 @@
 <!--
 @component
-Svelte initializer for Semantic UI checkbox component.
+Svelte initializer for Semantic UI `Checkbox` component.
 (see detailed description in init-checkbox.svelte.d.ts )
 -->
 <svelte:options runes={true} />
@@ -63,7 +63,7 @@ function onInputChange(this: JQueryApi, p1?: unknown, p2?: unknown): void {
     if (def.onChange) {
         def.onChange.call(this);
     }
-    // user-specifed handler for this component
+    // user-specified handler for this component
     if (settings && settings.onChange) {
         settings.onChange.call(this);
     }
@@ -94,7 +94,7 @@ onMount(async () => {
     }
 
     // select is already attaching the inner label to inner input
-    // no need for laber for="_" shotcut
+    // no need for label for="_" shortcut
 
     // apply validation rule if the rule is supplied in <InitCheckbox >
     fieldCtrl = new FieldController(input, validate);
@@ -110,7 +110,7 @@ onDestroy(() => {
         elem.checkbox("destroy");
 
         // select is already attaching the inner label to inner input
-        // no need for laber for="_" shotcut
+        // no need for label for="_" shortcut
     }
 });
 </script>

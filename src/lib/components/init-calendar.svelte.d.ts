@@ -8,7 +8,7 @@ import type { CalendarSettings } from "../data/semantic-types";
 import type { RuleDefinition } from "../data/common";
 
 /**
- * Svelte data binder and initializer for Semantic UI Calendar component.
+ * Svelte data binder and initializer for Semantic UI `Calendar` component.
  * ```
  * <div class="ui calendar">
  *     <div class="ui input right icon">
@@ -47,7 +47,7 @@ declare const InitCalendar: Component<{
     To avoid typos, use `rules` helper from `data/helpers.ts` {@link data/helpers.rule}. */
     validate?: RuleDefinition;
 
-    /** Id of the Semantic UI input element, takes precendence over tag position */
+    /** Id of the Semantic UI input element, takes precedence over tag position */
     forId?: string;
 
     /** If InitCalendar is used as a parent, render the children components */

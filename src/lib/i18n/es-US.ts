@@ -9,12 +9,12 @@
 
 import type {
     CalendarSettings,
-    FormPropmt,
+    FormPrompt,
     FormText,
     NumberSettings,
 } from "../data/semantic-types";
 
-const formPrompt: Partial<FormPropmt> = {
+const formPrompt: Partial<FormPrompt> = {
     email: "{name} debe ser un email válido",
 };
 

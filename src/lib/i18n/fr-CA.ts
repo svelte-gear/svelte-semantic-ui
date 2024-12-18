@@ -7,9 +7,9 @@
  * @module i18n/fr-CA
  */
 
-import type { CalendarSettings, FormPropmt, NumberSettings } from "../data/semantic-types";
+import type { CalendarSettings, FormPrompt, NumberSettings } from "../data/semantic-types";
 
-const formPrompt: Partial<FormPropmt> = {
+const formPrompt: Partial<FormPrompt> = {
     checked: "{name} doit être coché.",
     email: "{name} doit être une adresse courriel valide.",
 };

@@ -25,7 +25,6 @@ let country: string = $state("");
 let gender: string = $state("");
 let chb: boolean = $state(false);
 let test: string = $state("");
-let test3: string = $state("");
 
 let example: string = $state("");
 
@@ -66,10 +65,6 @@ $effect(() => {
     // adding to multi-select ids done one item at a time
     console.log(`inspect: teams [${teams.toString()}]`);
 });
-
-// $effect(() => {
-//     console.log(`nums [${teams.toString()}]`);
-// });
 
 function reset(): void {
     rank = "1";
@@ -149,7 +144,7 @@ function validateForm(e: MouseEvent): void {
                                 Validate
                             {/if}
                         </button>
-                        <button class="ui icon button" onclick={validateForm} aria-label="relaod">
+                        <button class="ui icon button" onclick={validateForm} aria-label="reload">
                             <i class="icon redo"></i>
                         </button>
                         <div class="ui message error"></div>
@@ -276,8 +271,8 @@ function validateForm(e: MouseEvent): void {
                 </div>
             </div>
             <!--
-                includes hiddent input, icon, and div for text display;
-                daya is supplied in .menu > .item structure
+                includes hidden input, icon, and div for text display;
+                data is supplied in .menu > .item structure
             -->
             <!-- example-select_with_flags -->
 
@@ -312,7 +307,7 @@ function validateForm(e: MouseEvent): void {
                         }}
                     />
                     <div class="help_text">
-                        dropddown with options from array -
+                        dropdown with options from array -
                         <ShowCode
                             file="select"
                             component="select_with_JS"
@@ -321,7 +316,7 @@ function validateForm(e: MouseEvent): void {
                     </div>
                 </div>
                 <!--
-                includes hiddent input, icon, and div for text display,
+                includes hidden input, icon, and div for text display,
                 values are supplied from JS
             -->
                 <!-- example-select_with_JS -->
@@ -347,7 +342,7 @@ function validateForm(e: MouseEvent): void {
                         </div>
                     </InitDropdown>
                     <div class="help_text">
-                        dropddown with options from array -
+                        dropdown with options from array -
                         <ShowCode
                             file="select"
                             component="select_with_JS_2"
@@ -419,6 +414,7 @@ function validateForm(e: MouseEvent): void {
                     <ShowCode file="select" component="checkbox_group" bind:selected={example} />
                 </div>
             </div>
+            <!-- example-checkbox_group -->
 
             <!--
  oo                              dP
@@ -431,6 +427,7 @@ function validateForm(e: MouseEvent): void {
              dP
 -->
 
+            <!-- example-input -->
             <div class="field">
                 <label for="xx5"> Test 1 </label>
                 <input id="xx5" />
@@ -441,11 +438,11 @@ function validateForm(e: MouseEvent): void {
                 <input id="xx2" bind:value={test} />
                 <InitTextInput validate={[rule.empty()]} />
             </div>
-            <div class="field">
-                <label for="xx3"> Test 3 </label>
-                <input id="xx3" bind:value={test3} />
-                <InitTextInput validate={[rule.empty()]} />
+            <div class="help_text">
+                bind in Init and directly -
+                <ShowCode file="select" component="input" bind:selected={example} />
             </div>
+            <!-- example-input -->
 
             <div></div>
         </form>

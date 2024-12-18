@@ -1,17 +1,7 @@
 <!--
 @component
-Svelte action to initialize semantic modal dialogue component.
+Svelte action to initialize semantic UI `Modal` dialogue component.
 (see detailed description in init-modal.svelte.d.ts )
-
-Initializes Semantic UI Modal componenet. Takes settings object as argument.
-
-https://fomantic-ui.com/modules/modal.html
-```
-    <div class="ui basic modal">
-        ...
-    </div>
-    <InitModal bind:show={show} settings={{ onApprove: okFn, closable: false }} />
-```
 -->
 <svelte:options runes={true} />
 
@@ -115,7 +105,7 @@ onMount(async () => {
     // delay initialization till all DOM UI elements are ready
     await tick();
 
-    // Initialize Semantic component and subscibe for changes
+    // Initialize Semantic component and subscribe for changes
     elem = findComponent(span!, ".ui.modal", forId) as JQueryApi & ModalApi;
     if (!elem.modal) {
         throw new Error("Semantic UI modal is not initialized");

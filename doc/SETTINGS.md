@@ -2,7 +2,7 @@
 
 ```
 sveltekit-i18n.load("fr-sui.json")   -- SUI calendar and validation messages
-    -> $.fn.form.settings.prompt     -- validation promps translation
+    -> $.fn.form.settings.prompt     -- validation prompt translation
     -> $.fn.form.settings.text       -- general form logic translation
     -> $.fn.form.*.text              -- calendar, dropdown, modal, pagination, search, progress
 
@@ -13,7 +13,7 @@ sveltekit-i18n.load("fr-CA")         -- locale format settings
 use:calendar(settings)               -- settings override
 
 extentRules()
-    -> $.fn.form.settings.rules      -- add adte validation and value comparison rules
+    -> $.fn.form.settings.rules      -- add validation and value comparison rules
 
 ```
 

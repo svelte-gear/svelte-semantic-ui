@@ -1,6 +1,6 @@
 /**
- * Svelte Component &lt;InitCalendar&gt;
- * @module components/<InitCalendar>
+ * Svelte Component &lt;InitForm&gt;
+ * @module data/<InitForm>
  */
 
 import type { Snippet, Component } from "svelte";
@@ -10,7 +10,8 @@ import type { FormSettings } from "../data/semantic-types";
 // Svelte 5.1.9 & svelte kit 2.7.5, still generate ```props: Record<string, never>;```
 
 /**
- * Provides Svelte bindings for Semantic-UI form validation.
+ * Svelte bindings for Semantic-UI form validation.
+ *
  * <InitForm> tag must be a child of the Semantic UI form component, or follow the form.
  *
  * https://semantic-ui.com/behaviors/form.html
@@ -29,6 +30,9 @@ import type { FormSettings } from "../data/semantic-types";
  *
  * The library may be configured to accept InitForm as a parent of the Semantic UI form.
  * Optional `forId` prop allows to put InitForm in a any location.
+ *
+ * If rules are supplied in form settings, fields are matched by 'id', 'name', or 'data-validate' attribute.
+ * Create `<div class="ui message error"/>` to display not-inline messages.
  */
 
 /* eslint-disable @typescript-eslint/naming-convention, @typescript-eslint/ban-types */
@@ -46,7 +50,7 @@ declare const InitForm: Component<{
     /** Form validation settings, see https://fomantic-ui.com/behaviors/form.html#/settings */
     settings?: FormSettings;
 
-    /** Id of the Semantic UI form element, takes precendence over tag position */
+    /** Id of the Semantic UI form element, takes precedence over tag position */
     forId?: string;
 
     /** If InitForm is used as a parent, render the children components */

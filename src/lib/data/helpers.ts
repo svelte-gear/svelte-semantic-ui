@@ -1,5 +1,5 @@
 /**
- * 'fmt', 'parse', and 'rile' utility object.
+ * 'fmt', 'parse', and 'rule' utility object.
  * @module data/helpers
  */
 
@@ -39,7 +39,7 @@ export const fmt: {
     date: DateFormatFn;
     time: DateFormatFn;
     // TODO: implement number, etc
-    // number: (val: number | undefined, prec?: number) => string;
+    // number: (val: number | undefined, precision?: number) => string;
     // money:  (val: number | undefined) => string;
     // list: (val: string[] | undefined) => string;
 } = {
@@ -142,34 +142,3 @@ export const rule = {
     size: "",
     /* eslint-enable */
 };
-
-/*
-          dP                                             dP
-          88                                             88
- .d8888b. 88d888b. .d8888b. 88d888b. .d8888b. .d8888b. d8888P
- 88'  `"" 88'  `88 88'  `88 88'  `88 Y8ooooo. 88ooood8   88
- 88.  ... 88    88 88.  .88 88             88 88.  ...   88
- `88888P' dP    dP `88888P8 dP       `88888P' `88888P'   dP
-
-*/
-
-// type Range = [number, number];
-// type Charset = Array<Range>;
-
-// function ch(s: string): number {
-//     return s.codePointAt(0) ?? 0;
-// }
-// function chRng(s: string): Range {
-//     return [ch(s), ch(s)];
-// }
-
-// export const NUMER: Charset = [[ch("0"), ch("9")]];
-// export const ALPHA: Charset = [
-//     [ch("A"), ch("Z")],
-//     [ch("a"), ch("z")],
-// ];
-// export const ALPNU: Charset = [...NUMER, ...ALPHA];
-// export const IDENT: Charset = [...ALPNU, chRng("_")];
-// export const ASCII: Charset = [[ch(" "), ch("~")]];
-
-// void new CharsetList({ base: IDENTIFIER, inclide: "-.", exclude: "_" });

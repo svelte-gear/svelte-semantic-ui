@@ -65,7 +65,7 @@ function valueToInput(newValue: Date | undefined): void {
         elem.val(formattedStr);
         elem.get(0)!.dispatchEvent(new CustomEvent("input"));
     }
-    // // DON'T push back the value if it got 'rounded', this creates indenite effect loop
+    // // DON'T push back the value if it got 'rounded', this creates infinite effect loop
     // const roundedValue: Date | undefined = formatter.parse(formattedStr);
     // if (roundedValue !== value) {
     //     value = roundedValue;
@@ -113,7 +113,7 @@ onMount(async () => {
     // delay initialization till all DOM UI elements are ready
     await tick();
 
-    // Initialize Semantic component and subscibe for changes
+    // Initialize Semantic component and subscribe for changes
     elem = findComponent(span!, "input,textarea", forId);
     elem.on("change", onInputChange);
 
@@ -143,7 +143,7 @@ onMount(async () => {
     }
 });
 
-/** Remove the subscripion */
+/** Remove the subscription */
 onDestroy(() => {
     if (fieldCtrl) {
         fieldCtrl.removeRules();

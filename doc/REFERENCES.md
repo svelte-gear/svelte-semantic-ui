@@ -1,15 +1,20 @@
-1. Setup in rollup, webpack and parcel <br/>
+### TypeScript
+
+1. Setup Svelte TS project in rollup, webpack and parcel <br/>
    https://blog.logrocket.com/adding-typescript-existing-svelte-project/
 
-2. All-in-one eslint? <br/>
+### ESlint
+
+1. All-in-one eslint config? Integrates airbnb, prettier, svelte, svelte3 (2022)<br/>
    http://www.npmmirror.com/package/eslint-config-typescript-airbnb-prettier-svelte <br/>
-   integrates eslint-config-airbnb-base, eslint-config-airbnb-typescript-base, @typescript-eslint/eslint-plugin, eslint-config-prettier and eslint-svelte3
 
-3. https://npm.io/package/eslint-config-typescript-airbnb-prettier-svelte
+2. Eslint config (2021) <br/>
+   https://npm.io/package/eslint-config-typescript-airbnb-prettier-svelte
 
-4. https://www.npmjs.com/package/@techmely/eslint-config-svelte-ts
+3. Eslint config (2021) <br/>
+   https://www.npmjs.com/package/@techmely/eslint-config-svelte-ts
 
-5. to make eslint validate .svelte in vscode - add this to settings:
+4. to make eslint validate .svelte in vscode - add this to settings:
 
 ```
     "eslint.validate": [
@@ -18,19 +23,19 @@
     ]
 ```
 
-6. https://dev.to/mhaecker/ <br/>use-airbnb-s-eslint-config-with-typescript-prettier-in-svelte-apps-4fb7
+5. https://dev.to/mhaecker/use-airbnb-s-eslint-config-with-typescript-prettier-in-svelte-apps-4fb7
 
-7. https://www.arzidava.com/blog
+6. Click on the formatting section of the vsCode Text Editor tab and enable Format on Save Mode.
 
-8. Click on the formatting section of the vsCode Text Editor tab and enable Format on Save Mode.
+7. https://github.com/sveltejs/svelte-eslint-parser
 
-9. https://css-tricks.com/using-custom-elements-in-svelte/
+### Svelte
 
-10. http://martyice.github.io/svelte-tutorial/ <br/>
-    http://martyice.github.io/svelte-tutorial-part-2/ <br/>
-    http://martyice.github.io/svelte-tutorial-part-3/ <br/>
-    https://martyice.github.io/svelte-tutorial-part-4/
+1. https://css-tricks.com/using-custom-elements-in-svelte/
 
-11. https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/ <br/>Client-side_JavaScript_frameworks/Svelte_getting_started
+2. http://martyice.github.io/svelte-tutorial/ <br/>
+   http://martyice.github.io/svelte-tutorial-part-2/ <br/>
+   http://martyice.github.io/svelte-tutorial-part-3/ <br/>
+   https://martyice.github.io/svelte-tutorial-part-4/
 
-12. https://github.com/sveltejs/svelte-eslint-parser
+3. https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks/Svelte_getting_started

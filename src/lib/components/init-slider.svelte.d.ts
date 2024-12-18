@@ -8,7 +8,7 @@ import type { SliderSettings } from "../data/semantic-types";
 import type { RuleDefinition } from "../data/common";
 
 /**
- * Svelte data binder and initializer for Semantic UI Slider component.
+ * Svelte data binder and initializer for Semantic UI `Slider` component.
  * ```
  * <div class="ui labeled ticked slider"></div>
  * <InitSlider bind:value={rating} settings={{ min: 0, max: 10 }} />
@@ -41,7 +41,7 @@ declare const InitSlider: Component<{
     To avoid typos, use `rules` helper from `data/helpers.ts` {@link data/helpers.rule}. */
     validate?: RuleDefinition;
 
-    /** Id of the Semantic UI input element, takes precendence over tag position */
+    /** Id of the Semantic UI input element, takes precedence over tag position */
     forId?: string;
 
     /** If InitCalendar is used as a parent, render the children components */

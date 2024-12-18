@@ -1,5 +1,5 @@
 /**
- * Svelte Component &lt;InitCalendar&gt;
+ * Svelte Component &lt;InitDropdown&gt;
  * @module components/<InitDropdown>
  */
 
@@ -46,7 +46,7 @@ declare const InitDropdown: Component<{
     To avoid typos, use `rules` helper from `data/helpers.ts` {@link data/helpers.rule}. */
     validate?: RuleDefinition;
 
-    /** Id of the Semantic UI input element, takes precendence over tag position */
+    /** Id of the Semantic UI input element, takes precedence over tag position */
     forId?: string;
 
     /** If InitDropdown is used as a parent, render the children components */

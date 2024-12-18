@@ -1,6 +1,6 @@
 <!--
 @component
-Svelte data binder and initializer for Semantic-UI `Dropdowm` components.
+Svelte data binder and initializer for Semantic-UI `Dropdown` components.
 (see detailed description in init-dropdown.svelte.d.ts )
 -->
 <svelte:options runes={true} />
@@ -11,7 +11,7 @@ import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition } from "../data/common";
 import type { DropdownSettings, JQueryApi } from "../data/semantic-types";
-import { equalDataTypes, findComponent, uid } from "../data/common";
+import { equalArrays, findComponent, uid } from "../data/common";
 import { dropdownDefaults } from "../data/settings";
 import { FieldController } from "../data/field-controller";
 
@@ -84,7 +84,7 @@ function svelteToInput(newValue: string | string[] | undefined): void {
         if (!Array.isArray(newValue)) {
             throw new Error(`Multi-value dropdown expects string[] value, got ${newValue}`);
         }
-        if (!equalDataTypes(newValue, curValue)) {
+        if (!equalArrays(newValue, curValue as string[])) {
             console.debug(`Dropdown(${fieldCtrl?.key}) : value -> ${toStr(newValue)}`);
             // NOTE: use 'set exactly' instead of 'set selected'!!!
             elem.dropdown("set exactly", newValue);
@@ -113,7 +113,7 @@ function svelteToInput(newValue: string | string[] | undefined): void {
 /** The effect rune calls svelteToInput when prop value changes */
 $effect(() => {
     void value;
-    // not sure if this trick will help to detect array alement changes, if array wan't assigned after init
+    // not sure if this trick will help to detect array element changes, if array wan't assigned after init
     if (Array.isArray(value)) {
         if (value.length > 0) {
             void value[0];
@@ -134,7 +134,7 @@ function inputToSvelte(inputValue: string | string[] | undefined): void {
     }
     // store in the prop only if the value is different
     if (multi) {
-        if (!equalDataTypes(value, inputValue)) {
+        if (!equalArrays(value as string[], inputValue as string[])) {
             console.debug(`Dropdown(${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
             value = inputValue;
             fieldCtrl?.revalidate();
@@ -170,7 +170,7 @@ function onDropdownChange(
     if (def.onChange) {
         def.onChange.call(this, newValue, text, choice);
     }
-    // user-specifed handler for this component
+    // user-specified handler for this component
     if (settings && settings.onChange) {
         settings.onChange.call(this, newValue, text, choice);
     }
@@ -188,7 +188,7 @@ onMount(async () => {
     // delay initialization till all DOM UI elements are ready
     await tick();
 
-    // Initialize Semantic component and subscibe for changes
+    // Initialize Semantic component and subscribe for changes
     elem = findComponent(span!, ".ui.dropdown", forId) as JQueryApi & DropdownApi;
     if (!elem.dropdown) {
         throw new Error("Semantic UI dropdown is not initialized");
@@ -205,7 +205,7 @@ onMount(async () => {
     }
     if (!multi && Array.isArray(value)) {
         throw new Error(
-            `Dropdown has a string 'value', got ${toStr(value)}, did you forget to add 'multuiple' class or attr?`
+            `Dropdown has a string 'value', got ${toStr(value)}, did you forget to add 'multiple' class or attr?`
         );
     }
 
@@ -232,7 +232,7 @@ onMount(async () => {
     svelteToInput(value);
 });
 
-/** Remove the subscripion */
+/** Remove the subscription */
 onDestroy(() => {
     if (fieldCtrl) {
         fieldCtrl.removeRules(); // FIXME: testing (AK)

@@ -3,12 +3,6 @@
  * @module data/common
  */
 
-// NOTE: getting jQuery element by dom node has a strange effect inside a Svelte action:
-// it doesn't see existing elements, and changes done to the element are not visible to the app.
-// Getting element by id seems to fix the problem.
-// This maybe caused by 'modal' component moving the element up in dom...
-
-import type { Writable } from "svelte/store";
 import type { JQueryApi } from "../data/semantic-types";
 
 export const SVELTE_FORM_STORE: string = "svelte_form_store";
@@ -18,21 +12,20 @@ export type ActionReturnType = {
     destroy: () => void;
 } | void;
 
-/** Format function, must return null if it can't parse value and doesn't want to override it. */
-export interface Formatter {
-    format: (val: DataTypes) => string;
-    parse?: (val: string) => DataTypes;
-}
+//-----------------------------------------------------------------------------
 
+/** Text format function, may be used to change case or limit charset. */
 export interface TextFormatter {
     format: (val: string) => string;
 }
 
+/** Number format function, must return null if it can't parse value and doesn't want to override it. */
 export interface NumberFormatter {
     format: (val: number | undefined) => string;
     parse: (val: string) => number | undefined;
 }
 
+/** Number format function, must return null if it can't parse value and doesn't want to override it. */
 export interface DateFormatter {
     format: (val: Date | undefined) => string;
     parse: (val: string) => Date | undefined;
@@ -43,6 +36,8 @@ export interface ListFormatter {
     parse: (val: string) => string[];
 }
 
+//-----------------------------------------------------------------------------
+
 /** Validation rule object: rule string and custom error prompt */
 export type RuleObj = {
     type: string;
@@ -51,6 +46,8 @@ export type RuleObj = {
 
 /** Rule definition takes array or single instance of string or RuleObj */
 export type RuleDefinition = string | string[] | RuleObj | RuleObj[]; // | BaseSchema;
+
+//-----------------------------------------------------------------------------
 
 /** Gets jQuery element by id attribute. */
 export function jQueryElemById(id: string): JQueryApi {
@@ -105,7 +102,7 @@ export function setComponentInitMode(modes: ComponentInitMode[]): void {
 
 /** Find corresponding Semantic UI component,
 where the `span` Element is a parent, child, or next sibling of the component.
-Search mode is usually set in setComponentInitMode(), but may be overriden by `search` paremeter. */
+Search mode is usually set in setComponentInitMode(), but may be overridden by `search` parameter. */
 export function findComponent(
     span: Element,
     selector: string,
@@ -153,9 +150,6 @@ export function findComponent(
 
 */
 
-/** Possible data types for the store */
-export type DataTypes = string | string[] | boolean | Date | number | number[] | undefined;
-
 /** Controls Semantic UI form element and it's data validation. */
 export interface FormController {
     // formId: string;
@@ -174,29 +168,7 @@ export interface FormController {
     errorsCallback?: (errors: string[]) => void;
 }
 
-/** Holds Svelte `store` allowing the `Data` component to subscribe to data changes */
-export interface DataController<T extends DataTypes> {
-    /** Is used for debugging. */
-    uid: string;
-
-    /** Describes the type of the controlled component. */
-    mode: "dropdown" | "modal" | "calendar" | "slider" | "input";
-
-    /** Svelte store */
-    store: Writable<T>;
-
-    /** Imperatively updates Semantic component. */
-    doUpdate: (val: T) => void;
-
-    /** Called after user data entry or interaction. */
-    onChange: (value: T) => void;
-
-    // // Yup integration
-    // setValid?: (value: boolean) => void;
-    // setPrompt?: (value: string | null) => void;
-}
-
-/** Semantic UI component behaviour API */
+/** Semantic UI component behavior API */
 export type SemanticCommand = (
     command: string,
     v1?: unknown,
@@ -224,8 +196,19 @@ export function uid(): string {
     return `000000${unum % 1000}`.slice(-3);
 }
 
-/** Compare two arrays, two Date objects, or two primitives */
-export function equalDataTypes(a1: DataTypes | undefined, a2: DataTypes | undefined): boolean {
+/** Compare two Date objects or two primitives */
+export function equalDates(a1: Date | undefined, a2: Date | undefined): boolean {
+    if (a1 instanceof Date && a2 instanceof Date) {
+        return a1.getTime() === a2.getTime();
+    }
+    return a1 === a2;
+}
+
+/** Compare two arrays or two primitives */
+export function equalArrays(
+    a1: string[] | number[] | string | number | undefined,
+    a2: string[] | number[] | string | number | undefined
+): boolean {
     if (Array.isArray(a1) && Array.isArray(a2)) {
         if (a1.length !== a2.length) {
             return false;
@@ -236,9 +219,6 @@ export function equalDataTypes(a1: DataTypes | undefined, a2: DataTypes | undefi
             }
         }
         return true;
-    }
-    if (a1 instanceof Date && a2 instanceof Date) {
-        return a1.getTime() === a2.getTime();
     }
     return a1 === a2;
 }

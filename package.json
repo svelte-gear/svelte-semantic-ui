@@ -19,7 +19,7 @@
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "_exports": {
-        ".": "export root folder; other expoerts must start with './' as well"
+        ".": "export root folder; other exports must start with './' as well"
     },
     "exports": {
         ".": {
@@ -46,17 +46,17 @@
     },
     "_peerDependencies": {
         "svelte": "see app.html and /routes folder for examples; the library can be used without svelte-kit",
-        "jquery": "jQuery must be staticly loaded in DOM for semantic ui to work",
+        "jquery": "jQuery must be statically loaded in DOM for semantic ui to work",
         "fomantic-ui-css": "works with semantic-ui or fomantic-ui, packages may be imported or loaded in DOM",
         "semantic-ui-css": "for semantic-ui, add optional fomantic modules: calendar, slider, toast, and form"
     },
     "peerDependencies": {
-        "svelte": "^3.59.2 || ^4.2.18 || ^5.14.0",
+        "svelte": "^3.59.2 || ^4.2.18 || ^5.14.1",
         "jquery": "^3.7.1",
         "fomantic-ui-css": "^2.9.3"
     },
     "_dependencies": {
-        "_none": "the library has no npm dependencies, but jQuery and senamtic-ui must be present at runtime",
+        "_none": "the library has no npm dependencies, but jQuery and semantic-ui must be present at runtime",
         "jquery": "3.7.1 - doesn't seem to work, needs to be imported in app.html",
         "fomantic-ui-css": "2.9.3 - required for import variants C, D, E",
         "semantic-ui-css": "2.5.0 - required for import variants D, E"
@@ -71,18 +71,21 @@
         "_typedoc": "types information and api docs",
         "eslint-config-prettier": "9.1.0 - is not used; we prefer modifying eslint rules to match prettier",
         "npm-run-all": "4.1.5 - allows to run npm tasks sequentially or in parallel; not yet required",
-        "eslint": "9.5.0 - v9 requires config file changes, not compartible with airbnb rules (8.53 has many changes)",
+        "eslint": "9.5.0 - v9 requires config file changes, not compatible with airbnb rules (8.53 has many changes)",
         "typescript": "5.7.2 - not yet supported by eslint and typedoc"
     },
     "devDependencies": {
+        "fomantic-ui-css": "2.9.3",
+        "svelte": "5.14.1",
+        "@sveltejs/kit": "2.12.1",
         "@sveltejs/adapter-static": "3.0.6",
-        "@sveltejs/kit": "2.11.1",
         "@sveltejs/package": "2.3.7",
         "@sveltejs/vite-plugin-svelte": "5.0.2",
-        "eslint": "8.57.0",
-        "eslint-plugin-svelte": "2.46.1",
+
         "@typescript-eslint/eslint-plugin": "7.18.0",
         "@typescript-eslint/parser": "7.18.0",
+        "eslint": "8.57.0",
+        "eslint-plugin-svelte": "2.46.1",
         "eslint-config-airbnb-typescript": "18.0.0",
         "eslint-plugin-import": "2.31.0",
         "eslint-plugin-jsx-a11y": "6.10.2",
@@ -90,15 +93,14 @@
         "eslint-plugin-react": "7.37.2",
         "prettier": "3.4.2",
         "prettier-plugin-svelte": "3.3.2",
-        "svelte": "5.14.0",
+
+        "@types/jquery": "3.5.32",
+        "@types/node": "22.10.2",
+        "cpy-cli": "5.0.0",
         "svelte-check": "4.1.1",
         "publint": "0.2.12",
-        "typescript": "5.6.3",
-        "vite": "6.0.3",
-        "cpy-cli": "5.0.0",
         "typedoc": "0.27.5",
-        "@types/node": "22.10.2",
-        "@types/jquery": "3.5.32",
-        "fomantic-ui-css": "2.9.3"
+        "typescript": "5.6.3",
+        "vite": "6.0.3"
     }
 }

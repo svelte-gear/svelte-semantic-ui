@@ -63,7 +63,7 @@ export class FieldController {
             }
             this.formCtrl = form.data(SVELTE_FORM_STORE) as FormController;
             if (!this.formCtrl) {
-                throw new Error(`Form controller for ${this.key} is not initalized`);
+                throw new Error(`Form controller for ${this.key} is not initialized`);
             }
 
             this.formCtrl.addRule(this.key, validationRules);

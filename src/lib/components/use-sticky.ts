@@ -1,5 +1,5 @@
 /**
- * Svelte action to initialize semantic sticky component.
+ * Svelte action to initialize Semantic UI `Sticky` component.
  * @module components/use-sticky
  */
 
@@ -10,7 +10,7 @@ import { jQueryElem } from "../data/common";
 
 https://fomantic-ui.com/modules/sticky.html
 
-By defult attaches itself to the parent component.
+By default attaches itself to the parent component.
 ```
     <div class="ui right rail">
         <div class="ui segment sticky" use:sticky={{ offset: 10 }}>

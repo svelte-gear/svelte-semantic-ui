@@ -1,5 +1,5 @@
 /**
- * Svelte Component &lt;InitCalendar&gt;
+ * Svelte Component &lt;InitCheckbox&gt;
  * @module components/<InitCheckbox>
  */
 
@@ -7,7 +7,7 @@ import type { Snippet, Component } from "svelte";
 import type { CheckboxSettings } from "../data/semantic-types";
 import type { RuleDefinition } from "../data/common";
 
-/** Svelte action to initialize Semantic UI Checkbox component.
+/** Svelte action to initialize Semantic UI `Checkbox` component.
  * https://semantic-ui.com/modules/checkbox.html
  *
  * Bind directly to the input ```bind:checked```.
@@ -39,7 +39,7 @@ declare const InitCheckbox: Component<{
     To avoid typos, use `rules` helper from `data/helpers.ts` {@link data/helpers.rule}. */
     validate?: RuleDefinition;
 
-    /** Id of the Semantic UI input element, takes precendence over tag position */
+    /** Id of the Semantic UI input element, takes precedence over tag position */
     forId?: string;
 
     /** If InitDropdown is used as a parent, render the children components */

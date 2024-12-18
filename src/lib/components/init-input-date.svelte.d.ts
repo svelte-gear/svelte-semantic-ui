@@ -1,6 +1,6 @@
 /**
- * Svelte Component &lt;InitCalendar&gt;
- * @module components/<InitDropdown>
+ * Svelte Component &lt;InitDateInput&gt;
+ * @module components/<InitDateInput>
  */
 
 import type { Snippet, Component } from "svelte";
@@ -28,7 +28,7 @@ import type { DateFormatter, RuleDefinition } from "../data/common";
  * see https://fomantic-ui.com/behaviors/form.html#/examples for more information.
  * Validator function will receive the formatted text (not Date object).
  *
- * InitDateInput should follow the inpit.
+ * InitDateInput should follow the input.
  * The library may be configured to accept InitDateInput as a parent or a child on the input.
  * Optional `forId` prop allows to put InitDateInput in a any location.
  */
@@ -48,11 +48,11 @@ declare const InitDropdown: Component<{
     validate?: RuleDefinition;
 
     /** In most cases you should use the default locale-aware formatter with `settings`.
-    Optional custom formatter may be used to implement unstandard formats or additional parsing logic.
+    Optional custom formatter may be used to implement non-standard formats or additional parsing logic.
     It will override `settings`, don't use both at the same time. */
     formatter?: DateFormatter;
 
-    /** Id of the Semantic UI input element, takes precendence over tag position */
+    /** Id of the Semantic UI input element, takes precedence over tag position */
     forId?: string;
 
     /** If InitDateInput is used as a parent, render the children components */

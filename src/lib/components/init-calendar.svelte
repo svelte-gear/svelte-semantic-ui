@@ -11,7 +11,7 @@ import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition } from "../data/common";
 import type { CalendarSettings, JQueryApi } from "../data/semantic-types";
-import { equalDataTypes, isoDate, isoTime, findComponent, uid } from "../data/common";
+import { equalDates, isoDate, isoTime, findComponent, uid } from "../data/common";
 import { calendarDefaults } from "../data/settings";
 import { FieldController } from "../data/field-controller";
 
@@ -82,7 +82,7 @@ function svelteToInput(newValue: Date | undefined): void {
         console.log(`Calendar(${fieldCtrl?.key}) : GOT ARRAY`, val);
         val = val[0] as Date;
     }
-    if (!equalDataTypes(newValue, val)) {
+    if (!equalDates(newValue, val)) {
         console.debug(`Calendar(${fieldCtrl?.key}) value -> ${toStr(newValue)}`);
         elem.calendar("set date", newValue);
     }
@@ -101,7 +101,7 @@ $effect(() => {
 /** When input value changes, modify the svelte prop */
 function inputToSvelte(inputValue: Date): void {
     // store in the prop only if the value is different
-    if (!equalDataTypes(value, inputValue)) {
+    if (!equalDates(value, inputValue)) {
         console.debug(`Calendar(${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
         value = inputValue;
     }
@@ -116,7 +116,7 @@ function onCalendarChange(this: JQueryApi, newValue: Date, text: string, mode: s
     if (def.onChange) {
         def.onChange.call(this, newValue, text, mode);
     }
-    // user-specifed handler for this component
+    // user-specified handler for this component
     if (settings && settings.onChange) {
         settings.onChange.call(this, newValue, text, mode);
     }
@@ -155,7 +155,7 @@ onMount(async () => {
     // delay initialization till all DOM UI elements are ready
     await tick();
 
-    // Initialize Semantic component and subscibe for changes
+    // Initialize Semantic component and subscribe for changes
     elem = findComponent(span!, ".ui.calendar", forId) as JQueryApi & CalendarApi;
     if (!elem.calendar) {
         throw new Error("Semantic calendar is not initialized");
@@ -189,7 +189,7 @@ onMount(async () => {
     svelteToInput(value);
 });
 
-/** Remove the subscripion */
+/** Remove the subscription */
 onDestroy(() => {
     if (fieldCtrl) {
         fieldCtrl.removeRules();

@@ -1,6 +1,6 @@
 /**
  * Svelte action to activate validation framework for the form.
- * @module data/use-form-validation
+ * @module data/form-controller
  */
 
 import type { FormController, RuleDefinition } from "../data/common";

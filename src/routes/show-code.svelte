@@ -51,14 +51,14 @@ function getImportList(text: string): string[] {
             imports.push(comp);
         }
     });
-    functions.forEach((funct: string) => {
-        if (text.includes(`${funct}(`)) {
-            imports.push(funct);
+    functions.forEach((func: string) => {
+        if (text.includes(`${func}(`)) {
+            imports.push(func);
         }
     });
-    objects.forEach((objec: string) => {
-        if (text.includes(`${objec}.`)) {
-            imports.push(objec);
+    objects.forEach((obj: string) => {
+        if (text.includes(`${obj}.`)) {
+            imports.push(obj);
         }
     });
     return imports;

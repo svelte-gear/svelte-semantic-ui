@@ -40,7 +40,7 @@ function noFn(): void {
             onclick={() => {
                 toast({
                     class: "success",
-                    title: "Congradulations!",
+                    title: "Congratulations!",
                     message: "You're using the good framework!",
                     displayTime: 3000,
                 });
@@ -50,7 +50,7 @@ function noFn(): void {
         </button>
         <br />
         <div class="help_text">
-            display a toas in the corner of the screen
+            display a toast in the corner of the screen
             <ShowCode file="more" component="toast" bind:selected={example} />
         </div>
         <!-- example-toast -->

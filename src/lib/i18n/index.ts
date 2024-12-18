@@ -1,5 +1,5 @@
 /**
- * Internatinalization module.
+ * Internationalization module.
  * Dynamically import translations and formats based on locale.
  * See routes/i18n/extra-locales.ts for an example how to extend it.
 
@@ -23,7 +23,7 @@ Sources:
 - https://gist.github.com/mlconnor/1887156
 - https://en.wikipedia.org/wiki/Decimal_separator
 - https://leap.hcldoc.com/help/topic/SSS28S_8.2.1/XFDL_Specification/i_xfdl_r_formats_en_CA.html
- * @module i18n
+ * @module i18n/_index
  */
 
 import type { AllSettingsJson } from "../data/settings";

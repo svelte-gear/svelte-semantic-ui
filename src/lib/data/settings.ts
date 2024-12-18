@@ -98,7 +98,7 @@ function ensureNumberSettings(jQuery: JQuerySettings): void {
     if (!jQuery.fn.number) {
         jQuery.fn.number = {
             settings: {
-                decimalSeparator: ".", // TODO: implement onfigurable separator
+                decimalSeparator: ".",
                 thousandSeparator: " ",
                 moneyPrefix: "$",
                 moneySuffix: "",
@@ -120,7 +120,7 @@ function ensureNumberSettings(jQuery: JQuerySettings): void {
                       dP
 */
 
-/** Provides acces to Sematic UI settings for different components. */
+/** Provides access to Sematic UI settings for different components. */
 export class SettingsHelper<T> {
     compName: string;
 
@@ -210,7 +210,7 @@ export const sliderDefaults: SettingsHelper<SliderSettings> = new SettingsHelper
 export const stickyDefaults: SettingsHelper<StickySettings> = new SettingsHelper("sticky");
 export const toastDefaults: SettingsHelper<ToastSettings> = new SettingsHelper("toast");
 
-/** Must be called after DOM is initailized. Like in sveltekit rotes/layout.ts load(). */
+/** Must be called after DOM is initialized. Like in sveltekit rotes/layout.ts load(). */
 export function applyDefaultSettings(locale?: string): void {
     void locale;
     calendarDefaults.apply({

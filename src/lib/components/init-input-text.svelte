@@ -10,16 +10,16 @@ import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition, TextFormatter } from "../data/common";
-import type { JQueryApi } from "../data/semantic-types";
+import type { JQueryApi, TextInputSettings } from "../data/semantic-types";
 import { findComponent } from "../data/common";
 import { FieldController } from "../data/field-controller";
-import { TextFmt, type TextFormatSettings } from "../data/input-formatter";
+import { TextFmt } from "../data/input-formatter";
 
 const FIELD_PREFIX: string = "f_input";
 
 interface Props {
     value?: string;
-    settings?: TextFormatSettings;
+    settings?: TextInputSettings;
     validate?: RuleDefinition;
     formatter?: TextFormatter;
     forId?: string;
@@ -65,7 +65,7 @@ function svelteToInput(newValue: string): void {
         elem.val(formattedStr);
         elem.get(0)!.dispatchEvent(new CustomEvent("input"));
     }
-    // push back the value if it got chenged
+    // push back the value if it got changed
     if (formattedStr !== value) {
         value = formattedStr;
     }
@@ -111,7 +111,7 @@ onMount(async () => {
     // delay initialization till all DOM UI elements are ready
     await tick();
 
-    // Initialize Semantic component and subscibe for changes
+    // Initialize Semantic component and subscribe for changes
     elem = findComponent(span!, "input,textarea", forId);
     elem.on("change", onInputChange);
 
@@ -141,7 +141,7 @@ onMount(async () => {
     }
 });
 
-/** Remove the subscripion */
+/** Remove the subscription */
 onDestroy(() => {
     if (fieldCtrl) {
         fieldCtrl.removeRules();
