@@ -209,10 +209,9 @@ onDestroy(() => {
 });
 </script>
 
-<span class="InitSlider" class:hidden={!children} bind:this={span}>{@render children?.()}</span>
+<span class="InitSlider" style:display={children ? "contents" : "none"} bind:this={span}
+    >{@render children?.()}</span
+>
 
 <style>
-.hidden {
-    display: none;
-}
 </style>

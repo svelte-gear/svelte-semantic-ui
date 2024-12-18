@@ -138,7 +138,9 @@ onDestroy(() => {
 });
 </script>
 
-<span class="InitModal" bind:this={span}>{@render children?.()}</span>
+<span class="InitModal" style:display={children ? "contents" : "none"} bind:this={span}
+    >{@render children?.()}</span
+>
 
 <style>
 </style>
