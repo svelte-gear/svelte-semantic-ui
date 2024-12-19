@@ -76,11 +76,7 @@ function reset(): void {
     ratings = [1, 5];
 }
 
-setTimeout(() => {
-    // FIXME: without setTimeout, changing rating[0] doesn't trigger effect on rating
-    // FIXME: with setTimeout, the change is propagated in both directions
-    reset();
-}, 0);
+reset();
 
 function toggleActive(): void {
     active = !active;

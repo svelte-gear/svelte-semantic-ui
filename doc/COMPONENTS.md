@@ -37,7 +37,7 @@ There are 23 settings objects in JQuery:
 
 - checkbox <br/>
   `<input type="checkbox" bind:checked={..} />` <br/>
-  `<InitCheckbox settings={..}` // TODO
+  `<InitCheckbox settings={..}`
 
 #### Modal
 
