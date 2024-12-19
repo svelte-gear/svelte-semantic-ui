@@ -25,7 +25,8 @@ import type { RuleDefinition } from "../data/common";
  *
  * `validate` prop accepts an array of Semantic UI form validation rules,
  * see https://fomantic-ui.com/behaviors/form.html#/examples for more information.
- * Validator function will receive the formatted text (not Array object). // TODO: test this.
+ * Validator function will receive the formatted text (not Array object).
+ * // TODO: test validation with multi-select.
  *
  * InitDropdown should follow the Semantic UI component (select or div.ui.dropdown).
  * The library may be configured to accept InitDropdown as a parent or a child on the Semantic UI dropdown.

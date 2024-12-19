@@ -26,7 +26,8 @@ import type { RuleDefinition } from "../data/common";
  *
  * `validate` prop accepts an array of Semantic UI form validation rules,
  * see https://fomantic-ui.com/behaviors/form.html#/examples for more information.
- * Validator function will receive the formatted text (not Date object). // TODO: test this.
+ * Validator function will receive the formatted text (not Date object).
+ * // TODO: test calendar settings ("string" / "date" / "formatter").
  *
  * InitCalendar should follow the Semantic UI component (div.ui.calendar).
  * The library may be configured to accept InitCalendar as a parent or a child on the Semantic UI calendar.

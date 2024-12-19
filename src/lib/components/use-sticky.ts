@@ -33,5 +33,5 @@ export function sticky(node: Element, settings?: StickySettings): void {
         ...settings,
     });
 
-    // FIXME: do i need to remove it if hidden ?
+    // FIXME: do i need to remove it if hidden (removed from DOM) ?
 }

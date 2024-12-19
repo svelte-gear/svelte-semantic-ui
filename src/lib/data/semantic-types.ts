@@ -193,7 +193,7 @@ export type DropdownMessages = FomanticUI.Dropdown.Settings.Messages;
  dP                          d8888P
 */
 
-// TODO: implement use-progress
+// TODO: implement init-progress
 /** @see {@link https://fomantic-ui.com/modules/progress.html#/settings} */
 export type ProgressSettings = Partial<FomanticUI.ProgressSettings>;
 
@@ -221,7 +221,7 @@ export type FlyoutTexts = {
     cancel: string; // "Cancel"
     close: string; //  "Close"
 };
-// TODO: add to translation
+// TODO: add flyout to translation
 
 /** @see {@link https://fomantic-ui.com/modules/flyout.html#/settings} */
 export type FlyoutSettings = Partial<FomanticUI.FlyoutSettings> & {

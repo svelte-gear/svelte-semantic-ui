@@ -168,13 +168,13 @@ export interface FormController {
     errorsCallback?: (errors: string[]) => void;
 }
 
-/** Semantic UI component behavior API */
-export type SemanticCommand = (
-    command: string,
-    v1?: unknown,
-    v2?: unknown,
-    v3?: unknown
-) => unknown;
+// /** Semantic UI component behavior API */
+// export type SemanticCommand = (
+//     command: string,
+//     v1?: unknown,
+//     v2?: unknown,
+//     v3?: unknown
+// ) => unknown;
 
 /*
             dP   oo dP

@@ -168,7 +168,7 @@ async function noop(): Promise<object> {
 
 /** Register known locales.
  * Only required translations and settings are dynamically loaded into memory
- * when {@link i18n.applyLocale} is called.
+ * when {@link i18n/_index.applyLocale} is called.
  * */
 export function registerBaseLocales(): void {
     registerLanguage("de", () => import("./de"));

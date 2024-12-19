@@ -118,7 +118,6 @@ function onFailureCallback(this: JQueryApi, formErrors: object[], fields: object
     if (settings && settings.onFailure) {
         settings.onFailure.call(this, formErrors, fields);
     }
-    // TODO: call default and settings callbacks
     onValidChange(false);
     onErrorsChange(formErrors as unknown as string[]);
 }
@@ -149,6 +148,7 @@ onMount(async () => {
 
     // make sure all inputs have ids, so form validation doesn't show warnings
     // FIXME: check if it runs AFTER all the fields are initialized, no matter if parent, child, or sibling
+    // TODO: test is it works with one await
     await tick();
     await tick();
     elem.find("input").each((_idx: number, input: Element): void => {

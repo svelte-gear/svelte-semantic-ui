@@ -30,7 +30,7 @@ const formPrompt: FormPrompt = {
     isExactly: "{name} must be exactly '{ruleValue}'",
     not: "{name} cannot be set to '{ruleValue}'",
     notExactly: "{name} cannot be set to exactly '{ruleValue}'",
-    contains: "{name} must contain '{ruleValue}'", // TODO: fix other translations (cannot -> must)
+    contains: "{name} must contain '{ruleValue}'",
     containsExactly: "{name} must contain exactly '{ruleValue}'",
     doesntContain: "{name} must contain  '{ruleValue}'",
     doesntContainExactly: "{name} must contain exactly '{ruleValue}'",
@@ -113,7 +113,7 @@ const numberSettings: NumberSettings = {
     listSeparator: ",",
 };
 
-// TODO: transpalte to other languages
+// TODO: transpalte dropdownMessages and progressTexts to other languages
 const dropdownMessages: DropdownMessages = {
     addResult: "Add <b>{term}</b>",
     count: "{count} selected",

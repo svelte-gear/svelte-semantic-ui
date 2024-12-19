@@ -38,7 +38,7 @@ function getDefaultTimeFmt(): DateFmt {
 export const fmt: {
     date: DateFormatFn;
     time: DateFormatFn;
-    // TODO: implement number, etc
+    // TODO: implement integer, decimal0, decimal1, decimal2, decimal3, money
     // number: (val: number | undefined, precision?: number) => string;
     // money:  (val: number | undefined) => string;
     // list: (val: string[] | undefined) => string;
@@ -58,11 +58,10 @@ export const fmt: {
  dP
 */
 
-// TODO: review null/undefined, decide which one should be used
 export const parse: {
     date: DateParseFn;
     time: DateParseFn;
-    // TODO: implement number, etc
+    // TODO: implement number, maybe list
     // number: (val: string | undefined) => number | undefined;
     // money: (val: string | undefined) => number | undefined;
     // list: (val: string | undefined) => string[];
@@ -135,7 +134,7 @@ export const rule = {
     isoDate:             (): string => "isoDate",
     startEnd: (val: string): string => `startEnd[${val}]`,
 
-    // TODO: investigate these rules
+    // TODO: investigate the rules: range, size, maxValue, minValue
     range: "",
     maxValue: "",
     minValue: "",

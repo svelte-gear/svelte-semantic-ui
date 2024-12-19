@@ -65,7 +65,6 @@ export class NumberFmt implements NumberFormatter {
         }
     }
 
-    // TODO: move format / parse number into format.ts
     parse(value: string): number | undefined {
         let val: string = value;
         if (this.type === "money") {
@@ -291,7 +290,7 @@ export class DateFmt implements DateFormatter {
         this.settings = {
             ...calendarDefaults.read(),
             ...settings,
-            // TODO: do i need to use deep copy?
+            // TODO: should we use deep copy? test what happens...
         };
     }
 

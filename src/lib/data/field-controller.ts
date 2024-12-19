@@ -42,8 +42,6 @@ export function getOrAssignKey(elem: JQueryApi, prefix?: string): string {
     return key;
 }
 
-// TODO: rename the file to field-controller.ts
-
 export class FieldController {
     key: string | undefined;
     formCtrl?: FormController;

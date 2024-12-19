@@ -86,7 +86,7 @@ function svelteToInput(newValue: Date | undefined): void {
         console.debug(`Calendar(${fieldCtrl?.key}) value -> ${toStr(newValue)}`);
         elem.calendar("set date", newValue);
     }
-    // TODO: no need to revalidate calendar component ?
+    // TODO: test if calendar revalidation is required (test from examples) ?
     fieldCtrl?.revalidate();
 }
 
@@ -105,7 +105,7 @@ function inputToSvelte(inputValue: Date): void {
         console.debug(`Calendar(${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
         value = inputValue;
     }
-    // TODO: no need to revalidate calendar component ?
+    // TODO: test if calendar revalidation is required (test from examples) ?
     fieldCtrl?.revalidate();
 }
 
