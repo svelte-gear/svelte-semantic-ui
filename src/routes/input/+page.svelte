@@ -150,8 +150,7 @@ function toggleActive(): void {
                 <InitDateInput
                     bind:value={dat}
                     validate={[rule.empty()]}
-                    settings={{ text: { now: "sejchas" } }}
-                /><!-- // TODO: remove test options -->
+                /><!-- // TODO: test with settings={{ text: { now: "sejchas" } }} -->
                 <div class="help_text">
                     date formatter -
                     <ShowCode file="input" component="date" bind:selected={example} />
