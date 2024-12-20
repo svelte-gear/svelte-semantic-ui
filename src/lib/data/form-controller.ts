@@ -5,7 +5,7 @@
 
 import type { FormController, RuleDefinition } from "../data/common";
 import type { FormSettings, JQueryApi } from "../data/semantic-types";
-import { uid } from "../data/common";
+import { nextUid } from "../data/common";
 
 export type FormApi = {
     form(settings?: FormSettings): void;
@@ -21,32 +21,6 @@ function ruleToStr(rule: RuleDefinition): string {
  * Form validation controller. Is accessed by both `<FormValidation>` and individual `<InitField>`.
  * */
 
-// function getFieldByKey(key: string): JQueryApi {
-//     let field = elem.find(`#${key}`);
-//     if (field.length > 0) {
-//         return field;
-//     }
-//     field = elem.find(`[name=${key}]`);
-//     if (field.length > 0) {
-//         return field;
-//     }
-//     field = elem.find(`[data-validate=${key}]`);
-//     if (field.length > 0) {
-//         return field;
-//     }
-//     throw new Error(`Field not found for key=${key}`);
-// }
-
-// function getFieldPrompt(key: string): string {
-//     const field = getFieldByKey(key);
-//     const prompt = field.parent().find(".prompt");
-//     if (prompt.length > 0) {
-//         return prompt.text();
-//     } else {
-//         return "";
-//     }
-// }
-
 export class SuiFormController implements FormController {
     formId: string;
 
@@ -58,23 +32,19 @@ export class SuiFormController implements FormController {
 
     rules: Record<string, RuleDefinition> = {};
 
-    validCallback: (valid: boolean) => void;
+    // validCallback: (valid: boolean) => void;
 
-    errorsCallback: (errors: string[]) => void;
+    // errorsCallback: (errors: string[]) => void;
 
-    constructor(
-        elem: JQueryApi,
-        validCallback: (valid: boolean) => void,
-        errorsCallback: (errors: string[]) => void
-    ) {
+    constructor(elem: JQueryApi) {
         this.elem = elem;
-        this.formId = `FORM_${elem.attr("id") ?? uid()}`;
+        this.formId = `FORM_${elem.attr("id") ?? nextUid()}`;
         // this.errMsg = elem.find(".ui.message.error");
         // if (this.errMsg.length === 0) {
         //     throw new Error("Semantic form is not initialized");
         // }
-        this.validCallback = validCallback;
-        this.errorsCallback = errorsCallback;
+        // this.validCallback = validCallback;
+        // this.errorsCallback = errorsCallback;
     }
 
     private activateRule(key: string, rule: RuleDefinition): void {
@@ -172,3 +142,29 @@ export class SuiFormController implements FormController {
         }
     }
 }
+
+// function getFieldByKey(key: string): JQueryApi {
+//     let field = elem.find(`#${key}`);
+//     if (field.length > 0) {
+//         return field;
+//     }
+//     field = elem.find(`[name=${key}]`);
+//     if (field.length > 0) {
+//         return field;
+//     }
+//     field = elem.find(`[data-validate=${key}]`);
+//     if (field.length > 0) {
+//         return field;
+//     }
+//     throw new Error(`Field not found for key=${key}`);
+// }
+
+// function getFieldPrompt(key: string): string {
+//     const field = getFieldByKey(key);
+//     const prompt = field.parent().find(".prompt");
+//     if (prompt.length > 0) {
+//         return prompt.text();
+//     } else {
+//         return "";
+//     }
+// }

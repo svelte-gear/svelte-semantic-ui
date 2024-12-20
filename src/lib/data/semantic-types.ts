@@ -13,6 +13,50 @@
 import type { RuleDefinition } from "../data/common";
 
 /*
+                              dP
+                              88
+ 88d888b. dP    dP 88d8b.d8b. 88d888b. .d8888b. 88d888b.
+ 88'  `88 88    88 88'`88'`88 88'  `88 88ooood8 88'  `88
+ 88    88 88.  .88 88  88  88 88.  .88 88.  ... 88
+ dP    dP `88888P' dP  dP  dP 88Y8888' `88888P' dP
+
+*/
+
+/** Settings controlling number, money, and list formatting. */
+export interface NumberSettings {
+    decimalSeparator: string;
+    thousandSeparator: string;
+    moneyPrefix: string;
+    moneySuffix: string;
+    moneyPrecision: number;
+    listSeparator: string;
+}
+
+/** Settings used to initialize a number input component. */
+export interface NumberInputSettings extends Partial<NumberSettings> {
+    type?: "integer" | "decimal" | "money";
+    precision?: number;
+}
+
+export type TextInputSettings = {
+    case?: "upper" | "lower" | "title" | "none";
+    charset?: "any" | "euro" | "latin" | "ascii" | "id"; // TODO: add "hex", "num"
+    idAllowChars?: Array<"_" | "-" | ".">;
+    idBlockChars?: Array<"I" | "O" | "i" | "o" | "l">;
+    blockSingleQuotes?: boolean;
+    blockDoubleQuotes?: boolean;
+    allowHtmlTags?: boolean;
+    blockEmoji?: boolean; // works with charset: "any"
+    maxLen?: number; // for id only, in other cases it is often better to use validation
+};
+
+// TODO: review and implement
+export type ListInputSettings = TextInputSettings & {
+    listSeparator?: string;
+    allowedValues?: string[];
+};
+
+/*
                    dP                         dP
                    88                         88
  .d8888b. .d8888b. 88 .d8888b. 88d888b. .d888b88 .d8888b. 88d888b.
@@ -121,44 +165,6 @@ export type FormPrompt = Omit<FomanticUI.Form.Settings.Prompts, "contain" | "con
 };
 
 export type FormText = FomanticUI.Form.Settings.Texts;
-
-/*
-                              dP
-                              88
- 88d888b. dP    dP 88d8b.d8b. 88d888b. .d8888b. 88d888b.
- 88'  `88 88    88 88'`88'`88 88'  `88 88ooood8 88'  `88
- 88    88 88.  .88 88  88  88 88.  .88 88.  ... 88
- dP    dP `88888P' dP  dP  dP 88Y8888' `88888P' dP
-
-*/
-
-/** Settings controlling number, money, and list formatting. */
-export interface NumberSettings {
-    decimalSeparator: string;
-    thousandSeparator: string;
-    moneyPrefix: string;
-    moneySuffix: string;
-    moneyPrecision: number;
-    listSeparator: string;
-}
-
-/** Settings used to initialize a number input component. */
-export interface NumberInputSettings extends Partial<NumberSettings> {
-    type?: "integer" | "decimal" | "money";
-    precision?: number;
-}
-
-export type TextInputSettings = {
-    case?: "upper" | "lower" | "title" | "none";
-    charset?: "any" | "euro" | "latin" | "ascii" | "id";
-    idAllowChars?: Array<"_" | "-" | ".">;
-    idBlockChars?: Array<"I" | "O" | "i" | "o" | "l">;
-    blockSingleQuotes?: boolean;
-    blockDoubleQuotes?: boolean;
-    allowHtmlTags?: boolean;
-    blockEmoji?: boolean; // works with charset: "any"
-    maxLen?: number; // for id only, in other cases it is often better to use validation
-};
 
 /*
        dP                                  dP

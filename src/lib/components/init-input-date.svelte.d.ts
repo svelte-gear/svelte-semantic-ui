@@ -5,7 +5,8 @@
 
 import type { Snippet, Component } from "svelte";
 import type { CalendarSettings } from "../data/semantic-types";
-import type { DateFormatter, RuleDefinition } from "../data/common";
+import type { RuleDefinition } from "../data/common";
+import type { DateFormatter } from "../data/format";
 
 /**
  * Svelte data binder and initializer for Date input.

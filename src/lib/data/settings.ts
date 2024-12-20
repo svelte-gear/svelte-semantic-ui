@@ -51,8 +51,29 @@ function isObject(value: unknown): boolean {
     return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
+// TODO: test that this function works well, it it required at all?
+export function deepClone<T>(obj: T): T {
+    if (obj === null || typeof obj !== "object") {
+        return obj; // Primitive values are returned as is
+    }
+    if (Array.isArray(obj)) {
+        return obj.map((item: unknown) => deepClone(item)) as unknown as T; // Recursively clone arrays
+    }
+    if (typeof obj === "function") {
+        return obj; // Functions are shared, not cloned
+    }
+    const clone: Record<string, unknown> = {};
+    // eslint-disable-next-line no-restricted-syntax
+    for (const key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            clone[key] = deepClone((obj as Record<string, unknown>)[key]); // Recursively clone objects
+        }
+    }
+    return clone as T;
+}
+
 /** Recursive function to copy only matching fields. */
-function copyFields(target: SettingsObject, source: SettingsObject, logName: string): void {
+export function copyFields(target: SettingsObject, source: SettingsObject, logName: string): void {
     const sourceKeys: string[] = Object.keys(source);
     const targetKeys: string[] = Object.keys(target);
     if (sourceKeys.length === 0 || targetKeys.length === 0) {
@@ -199,10 +220,11 @@ export function applyAllSettings(json: AllSettingsJson): void {
 
 */
 
+export const formDefaults: SettingsHelper<FormSettings> = new SettingsHelper("form");
+
 export const calendarDefaults: SettingsHelper<CalendarSettings> = new SettingsHelper("calendar");
 export const checkboxDefaults: SettingsHelper<CheckboxSettings> = new SettingsHelper("checkbox");
 export const dropdownDefaults: SettingsHelper<DropdownSettings> = new SettingsHelper("dropdown");
-export const formDefaults: SettingsHelper<FormSettings> = new SettingsHelper("form");
 export const modalDefaults: SettingsHelper<ModalSettings> = new SettingsHelper("modal");
 export const numberDefaults: SettingsHelper<NumberSettings> = new SettingsHelper("number");
 export const popupDefaults: SettingsHelper<PopupSettings> = new SettingsHelper("popup");

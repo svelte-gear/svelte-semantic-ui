@@ -11,9 +11,9 @@ import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition } from "../data/common";
 import type { CheckboxSettings, JQueryApi } from "../data/semantic-types";
-import { findComponent, uid } from "../data/common";
+import { findComponent, nextUid } from "../data/common";
 import { FieldController } from "../data/field-controller";
-import { checkboxDefaults } from "../data/settings";
+// import { checkboxDefaults } from "../data/settings";
 
 const FIELD_PREFIX: string = "f_checkbox";
 
@@ -58,11 +58,11 @@ let fieldCtrl: FieldController | undefined = undefined;
 
 function onInputChange(this: JQueryApi, p1?: unknown, p2?: unknown): void {
     console.log("CHECK", this, p1, p2);
-    // global checkbox settings
-    const def: CheckboxSettings = checkboxDefaults.read();
-    if (def.onChange) {
-        def.onChange.call(this);
-    }
+    // // global checkbox settings
+    // const def: CheckboxSettings = checkboxDefaults.read();
+    // if (def.onChange) {
+    //     def.onChange.call(this);
+    // }
     // user-specified handler for this component
     if (settings && settings.onChange) {
         settings.onChange.call(this);
@@ -90,7 +90,7 @@ onMount(async () => {
     if (!inputId) {
         const checkboxId: string | undefined =
             elem.attr("id") ?? elem.attr("name") ?? elem.attr("data-validate");
-        input.attr("data-validate", `${FIELD_PREFIX}_${checkboxId ? checkboxId : uid()}`);
+        input.attr("data-validate", `${FIELD_PREFIX}_${checkboxId ? checkboxId : nextUid()}`);
     }
 
     // select is already attaching the inner label to inner input

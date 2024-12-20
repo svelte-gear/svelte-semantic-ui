@@ -11,8 +11,12 @@ import type { JQueryApi } from "../../lib/data/semantic-types";
 import { sticky, InitForm, rule, InitDropdown, InitTextInput, InitCheckbox } from "../../lib";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import ShowCode from "../show-code.svelte";
-import { jQueryElem, SVELTE_FORM_STORE, type FormController } from "../../lib/data/common";
-import { getParentForm } from "../../lib/data/field-controller";
+import {
+    jQueryElem,
+    SVELTE_FORM_STORE,
+    type FormController,
+    findParentForm,
+} from "../../lib/data/common"; // TODO: separet import type
 
 const options: string[] = ["1", "2", "3", "4", "5"];
 
@@ -85,10 +89,14 @@ function validateForm(e: MouseEvent): void {
         return;
     }
     const elem: JQueryApi = jQueryElem(e.target as Element);
-    const form: JQueryApi = getParentForm(elem);
+    const form: JQueryApi | undefined = findParentForm(elem);
+    if (!form) {
+        throw new Error("Form not found");
+    }
     const ctrl: FormController = form.data(SVELTE_FORM_STORE) as FormController;
     ctrl.doValidateForm();
 }
+// TODO: export imperative function for validation
 
 // function blur(): void {
 //     if (document.activeElement) {

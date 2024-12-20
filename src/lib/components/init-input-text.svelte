@@ -9,11 +9,13 @@ Svelte data binder and formatter for text input.
 import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
-import type { RuleDefinition, TextFormatter } from "../data/common";
+import type { RuleDefinition } from "../data/common";
+import type { TextFormatter } from "../data/format";
 import type { JQueryApi, TextInputSettings } from "../data/semantic-types";
+
 import { findComponent } from "../data/common";
 import { FieldController } from "../data/field-controller";
-import { TextFmt } from "../data/input-formatter";
+import { TextFmt } from "../data/format";
 
 const FIELD_PREFIX: string = "f_input";
 
@@ -129,7 +131,7 @@ onMount(async () => {
     }
     // create a default formatter based on settings, or use supplied custom formatter
     if (!formatter) {
-        formatter = new TextFmt(settings);
+        formatter = new TextFmt(settings); // TODO: is 'settings' optional or required argument?
     }
 
     // apply validation rule if the rule is supplied in <InitTextInput >

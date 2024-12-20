@@ -12,14 +12,14 @@ import { onMount, onDestroy, tick } from "svelte";
 import type { FormSettings, JQueryApi } from "../data/semantic-types";
 import { SuiFormController } from "../data/form-controller";
 import {
-    equalArrays,
+    equalStringArrays,
+    getOrAssignKey,
     findComponent,
     jQueryElem,
     SVELTE_FORM_STORE,
     getComponentInitMode,
 } from "../data/common";
-import { getOrAssignKey } from "../data/field-controller";
-import { formDefaults } from "../data/settings";
+// import { formDefaults } from "../data/settings";
 
 interface Props {
     /** Determines if any field change will cause form re-validation. */
@@ -43,7 +43,7 @@ interface Props {
 /* eslint-disable prefer-const */
 
 let {
-    active = $bindable(),
+    active,
     valid = $bindable(undefined),
     errors = $bindable([]),
     settings = undefined,
@@ -88,7 +88,7 @@ function onValidChange(ctrlValue: boolean): void {
 
 /** When store value changes, modify the corresponding prop. */
 function onErrorsChange(ctrlValue: string[]): void {
-    if (!equalArrays(ctrlValue, errors)) {
+    if (!equalStringArrays(ctrlValue, errors)) {
         console.debug(`${formCtrl!.formId} : errors <- [ ${ctrlValue.join(" | ")} ]`);
         errors = ctrlValue;
     }
@@ -96,11 +96,12 @@ function onErrorsChange(ctrlValue: string[]): void {
 
 function onSuccessCallback(this: JQueryApi, event: Event, fields: object[]): void {
     console.log("SUCCESS");
-    const def: FormSettings = formDefaults.read();
-    if (def.onSuccess) {
-        def.onSuccess.call(this, event, fields);
-    }
+    // const def: FormSettings = formDefaults.read();
+    // if (def.onSuccess) {
+    //     def.onSuccess.call(this, event, fields);
+    // }
     // user-specified handler for this component
+    // if default handler is present, user handler may call it before, after, or not call at all
     if (settings && settings.onSuccess) {
         settings.onSuccess.call(this, event, fields);
     }
@@ -110,11 +111,12 @@ function onSuccessCallback(this: JQueryApi, event: Event, fields: object[]): voi
 
 function onFailureCallback(this: JQueryApi, formErrors: object[], fields: object[]): void {
     console.log("FAILURE");
-    const def: FormSettings = formDefaults.read();
-    if (def.onFailure) {
-        def.onFailure.call(this, formErrors, fields);
-    }
+    // const def: FormSettings = formDefaults.read();
+    // if (def.onFailure) {
+    //     def.onFailure.call(this, formErrors, fields);
+    // }
     // user-specified handler for this component
+    // if default handler is present, user handler may call it before, after, or not call at all
     if (settings && settings.onFailure) {
         settings.onFailure.call(this, formErrors, fields);
     }
@@ -140,7 +142,7 @@ onMount(async () => {
         onFailure: onFailureCallback,
     });
 
-    formCtrl = new SuiFormController(elem, onValidChange, onErrorsChange);
+    formCtrl = new SuiFormController(elem /* , onValidChange, onErrorsChange */);
     // store controller in jQuery data for fields to access
     elem.data(SVELTE_FORM_STORE, formCtrl);
 

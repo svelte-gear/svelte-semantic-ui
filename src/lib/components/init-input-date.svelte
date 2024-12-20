@@ -9,11 +9,12 @@ Svelte data binder and formatter for date input.
 import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
-import type { RuleDefinition, DateFormatter } from "../data/common";
+import type { RuleDefinition } from "../data/common";
+import type { DateFormatter } from "../data/format";
 import type { CalendarSettings, JQueryApi } from "../data/semantic-types";
 import { findComponent } from "../data/common";
 import { FieldController } from "../data/field-controller";
-import { DateFmt } from "../data/input-formatter";
+import { DateFmt } from "../data/format";
 
 const FIELD_PREFIX: string = "f_input";
 
@@ -131,7 +132,7 @@ onMount(async () => {
     }
     // create locale-aware date formatter based on settings, or use supplied custom formatter
     if (!formatter) {
-        formatter = new DateFmt(settings ?? {});
+        formatter = new DateFmt(settings);
     }
 
     // apply validation rule if the rule is supplied in <InitDateInput >

@@ -9,8 +9,8 @@ Svelte action to initialize semantic UI `Modal` dialogue component.
 import { onDestroy, onMount, tick, type Snippet } from "svelte";
 
 import type { ModalSettings, JQueryApi } from "../data/semantic-types";
-import { findComponent, jQueryElemById, uid } from "../data/common";
-import { modalDefaults } from "../data/settings";
+import { findComponent, jQueryElemById, nextUid } from "../data/common";
+// import { modalDefaults } from "../data/settings";
 
 interface Props {
     show: boolean;
@@ -79,10 +79,10 @@ function inputToSvelte(newValue: boolean): void {
 
 // eslint-disable-next-line no-undef
 function onModalShow(this: JQuery<HTMLElement>): void {
-    const def: ModalSettings = modalDefaults.read();
-    if (def.onShow) {
-        def.onShow.call(this);
-    }
+    // const def: ModalSettings = modalDefaults.read();
+    // if (def.onShow) {
+    //     def.onShow.call(this);
+    // }
     if (settings && settings.onShow) {
         settings.onShow.call(this);
     }
@@ -91,10 +91,10 @@ function onModalShow(this: JQuery<HTMLElement>): void {
 
 // eslint-disable-next-line no-undef
 function onModalHidden(this: JQuery<HTMLElement>): void {
-    const def: ModalSettings = modalDefaults.read();
-    if (def.onHidden) {
-        def.onHidden.call(this);
-    }
+    // const def: ModalSettings = modalDefaults.read();
+    // if (def.onHidden) {
+    //     def.onHidden.call(this);
+    // }
     if (settings && settings.onHidden) {
         settings.onHidden.call(this);
     }
@@ -113,7 +113,7 @@ onMount(async () => {
     // ensure modal has an id
     let modalId: string | undefined = elem.attr("id");
     if (!modalId) {
-        modalId = `modal_${uid()}`;
+        modalId = `modal_${nextUid()}`;
         elem.attr("id", modalId);
     }
     elem.modal({

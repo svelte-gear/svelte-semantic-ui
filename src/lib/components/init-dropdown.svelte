@@ -11,8 +11,8 @@ import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition } from "../data/common";
 import type { DropdownSettings, JQueryApi } from "../data/semantic-types";
-import { equalArrays, findComponent, uid } from "../data/common";
-import { dropdownDefaults } from "../data/settings";
+import { equalStringArrays, findComponent, nextUid } from "../data/common";
+// import { dropdownDefaults } from "../data/settings";
 import { FieldController } from "../data/field-controller";
 
 const FIELD_PREFIX: string = "f_dropdown";
@@ -84,7 +84,7 @@ function svelteToInput(newValue: string | string[] | undefined): void {
         if (!Array.isArray(newValue)) {
             throw new Error(`Multi-value dropdown expects string[] value, got ${newValue}`);
         }
-        if (!equalArrays(newValue, curValue as string[])) {
+        if (!equalStringArrays(newValue, curValue as string[])) {
             console.debug(`Dropdown(${fieldCtrl?.key}) : value -> ${toStr(newValue)}`);
             // NOTE: use 'set exactly' instead of 'set selected'!!!
             elem.dropdown("set exactly", newValue);
@@ -134,7 +134,7 @@ function inputToSvelte(inputValue: string | string[] | undefined): void {
     }
     // store in the prop only if the value is different
     if (multi) {
-        if (!equalArrays(value as string[], inputValue as string[])) {
+        if (!equalStringArrays(value as string[], inputValue as string[])) {
             console.debug(`Dropdown(${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
             value = inputValue;
             fieldCtrl?.revalidate();
@@ -165,11 +165,11 @@ function onDropdownChange(
     choice: JQueryApi
 ): void {
     void choice;
-    // global dropdown settings
-    const def: DropdownSettings = dropdownDefaults.read();
-    if (def.onChange) {
-        def.onChange.call(this, newValue, text, choice);
-    }
+    // // global dropdown settings
+    // const def: DropdownSettings = dropdownDefaults.read();
+    // if (def.onChange) {
+    //     def.onChange.call(this, newValue, text, choice);
+    // }
     // user-specified handler for this component
     if (settings && settings.onChange) {
         settings.onChange.call(this, newValue, text, choice);
@@ -216,7 +216,7 @@ onMount(async () => {
     if (!inputId) {
         const dropdownId: string | undefined =
             elem.attr("id") ?? elem.attr("name") ?? elem.attr("data-validate");
-        input.attr("data-validate", `${FIELD_PREFIX}_${dropdownId ? dropdownId : uid()}`);
+        input.attr("data-validate", `${FIELD_PREFIX}_${dropdownId ? dropdownId : nextUid()}`);
     }
 
     // show dropdown on label click, if for="_"

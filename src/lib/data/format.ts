@@ -3,7 +3,6 @@
  * @module data/input-formatter
  */
 
-import type { DateFormatter, ListFormatter, NumberFormatter, TextFormatter } from "../data/common";
 import type {
     CalendarSettings,
     DateFormatFn,
@@ -13,6 +12,39 @@ import type {
     TextInputSettings,
 } from "../data/semantic-types";
 import { calendarDefaults, numberDefaults } from "../data/settings";
+
+/*
+   dP
+   88
+ d8888P dP    dP 88d888b. .d8888b. .d8888b.
+   88   88    88 88'  `88 88ooood8 Y8ooooo.
+   88   88.  .88 88.  .88 88.  ...       88
+   dP   `8888P88 88Y888P' `88888P' `88888P'
+             .88 88
+         d8888P  dP
+*/
+
+/** Text format function, may be used to change case or limit charset. */
+export interface TextFormatter {
+    format: (val: string) => string;
+}
+
+/** Number format function, must return null if it can't parse value and doesn't want to override it. */
+export interface NumberFormatter {
+    format: (val: number | undefined) => string;
+    parse: (val: string) => number | undefined;
+}
+
+/** Number format function, must return null if it can't parse value and doesn't want to override it. */
+export interface DateFormatter {
+    format: (val: Date | undefined) => string;
+    parse: (val: string) => Date | undefined;
+}
+
+export interface ListFormatter {
+    format: (val: string[]) => string;
+    parse: (val: string) => string[];
+}
 
 /*
                               dP
@@ -48,9 +80,8 @@ export class NumberFmt implements NumberFormatter {
             throw new Error(`Unsupported precision number ${inputSettings.precision}`);
         }
 
-        const def: NumberSettings = numberDefaults.read();
         this.settings = {
-            ...def,
+            ...numberDefaults.read(),
             ...inputSettings,
         };
 
@@ -244,14 +275,21 @@ export class TextFmt implements TextFormatter {
 
 */
 
+type ListSettings = {
+    listSeparator?: string;
+};
+
 export class ListFmt implements ListFormatter {
     separator: string;
 
-    constructor(sep?: string) {
-        if (sep === "") {
+    constructor(settings?: ListSettings) {
+        if (settings && settings.listSeparator === "") {
             throw new Error("List separator can't be empty");
         }
-        this.separator = sep !== undefined ? sep : numberDefaults.read().listSeparator;
+        this.separator =
+            settings && settings.listSeparator
+                ? settings.listSeparator
+                : numberDefaults.read().listSeparator;
     }
 
     parse(val: string): string[] {
@@ -273,6 +311,8 @@ export class ListFmt implements ListFormatter {
     }
 }
 
+// TODO: init-input-list.svelte
+
 /*
        dP            dP
        88            88
@@ -290,7 +330,8 @@ export class DateFmt implements DateFormatter {
         this.settings = {
             ...calendarDefaults.read(),
             ...settings,
-            // TODO: should we use deep copy? test what happens...
+            // TODO: should we use clone and copyFields()? here and for number. test what happens with partial overrides
+            // FIXME: settings are ignored when formatting, defaults are used instead
         };
     }
 

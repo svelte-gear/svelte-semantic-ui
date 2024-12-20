@@ -157,7 +157,7 @@ calendar:
     showWeekNumbers: false # on the left
     startMode: false # year | month | def:day | hour
     today: false # show today/now button
-    touchReadonly: true # no input on toch devives
+    touchReadonly: true # no input on touch devices
 
     error:
         popup: "UI Popup, a required component is not included in this page"

@@ -5,38 +5,59 @@
 
 import type { JQueryApi } from "../data/semantic-types";
 
+/** Name of the jQuery data attribute used to store form controller */
 export const SVELTE_FORM_STORE: string = "svelte_form_store";
 
-/** Return type for a simple svelte action; with destroy(), but without update(). */
-export type ActionReturnType = {
-    destroy: () => void;
-} | void;
+//-----------------------------------------------------------------------------
+
+/*
+ oo          oo   dP                                dP
+                  88                                88
+ dP 88d888b. dP d8888P    88d8b.d8b. .d8888b. .d888b88 .d8888b.
+ 88 88'  `88 88   88      88'`88'`88 88'  `88 88'  `88 88ooood8
+ 88 88    88 88   88      88  88  88 88.  .88 88.  .88 88.  ...
+ dP dP    dP dP   dP      dP  dP  dP `88888P' `88888P8 `88888P'
+
+*/
+
+/** Determines how <InitComponent> is positioned related to the input to control */
+export type ComponentInitMode = "parent" | "child" | "sibling";
+
+/** List of all init modes, used for runtime check */
+const ALL_MODES: ComponentInitMode[] = ["parent", "child", "sibling"];
+
+/** Global setting for finding corresponding Semantic UI component */
+let COMPONENT_INIT_MODES: ComponentInitMode[] = ["sibling"];
+
+/** How Init* components are looking for a Semantic UI input */
+export function getComponentInitMode(): ComponentInitMode[] {
+    return COMPONENT_INIT_MODES;
+}
+
+/** Change component finding algorithm.
+Setting to all modes will find component in any of the 3 locations.
+Setting to empty array makes Init* component work only using forId param. */
+export function setComponentInitMode(modes: ComponentInitMode[]): void {
+    modes.forEach((mode: ComponentInitMode) => {
+        if (!ALL_MODES.includes(mode)) {
+            throw new Error(`Invalid component init mode: ${mode}`);
+        }
+    });
+    COMPONENT_INIT_MODES = modes;
+}
 
 //-----------------------------------------------------------------------------
 
-/** Text format function, may be used to change case or limit charset. */
-export interface TextFormatter {
-    format: (val: string) => string;
-}
-
-/** Number format function, must return null if it can't parse value and doesn't want to override it. */
-export interface NumberFormatter {
-    format: (val: number | undefined) => string;
-    parse: (val: string) => number | undefined;
-}
-
-/** Number format function, must return null if it can't parse value and doesn't want to override it. */
-export interface DateFormatter {
-    format: (val: Date | undefined) => string;
-    parse: (val: string) => Date | undefined;
-}
-
-export interface ListFormatter {
-    format: (val: string[]) => string;
-    parse: (val: string) => string[];
-}
-
-//-----------------------------------------------------------------------------
+/*
+   dP
+   88
+ d8888P dP    dP 88d888b. .d8888b. .d8888b.
+   88   88    88 88'  `88 88ooood8 Y8ooooo.
+   88   88.  .88 88.  .88 88.  ...       88
+   dP   `8888P88 88Y888P' `88888P' `88888P'
+             .88 88
+         d8888P  dP
+*/
 
 /** Validation rule object: rule string and custom error prompt */
 export type RuleObj = {
@@ -47,7 +68,139 @@ export type RuleObj = {
 /** Rule definition takes array or single instance of string or RuleObj */
 export type RuleDefinition = string | string[] | RuleObj | RuleObj[]; // | BaseSchema;
 
+/** Controls Semantic UI form element and it's data validation. */
+export interface FormController {
+    addRule: (key: string, rules: RuleDefinition) => void;
+    removeRule: (key: string, rules: RuleDefinition) => void;
+    doValidateField: (key: string) => void;
+    doValidateForm: () => void;
+    onFieldChange: (key: string) => void;
+}
+
+// /** Semantic UI component behavior API */
+// export type SemanticCommand = (
+//     command: string,
+//     v1?: unknown,
+//     v2?: unknown,
+//     v3?: unknown
+// ) => unknown;
+
+// /** Return type for a simple svelte action; with destroy(), but without update(). */
+// export type ActionReturnType = {
+//     destroy: () => void;
+// } | void;
+
 //-----------------------------------------------------------------------------
+
+/*
+            dP   oo dP
+            88      88
+ dP    dP d8888P dP 88
+ 88    88   88   88 88
+ 88.  .88   88   88 88
+ `88888P'   dP   dP dP
+
+*/
+
+/** Global unique id sequence */
+let unum: number = 100;
+
+/** Generate an unique number */
+export function nextUid(): string {
+    // const num = new Date().getTime();
+    // const num = Math.round(window.performance.now());
+    unum = unum + 1;
+    return `000000${unum % 1000}`.slice(-3);
+}
+
+/** Compare two Date objects */
+export function equalDates(a1: Date | undefined, a2: Date | undefined): boolean {
+    if (a1 instanceof Date && a2 instanceof Date) {
+        return a1.getTime() === a2.getTime();
+    }
+    return a1 === a2;
+}
+
+/** Compare two string arrays or strings */
+export function equalStringArrays(
+    a1: string[] | string | undefined,
+    a2: string[] | string | undefined
+): boolean {
+    if (Array.isArray(a1) && Array.isArray(a2)) {
+        if (a1.length !== a2.length) {
+            return false;
+        }
+        for (let i: number = 0; i < a1.length; i++) {
+            if (a1[i] !== a2[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return a1 === a2;
+}
+
+/** Compare two number arrays or numbers */
+export function equalNumberArrays(
+    a1: number[] | number | undefined,
+    a2: number[] | number | undefined
+): boolean {
+    if (Array.isArray(a1) && Array.isArray(a2)) {
+        if (a1.length !== a2.length) {
+            return false;
+        }
+        for (let i: number = 0; i < a1.length; i++) {
+            if (a1[i] !== a2[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return a1 === a2;
+}
+
+/** Format a number, padded with "0" to the minimum length */
+export function pad(n: number, size: number): string {
+    let str: string = n.toString();
+    while (str.length < size) {
+        str = `0${str}`;
+    }
+    return str;
+}
+
+/** Format Date using YYYY-MM-DD format */
+export function isoDate(d: Date | undefined): string {
+    if (!d || !d.getDate) {
+        return "";
+    }
+    const day: string = pad(d.getDate(), 2);
+    const month: string = pad(d.getMonth() + 1, 2);
+    const year: string = pad(d.getFullYear(), 4);
+    return `${year}-${month}-${day}`;
+}
+
+/** Format Date as time using HH:mm format (24 hours) */
+export function isoTime(d: Date | undefined): string {
+    if (!d || !d.getDate) {
+        return "";
+    }
+    const hour: string = pad(d.getHours(), 2);
+    const minute: string = pad(d.getMinutes(), 2);
+    return `${hour}:${minute}`;
+}
+
+//-----------------------------------------------------------------------------
+
+/*
+ oo  .88888.
+    d8'   `8b
+ dP 88     88  dP    dP .d8888b. 88d888b. dP    dP
+ 88 88  db 88  88    88 88ooood8 88'  `88 88    88
+ 88 Y8.  Y88P  88.  .88 88.  ... 88       88.  .88
+ 88  `8888PY8b `88888P' `88888P' dP       `8888P88
+ 88                                            .88
+ dP                                        d8888P
+*/
 
 /** Gets jQuery element by id attribute. */
 export function jQueryElemById(id: string): JQueryApi {
@@ -73,31 +226,6 @@ export function jQueryElem(node: Element): JQueryApi {
         throw new Error("jQuery is not initialized");
     }
     return jQuery(node);
-}
-
-//-----------------------------------------------------------------------------
-
-export type ComponentInitMode = "parent" | "child" | "sibling";
-const ALL_MODES: ComponentInitMode[] = ["parent", "child", "sibling"];
-
-/** Global setting for finding corresponding Semantic UI component */
-let COMPONENT_INIT_MODES: ComponentInitMode[] = ["sibling"];
-
-/** How Init** components are looking for a Semantic UI input */
-export function getComponentInitMode(): ComponentInitMode[] {
-    return COMPONENT_INIT_MODES;
-}
-
-/** Change component finding algorithm.
-Setting to all modes will find component in any of the 3 locations.
-Setting to empty array make <InitComp work only using forId. */
-export function setComponentInitMode(modes: ComponentInitMode[]): void {
-    modes.forEach((mode: ComponentInitMode) => {
-        if (!ALL_MODES.includes(mode)) {
-            throw new Error(`Invalid component init mode: ${mode}`);
-        }
-    });
-    COMPONENT_INIT_MODES = modes;
 }
 
 /** Find corresponding Semantic UI component,
@@ -140,112 +268,45 @@ export function findComponent(
     throw new Error(`Can't find '${selector}' component as a ${searchModes.join("|")}`);
 }
 
-/*
-                                                  dP   oo
-                                                  88
- .d8888b. .d8888b. 88d8b.d8b. .d8888b. 88d888b. d8888P dP .d8888b.
- Y8ooooo. 88ooood8 88'`88'`88 88'  `88 88'  `88   88   88 88'  `""
-       88 88.  ... 88  88  88 88.  .88 88    88   88   88 88.  ...
- `88888P' `88888P' dP  dP  dP `88888P8 dP    dP   dP   dP `88888P'
-
-*/
-
-/** Controls Semantic UI form element and it's data validation. */
-export interface FormController {
-    // formId: string;
-    // mode: "sui-form" | "yup-form";
-    // valid: Writable<boolean>;
-    // errors: Writable<string[]>;
-    // getActive(): boolean;
-    // setActive(val: boolean): void;
-    addRule: (key: string, rules: RuleDefinition) => void;
-    removeRule: (key: string, rules: RuleDefinition) => void;
-    doValidateField: (key: string) => void;
-    doValidateForm: () => void;
-    onFieldChange: (key: string) => void;
-
-    validCallback?: (valid: boolean) => void;
-    errorsCallback?: (errors: string[]) => void;
-}
-
-// /** Semantic UI component behavior API */
-// export type SemanticCommand = (
-//     command: string,
-//     v1?: unknown,
-//     v2?: unknown,
-//     v3?: unknown
-// ) => unknown;
-
-/*
-            dP   oo dP
-            88      88
- dP    dP d8888P dP 88
- 88    88   88   88 88
- 88.  .88   88   88 88
- `88888P'   dP   dP dP
-
-*/
-
-let unum: number = 100;
-
-/** Generate an unique number */
-export function uid(): string {
-    // const num = new Date().getTime();
-    // const num = Math.round(window.performance.now());
-    unum = unum + 1;
-    return `000000${unum % 1000}`.slice(-3);
-}
-
-/** Compare two Date objects or two primitives */
-export function equalDates(a1: Date | undefined, a2: Date | undefined): boolean {
-    if (a1 instanceof Date && a2 instanceof Date) {
-        return a1.getTime() === a2.getTime();
+/** Get field identifier: id, name, data-validate */
+export function getKey(elem: JQueryApi): string | undefined {
+    let key: string | undefined = elem.attr("id");
+    if (!key) {
+        key = elem.attr("name");
     }
-    return a1 === a2;
+    if (!key) {
+        key = elem.attr("data-validate");
+    }
+    return key;
 }
 
-/** Compare two arrays or two primitives */
-export function equalArrays(
-    a1: string[] | number[] | string | number | undefined,
-    a2: string[] | number[] | string | number | undefined
-): boolean {
-    if (Array.isArray(a1) && Array.isArray(a2)) {
-        if (a1.length !== a2.length) {
-            return false;
-        }
-        for (let i: number = 0; i < a1.length; i++) {
-            if (a1[i] !== a2[i]) {
-                return false;
-            }
-        }
-        return true;
+/** Get or assign field identifier: id, name, data-validate */
+export function getOrAssignKey(elem: JQueryApi, prefix?: string): string {
+    let key: string | undefined = elem.attr("id");
+    if (!key) {
+        key = elem.attr("name");
     }
-    return a1 === a2;
+    if (!key) {
+        key = elem.attr("data-validate");
+    }
+    if (!key) {
+        // assign new attribute
+        key = `${prefix ?? "f"}_${nextUid()}`;
+        elem.attr("data-validate", key);
+    }
+    return key;
 }
 
-export function pad(n: number, size: number): string {
-    let str: string = n.toString();
-    while (str.length < size) {
-        str = `0${str}`;
-    }
-    return str;
-}
+/** Search DOM tree for a parent form element  */
+export function findParentForm(elem: JQueryApi): JQueryApi | undefined {
+    let node: JQueryApi = elem;
+    do {
+        node = node.parent();
+    } while (node && !node.is("form.ui.form"));
 
-export function isoDate(d: Date | undefined): string {
-    if (!d || !d.getDate) {
-        return "";
+    if (node.is("form.ui.form")) {
+        return node;
+    } else {
+        return undefined;
     }
-    const day: string = pad(d.getDate(), 2);
-    const month: string = pad(d.getMonth() + 1, 2);
-    const year: string = pad(d.getFullYear(), 4);
-    return `${year}-${month}-${day}`;
-}
-
-export function isoTime(d: Date | undefined): string {
-    if (!d || !d.getDate) {
-        return "";
-    }
-    const hour: string = pad(d.getHours(), 2);
-    const minute: string = pad(d.getMinutes(), 2);
-    return `${hour}:${minute}`;
 }

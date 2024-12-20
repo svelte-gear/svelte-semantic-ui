@@ -92,3 +92,5 @@ export {
     supportedLanguages,
     supportedLocales,
 } from "./i18n";
+
+export { registerRule } from "./data/validation-rules";

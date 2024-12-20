@@ -11,8 +11,8 @@ import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition } from "../data/common";
 import type { SliderSettings, JQueryApi } from "../data/semantic-types";
-import { equalArrays, findComponent, uid } from "../data/common";
-import { sliderDefaults } from "../data/settings";
+import { equalNumberArrays, findComponent, nextUid } from "../data/common";
+// import { sliderDefaults } from "../data/settings";
 import { FieldController } from "../data/field-controller";
 
 const FIELD_PREFIX: string = "f_slider";
@@ -123,7 +123,7 @@ function inputToSvelte(inputValue: number | number[]): void {
         throw new Error("Slider is not initialized");
     }
     // store in the prop only if the value is different
-    if (!equalArrays(value, inputValue)) {
+    if (!equalNumberArrays(value, inputValue)) {
         console.debug(`InitSlider <- input = ${toStr(inputValue)}`);
         value = inputValue;
         if (range && Array.isArray(inputValue)) {
@@ -143,11 +143,11 @@ function onSliderChange(
     th1: number,
     th2: number
 ): void {
-    // global calendar settings
-    const def: SliderSettings = sliderDefaults.read();
-    if (def.onChange) {
-        def.onChange.call(this, newValue, th1, th2);
-    }
+    // // global calendar settings
+    // const def: SliderSettings = sliderDefaults.read();
+    // if (def.onChange) {
+    //     def.onChange.call(this, newValue, th1, th2);
+    // }
     // user-specified handler for this component
     if (settings && settings.onChange) {
         settings.onChange.call(this, newValue, th1, th2);
@@ -186,7 +186,7 @@ onMount(async () => {
     // Add hidden input to enable slider value validation
     const sliderId: string | undefined =
         elem.attr("id") ?? elem.attr("name") ?? elem.attr("data-validate");
-    const inputId: string = `${FIELD_PREFIX}_${sliderId ? sliderId : uid()}`;
+    const inputId: string = `${FIELD_PREFIX}_${sliderId ? sliderId : nextUid()}`;
     elem.append(`<input type="hidden" data-validate="${inputId}"/>`);
     input = elem.find("input");
 

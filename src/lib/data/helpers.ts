@@ -4,7 +4,7 @@
  */
 
 import type { DateFormatFn, DateParseFn } from "../data/semantic-types";
-import { DateFmt } from "../data/input-formatter";
+import { DateFmt } from "../data/format";
 
 /*
  .8888b              dP
@@ -129,7 +129,7 @@ export const rule = {
     exactCount:  (n: number): string => `exactCount[${n}]`,
     maxCount:    (n: number): string => `maxCount[${n}]`,
 
-    // helpers for custom rules
+    // helpers for custom rules // TODO: move to validation-rules.ts
     start:    (val: string): string => `start[${val}]`,
     isoDate:             (): string => "isoDate",
     startEnd: (val: string): string => `startEnd[${val}]`,

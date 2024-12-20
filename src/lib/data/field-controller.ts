@@ -5,43 +5,10 @@
 
 import type { FormController, RuleDefinition } from "../data/common";
 import type { JQueryApi } from "../data/semantic-types";
-import { uid, SVELTE_FORM_STORE } from "../data/common";
+import { findParentForm, getOrAssignKey, SVELTE_FORM_STORE } from "../data/common";
 
-/** Iterate through ancestors till `form` if found. */
-export function getParentForm(elem: JQueryApi): JQueryApi {
-    let form: JQueryApi = elem;
-    do {
-        form = form.parent();
-    } while (form && !form.hasClass("form"));
-
-    if (!form) {
-        throw new Error("use:validator must be called from a child of a 'form' component");
-    }
-    return form;
-}
-
-/* Adds validation rule to the field.
- * For Dropdown, use id of the select or the inner input.
- * For Calendar, use id of the innermost input.
- */
-
-/** Get or assign field identifier: id, name, data-validate */
-export function getOrAssignKey(elem: JQueryApi, prefix?: string): string {
-    let key: string | undefined = elem.attr("id");
-    if (!key) {
-        key = elem.attr("name");
-    }
-    if (!key) {
-        key = elem.attr("data-validate");
-    }
-    if (!key) {
-        // assign new attribute
-        key = `${prefix ?? "f"}_${uid()}`;
-        elem.attr("data-validate", key);
-    }
-    return key;
-}
-
+/** Adds validation rule to the field.
+    Common class used by all Init* components to control field validation */
 export class FieldController {
     key: string | undefined;
     formCtrl?: FormController;
@@ -52,16 +19,18 @@ export class FieldController {
 
         // get parent form and form controller
         if (validationRules) {
-            let form: JQueryApi = elem;
-            do {
-                form = form.parent();
-            } while (form && !form.hasClass("form"));
+            // TODO: create function findParentForm()
+            const form: JQueryApi | undefined = findParentForm(elem);
             if (!form) {
-                throw new Error(`Validated field ${this.key} must be a child of a Form component`);
+                throw new Error(
+                    `Validated field ${this.key} must be a child of a <form class="ui form">`
+                );
             }
             this.formCtrl = form.data(SVELTE_FORM_STORE) as FormController;
             if (!this.formCtrl) {
-                throw new Error(`Form controller for ${this.key} is not initialized`);
+                throw new Error(
+                    `Form controller for ${this.key} is not initialized, use <InitForm> on the parent form element`
+                );
             }
 
             this.formCtrl.addRule(this.key, validationRules);

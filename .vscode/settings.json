@@ -81,10 +81,11 @@
         ".git/{index,*refs,*HEAD}",
         ".vscode",
         ".vscode-insiders",
-        "doc/SETTINGS.md".
+        "doc/SETTINGS.md",
         "src/lib/i18n",
         "**/sveltekit-i18n",
-        "**/extra-locales"
+        "**/extra-locales",
+        "node_modules.*",
     ],
 
 }

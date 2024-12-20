@@ -147,7 +147,11 @@ function toggleActive(): void {
             <div class="field">
                 <label for="z1"> Date Input </label>
                 <input type="text" name="calendar-date" placeholder="date" id="z1" />
-                <InitDateInput bind:value={dat} validate={[rule.empty()]} />
+                <InitDateInput
+                    bind:value={dat}
+                    validate={[rule.empty()]}
+                    settings={{ text: { now: "sejchas" } }}
+                /><!-- // TODO: remove test options -->
                 <div class="help_text">
                     date formatter -
                     <ShowCode file="input" component="date" bind:selected={example} />

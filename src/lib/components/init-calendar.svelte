@@ -11,8 +11,8 @@ import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition } from "../data/common";
 import type { CalendarSettings, JQueryApi } from "../data/semantic-types";
-import { equalDates, isoDate, isoTime, findComponent, uid } from "../data/common";
-import { calendarDefaults } from "../data/settings";
+import { equalDates, isoDate, isoTime, findComponent, nextUid } from "../data/common";
+// import { calendarDefaults } from "../data/settings";
 import { FieldController } from "../data/field-controller";
 
 const FIELD_PREFIX: string = "f_calendar";
@@ -111,11 +111,11 @@ function inputToSvelte(inputValue: Date): void {
 
 /** The callback function is calls inputToSvelte when calendar value is changed by user. */
 function onCalendarChange(this: JQueryApi, newValue: Date, text: string, mode: string): void {
-    // global calendar settings
-    const def: CalendarSettings = calendarDefaults.read();
-    if (def.onChange) {
-        def.onChange.call(this, newValue, text, mode);
-    }
+    // // global calendar settings
+    // const def: CalendarSettings = calendarDefaults.read();
+    // if (def.onChange) {
+    //     def.onChange.call(this, newValue, text, mode);
+    // }
     // user-specified handler for this component
     if (settings && settings.onChange) {
         settings.onChange.call(this, newValue, text, mode);
@@ -126,10 +126,10 @@ function onCalendarChange(this: JQueryApi, newValue: Date, text: string, mode: s
 
 /** Callback for calendar closed before the final selection - restore the original value */
 function onCalendarHidden(this: JQueryApi): void {
-    const def: CalendarSettings = calendarDefaults.read();
-    if (def.onHidden) {
-        def.onHidden.call(this);
-    }
+    // const def: CalendarSettings = calendarDefaults.read();
+    // if (def.onHidden) {
+    //     def.onHidden.call(this);
+    // }
     if (settings && settings.onHidden) {
         settings.onHidden.call(this);
     }
@@ -169,11 +169,11 @@ onMount(async () => {
     // Add attribute to inner input to enable calendar value validation
     input = elem.find("input");
     const inputId: string | undefined =
-        input.attr("id") ?? input.attr("name") ?? input.attr("data-validate");
+        input.attr("id") ?? input.attr("name") ?? input.attr("data-validate"); // TODO: create a function to get key
     if (!inputId) {
         const calendarId: string | undefined =
             elem.attr("id") ?? elem.attr("name") ?? elem.attr("data-validate");
-        input.attr("data-validate", `${FIELD_PREFIX}_${calendarId ? calendarId : uid()}`);
+        input.attr("data-validate", `${FIELD_PREFIX}_${calendarId ? calendarId : nextUid()}`);
     }
 
     // show dropdown on label click, if for="_"
