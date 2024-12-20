@@ -129,7 +129,8 @@ export const rule = {
     exactCount:  (n: number): string => `exactCount[${n}]`,
     maxCount:    (n: number): string => `maxCount[${n}]`,
 
-    // helpers for custom rules // TODO: move to validation-rules.ts
+    // helpers for custom rules, would be better in validation-rules.ts, but are left here for auto-completion
+    // TODO: check if auto-completion works in examples
     start:    (val: string): string => `start[${val}]`,
     isoDate:             (): string => "isoDate",
     startEnd: (val: string): string => `startEnd[${val}]`,

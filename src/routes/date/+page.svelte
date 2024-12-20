@@ -5,7 +5,7 @@
 // Sample form page with components, data binding, and validation.
 
 // eslint-disable-next-line import/no-unresolved, import/extensions
-import { page } from "$app/stores";
+import { page } from "$app/state";
 
 import { sticky, InitForm, rule, InitCalendar, InitDateInput, InitCheckbox } from "../../lib";
 import { isoDate, isoTime } from "../../lib/data/common";
@@ -43,7 +43,7 @@ let json: string = $derived(
 /* eslint-enable */
 
 $effect(() => {
-    const hash: string = $page.url.hash;
+    const hash: string = page.url.hash;
     if (hash.length > 1) {
         example = hash.slice(1);
     }

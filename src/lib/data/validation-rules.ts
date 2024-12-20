@@ -28,7 +28,7 @@ import { isoDate } from "../data/common";
 function isoDateFn(value: string): boolean {
     let d: Date | undefined = undefined;
     try {
-        d = new Date(`${value} 13:00`); // TODO: use better hack
+        d = new Date(`${value} 13:00`); // TODO: find better hack
     } catch (ex) {
         d = undefined;
     }

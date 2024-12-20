@@ -6,6 +6,11 @@ Provides Svelte bindings for Semantic-UI `Form` validator.
 <svelte:options runes={true} />
 
 <script lang="ts">
+/**
+ * Svelte Component &lt;InitForm&gt;
+ * @module data/Svelte::InitForm
+ */
+
 import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
@@ -149,12 +154,12 @@ onMount(async () => {
     formCtrl.setActive(active);
 
     // make sure all inputs have ids, so form validation doesn't show warnings
-    // FIXME: check if it runs AFTER all the fields are initialized, no matter if parent, child, or sibling
+    // TODO: check if it runs AFTER all the fields are initialized, no matter if parent, child, or sibling
     // TODO: test is it works with one await
     await tick();
     await tick();
     elem.find("input").each((_idx: number, input: Element): void => {
-        getOrAssignKey(jQueryElem(input));
+        getOrAssignKey(jQueryElem(input), "f");
     });
 });
 

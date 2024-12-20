@@ -12,6 +12,7 @@
 #   | sed -z s/--\>.*@module/@module/ \
 #   | sed -z s/\<\\/script\>.*// \
 #   > "$dest_file"
+#   echo "void children;" >> "$dest_file"
 # done
 
 # pre-process *.md documents

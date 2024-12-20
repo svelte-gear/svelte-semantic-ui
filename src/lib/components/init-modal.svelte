@@ -12,6 +12,8 @@ import type { ModalSettings, JQueryApi } from "../data/semantic-types";
 import { findComponent, jQueryElemById, nextUid } from "../data/common";
 // import { modalDefaults } from "../data/settings";
 
+const MODAL_PREFIX: string = "modal";
+
 interface Props {
     show: boolean;
     settings?: ModalSettings;
@@ -106,14 +108,14 @@ onMount(async () => {
     await tick();
 
     // Initialize Semantic component and subscribe for changes
-    elem = findComponent(span!, ".ui.modal", forId) as JQueryApi & ModalApi;
+    elem = findComponent(span!, ".ui.modal", forId);
     if (!elem.modal) {
         throw new Error("Semantic UI modal is not initialized");
     }
     // ensure modal has an id
     let modalId: string | undefined = elem.attr("id");
     if (!modalId) {
-        modalId = `modal_${nextUid()}`;
+        modalId = `${MODAL_PREFIX}_${nextUid()}`;
         elem.attr("id", modalId);
     }
     elem.modal({
@@ -121,7 +123,8 @@ onMount(async () => {
         onShow: onModalShow,
         onHidden: onModalHidden,
     });
-    // the element has been moved in dom, find i't new location
+
+    // IMPORTANT: the element has been moved in dom, find i't new location
     elem = jQueryElemById(modalId);
 
     svelteToInput(show);
@@ -129,9 +132,9 @@ onMount(async () => {
 
 onDestroy(() => {
     if (elem) {
-        console.debug("InitModal - destroy", elem);
         elem.modal("hide");
         elem.modal("destroy");
+
         // IMPORTANT: elem must be removed from DOM using jQuery, as svelte has lost track of it
         elem.remove();
     }

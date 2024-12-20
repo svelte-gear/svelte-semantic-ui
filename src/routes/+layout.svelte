@@ -7,7 +7,7 @@
 
 import type { Snippet } from "svelte";
 // eslint-disable-next-line import/no-unresolved, import/extensions
-import { page } from "$app/stores";
+import { page } from "$app/state";
 import { applyLocale, getLocale, supportedLocales } from "../lib/i18n";
 
 interface Props {
@@ -24,7 +24,7 @@ let currLocale: string = $state(getLocale());
 let path: string = $state("");
 
 $effect(() => {
-    path = $page.url.pathname;
+    path = page.url.pathname;
     console.log("PATH", path);
 });
 

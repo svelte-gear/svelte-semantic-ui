@@ -12,6 +12,7 @@ import type {
     TextInputSettings,
 } from "../data/semantic-types";
 import { calendarDefaults, numberDefaults } from "../data/settings";
+import { helperDateFormat } from "./semantic-date-format";
 
 /*
    dP
@@ -80,6 +81,7 @@ export class NumberFmt implements NumberFormatter {
             throw new Error(`Unsupported precision number ${inputSettings.precision}`);
         }
 
+        // this settings are flat, shallow copy works well
         this.settings = {
             ...numberDefaults.read(),
             ...inputSettings,
@@ -311,7 +313,7 @@ export class ListFmt implements ListFormatter {
     }
 }
 
-// TODO: init-input-list.svelte
+// TODO: implement init-input-list.svelte
 
 /*
        dP            dP
@@ -326,107 +328,32 @@ export class ListFmt implements ListFormatter {
 export class DateFmt implements DateFormatter {
     private settings: CalendarSettings;
 
-    constructor(settings?: CalendarSettings) {
+    constructor(settings: CalendarSettings = {}) {
+        const def: CalendarSettings = calendarDefaults.read();
+
+        /* eslint-disable key-spacing, no-multi-spaces */
+        /* prettier-ignore */
         this.settings = {
-            ...calendarDefaults.read(),
-            ...settings,
-            // TODO: should we use clone and copyFields()? here and for number. test what happens with partial overrides
-            // FIXME: settings are ignored when formatting, defaults are used instead
+            // settings which are used for format() and parse()
+            type:           settings.type                ?? def.type,
+            monthFirst:     settings.monthFirst          ?? def.monthFirst,
+            firstDayOfWeek: settings.firstDayOfWeek      ?? def.firstDayOfWeek,
+            centuryBreak:   settings.centuryBreak        ?? def.centuryBreak,
+            currentCentury: settings.currentCentury      ?? def.currentCentury,
+            parser: {
+                date:       settings.parser?.date        ?? def.parser?.date,
+            },
+            formatter: {
+                date:       settings.formatter?.date     ?? def.formatter?.date,
+                datetime:   settings.formatter?.datetime ?? def.formatter?.datetime,
+                time:       settings.formatter?.time     ?? def.formatter?.time,
+            },
+            // deep-copy sub-objects
+            text:   { ...def.text,   ...settings.text },
+            regExp: { ...def.regExp, ...settings.regExp },
         };
+        /* eslint-enable */
     }
-
-    /* eslint-disable one-var */
-    /* eslint-disable prefer-template */
-    /* eslint-disable no-nested-ternary */
-    /* eslint-disable @typescript-eslint/typedef */
-
-    // this function is copied from fomantic-ui calendar component v2.9.3
-    protected weekOfYear(weekYear: number, weekMonth: number, weekDay: number): number {
-        void this;
-        // adapted from http://www.merlyn.demon.co.uk/weekcalc.htm
-        const ms1d = 24 * 3600 * 1000,
-            ms7d = 7 * ms1d,
-            DC3 = Date.UTC(weekYear, weekMonth, weekDay + 3) / ms1d, // an absolute day number
-            AWN = Math.floor(DC3 / 7), // an absolute week number
-            WYR = new Date(AWN * ms7d).getUTCFullYear();
-        return AWN - Math.floor(Date.UTC(WYR, 0, 7) / ms7d) + 1;
-    }
-
-    // this function is copied from fomantic-ui calendar component v2.9.3
-    protected helperDateFormat(
-        format: string | DateFormatFn,
-        date: Date,
-        sett?: CalendarSettings
-    ): string {
-        const settings: Required<CalendarSettings> =
-            (sett as Required<CalendarSettings>) ?? calendarDefaults.read();
-
-        if (!(date instanceof Date)) {
-            return "";
-        }
-        if (typeof format === "function") {
-            return format.call(this, date, settings);
-            // TODO: test if it works with formatter function
-        }
-        const D = date.getDate(),
-            M = date.getMonth(),
-            Y = date.getFullYear(),
-            d = date.getDay(),
-            H = date.getHours(),
-            m = date.getMinutes(),
-            s = date.getSeconds(),
-            w = /* module.get. */ this.weekOfYear(Y, M, D + 1 - settings.firstDayOfWeek),
-            h = H % 12 || 12,
-            a = H < 12 ? settings.text.am!.toLowerCase() : settings.text.pm!.toLowerCase(),
-            tokens = {
-                D: D,
-                DD: ("0" + D).slice(-2),
-                M: M + 1,
-                MM: ("0" + (M + 1)).slice(-2),
-                MMM: settings.text.monthsShort![M],
-                MMMM: settings.text.months![M],
-                Y: Y,
-                YY: String(Y).slice(2),
-                YYYY: Y,
-                d: d,
-                dd: settings.text.days![d],
-                ddd: settings.text.days![d],
-                dddd: settings.text.days![d],
-                // dd: settings.text.dayNamesShort[d].slice(0, 2),
-                // ddd: settings.text.dayNamesShort[d],
-                // dddd: settings.text.dayNames[d],
-                h: h,
-                hh: ("0" + h).slice(-2),
-                H: H,
-                HH: ("0" + H).slice(-2),
-                m: m,
-                mm: ("0" + m).slice(-2),
-                s: s,
-                ss: ("0" + s).slice(-2),
-                a: a,
-                A: a.toUpperCase(),
-                S: ["th", "st", "nd", "rd"][
-                    D % 10 > 3 ? 0 : (D % 100) - (D % 10) === 10 ? 0 : D % 10
-                ],
-                w: w,
-                ww: ("0" + w).slice(-2),
-            };
-
-        // eslint-disable-next-line func-names, prefer-arrow-callback
-        return format.replace(settings.regExp.token!, function (match: string): string {
-            if (match in tokens) {
-                return (
-                    tokens as unknown as {
-                        [key: string]: string;
-                    }
-                )[match];
-            }
-
-            return match.slice(1, -1);
-        });
-    }
-
-    /* eslint-enable */
 
     parse(val: string): Date | undefined {
         if (!val) {
@@ -447,10 +374,8 @@ export class DateFmt implements DateFormatter {
         type SettingsFormatter = {
             [key: string]: string | DateFormatFn;
         };
-        return this.helperDateFormat(
-            (this.settings.formatter! as SettingsFormatter)[type],
-            val,
-            this.settings
-        );
+        const formatter: SettingsFormatter = this.settings.formatter! as SettingsFormatter;
+        const formatStrOrFunc: string | DateFormatFn = formatter[type];
+        return helperDateFormat(formatStrOrFunc, val, this.settings as Required<CalendarSettings>);
     }
 }

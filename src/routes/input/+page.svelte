@@ -5,7 +5,7 @@
 // Sample form page with components, data binding, and validation.
 
 // eslint-disable-next-line import/no-unresolved, import/extensions
-import { page } from "$app/stores";
+import { page } from "$app/state";
 
 import {
     popup,
@@ -62,7 +62,7 @@ let json: string = $derived(
 /* eslint-enable */
 
 $effect(() => {
-    const hash: string = $page.url.hash;
+    const hash: string = page.url.hash;
     if (hash.length > 1) {
         example = hash.slice(1);
     }
@@ -73,7 +73,7 @@ function reset(): void {
     income = 12345;
     text3 = "";
     text4 = "";
-    ratings = [1, 5];
+    ratings = [0, 5];
 }
 
 reset();
@@ -150,7 +150,8 @@ function toggleActive(): void {
                 <InitDateInput
                     bind:value={dat}
                     validate={[rule.empty()]}
-                /><!-- // TODO: test with settings={{ text: { now: "sejchas" } }} -->
+                    settings={{ formatter: { date: "MMMM DD, YYYY" } }}
+                />
                 <div class="help_text">
                     date formatter -
                     <ShowCode file="input" component="date" bind:selected={example} />

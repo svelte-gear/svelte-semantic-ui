@@ -12,7 +12,7 @@ import { onMount, onDestroy, tick } from "svelte";
 import type { RuleDefinition } from "../data/common";
 import type { DateFormatter } from "../data/format";
 import type { CalendarSettings, JQueryApi } from "../data/semantic-types";
-import { findComponent } from "../data/common";
+import { findComponent, findLabelWithBlankFor, getOrAssignKey } from "../data/common";
 import { FieldController } from "../data/field-controller";
 import { DateFmt } from "../data/format";
 
@@ -118,29 +118,29 @@ onMount(async () => {
     elem = findComponent(span!, "input,textarea", forId);
     elem.on("change", onInputChange);
 
-    // focus on label click, if for="_"
-    const field: JQueryApi = elem.parent().filter(".field");
-    const labelFor: string | undefined = field.find("label").attr("for");
-    if (labelFor === "_") {
-        field.on("click", "label", labelClick);
+    // focus on label click, if label for="_"
+    const label: JQueryApi | undefined = findLabelWithBlankFor(elem);
+    if (label) {
+        label.on("click", labelClick);
     }
 
+    // create locale-aware date formatter based on settings, or use supplied custom formatter
     if (settings && formatter) {
         throw new Error(
             `InitDateInput(${fieldCtrl?.key}) : 'formatter' will override 'settings', don't use both at the same time`
         );
     }
-    // create locale-aware date formatter based on settings, or use supplied custom formatter
     if (!formatter) {
         formatter = new DateFmt(settings);
     }
 
     // apply validation rule if the rule is supplied in <InitDateInput >
-    fieldCtrl = new FieldController(elem, validate, FIELD_PREFIX);
+    getOrAssignKey(elem, FIELD_PREFIX);
+    fieldCtrl = new FieldController(elem, validate);
 
     // push initial value into the Semantic UI element
     if (value) {
-        valueToInput(value);
+        valueToInput(value); // FIXME: is validation ok if value is undefined ?
     }
 });
 
@@ -152,10 +152,9 @@ onDestroy(() => {
     if (elem) {
         elem.off("change", onInputChange);
 
-        const field: JQueryApi = elem.parent().filter(".field");
-        const labelFor: string | undefined = field.find("label").attr("for");
-        if (labelFor === "_") {
-            field.off("click", "label", labelClick);
+        const label: JQueryApi | undefined = findLabelWithBlankFor(elem);
+        if (label) {
+            label.off("click", labelClick);
         }
     }
 });

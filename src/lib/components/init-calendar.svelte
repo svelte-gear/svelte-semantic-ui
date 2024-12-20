@@ -11,7 +11,14 @@ import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition } from "../data/common";
 import type { CalendarSettings, JQueryApi } from "../data/semantic-types";
-import { equalDates, isoDate, isoTime, findComponent, nextUid } from "../data/common";
+import {
+    equalDates,
+    isoDate,
+    isoTime,
+    findComponent,
+    findLabelWithBlankFor,
+    copyParentKey,
+} from "../data/common";
 // import { calendarDefaults } from "../data/settings";
 import { FieldController } from "../data/field-controller";
 
@@ -37,7 +44,7 @@ let {
 }: Props = $props();
 
 /** Invisible dom element created by this component. */
-let span: Element | undefined = undefined; // $state();
+let span: Element | undefined = undefined;
 
 /* eslint-enable */
 
@@ -86,7 +93,6 @@ function svelteToInput(newValue: Date | undefined): void {
         console.debug(`Calendar(${fieldCtrl?.key}) value -> ${toStr(newValue)}`);
         elem.calendar("set date", newValue);
     }
-    // TODO: test if calendar revalidation is required (test from examples) ?
     fieldCtrl?.revalidate();
 }
 
@@ -105,17 +111,11 @@ function inputToSvelte(inputValue: Date): void {
         console.debug(`Calendar(${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
         value = inputValue;
     }
-    // TODO: test if calendar revalidation is required (test from examples) ?
     fieldCtrl?.revalidate();
 }
 
 /** The callback function is calls inputToSvelte when calendar value is changed by user. */
 function onCalendarChange(this: JQueryApi, newValue: Date, text: string, mode: string): void {
-    // // global calendar settings
-    // const def: CalendarSettings = calendarDefaults.read();
-    // if (def.onChange) {
-    //     def.onChange.call(this, newValue, text, mode);
-    // }
     // user-specified handler for this component
     if (settings && settings.onChange) {
         settings.onChange.call(this, newValue, text, mode);
@@ -126,10 +126,7 @@ function onCalendarChange(this: JQueryApi, newValue: Date, text: string, mode: s
 
 /** Callback for calendar closed before the final selection - restore the original value */
 function onCalendarHidden(this: JQueryApi): void {
-    // const def: CalendarSettings = calendarDefaults.read();
-    // if (def.onHidden) {
-    //     def.onHidden.call(this);
-    // }
+    // user-specified handler for this component
     if (settings && settings.onHidden) {
         settings.onHidden.call(this);
     }
@@ -156,7 +153,7 @@ onMount(async () => {
     await tick();
 
     // Initialize Semantic component and subscribe for changes
-    elem = findComponent(span!, ".ui.calendar", forId) as JQueryApi & CalendarApi;
+    elem = findComponent(span!, ".ui.calendar", forId);
     if (!elem.calendar) {
         throw new Error("Semantic calendar is not initialized");
     }
@@ -168,23 +165,17 @@ onMount(async () => {
 
     // Add attribute to inner input to enable calendar value validation
     input = elem.find("input");
-    const inputId: string | undefined =
-        input.attr("id") ?? input.attr("name") ?? input.attr("data-validate"); // TODO: create a function to get key
-    if (!inputId) {
-        const calendarId: string | undefined =
-            elem.attr("id") ?? elem.attr("name") ?? elem.attr("data-validate");
-        input.attr("data-validate", `${FIELD_PREFIX}_${calendarId ? calendarId : nextUid()}`);
-    }
+    copyParentKey(input, elem, FIELD_PREFIX);
 
-    // show dropdown on label click, if for="_"
-    const field: JQueryApi = elem.parent().filter(".field");
-    const labelFor: string | undefined = field.find("label").attr("for");
-    if (labelFor === "_") {
-        field.on("click", "label", labelClick);
+    // show calendar on label click, if label for="_"
+    const label: JQueryApi | undefined = findLabelWithBlankFor(elem);
+    if (label) {
+        label.on("click", labelClick);
     }
 
     // apply validation rule if the rule is supplied in <InitCalendar >
     fieldCtrl = new FieldController(input, validate);
+
     // push initial value into the Semantic UI element
     svelteToInput(value);
 });
@@ -197,10 +188,9 @@ onDestroy(() => {
     if (elem) {
         elem.calendar("destroy");
 
-        const field: JQueryApi = elem.parent().filter(".field");
-        const labelFor: string | undefined = field.find("label").attr("for");
-        if (labelFor === "_") {
-            field.off("click", "label", labelClick);
+        const label: JQueryApi | undefined = findLabelWithBlankFor(elem);
+        if (label) {
+            label.off("click", labelClick);
         }
     }
 });

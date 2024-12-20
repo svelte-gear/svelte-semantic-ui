@@ -269,29 +269,28 @@ export function findComponent(
 }
 
 /** Get field identifier: id, name, data-validate */
-export function getKey(elem: JQueryApi): string | undefined {
-    let key: string | undefined = elem.attr("id");
+export function getFieldKey(elem: JQueryApi): string | undefined {
+    return elem.attr("id") ?? elem.attr("name") ?? elem.attr("data-validate");
+}
+
+/** Get or assign sequential field identifier: id, name, data-validate */
+export function getOrAssignKey(elem: JQueryApi, prefix: string): string {
+    let key: string | undefined = getFieldKey(elem);
     if (!key) {
-        key = elem.attr("name");
-    }
-    if (!key) {
-        key = elem.attr("data-validate");
+        // assign new attribute
+        key = `${prefix}_${nextUid()}`;
+        elem.attr("data-validate", key);
     }
     return key;
 }
 
-/** Get or assign field identifier: id, name, data-validate */
-export function getOrAssignKey(elem: JQueryApi, prefix?: string): string {
-    let key: string | undefined = elem.attr("id");
-    if (!key) {
-        key = elem.attr("name");
-    }
-    if (!key) {
-        key = elem.attr("data-validate");
-    }
+/** If the elem doesn't have key, copy parent field identifier: id, name, data-validate */
+export function copyParentKey(elem: JQueryApi, parent: JQueryApi, prefix: string): string {
+    let key: string | undefined = getFieldKey(elem);
     if (!key) {
         // assign new attribute
-        key = `${prefix ?? "f"}_${nextUid()}`;
+        const parentKey: string | undefined = getFieldKey(parent);
+        key = `${prefix}_${parentKey ?? nextUid()}`;
         elem.attr("data-validate", key);
     }
     return key;
@@ -306,6 +305,17 @@ export function findParentForm(elem: JQueryApi): JQueryApi | undefined {
 
     if (node.is("form.ui.form")) {
         return node;
+    } else {
+        return undefined;
+    }
+}
+
+/** Find the label in the the same .ui.field with for="_" */
+export function findLabelWithBlankFor(node: JQueryApi): JQueryApi | undefined {
+    const field: JQueryApi = node.parent().filter(".field");
+    const label: JQueryApi = field.find("label");
+    if (label.attr("for") === "_") {
+        return label;
     } else {
         return undefined;
     }

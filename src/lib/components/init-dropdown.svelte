@@ -11,7 +11,12 @@ import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition } from "../data/common";
 import type { DropdownSettings, JQueryApi } from "../data/semantic-types";
-import { equalStringArrays, findComponent, nextUid } from "../data/common";
+import {
+    copyParentKey,
+    equalStringArrays,
+    findComponent,
+    findLabelWithBlankFor,
+} from "../data/common";
 // import { dropdownDefaults } from "../data/settings";
 import { FieldController } from "../data/field-controller";
 
@@ -189,7 +194,7 @@ onMount(async () => {
     await tick();
 
     // Initialize Semantic component and subscribe for changes
-    elem = findComponent(span!, ".ui.dropdown", forId) as JQueryApi & DropdownApi;
+    elem = findComponent(span!, ".ui.dropdown", forId);
     if (!elem.dropdown) {
         throw new Error("Semantic UI dropdown is not initialized");
     }
@@ -211,23 +216,17 @@ onMount(async () => {
 
     // Find select or inner input
     input = elem.find("input,select");
-    const inputId: string | undefined =
-        input.attr("id") ?? input.attr("name") ?? input.attr("data-validate");
-    if (!inputId) {
-        const dropdownId: string | undefined =
-            elem.attr("id") ?? elem.attr("name") ?? elem.attr("data-validate");
-        input.attr("data-validate", `${FIELD_PREFIX}_${dropdownId ? dropdownId : nextUid()}`);
-    }
+    copyParentKey(input, elem, FIELD_PREFIX);
 
     // show dropdown on label click, if for="_"
-    const field: JQueryApi = elem.parent().filter(".field");
-    const labelFor: string | undefined = field.find("label").attr("for");
-    if (labelFor === "_") {
-        field.on("click", "label", labelClick);
+    const label: JQueryApi | undefined = findLabelWithBlankFor(elem);
+    if (label) {
+        label.on("click", labelClick);
     }
 
     // apply validation rule if the rule is supplied in <InitCalendar >
     fieldCtrl = new FieldController(input, validate);
+
     // push initial value into the Semantic UI element
     svelteToInput(value);
 });
@@ -235,15 +234,14 @@ onMount(async () => {
 /** Remove the subscription */
 onDestroy(() => {
     if (fieldCtrl) {
-        fieldCtrl.removeRules(); // FIXME: testing (AK)
+        fieldCtrl.removeRules();
     }
     if (elem) {
         elem.dropdown("destroy");
 
-        const field: JQueryApi = elem.parent().filter(".field");
-        const labelFor: string | undefined = field.find("label").attr("for");
-        if (labelFor === "_") {
-            field.off("click", "label", labelClick);
+        const label: JQueryApi | undefined = findLabelWithBlankFor(elem);
+        if (label) {
+            label.off("click", labelClick);
         }
     }
 });

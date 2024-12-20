@@ -11,11 +11,12 @@ import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition } from "../data/common";
 import type { SliderSettings, JQueryApi } from "../data/semantic-types";
-import { equalNumberArrays, findComponent, nextUid } from "../data/common";
+import { copyParentKey, equalNumberArrays, findComponent } from "../data/common";
 // import { sliderDefaults } from "../data/settings";
 import { FieldController } from "../data/field-controller";
 
 const FIELD_PREFIX: string = "f_slider";
+const INITIAL_SLIDER_VALUE: number = 0;
 
 interface Props {
     value: number | number[];
@@ -29,7 +30,7 @@ interface Props {
 /* eslint-disable prefer-const */
 
 let {
-    value = $bindable(0),
+    value = $bindable(INITIAL_SLIDER_VALUE),
     settings = undefined,
     validate = undefined,
     forId = undefined,
@@ -72,7 +73,7 @@ function toStr(val: number | number[]): string {
 //-----------------------------------------------------------------------------
 
 /** Propagate prop change to UI component */
-function svelteToInput(newValue: number | number[]): void {
+function svelteToInput(newValue: number | number[], forceUpdate?: boolean): void {
     if (!elem) {
         // effect and svelteToInput may be called before onMount()
         return;
@@ -84,7 +85,7 @@ function svelteToInput(newValue: number | number[]): void {
         }
         const val1: number = elem.slider("get thumbValue", "first");
         const val2: number = elem.slider("get thumbValue", "second");
-        if (newValue[0] !== val1 || newValue[1] !== val2) {
+        if (newValue[0] !== val1 || newValue[1] !== val2 || forceUpdate) {
             console.debug(`InitSlider -> prop change = ${toStr(newValue)}`);
             elem.slider("set rangeValue", newValue[0], newValue[1]);
             input!.val(`${newValue.join(",")}`);
@@ -95,7 +96,7 @@ function svelteToInput(newValue: number | number[]): void {
             throw new Error(`Simple slider expects number value, got ${newValue.join(",")}`);
         }
         const val: number = elem.slider("get value");
-        if (newValue !== val) {
+        if (newValue !== val || forceUpdate) {
             console.debug(`InitSlider -> prop change = ${toStr(newValue)}`);
             elem.slider("set value", newValue);
             input!.val(`${newValue}`);
@@ -143,11 +144,6 @@ function onSliderChange(
     th1: number,
     th2: number
 ): void {
-    // // global calendar settings
-    // const def: SliderSettings = sliderDefaults.read();
-    // if (def.onChange) {
-    //     def.onChange.call(this, newValue, th1, th2);
-    // }
     // user-specified handler for this component
     if (settings && settings.onChange) {
         settings.onChange.call(this, newValue, th1, th2);
@@ -184,18 +180,20 @@ onMount(async () => {
     }
 
     // Add hidden input to enable slider value validation
-    const sliderId: string | undefined =
-        elem.attr("id") ?? elem.attr("name") ?? elem.attr("data-validate");
-    const inputId: string = `${FIELD_PREFIX}_${sliderId ? sliderId : nextUid()}`;
-    elem.append(`<input type="hidden" data-validate="${inputId}"/>`);
+    elem.append('<input type="hidden" />');
     input = elem.find("input");
+    copyParentKey(input, elem, FIELD_PREFIX);
+
+    // const sliderId: string | undefined = getFieldKey(elem);
+    // const inputId: string = `${FIELD_PREFIX}_${sliderId ? sliderId : nextUid()}`;
+    // elem.append(`<input type="hidden" data-validate="${inputId}"/>`);
 
     // apply validation rule if the rule is supplied in <InitSlider >
     fieldCtrl = new FieldController(input, validate);
+
     // push initial value into the Semantic UI element
-    svelteToInput(value);
-    // validate initial value, if validation is active
-    fieldCtrl.revalidate();
+    svelteToInput(value, true);
+    // FIXME: do we need the same force mechanism for other components?
 });
 
 /** Remove the subscription */

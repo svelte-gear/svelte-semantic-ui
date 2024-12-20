@@ -11,7 +11,7 @@ import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition } from "../data/common";
 import type { CheckboxSettings, JQueryApi } from "../data/semantic-types";
-import { findComponent, nextUid } from "../data/common";
+import { copyParentKey, findComponent } from "../data/common";
 import { FieldController } from "../data/field-controller";
 // import { checkboxDefaults } from "../data/settings";
 
@@ -56,13 +56,7 @@ let fieldCtrl: FieldController | undefined = undefined;
 
 // FUNCTIONS ------------------------------------------------------------------
 
-function onInputChange(this: JQueryApi, p1?: unknown, p2?: unknown): void {
-    console.log("CHECK", this, p1, p2);
-    // // global checkbox settings
-    // const def: CheckboxSettings = checkboxDefaults.read();
-    // if (def.onChange) {
-    //     def.onChange.call(this);
-    // }
+function onInputChange(this: JQueryApi): void {
     // user-specified handler for this component
     if (settings && settings.onChange) {
         settings.onChange.call(this);
@@ -83,15 +77,9 @@ onMount(async () => {
         onChange: onInputChange,
     });
 
-    // Find select or inner input
+    // Find inner input
     input = elem.find("input");
-    const inputId: string | undefined =
-        input.attr("id") ?? input.attr("name") ?? input.attr("data-validate");
-    if (!inputId) {
-        const checkboxId: string | undefined =
-            elem.attr("id") ?? elem.attr("name") ?? elem.attr("data-validate");
-        input.attr("data-validate", `${FIELD_PREFIX}_${checkboxId ? checkboxId : nextUid()}`);
-    }
+    copyParentKey(input, elem, FIELD_PREFIX);
 
     // select is already attaching the inner label to inner input
     // no need for label for="_" shortcut
@@ -104,7 +92,7 @@ onMount(async () => {
 /** Remove event handlers */
 onDestroy(() => {
     if (fieldCtrl) {
-        fieldCtrl.removeRules(); // FIXME: testing (AK)
+        fieldCtrl.removeRules();
     }
     if (elem) {
         elem.checkbox("destroy");

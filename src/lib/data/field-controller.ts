@@ -5,7 +5,7 @@
 
 import type { FormController, RuleDefinition } from "../data/common";
 import type { JQueryApi } from "../data/semantic-types";
-import { findParentForm, getOrAssignKey, SVELTE_FORM_STORE } from "../data/common";
+import { findParentForm, getFieldKey, SVELTE_FORM_STORE } from "../data/common";
 
 /** Adds validation rule to the field.
     Common class used by all Init* components to control field validation */
@@ -14,12 +14,16 @@ export class FieldController {
     formCtrl?: FormController;
     rules?: RuleDefinition;
 
-    constructor(elem: JQueryApi, validationRules?: RuleDefinition, prefix?: string) {
-        this.key = getOrAssignKey(elem, prefix);
+    constructor(elem: JQueryApi, validationRules?: RuleDefinition) {
+        this.key = getFieldKey(elem);
+        if (!this.key) {
+            throw new Error(
+                `Validated element ${elem.html()} must have a key (id, name, or data-validate)`
+            );
+        }
 
         // get parent form and form controller
         if (validationRules) {
-            // TODO: create function findParentForm()
             const form: JQueryApi | undefined = findParentForm(elem);
             if (!form) {
                 throw new Error(
