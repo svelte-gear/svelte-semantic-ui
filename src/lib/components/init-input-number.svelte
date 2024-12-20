@@ -13,7 +13,7 @@ import type { RuleDefinition } from "../data/common";
 import type { NumberFormatter } from "../data/format";
 import type { NumberInputSettings, JQueryApi } from "../data/semantic-types";
 
-import { findComponent, findLabelWithBlankFor, getOrAssignKey } from "../data/common";
+import { findComponent, findLabelWithBlank, getOrAssignKey } from "../data/common";
 import { FieldController } from "../data/field-controller";
 import { NumberFmt } from "../data/format";
 
@@ -120,7 +120,7 @@ onMount(async () => {
     elem.on("change", onInputChange);
 
     // focus on label click, if label for="_"
-    const label: JQueryApi | undefined = findLabelWithBlankFor(elem);
+    const label: JQueryApi | undefined = findLabelWithBlank(elem);
     if (label) {
         label.on("click", labelClick);
     }
@@ -153,7 +153,7 @@ onDestroy(() => {
     if (elem) {
         elem.off("change", onInputChange);
 
-        const label: JQueryApi | undefined = findLabelWithBlankFor(elem);
+        const label: JQueryApi | undefined = findLabelWithBlank(elem);
         if (label) {
             label.off("click", labelClick);
         }

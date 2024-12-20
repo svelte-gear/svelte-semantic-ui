@@ -16,7 +16,7 @@ import {
     isoDate,
     isoTime,
     findComponent,
-    findLabelWithBlankFor,
+    findLabelWithBlank,
     copyParentKey,
 } from "../data/common";
 // import { calendarDefaults } from "../data/settings";
@@ -168,7 +168,7 @@ onMount(async () => {
     copyParentKey(input, elem, FIELD_PREFIX);
 
     // show calendar on label click, if label for="_"
-    const label: JQueryApi | undefined = findLabelWithBlankFor(elem);
+    const label: JQueryApi | undefined = findLabelWithBlank(elem);
     if (label) {
         label.on("click", labelClick);
     }
@@ -188,7 +188,7 @@ onDestroy(() => {
     if (elem) {
         elem.calendar("destroy");
 
-        const label: JQueryApi | undefined = findLabelWithBlankFor(elem);
+        const label: JQueryApi | undefined = findLabelWithBlank(elem);
         if (label) {
             label.off("click", labelClick);
         }

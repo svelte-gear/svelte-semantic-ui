@@ -311,7 +311,7 @@ export function findParentForm(elem: JQueryApi): JQueryApi | undefined {
 }
 
 /** Find the label in the the same .ui.field with for="_" */
-export function findLabelWithBlankFor(node: JQueryApi): JQueryApi | undefined {
+export function findLabelWithBlank(node: JQueryApi): JQueryApi | undefined {
     const field: JQueryApi = node.parent().filter(".field");
     const label: JQueryApi = field.find("label");
     if (label.attr("for") === "_") {

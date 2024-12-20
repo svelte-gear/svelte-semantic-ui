@@ -15,7 +15,7 @@ import {
     copyParentKey,
     equalStringArrays,
     findComponent,
-    findLabelWithBlankFor,
+    findLabelWithBlank,
 } from "../data/common";
 // import { dropdownDefaults } from "../data/settings";
 import { FieldController } from "../data/field-controller";
@@ -219,7 +219,7 @@ onMount(async () => {
     copyParentKey(input, elem, FIELD_PREFIX);
 
     // show dropdown on label click, if for="_"
-    const label: JQueryApi | undefined = findLabelWithBlankFor(elem);
+    const label: JQueryApi | undefined = findLabelWithBlank(elem);
     if (label) {
         label.on("click", labelClick);
     }
@@ -239,7 +239,7 @@ onDestroy(() => {
     if (elem) {
         elem.dropdown("destroy");
 
-        const label: JQueryApi | undefined = findLabelWithBlankFor(elem);
+        const label: JQueryApi | undefined = findLabelWithBlank(elem);
         if (label) {
             label.off("click", labelClick);
         }
