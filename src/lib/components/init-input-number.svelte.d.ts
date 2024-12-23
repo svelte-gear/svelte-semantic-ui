@@ -5,7 +5,7 @@
 
 import type { Snippet, Component } from "svelte";
 import type { RuleDefinition, NumberInputSettings } from "../data/common";
-import type { NumberFormatter } from "../data/format";
+import type { NumberFormatter } from "../data/format-number";
 
 /**
  * Svelte data binder and initializer for number input.
@@ -40,7 +40,7 @@ import type { NumberFormatter } from "../data/format";
 /* eslint-disable @typescript-eslint/naming-convention, @typescript-eslint/ban-types */
 /* prettier-ignore */
 declare const InitDropdown: Component<{
-    /** Two-way binding for setting and reading back the selected item or array of items */
+    /** Two-way binding for setting and reading back numeric value */
     value?: number | undefined;
 
     /** Settings for date formatter, see https://fomantic-ui.com/modules/calendar.html#/settings */

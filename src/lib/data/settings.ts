@@ -103,7 +103,6 @@ function ensureNumberSettings(jQuery: JQuerySettings): void {
                 moneyPrefix: "$",
                 moneySuffix: "",
                 moneyPrecision: 2,
-                listSeparator: ", ",
             },
         };
     }

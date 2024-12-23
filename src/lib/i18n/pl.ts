@@ -103,7 +103,6 @@ const numberSettings: NumberSettings = {
     moneyPrefix: "",
     moneySuffix: " zł",
     moneyPrecision: 2,
-    listSeparator: ",",
 };
 
 export default {

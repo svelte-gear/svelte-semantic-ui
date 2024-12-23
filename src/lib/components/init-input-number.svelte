@@ -10,12 +10,12 @@ import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition, NumberInputSettings } from "../data/common";
-import type { NumberFormatter } from "../data/format";
+import type { NumberFormatter } from "../data/format-number";
 import type { JQueryApi } from "../data/dom-jquery";
 
 import { findComponent, findLabelWithBlank, getOrAssignKey } from "../data/dom-jquery";
 import { FieldController } from "../data/form-controller";
-import { NumberFmt } from "../data/format";
+import { NumberFmt } from "../data/format-number";
 
 const FIELD_PREFIX: string = "f_input";
 

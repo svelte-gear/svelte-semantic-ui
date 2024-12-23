@@ -27,7 +27,6 @@ const numberSettings: NumberSettings = {
     moneyPrefix: "£",
     moneySuffix: "",
     moneyPrecision: 2,
-    listSeparator: ",",
 };
 
 export default {

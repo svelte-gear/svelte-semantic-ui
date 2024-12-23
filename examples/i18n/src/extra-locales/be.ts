@@ -105,7 +105,6 @@ const numberSettings: NumberSettings = {
     moneyPrefix: "",
     moneySuffix: " р.",
     moneyPrecision: 2,
-    listSeparator: ",",
 };
 
 export default {

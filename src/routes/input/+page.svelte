@@ -32,6 +32,7 @@ let incomeRaw: string = $state("");
 let text3: string = $state("");
 let text4: string = $state("");
 let text5: string = $state("");
+// let list: string[] = $state([]);
 let ratings: number[] = $state([0, 0]);
 
 /* Hide or show slider */
@@ -53,6 +54,7 @@ let json: string = $derived(
         input: text4,
         input_live: text5,
         ratings: ratings.join(","),
+        // list: list,
     })
         .replace(/,"/g, ', "')
         .replace("{", "{ ")
@@ -74,6 +76,7 @@ function reset(): void {
     text3 = "";
     text4 = "";
     ratings = [0, 5];
+    // list = ["A", "b"];
 }
 
 reset();
@@ -193,7 +196,15 @@ function toggleActive(): void {
                 <InitTextInput
                     bind:value={text3}
                     validate={[rule.empty(), rule.contains("X")]}
-                    settings={{ charset: "any", blockEmoji: true }}
+                    settings={{
+                        charset: "ascii",
+                        // charset: "id_hex",
+                        // case: "upper",
+                        // blockEmoji: true,
+                        // list: true,
+                        // listSeparator: "\n",
+                        // maxLen: 2,
+                    }}
                 />
                 <div class="help_text">
                     text, uppercase formatter -

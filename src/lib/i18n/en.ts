@@ -110,7 +110,6 @@ const numberSettings: NumberSettings = {
     moneyPrefix: "$",
     moneySuffix: "",
     moneyPrecision: 2,
-    listSeparator: ",",
 };
 
 // TODO: 3. translate dropdownMessages and progressTexts to other languages

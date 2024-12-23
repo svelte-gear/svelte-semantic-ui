@@ -41,7 +41,6 @@ export interface NumberSettings {
     moneyPrefix: string;
     moneySuffix: string;
     moneyPrecision: number;
-    listSeparator: string;
 }
 
 /** Settings used to initialize a number input component. */
@@ -58,14 +57,16 @@ export type TextInputSettings = {
     blockSingleQuotes?: boolean;
     blockDoubleQuotes?: boolean;
     allowHtmlTags?: boolean;
-    blockEmoji?: boolean; // works with charset: "any"
-    maxLen?: number; // for id only, in other cases it is often better to use validation
-};
+    blockEmoji?: boolean; // works with charset "any"
 
-// TODO: 3. review and implement
-export type ListInputSettings = TextInputSettings & {
+    /** Maximum value length. Intended for "id_*" charset, in other cases it is often better to use validation */
+    maxLen?: number; //
+
+    /** The input returns string[] */
+    list?: boolean;
+
+    /** Character user to separate values */
     listSeparator?: string;
-    allowedValues?: string[];
 };
 
 // /** Semantic UI component behavior API */

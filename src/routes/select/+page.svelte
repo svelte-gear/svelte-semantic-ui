@@ -78,7 +78,6 @@ reset();
 
 function toggleActive(): void {
     active = !active;
-    // rule.s // TODO: 1. remove test code
 }
 
 function validateForm(e: MouseEvent): void {

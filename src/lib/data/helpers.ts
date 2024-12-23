@@ -4,7 +4,7 @@
  */
 
 import type { DateFormatFn, DateParseFn } from "../data/semantic-types";
-import { DateFmt } from "../data/format";
+import { DateFmt } from "../data/format-date";
 
 /*
  .8888b              dP

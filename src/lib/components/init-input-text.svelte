@@ -9,18 +9,18 @@ Svelte data binder and formatter for text input.
 import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
-import type { RuleDefinition, TextInputSettings } from "../data/common";
-import type { TextFormatter } from "../data/format";
+import { equalStringArrays, type RuleDefinition, type TextInputSettings } from "../data/common";
+import type { TextFormatter } from "../data/format-text";
 import type { JQueryApi } from "../data/dom-jquery";
 
 import { findComponent, findLabelWithBlank, getOrAssignKey } from "../data/dom-jquery";
 import { FieldController } from "../data/form-controller";
-import { TextFmt } from "../data/format";
+import { TextFmt } from "../data/format-text";
 
 const FIELD_PREFIX: string = "f_input";
 
 interface Props {
-    value?: string;
+    value?: string | string[];
     settings?: TextInputSettings;
     validate?: RuleDefinition;
     formatter?: TextFormatter;
@@ -55,7 +55,7 @@ let fieldCtrl: FieldController | undefined = undefined;
 
 // FUNCTIONS ------------------------------------------------------------------
 
-function svelteToInput(newValue: string): void {
+function svelteToInput(newValue: string | string[]): void {
     if (!elem || !formatter) {
         // effect and svelteToInput may be called before onMount()
         return;
@@ -68,14 +68,24 @@ function svelteToInput(newValue: string): void {
         elem.get(0)!.dispatchEvent(new CustomEvent("input"));
     }
     // push back the value if it got changed
-    if (formattedStr !== value) {
-        value = formattedStr;
+    const parsedValue: string | string[] = formatter.parse(formattedStr);
+    if (!equalStringArrays(parsedValue, value)) {
+        value = parsedValue;
     }
     fieldCtrl?.revalidate(); // AK 01
 }
 
 $effect(() => {
     void value;
+    // a hack to trigger effect on array element change
+    if (Array.isArray(value)) {
+        if (value.length > 0) {
+            void value[0];
+        }
+        for (let i: number = 0; i < value.length; i++) {
+            void value[i];
+        }
+    }
     svelteToInput(value);
 });
 
@@ -84,12 +94,13 @@ $effect(() => {
 /** When input value changes, modify the svelte prop */
 function inputToSvelte(inputText: string): void {
     // store in the prop only if the value is different
-    const formattedStr: string = formatter!.format(inputText);
-    if (formattedStr !== value) {
+    const parsedValue: string | string[] = formatter!.parse(inputText);
+    if (parsedValue !== value) {
         console.debug(`TextInput(${fieldCtrl?.key}) : value <- ${inputText}`);
-        value = formattedStr;
+        value = parsedValue;
     }
     // update input if the formatted text is different
+    const formattedStr: string = formatter!.format(parsedValue);
     if (formattedStr !== inputText) {
         elem?.val(formattedStr);
         elem?.get(0)!.dispatchEvent(new CustomEvent("input"));

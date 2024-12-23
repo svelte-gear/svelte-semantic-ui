@@ -5,7 +5,7 @@
 
 import type { Snippet, Component } from "svelte";
 import type { RuleDefinition, TextInputSettings } from "../data/common";
-import type { TextFormatter } from "../data/format";
+import type { TextFormatter } from "../data/format-text";
 
 /**
  * Svelte data binder and initializer for text input.
@@ -35,8 +35,8 @@ import type { TextFormatter } from "../data/format";
 /* eslint-disable @typescript-eslint/naming-convention, @typescript-eslint/ban-types */
 /* prettier-ignore */
 declare const InitDropdown: Component<{
-    /** Two-way binding for setting and reading back the selected item or array of items */
-    value?: string;
+    /** Two-way binding for setting and reading back the text or array of text items */
+    value?: string | string[];
 
     /** Settings for date formatter, see https://fomantic-ui.com/modules/calendar.html#/settings */
     settings?: TextInputSettings;
