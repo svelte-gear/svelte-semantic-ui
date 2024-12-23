@@ -7,12 +7,17 @@
 
 // eslint-disable-next-line import/no-unresolved, import/extensions
 import { page } from "$app/state";
-import type { JQueryApi } from "../../lib/data/dom-jquery";
-import type { FormController } from "../../lib/data/common";
-import { sticky, InitForm, rule, InitDropdown, InitTextInput, InitCheckbox } from "../../lib";
+import {
+    sticky,
+    InitForm,
+    rule,
+    InitDropdown,
+    InitTextInput,
+    InitCheckbox,
+    validateForm,
+} from "../../lib";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import ShowCode from "../show-code.svelte";
-import { jQueryElem, SVELTE_FORM_STORE, findParentForm } from "../../lib/data/dom-jquery";
 
 const options: string[] = ["1", "2", "3", "4", "5"];
 
@@ -79,26 +84,6 @@ reset();
 function toggleActive(): void {
     active = !active;
 }
-
-function validateForm(e: MouseEvent): void {
-    if (!e.target) {
-        return;
-    }
-    const elem: JQueryApi = jQueryElem(e.target as Element);
-    const form: JQueryApi | undefined = findParentForm(elem);
-    if (!form) {
-        throw new Error("Form not found");
-    }
-    const ctrl: FormController = form.data(SVELTE_FORM_STORE) as FormController;
-    ctrl.doValidateForm();
-}
-// TODO: 1. export a function for imperative validation
-
-// function blur(): void {
-//     if (document.activeElement) {
-//         (document.activeElement as HTMLElement).blur();
-//     }
-// }
 </script>
 
 <!------------------------------------------------------------------------------------------------>

@@ -6,7 +6,14 @@
 import type { FormController, RuleDefinition } from "../data/common";
 import type { JQueryApi } from "../data/dom-jquery";
 import type { FormSettings } from "../data/semantic-types";
-import { nextUid, findParentForm, getFieldKey, SVELTE_FORM_STORE } from "../data/dom-jquery";
+import {
+    nextUid,
+    findParentForm,
+    getFieldKey,
+    SVELTE_FORM_STORE,
+    jQueryElemById,
+    jQueryElem,
+} from "../data/dom-jquery";
 
 export type FormApi = {
     form(settings?: FormSettings): void;
@@ -216,6 +223,32 @@ export class FieldController {
             }, 0);
         }
     }
+}
+
+/** Imperatively call form validation, may be passed by name in event handler from within the form.
+    Will find the parent form using event target.
+    Or may be called with form id attribute as a string. */
+export function validateForm(e: MouseEvent | KeyboardEvent | string): void {
+    if (!e) {
+        throw new Error("validateForm() requires a parameter: event or string dom id");
+    }
+    let elem: JQueryApi | undefined = undefined;
+    if (typeof e === "string") {
+        elem = jQueryElemById(e);
+    } else {
+        if (!e.target) {
+            throw new Error(
+                `validateForm() requires a parameter: event or string dom id, got ${typeof e} ${e.type}`
+            );
+        }
+        elem = jQueryElem(e.target as Element);
+    }
+    const form: JQueryApi | undefined = findParentForm(elem);
+    if (!form) {
+        throw new Error("Form not found");
+    }
+    const ctrl: FormController = form.data(SVELTE_FORM_STORE) as FormController;
+    ctrl.doValidateForm();
 }
 
 // function getFieldByKey(key: string): JQueryApi {

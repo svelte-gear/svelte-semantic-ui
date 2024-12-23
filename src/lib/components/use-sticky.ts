@@ -33,6 +33,4 @@ export function sticky(node: Element, settings?: StickySettings): void {
         // ...stickyDefaults,
         ...settings,
     });
-
-    // TODO: 2. do i need to remove it if hidden (removed from DOM) ?
 }

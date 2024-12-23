@@ -24,6 +24,7 @@ import {
     jQueryElem,
     SVELTE_FORM_STORE,
     getComponentInitMode,
+    ensureFieldKey,
 } from "../data/dom-jquery";
 // import { formDefaults } from "../data/settings";
 
@@ -157,10 +158,12 @@ onMount(async () => {
     // make sure all inputs have ids, so form validation doesn't show warnings
     // TODO: 2. check if it runs AFTER all the fields are initialized, no matter if parent, child, or sibling
     // TODO: 3. test is it works with one await
-    await tick();
-    await tick();
+    // await tick();
+    // await tick();
     elem.find("input").each((_idx: number, input: Element): void => {
-        getOrAssignKey(jQueryElem(input), "f");
+        ensureFieldKey(jQueryElem(input));
+        // getOrAssignKey(jQueryElem(input), "f");
+        // FIXME: validate if key assignment works as desired
     });
 });
 

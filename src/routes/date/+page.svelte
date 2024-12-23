@@ -163,12 +163,12 @@ function toggleActive(): void {
                         bind:value={dat}
                         settings={{
                             type: "time",
-                            onChange: (date: Date, text: string, mode: string) => {
-                                console.log(`time changed: ${text} | ${date} | ${mode}`);
-                            },
                         }}
                         validate={[rule.empty(), rule.not("00:00")]}
                     >
+                        <!-- onChange: (date: Date, text: string, mode: string) => {
+                            console.log(`time changed: ${text} | ${date} | ${mode}`);
+                        }, -->
                         <div class="ui calendar">
                             <div class="ui input right icon" id="x16">
                                 <i class="clock outline icon"></i>

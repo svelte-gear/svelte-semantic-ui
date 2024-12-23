@@ -3,8 +3,8 @@
  * @module data/helpers
  */
 
-import type { DateFormatFn, DateParseFn } from "../data/semantic-types";
 import { DateFmt } from "../data/format-date";
+import { NumberFmt } from "./format-number";
 
 /*
  .8888b              dP
@@ -19,33 +19,45 @@ import { DateFmt } from "../data/format-date";
 // Global fmt and parse objects with default formatting settings.
 // Lazily initialized, to give user the chance to change defaults.
 
-let defaultDateFmt: DateFmt | null = null;
-function getDefaultDateFmt(): DateFmt {
-    if (defaultDateFmt === null) {
-        defaultDateFmt = new DateFmt({ type: "date" });
-    }
-    return defaultDateFmt;
-}
-
-let defaultTimeFmt: DateFmt | null = null;
-function getDefaultTimeFmt(): DateFmt {
-    if (defaultTimeFmt === null) {
-        defaultTimeFmt = new DateFmt({ type: "time" });
-    }
-    return defaultTimeFmt;
-}
+let dateFmt: DateFmt | null = null;
+let timeFmt: DateFmt | null = null;
+let intFmt: NumberFmt | null = null;
+let numFmt: NumberFmt | null = null;
+let num2Fmt: NumberFmt | null = null;
+let moneyFmt: NumberFmt | null = null;
 
 export const fmt: {
-    date: DateFormatFn;
-    time: DateFormatFn;
-    // TODO: 1. implement integer, decimal0, decimal1, decimal2, decimal3, money
-    // number: (val: number | undefined, precision?: number) => string;
-    // money:  (val: number | undefined) => string;
-    // list: (val: string[] | undefined) => string;
+    date: (d: Date | undefined) => string;
+    time: (d: Date | undefined) => string;
+    int: (n: number | undefined) => string;
+    num: (n: number | undefined) => string;
+    num2: (n: number | undefined) => string;
+    money: (n: number | undefined) => string;
 } = {
-    date: (d: Date | undefined): string => getDefaultDateFmt().format(d),
-
-    time: (d: Date | undefined): string => getDefaultTimeFmt().format(d),
+    date: (d: Date | undefined): string => {
+        dateFmt ??= new DateFmt({ type: "date" });
+        return dateFmt.format(d);
+    },
+    time: (d: Date | undefined): string => {
+        timeFmt ??= new DateFmt({ type: "time" });
+        return timeFmt.format(d);
+    },
+    int: (n: number | undefined): string => {
+        intFmt ??= new NumberFmt({ type: "integer" });
+        return intFmt.format(n);
+    },
+    num: (n: number | undefined): string => {
+        numFmt ??= new NumberFmt({ type: "decimal" });
+        return numFmt.format(n);
+    },
+    num2: (n: number | undefined): string => {
+        num2Fmt ??= new NumberFmt({ type: "decimal", precision: 2 });
+        return num2Fmt.format(n);
+    },
+    money: (n: number | undefined): string => {
+        moneyFmt ??= new NumberFmt({ type: "decimal", precision: 2 });
+        return moneyFmt.format(n);
+    },
 };
 
 /*
@@ -59,24 +71,36 @@ export const fmt: {
 */
 
 export const parse: {
-    date: DateParseFn;
-    time: DateParseFn;
-    // TODO: 1. implement number, maybe list
-    // number: (val: string | undefined) => number | undefined;
-    // money: (val: string | undefined) => number | undefined;
-    // list: (val: string | undefined) => string[];
+    date: (s: string) => Date | undefined;
+    time: (s: string) => Date | undefined;
+    int: (s: string) => number | undefined;
+    num: (s: string) => number | undefined;
+    num2: (s: string) => number | undefined;
+    money: (s: string) => number | undefined;
 } = {
-    date: (value: string | undefined): Date | undefined => {
-        if (!value) {
-            return undefined;
-        }
-        return getDefaultDateFmt().parse(value);
+    date: (s: string): Date | undefined => {
+        dateFmt ??= new DateFmt({ type: "date" });
+        return dateFmt.parse(s);
     },
-    time: (value: string | undefined): Date | undefined => {
-        if (!value) {
-            return undefined;
-        }
-        return getDefaultTimeFmt().parse(value);
+    time: (s: string): Date | undefined => {
+        timeFmt ??= new DateFmt({ type: "time" });
+        return timeFmt.parse(s);
+    },
+    int: (s: string): number | undefined => {
+        intFmt ??= new NumberFmt({ type: "integer" });
+        return intFmt.parse(s);
+    },
+    num: (s: string): number | undefined => {
+        numFmt ??= new NumberFmt({ type: "decimal" });
+        return numFmt.parse(s);
+    },
+    num2: (s: string): number | undefined => {
+        num2Fmt ??= new NumberFmt({ type: "decimal", precision: 2 });
+        return num2Fmt.parse(s);
+    },
+    money: (s: string): number | undefined => {
+        moneyFmt ??= new NumberFmt({ type: "decimal", precision: 2 });
+        return moneyFmt.parse(s);
     },
 };
 

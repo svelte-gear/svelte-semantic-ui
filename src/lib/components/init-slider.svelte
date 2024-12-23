@@ -193,9 +193,8 @@ onMount(async () => {
     // apply validation rule if the rule is supplied in <InitSlider >
     fieldCtrl = new FieldController(input, validate);
 
-    // push initial value into the Semantic UI element
+    // push initial value into the Semantic UI element, required for slider as it has 0 as default
     svelteToInput(value, true);
-    // FIXME: do we need the same force mechanism for other components?
 });
 
 /** Remove the subscription */

@@ -31,7 +31,6 @@ export function helperDateFormat(
     }
     if (typeof format === "function") {
         return format(date, settings);
-        // TODO: 2. test if the function works with formatter function as argument
     }
     const D = date.getDate(),
         M = date.getMonth(),

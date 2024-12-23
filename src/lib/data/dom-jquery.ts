@@ -146,6 +146,37 @@ export function copyParentKey(elem: JQueryApi, parent: JQueryApi, prefix: string
     return key;
 }
 
+/** Perform lookup for known parent types, copy parent id if it can. */
+export function ensureFieldKey(elem: JQueryApi): string {
+    const key: string | undefined = getFieldKey(elem);
+    if (key) {
+        return key;
+    }
+    let parent: JQueryApi = elem.parent();
+    while (parent && parent.length > 0) {
+        if (parent.is(".ui.calendar")) {
+            return copyParentKey(elem, parent, "f_calendar");
+        }
+        if (parent.is(".ui.dropdown")) {
+            return copyParentKey(elem, parent, "f_dropdown");
+        }
+        if (parent.is(".ui.checkbox")) {
+            return copyParentKey(elem, parent, "f_checkbox");
+        }
+        if (parent.is(".ui.slider")) {
+            return copyParentKey(elem, parent, "f_slider");
+        }
+
+        // exit if component is not found
+        if (parent.is(".ui.field") || parent.is("form")) {
+            break;
+        }
+        parent = parent.parent();
+    }
+    // assign new attribute
+    return getOrAssignKey(elem, "f");
+}
+
 /** Search DOM tree for a parent form element  */
 export function findParentForm(elem: JQueryApi): JQueryApi | undefined {
     let node: JQueryApi = elem;

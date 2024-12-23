@@ -80,13 +80,16 @@ export class NumberFmt implements NumberFormatter {
         }
         let str: string = val.toFixed(Math.max(this.precision, 0));
         str = str.replace(".", this.settings.decimalSeparator);
-        const len: number = str.length;
-        const firstPos: number = this.precision > 0 ? this.precision + 1 : 0;
-        for (let n: number = 3 + firstPos; n < len; n += 3) {
-            str =
-                str.substring(0, len - n) +
-                this.settings.thousandSeparator +
-                str.substring(len - n);
+        if (this.type !== "integer") {
+            // thousand separator is not applicable to integer, use decimal with precision 0 to enable it
+            const len: number = str.length;
+            const firstPos: number = this.precision > 0 ? this.precision + 1 : 0;
+            for (let n: number = 3 + firstPos; n < len; n += 3) {
+                str =
+                    str.substring(0, len - n) +
+                    this.settings.thousandSeparator +
+                    str.substring(len - n);
+            }
         }
         if (this.type === "money") {
             str = this.settings.moneyPrefix + str + this.settings.moneySuffix;

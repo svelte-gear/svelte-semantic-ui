@@ -3,6 +3,8 @@
  * @module components/use-popup
  */
 
+import type { ActionReturn } from "svelte/action";
+
 import type { JQueryApi } from "../data/dom-jquery";
 import type { PopupSettings } from "../data/semantic-types";
 import { jQueryElem } from "../data/dom-jquery";
@@ -21,7 +23,7 @@ Supply popup parameters using a settings object or through data-* attributes.
     >
 ```
 */
-export function popup(node: Element, settings?: PopupSettings): void {
+export function popup(node: Element, settings?: PopupSettings): ActionReturn {
     type PopupInitializer = JQueryApi & {
         popup(settings?: PopupSettings): void;
     };
@@ -33,4 +35,10 @@ export function popup(node: Element, settings?: PopupSettings): void {
         // ...popupDefaults,
         ...settings,
     });
+
+    return {
+        destroy(): void {
+            elem.popup("destroy");
+        },
+    };
 }

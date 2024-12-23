@@ -140,9 +140,7 @@ onMount(async () => {
     fieldCtrl = new FieldController(elem, validate);
 
     // push initial value into the Semantic UI element
-    if (value) {
-        valueToInput(value); // FIXME: is validation ok if value is undefined ?
-    }
+    valueToInput(value);
 });
 
 /** Remove the subscription */
