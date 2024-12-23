@@ -7,54 +7,9 @@
  * @module data/semantic-types
  */
 
-/// <reference types="jquery" />
 /// <reference types="fomantic-ui-css" />
 
 import type { RuleDefinition } from "../data/common";
-
-/*
-                              dP
-                              88
- 88d888b. dP    dP 88d8b.d8b. 88d888b. .d8888b. 88d888b.
- 88'  `88 88    88 88'`88'`88 88'  `88 88ooood8 88'  `88
- 88    88 88.  .88 88  88  88 88.  .88 88.  ... 88
- dP    dP `88888P' dP  dP  dP 88Y8888' `88888P' dP
-
-*/
-
-/** Settings controlling number, money, and list formatting. */
-export interface NumberSettings {
-    decimalSeparator: string;
-    thousandSeparator: string;
-    moneyPrefix: string;
-    moneySuffix: string;
-    moneyPrecision: number;
-    listSeparator: string;
-}
-
-/** Settings used to initialize a number input component. */
-export interface NumberInputSettings extends Partial<NumberSettings> {
-    type?: "integer" | "decimal" | "money";
-    precision?: number;
-}
-
-export type TextInputSettings = {
-    case?: "upper" | "lower" | "title" | "none";
-    charset?: "any" | "euro" | "latin" | "ascii" | "id"; // TODO: add "hex", "num"
-    idAllowChars?: Array<"_" | "-" | ".">;
-    idBlockChars?: Array<"I" | "O" | "i" | "o" | "l">;
-    blockSingleQuotes?: boolean;
-    blockDoubleQuotes?: boolean;
-    allowHtmlTags?: boolean;
-    blockEmoji?: boolean; // works with charset: "any"
-    maxLen?: number; // for id only, in other cases it is often better to use validation
-};
-
-// TODO: review and implement
-export type ListInputSettings = TextInputSettings & {
-    listSeparator?: string;
-    allowedValues?: string[];
-};
 
 /*
                    dP                         dP
@@ -65,9 +20,6 @@ export type ListInputSettings = TextInputSettings & {
  `88888P' `88888P8 dP `88888P' dP    dP `88888P8 `88888P8 dP
 
 */
-
-/** jQuery */
-export type JQueryApi = JQuery<HTMLElement>;
 
 export type DateFormatFn = (d: Date | undefined, settings?: CalendarSettings) => string;
 export type DateParseFn = (
@@ -199,7 +151,7 @@ export type DropdownMessages = FomanticUI.Dropdown.Settings.Messages;
  dP                          d8888P
 */
 
-// TODO: implement init-progress
+// TODO: 3. implement init-progress
 /** @see {@link https://fomantic-ui.com/modules/progress.html#/settings} */
 export type ProgressSettings = Partial<FomanticUI.ProgressSettings>;
 
@@ -227,7 +179,7 @@ export type FlyoutTexts = {
     cancel: string; // "Cancel"
     close: string; //  "Close"
 };
-// TODO: add flyout to translation
+// TODO: 3. add flyout to translation
 
 /** @see {@link https://fomantic-ui.com/modules/flyout.html#/settings} */
 export type FlyoutSettings = Partial<FomanticUI.FlyoutSettings> & {

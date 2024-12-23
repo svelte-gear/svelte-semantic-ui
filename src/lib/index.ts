@@ -43,10 +43,12 @@ export { default as InitModal } from "./components/init-modal.svelte";
 // HELPERS
 
 export { fmt, parse, rule } from "./data/helpers";
-export { isoDate, isoTime, setComponentInitMode } from "./data/common";
+export { isoDate, isoTime } from "./data/common";
+export { setComponentInitMode } from "./data/dom-jquery";
 
 // TYPES
 
+export type { NumberSettings } from "./data/common";
 export type {
     CalendarSettings,
     CalendarText,
@@ -58,7 +60,6 @@ export type {
     FormPrompt,
     FormText,
     ModalSettings,
-    NumberSettings,
     PopupSettings,
     ProgressTexts,
     SliderSettings,

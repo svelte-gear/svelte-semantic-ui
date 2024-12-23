@@ -20,7 +20,7 @@ import type { DateFormatter } from "../data/format";
  * <input type="text" id="birthday" />
  * <InitDateInput bind:value={dob} settings={{ type: "date" }} />
  * ```
- * // TODO: test calendar settings in date input
+ * // TODO: 1. test calendar settings in date input
  *
  * `settings` prop allows to customize the input formatter, it uses the same settings as
  * Semantic UI Calendar, see https://fomantic-ui.com/modules/calendar.html#/settings

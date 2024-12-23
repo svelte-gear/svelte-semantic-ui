@@ -3,8 +3,9 @@
  * @module components/use-sticky
  */
 
-import type { StickySettings, JQueryApi } from "../data/semantic-types";
-import { jQueryElem } from "../data/common";
+import type { JQueryApi } from "../data/dom-jquery";
+import type { StickySettings } from "../data/semantic-types";
+import { jQueryElem } from "../data/dom-jquery";
 
 /** Svelte action to initialize Semantic UI `Sticky` component.
 
@@ -33,5 +34,5 @@ export function sticky(node: Element, settings?: StickySettings): void {
         ...settings,
     });
 
-    // TODO: do i need to remove it if hidden (removed from DOM) ?
+    // TODO: 2. do i need to remove it if hidden (removed from DOM) ?
 }

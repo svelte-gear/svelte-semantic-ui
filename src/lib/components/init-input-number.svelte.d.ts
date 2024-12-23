@@ -4,8 +4,7 @@
  */
 
 import type { Snippet, Component } from "svelte";
-import type { NumberInputSettings } from "../data/semantic-types";
-import type { RuleDefinition } from "../data/common";
+import type { RuleDefinition, NumberInputSettings } from "../data/common";
 import type { NumberFormatter } from "../data/format";
 
 /**

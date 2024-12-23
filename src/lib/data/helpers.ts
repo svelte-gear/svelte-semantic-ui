@@ -38,7 +38,7 @@ function getDefaultTimeFmt(): DateFmt {
 export const fmt: {
     date: DateFormatFn;
     time: DateFormatFn;
-    // TODO: implement integer, decimal0, decimal1, decimal2, decimal3, money
+    // TODO: 1. implement integer, decimal0, decimal1, decimal2, decimal3, money
     // number: (val: number | undefined, precision?: number) => string;
     // money:  (val: number | undefined) => string;
     // list: (val: string[] | undefined) => string;
@@ -61,7 +61,7 @@ export const fmt: {
 export const parse: {
     date: DateParseFn;
     time: DateParseFn;
-    // TODO: implement number, maybe list
+    // TODO: 1. implement number, maybe list
     // number: (val: string | undefined) => number | undefined;
     // money: (val: string | undefined) => number | undefined;
     // list: (val: string | undefined) => string[];
@@ -130,12 +130,11 @@ export const rule = {
     maxCount:    (n: number): string => `maxCount[${n}]`,
 
     // helpers for custom rules, would be better in validation-rules.ts, but are left here for auto-completion
-    // TODO: check if auto-completion works in examples
     start:    (val: string): string => `start[${val}]`,
     isoDate:             (): string => "isoDate",
     startEnd: (val: string): string => `startEnd[${val}]`,
 
-    // TODO: investigate the rules: range, size, maxValue, minValue
+    // TODO: 2. investigate the rules: range, size, maxValue, minValue
     range: "",
     maxValue: "",
     minValue: "",

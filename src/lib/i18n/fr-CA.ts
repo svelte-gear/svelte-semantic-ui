@@ -7,7 +7,8 @@
  * @module i18n/fr-CA
  */
 
-import type { CalendarSettings, FormPrompt, NumberSettings } from "../data/semantic-types";
+import type { NumberSettings } from "../data/common";
+import type { CalendarSettings, FormPrompt } from "../data/semantic-types";
 
 const formPrompt: Partial<FormPrompt> = {
     checked: "{name} doit être coché.",

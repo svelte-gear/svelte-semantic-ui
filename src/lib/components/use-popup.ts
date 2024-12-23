@@ -3,8 +3,9 @@
  * @module components/use-popup
  */
 
-import type { PopupSettings, JQueryApi } from "../data/semantic-types";
-import { jQueryElem } from "../data/common";
+import type { JQueryApi } from "../data/dom-jquery";
+import type { PopupSettings } from "../data/semantic-types";
+import { jQueryElem } from "../data/dom-jquery";
 
 /** Svelte action to initialize Semantic UI `Popup` component.
 

@@ -4,8 +4,7 @@
  */
 
 import type { Snippet, Component } from "svelte";
-import type { TextInputSettings } from "../data/semantic-types";
-import type { RuleDefinition } from "../data/common";
+import type { RuleDefinition, TextInputSettings } from "../data/common";
 import type { TextFormatter } from "../data/format";
 
 /**

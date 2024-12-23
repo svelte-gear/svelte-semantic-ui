@@ -3,13 +3,13 @@
  * @module data/settings
  */
 
+import type { NumberSettings } from "../data/common";
 import type {
     CalendarSettings,
     CheckboxSettings,
     DropdownSettings,
     FormSettings,
     ModalSettings,
-    NumberSettings,
     PopupSettings,
     SliderSettings,
     StickySettings,

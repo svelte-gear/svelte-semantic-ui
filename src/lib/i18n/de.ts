@@ -9,13 +9,8 @@
 
 /* eslint-disable max-len */
 
-import type {
-    CalendarSettings,
-    CalendarText,
-    FormPrompt,
-    FormText,
-    NumberSettings,
-} from "../data/semantic-types";
+import type { NumberSettings } from "../data/common";
+import type { CalendarSettings, CalendarText, FormPrompt, FormText } from "../data/semantic-types";
 
 const formPrompt: FormPrompt = {
     empty: "{name} muss einen Wert haben",

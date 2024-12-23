@@ -10,9 +10,10 @@ import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition } from "../data/common";
-import type { CheckboxSettings, JQueryApi } from "../data/semantic-types";
-import { copyParentKey, findComponent } from "../data/common";
-import { FieldController } from "../data/field-controller";
+import type { JQueryApi } from "../data/dom-jquery";
+import type { CheckboxSettings } from "../data/semantic-types";
+import { copyParentKey, findComponent } from "../data/dom-jquery";
+import { FieldController } from "../data/form-controller";
 // import { checkboxDefaults } from "../data/settings";
 
 const FIELD_PREFIX: string = "f_checkbox";

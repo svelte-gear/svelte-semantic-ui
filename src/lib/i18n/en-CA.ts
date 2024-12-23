@@ -7,7 +7,8 @@
  * @module i18n/en-CA
  */
 
-import type { CalendarSettings, NumberSettings } from "../data/semantic-types";
+import type { NumberSettings } from "../data/common";
+import type { CalendarSettings } from "../data/semantic-types";
 
 const calendarSettings: CalendarSettings = {
     firstDayOfWeek: 0,

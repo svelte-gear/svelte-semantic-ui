@@ -7,12 +7,8 @@
  * @module i18n/es-US
  */
 
-import type {
-    CalendarSettings,
-    FormPrompt,
-    FormText,
-    NumberSettings,
-} from "../data/semantic-types";
+import type { NumberSettings } from "../data/common";
+import type { CalendarSettings, FormPrompt, FormText } from "../data/semantic-types";
 
 const formPrompt: Partial<FormPrompt> = {
     email: "{name} debe ser un email válido",

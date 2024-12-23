@@ -10,10 +10,12 @@ import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition } from "../data/common";
-import type { SliderSettings, JQueryApi } from "../data/semantic-types";
-import { copyParentKey, equalNumberArrays, findComponent } from "../data/common";
+import type { JQueryApi } from "../data/dom-jquery";
+import type { SliderSettings } from "../data/semantic-types";
+import { equalNumberArrays } from "../data/common";
+import { copyParentKey, findComponent } from "../data/dom-jquery";
 // import { sliderDefaults } from "../data/settings";
-import { FieldController } from "../data/field-controller";
+import { FieldController } from "../data/form-controller";
 
 const FIELD_PREFIX: string = "f_slider";
 const INITIAL_SLIDER_VALUE: number = 0;

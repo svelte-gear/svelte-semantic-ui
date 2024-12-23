@@ -3,14 +3,8 @@
  * @module data/input-formatter
  */
 
-import type {
-    CalendarSettings,
-    DateFormatFn,
-    DateParseFn,
-    NumberSettings,
-    NumberInputSettings,
-    TextInputSettings,
-} from "../data/semantic-types";
+import type { NumberSettings, NumberInputSettings, TextInputSettings } from "../data/common";
+import type { CalendarSettings, DateFormatFn, DateParseFn } from "../data/semantic-types";
 import { calendarDefaults, numberDefaults } from "../data/settings";
 import { helperDateFormat } from "./semantic-date-format";
 
@@ -170,12 +164,12 @@ export class TextFmt implements TextFormatter {
                 `TextFmt: invalid settings - blockEmoji doesn't effect charset: "${this.settings.charset}"`
             );
         }
-        if (this.settings.idAllowChars && this.settings.charset !== "id") {
+        if (this.settings.idAllowChars && !this.settings.charset.startsWith("id_")) {
             console.error(
                 `TextFmt: invalid settings - idAllowChars doesn't effect charset: "${this.settings.charset}"`
             );
         }
-        if (this.settings.idBlockChars && this.settings.charset !== "id") {
+        if (this.settings.idBlockChars && !this.settings.charset.startsWith("id_")) {
             console.error(
                 `TextFmt: invalid settings - idBlockChars doesn't effect charset: "${this.settings.charset}"`
             );
@@ -201,20 +195,21 @@ export class TextFmt implements TextFormatter {
         }
     }
 
+    /** Remove characters outside the specified charset (ascii, latin, euro, any */
     private filterCharset(val: string): string {
         switch (this.settings.charset) {
             case "any":
                 return val;
             case "ascii":
-                return val.replace(/[^\x20-\x7F]/g, "");
+                return val.replace(/[^\x20-\x7F]/g, "_");
             case "latin":
                 //                     ascii    latin-1      latin ext    symbols
-                return val.replace(/[^\x20-\x7F\u00C0-\u024F\u1E00-\u1EFF\u2000-\u22FF]/g, "");
+                return val.replace(/[^\x20-\x7F\u00C0-\u024F\u1E00-\u1EFF\u2000-\u22FF]/g, "_");
             case "euro":
                 return val.replace(
                     //  ascii    latin-1      latin ext    greek        cyrillic     symbols
                     /[^\x20-\x7F\u00C0-\u024F\u1E00-\u1EFF\u0370-\u03FF\u0400-\u04FF\u2000-\u22FF]/g,
-                    ""
+                    "_"
                 );
             default:
                 throw new Error(`Unrecognized charset directive ${this.settings.charset}`);
@@ -226,11 +221,21 @@ export class TextFmt implements TextFormatter {
             throw new Error("textFormatter expects string as data type");
         }
         let res: string = this.fixCase(val);
-        if (this.settings.charset === "id") {
-            let regexStr: string = "a-zA-Z0-9";
+        if (this.settings.charset?.startsWith("id")) {
+            let regexStr: string = "";
+            if (this.settings.charset === "id_num") {
+                regexStr = "0-9";
+            } else if (this.settings.charset === "id_hex") {
+                regexStr = "0-9a-fA-F";
+            } else if (this.settings.charset === "id_alpha") {
+                regexStr = "0-9a-zA-Z";
+            } else {
+                throw new Error(`Unrecognized charset directive ${this.settings.charset}`);
+            }
             this.settings.idAllowChars?.forEach((char: string) => {
                 regexStr = regexStr + escapeRegex(char);
             });
+            // remove unwanted characters
             res = res.replace(new RegExp(`[^${regexStr}]`, "g"), "");
             this.settings.idBlockChars?.forEach((char: string) => {
                 res = res.replace(char, "");
@@ -254,13 +259,14 @@ export class TextFmt implements TextFormatter {
                     res = res.replace("'", "\u2019"); // right single quote
                 }
                 if (!this.settings.allowHtmlTags) {
-                    res = res.replace("<", "\u2039").replace(">", "\u203A");
+                    res = res.replace("<", "\u2039").replace(">", "\u203A"); // angle quotation
                 }
             }
             if (this.settings.blockEmoji) {
                 // res = res.replace(/[\u1F000-\u1FFFF]/g, "");
                 res = res.replace(/[\p{Extended_Pictographic}]/gu, "");
             }
+            // replace unwanted characters with "_"
             res = this.filterCharset(res);
         }
         return res.trim();
@@ -313,7 +319,7 @@ export class ListFmt implements ListFormatter {
     }
 }
 
-// TODO: implement init-input-list.svelte
+// TODO: 3. implement init-input-list.svelte
 
 /*
        dP            dP

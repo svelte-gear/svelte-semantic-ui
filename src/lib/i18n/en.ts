@@ -7,13 +7,13 @@
  * @module i18n/en
  */
 
+import type { NumberSettings } from "../data/common";
 import type {
     CalendarSettings,
     CalendarText,
     DropdownMessages,
     FormPrompt,
     FormText,
-    NumberSettings,
     ProgressTexts,
 } from "../data/semantic-types";
 
@@ -113,7 +113,7 @@ const numberSettings: NumberSettings = {
     listSeparator: ",",
 };
 
-// TODO: transpalte dropdownMessages and progressTexts to other languages
+// TODO: 3. translate dropdownMessages and progressTexts to other languages
 const dropdownMessages: DropdownMessages = {
     addResult: "Add <b>{term}</b>",
     count: "{count} selected",

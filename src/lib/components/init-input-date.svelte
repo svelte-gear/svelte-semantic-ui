@@ -11,9 +11,10 @@ import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition } from "../data/common";
 import type { DateFormatter } from "../data/format";
-import type { CalendarSettings, JQueryApi } from "../data/semantic-types";
-import { findComponent, findLabelWithBlank, getOrAssignKey } from "../data/common";
-import { FieldController } from "../data/field-controller";
+import type { JQueryApi } from "../data/dom-jquery";
+import type { CalendarSettings } from "../data/semantic-types";
+import { findComponent, findLabelWithBlank, getOrAssignKey } from "../data/dom-jquery";
+import { FieldController } from "../data/form-controller";
 import { DateFmt } from "../data/format";
 
 const FIELD_PREFIX: string = "f_input";

@@ -14,16 +14,17 @@ Provides Svelte bindings for Semantic-UI `Form` validator.
 import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
-import type { FormSettings, JQueryApi } from "../data/semantic-types";
+import type { JQueryApi } from "../data/dom-jquery";
+import type { FormSettings } from "../data/semantic-types";
 import { SuiFormController } from "../data/form-controller";
+import { equalStringArrays } from "../data/common";
 import {
-    equalStringArrays,
     getOrAssignKey,
     findComponent,
     jQueryElem,
     SVELTE_FORM_STORE,
     getComponentInitMode,
-} from "../data/common";
+} from "../data/dom-jquery";
 // import { formDefaults } from "../data/settings";
 
 interface Props {
@@ -154,8 +155,8 @@ onMount(async () => {
     formCtrl.setActive(active);
 
     // make sure all inputs have ids, so form validation doesn't show warnings
-    // TODO: check if it runs AFTER all the fields are initialized, no matter if parent, child, or sibling
-    // TODO: test is it works with one await
+    // TODO: 2. check if it runs AFTER all the fields are initialized, no matter if parent, child, or sibling
+    // TODO: 3. test is it works with one await
     await tick();
     await tick();
     elem.find("input").each((_idx: number, input: Element): void => {

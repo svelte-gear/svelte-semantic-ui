@@ -10,17 +10,11 @@ import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition } from "../data/common";
-import type { CalendarSettings, JQueryApi } from "../data/semantic-types";
-import {
-    equalDates,
-    isoDate,
-    isoTime,
-    findComponent,
-    findLabelWithBlank,
-    copyParentKey,
-} from "../data/common";
-// import { calendarDefaults } from "../data/settings";
-import { FieldController } from "../data/field-controller";
+import type { JQueryApi } from "../data/dom-jquery";
+import type { CalendarSettings } from "../data/semantic-types";
+import { equalDates, isoDate, isoTime } from "../data/common";
+import { findComponent, findLabelWithBlank, copyParentKey } from "../data/dom-jquery";
+import { FieldController } from "../data/form-controller";
 
 const FIELD_PREFIX: string = "f_calendar";
 

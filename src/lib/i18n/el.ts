@@ -7,13 +7,8 @@
  * @module i18n/el-GR
  */
 
-import type {
-    CalendarSettings,
-    CalendarText,
-    FormPrompt,
-    FormText,
-    NumberSettings,
-} from "../data/semantic-types";
+import type { NumberSettings } from "../data/common";
+import type { CalendarSettings, CalendarText, FormPrompt, FormText } from "../data/semantic-types";
 
 const formPrompt: FormPrompt = {
     empty: "{name} πρέπει να έχει μια τιμή",

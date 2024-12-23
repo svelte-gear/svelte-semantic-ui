@@ -9,12 +9,12 @@ Svelte data binder and formatter for text input.
 import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
-import type { RuleDefinition } from "../data/common";
+import type { RuleDefinition, TextInputSettings } from "../data/common";
 import type { TextFormatter } from "../data/format";
-import type { JQueryApi, TextInputSettings } from "../data/semantic-types";
+import type { JQueryApi } from "../data/dom-jquery";
 
-import { findComponent, findLabelWithBlank, getOrAssignKey } from "../data/common";
-import { FieldController } from "../data/field-controller";
+import { findComponent, findLabelWithBlank, getOrAssignKey } from "../data/dom-jquery";
+import { FieldController } from "../data/form-controller";
 import { TextFmt } from "../data/format";
 
 const FIELD_PREFIX: string = "f_input";

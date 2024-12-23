@@ -7,7 +7,8 @@
  * @module i18n/es-MX
  */
 
-import type { CalendarSettings, FormText, NumberSettings } from "../data/semantic-types";
+import type { NumberSettings } from "../data/common";
+import type { CalendarSettings, FormText } from "../data/semantic-types";
 
 const formText: Partial<FormText> = {
     unspecifiedRule: "Por favor, ingresa un valor válido",

@@ -10,15 +10,12 @@ import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition } from "../data/common";
-import type { DropdownSettings, JQueryApi } from "../data/semantic-types";
-import {
-    copyParentKey,
-    equalStringArrays,
-    findComponent,
-    findLabelWithBlank,
-} from "../data/common";
+import type { JQueryApi } from "../data/dom-jquery";
+import type { DropdownSettings } from "../data/semantic-types";
+import { equalStringArrays } from "../data/common";
+import { copyParentKey, findComponent, findLabelWithBlank } from "../data/dom-jquery";
 // import { dropdownDefaults } from "../data/settings";
-import { FieldController } from "../data/field-controller";
+import { FieldController } from "../data/form-controller";
 
 const FIELD_PREFIX: string = "f_dropdown";
 const DROPDOWN_PREVENT_CLEARING_BAD_DATA: boolean = false;
