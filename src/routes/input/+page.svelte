@@ -161,7 +161,6 @@ function toggleActive(): void {
                 <ShowCode file="input" component="date" bind:selected={example} />
             </div>
             <!-- example-date -->
-            <!-- // TODO: move other help_text outside of .field -->
 
             <!-- example-money -->
             <div class="field">
@@ -171,7 +170,7 @@ function toggleActive(): void {
                     bind:value={income}
                     validate={[rule.empty(), rule.minValue(20000), rule.maxValue(100000)]}
                     settings={{ type: "money" /* , precision: -2 */ }}
-                /><!-- // FIXME: validation doesn't trigger on the first run -->
+                />
             </div>
             <div class="help_text">
                 money formatter -
@@ -232,7 +231,6 @@ function toggleActive(): void {
                     }}
                 />
                 <InitNumberInput bind:value={ratings[0]} validate={[rule.minValue(6)]} />
-                <!-- // FIXME: doesn't trigger validation on the first run with "range[6..]" -->
             </div>
             <div class="help_text">
                 number formatter -

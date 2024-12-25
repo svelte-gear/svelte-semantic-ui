@@ -154,7 +154,7 @@ onMount(async () => {
     //     svelteToInput(value);
     // } else {
     //     inputToSvelte(elem.val() as string);
-    //     // TODO: check if this is required for inputs bound directly in input tag
+    //     // FIXME: check if this is required for inputs bound directly in input tag
     // }
 });
 
