@@ -79,7 +79,7 @@ function isoDateFn(value: string): boolean {
 // }
 
 /** Returns true if the string starts with the given value */
-function startsWithFn(value: string, ruleValue: string): boolean {
+function startFn(value: string, ruleValue: string): boolean {
     // console.log("startFn", value);
     return value.startsWith(ruleValue);
 }
@@ -208,7 +208,7 @@ export function registerRule(name: string, fn: RuleFunc, defaultPrompt: string):
 
 /** Must be called after DOM is initialized. Like in sveltekit rotes/layout.ts load(). */
 export function extendValidationRules(): void {
-    registerRule("start", startsWithFn, "{name} must start with '{ruleValue}'");
+    registerRule("start", startFn, "{name} must start with '{ruleValue}'");
     registerRule("isoDate", isoDateFn, "{name} must follow the 'YYYY-MM-DD' format");
     registerRule("wrappedIn", wrappedInFn, "{name} must start and end with '{ruleValue}'");
 
