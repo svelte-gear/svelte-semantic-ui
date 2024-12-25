@@ -62,11 +62,11 @@ function onInputChange(this: JQueryApi): void {
     if (settings && settings.onChange) {
         settings.onChange.call(this);
     }
-    fieldCtrl?.revalidate();
+    void fieldCtrl?.revalidate();
 }
 
 onMount(async () => {
-    // delay initialization till all DOM UI elements are ready
+    // delay initialization till form controller is ready
     await tick();
 
     elem = findComponent(span!, ".ui.checkbox", forId);
@@ -87,7 +87,7 @@ onMount(async () => {
 
     // apply validation rule if the rule is supplied in <InitCheckbox >
     fieldCtrl = new FieldController(input, validate);
-    fieldCtrl.revalidate();
+    void fieldCtrl.revalidate();
 });
 
 /** Remove event handlers */

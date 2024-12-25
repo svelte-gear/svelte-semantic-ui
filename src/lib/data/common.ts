@@ -25,15 +25,6 @@ export type RuleObj = {
 /** Rule definition takes array or single instance of string or RuleObj */
 export type RuleDefinition = string | string[] | RuleObj | RuleObj[]; // | BaseSchema;
 
-/** Controls Semantic UI form element and it's data validation. */
-export interface FormController {
-    addRule: (key: string, rules: RuleDefinition) => void;
-    removeRule: (key: string, rules: RuleDefinition) => void;
-    doValidateField: (key: string) => void;
-    doValidateForm: () => void;
-    onFieldChange: (key: string) => void;
-}
-
 /** Settings controlling number, money, and list formatting. */
 export interface NumberSettings {
     decimalSeparator: string;

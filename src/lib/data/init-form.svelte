@@ -12,14 +12,13 @@ Provides Svelte bindings for Semantic-UI `Form` validator.
  */
 
 import type { Snippet } from "svelte";
-import { onMount, onDestroy, tick } from "svelte";
+import { onMount, onDestroy } from "svelte";
 
 import type { JQueryApi } from "../data/dom-jquery";
 import type { FormSettings } from "../data/semantic-types";
 import { SuiFormController } from "../data/form-controller";
 import { equalStringArrays } from "../data/common";
 import {
-    getOrAssignKey,
     findComponent,
     jQueryElem,
     SVELTE_FORM_STORE,
@@ -135,8 +134,7 @@ function onFailureCallback(this: JQueryApi, formErrors: object[], fields: object
 
 /**  */
 onMount(async () => {
-    // delay initialization till use:action is run on Semantic UI form
-    await tick();
+    // DOM is ready, initialize the form immediately, field will wait a tick to ensure that the form is ready
 
     // Initialize Semantic component and subscribe for changes, always allow to be a child
     elem = findComponent(span!, ".ui.form", forId, [...getComponentInitMode(), "child"]);
@@ -153,22 +151,20 @@ onMount(async () => {
     // store controller in jQuery data for fields to access
     elem.data(SVELTE_FORM_STORE, formCtrl);
 
-    formCtrl.setActive(active);
-
     // make sure all inputs have ids, so form validation doesn't show warnings
-    // TODO: 2. check if it runs AFTER all the fields are initialized, no matter if parent, child, or sibling
-    // TODO: 3. test is it works with one await
-    // await tick();
-    // await tick();
-    elem.find("input").each((_idx: number, input: Element): void => {
+    elem.find("input,select").each((_idx: number, input: Element): void => {
         ensureFieldKey(jQueryElem(input));
-        // getOrAssignKey(jQueryElem(input), "f");
-        // FIXME: validate if key assignment works as desired
     });
+
+    // no need for delay as revalidate is already deduped
+    formCtrl.setActive(active);
 });
 
 /** Remove the subscription */
 onDestroy(() => {
+    if (formCtrl) {
+        formCtrl.isActive = false;
+    }
     if (elem) {
         elem.form("destroy");
     }

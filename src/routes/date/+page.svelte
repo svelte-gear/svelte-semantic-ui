@@ -132,10 +132,10 @@ function toggleActive(): void {
                     bind:value={dat}
                     settings={{ type: "datetime", maxDate: new Date() }}
                 />
-                <div class="help_text">
-                    datetime -
-                    <ShowCode file="date" component="datetime" bind:selected={example} />
-                </div>
+            </div>
+            <div class="help_text">
+                datetime -
+                <ShowCode file="date" component="datetime" bind:selected={example} />
             </div>
             <!--
                 'InitCalendar' follows the Semantic UI component.
@@ -208,10 +208,6 @@ function toggleActive(): void {
                             <input type="text" placeholder="Date" />
                         </div>
                     </div>
-                    <div class="help_text">
-                        year first, uses forId to find Semantic component
-                        <ShowCode file="date" component="year_first" bind:selected={example} />
-                    </div>
                 </div>
                 <InitCalendar
                     forId="cal"
@@ -219,6 +215,10 @@ function toggleActive(): void {
                     bind:value={dat}
                     validate={[rule.start("19")]}
                 />
+                <div class="help_text">
+                    year first, uses forId to find Semantic component
+                    <ShowCode file="date" component="year_first" bind:selected={example} />
+                </div>
                 <!-- example-year_first -->
 
                 <div class="ui divider"></div>
@@ -238,10 +238,10 @@ function toggleActive(): void {
                     <label for="z1"> Date input </label>
                     <input type="text" name="calendar-date" placeholder="date" id="z1" />
                     <InitDateInput bind:value={dat} validate={[rule.empty()]} />
-                    <div class="help_text">
-                        date input -
-                        <ShowCode file="date" component="date_input" bind:selected={example} />
-                    </div>
+                </div>
+                <div class="help_text">
+                    date input -
+                    <ShowCode file="date" component="date_input" bind:selected={example} />
                 </div>
                 <!--
                     this will sett time portion to 00:00
@@ -265,6 +265,8 @@ form {
     font-style: italic;
     color: grey;
     float: right;
+    margin-top: -7px;
+    margin-bottom: 7px;
 }
 
 .ui.divider {

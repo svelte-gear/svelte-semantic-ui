@@ -41,7 +41,7 @@ const formPrompt: FormPropmt = {
 
     start: "{name}は'{ruleValue}'で始まる必要があります",
     isoDate: "{name}は'YYYY-MM-DD'形式に従う必要があります",
-    startEnd: "{name}は'{ruleValue}'で始まり、'{ruleValue}'で終わる必要があります",
+    wrappedIn: "{name}は'{ruleValue}'で始まり、'{ruleValue}'で終わる必要があります",
 };
 
 const formText: FormText = {

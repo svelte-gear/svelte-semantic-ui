@@ -39,7 +39,7 @@ const formPrompt: FormPrompt = {
 
     start: "{name} πρέπει να ξεκινά με '{ruleValue}'",
     isoDate: "{name} πρέπει να ακολουθεί τη μορφή 'ΕΕΕΕ-ΜΜ-ΗΗ'",
-    startEnd: "{name} πρέπει να ξεκινά και να τελειώνει με '{ruleValue}'",
+    wrappedIn: "{name} πρέπει να ξεκινά και να τελειώνει με '{ruleValue}'",
 };
 
 const formText: FormText = {

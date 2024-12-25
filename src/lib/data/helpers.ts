@@ -4,6 +4,7 @@
  */
 
 import { DateFmt } from "../data/format-date";
+import { isoDate } from "./common";
 import { NumberFmt } from "./format-number";
 
 /*
@@ -24,6 +25,7 @@ let timeFmt: DateFmt | null = null;
 let intFmt: NumberFmt | null = null;
 let numFmt: NumberFmt | null = null;
 let num2Fmt: NumberFmt | null = null;
+let num6Fmt: NumberFmt | null = null;
 let moneyFmt: NumberFmt | null = null;
 
 export const fmt: {
@@ -32,6 +34,7 @@ export const fmt: {
     int: (n: number | undefined) => string;
     num: (n: number | undefined) => string;
     num2: (n: number | undefined) => string;
+    num6: (n: number | undefined) => string;
     money: (n: number | undefined) => string;
 } = {
     date: (d: Date | undefined): string => {
@@ -54,8 +57,12 @@ export const fmt: {
         num2Fmt ??= new NumberFmt({ type: "decimal", precision: 2 });
         return num2Fmt.format(n);
     },
+    num6: (n: number | undefined): string => {
+        num6Fmt ??= new NumberFmt({ type: "decimal", precision: 6 });
+        return num6Fmt.format(n);
+    },
     money: (n: number | undefined): string => {
-        moneyFmt ??= new NumberFmt({ type: "decimal", precision: 2 });
+        moneyFmt ??= new NumberFmt({ type: "money" });
         return moneyFmt.format(n);
     },
 };
@@ -76,6 +83,7 @@ export const parse: {
     int: (s: string) => number | undefined;
     num: (s: string) => number | undefined;
     num2: (s: string) => number | undefined;
+    num6: (s: string) => number | undefined;
     money: (s: string) => number | undefined;
 } = {
     date: (s: string): Date | undefined => {
@@ -98,8 +106,12 @@ export const parse: {
         num2Fmt ??= new NumberFmt({ type: "decimal", precision: 2 });
         return num2Fmt.parse(s);
     },
+    num6: (s: string): number | undefined => {
+        num6Fmt ??= new NumberFmt({ type: "decimal", precision: 6 });
+        return num6Fmt.parse(s);
+    },
     money: (s: string): number | undefined => {
-        moneyFmt ??= new NumberFmt({ type: "decimal", precision: 2 });
+        moneyFmt ??= new NumberFmt({ type: "money" });
         return moneyFmt.parse(s);
     },
 };
@@ -154,14 +166,18 @@ export const rule = {
     maxCount:    (n: number): string => `maxCount[${n}]`,
 
     // helpers for custom rules, would be better in validation-rules.ts, but are left here for auto-completion
-    start:    (val: string): string => `start[${val}]`,
-    isoDate:             (): string => "isoDate",
-    startEnd: (val: string): string => `startEnd[${val}]`,
+    start:     (val: string): string => `start[${val}]`,
+    isoDate:              (): string => "isoDate",
+    wrappedIn: (val: string): string => `wrappedIn[${val}]`,
 
-    // TODO: 2. investigate the rules: range, size, maxValue, minValue
-    range: "",
-    maxValue: "",
-    minValue: "",
-    size: "",
+    range:    (min: number, max:number): string => `range[${min}..${max}]`,
+    size:     (min: number, max: number): string => `size[${min}..${max}]`,
+
+    maxValue: (val: Date | number | string): string => (
+        (val instanceof Date) ? `maxValue[${isoDate(val)}]` : `maxValue[${val}]`
+    ),
+    minValue: (val: Date | number | string): string => (
+        (val instanceof Date) ? `minValue[${isoDate(val)}]` : `minValue[${val}]`
+    ),
     /* eslint-enable */
 };

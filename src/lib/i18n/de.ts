@@ -41,7 +41,7 @@ const formPrompt: FormPrompt = {
 
     start: "{name} muss :) start with '{ruleValue}'",
     isoDate: "{name} muss :) follow the 'YYYY-MM-DD' format",
-    startEnd: "{name} muss :) start and end with '{ruleValue}'",
+    wrappedIn: "{name} muss :) start and end with '{ruleValue}'",
 };
 
 const formText: FormText = {

@@ -91,7 +91,7 @@ function svelteToInput(newValue: number | number[], forceUpdate?: boolean): void
             console.debug(`InitSlider -> prop change = ${toStr(newValue)}`);
             elem.slider("set rangeValue", newValue[0], newValue[1]);
             input!.val(`${newValue.join(",")}`);
-            fieldCtrl?.revalidate();
+            void fieldCtrl?.revalidate();
         }
     } else {
         if (Array.isArray(newValue)) {
@@ -102,7 +102,7 @@ function svelteToInput(newValue: number | number[], forceUpdate?: boolean): void
             console.debug(`InitSlider -> prop change = ${toStr(newValue)}`);
             elem.slider("set value", newValue);
             input!.val(`${newValue}`);
-            fieldCtrl?.revalidate();
+            void fieldCtrl?.revalidate();
         }
     }
 }
@@ -134,7 +134,7 @@ function inputToSvelte(inputValue: number | number[]): void {
         } else {
             input.val(`${inputValue}`);
         }
-        fieldCtrl?.revalidate();
+        void fieldCtrl?.revalidate();
     }
 }
 
@@ -157,7 +157,7 @@ function onSliderChange(
 //-----------------------------------------------------------------------------
 
 onMount(async () => {
-    // delay initialization till all DOM UI elements are ready
+    // delay initialization till form controller is ready
     await tick();
 
     // Initialize Semantic component and subscribe for changes

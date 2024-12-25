@@ -33,7 +33,7 @@ let text3: string = $state("");
 let text4: string = $state("");
 let text5: string = $state("");
 // let list: string[] = $state([]);
-let ratings: number[] = $state([0, 0]);
+let ratings: number[] = $state([]);
 
 /* Hide or show slider */
 let showSlider: boolean = $state(true);
@@ -148,39 +148,34 @@ function toggleActive(): void {
 
             <!-- example-date -->
             <div class="field">
-                <label for="z1"> Date Input </label>
-                <input type="text" name="calendar-date" placeholder="date" id="z1" />
+                <label for="_"> Date Input </label>
+                <input type="text" placeholder="date" />
                 <InitDateInput
                     bind:value={dat}
-                    validate={[rule.empty()]}
+                    validate={[rule.empty(), rule.minValue("2024-01-01")]}
                     settings={{ formatter: { date: "MMMM DD, YYYY" } }}
                 />
-                <div class="help_text">
-                    date formatter -
-                    <ShowCode file="input" component="date" bind:selected={example} />
-                </div>
+            </div>
+            <div class="help_text">
+                date formatter -
+                <ShowCode file="input" component="date" bind:selected={example} />
             </div>
             <!-- example-date -->
+            <!-- // TODO: move other help_text outside of .field -->
 
             <!-- example-money -->
             <div class="field">
                 <label for="_"> Income </label>
-                <input
-                    type="text"
-                    name="first-name"
-                    placeholder="money"
-                    id="fn2"
-                    bind:value={incomeRaw}
-                />
+                <input type="text" placeholder="money" bind:value={incomeRaw} />
                 <InitNumberInput
                     bind:value={income}
-                    validate={[rule.empty()]}
+                    validate={[rule.empty(), rule.minValue(20000), rule.maxValue(100000)]}
                     settings={{ type: "money" /* , precision: -2 */ }}
-                />
-                <div class="help_text">
-                    money formatter -
-                    <ShowCode file="input" component="money" bind:selected={example} />
-                </div>
+                /><!-- // FIXME: validation doesn't trigger on the first run -->
+            </div>
+            <div class="help_text">
+                money formatter -
+                <ShowCode file="input" component="money" bind:selected={example} />
             </div>
             <!--
                 <InitNumberInput bind:value> returns parsed number value,
@@ -191,11 +186,11 @@ function toggleActive(): void {
 
             <!-- example-text -->
             <div class="field">
-                <label for="g3"> Text Area </label>
-                <textarea name="text-3" placeholder="describe" rows="3" id="g3"></textarea>
+                <label for="_"> Text Area </label>
+                <textarea placeholder="describe" rows="3"></textarea>
                 <InitTextInput
                     bind:value={text3}
-                    validate={[rule.empty(), rule.contains("X")]}
+                    validate={[rule.empty(), rule.contains("X"), rule.size(3, 6)]}
                     settings={{
                         charset: "ascii",
                         // charset: "id_hex",
@@ -206,49 +201,42 @@ function toggleActive(): void {
                         // maxLen: 2,
                     }}
                 />
-                <div class="help_text">
-                    text, uppercase formatter -
-                    <ShowCode file="input" component="text" bind:selected={example} />
-                </div>
+            </div>
+            <div class="help_text">
+                text, uppercase formatter -
+                <ShowCode file="input" component="text" bind:selected={example} />
             </div>
             <!-- example-text -->
 
             <!-- example-input -->
             <div class="field">
                 <label for="g4"> Text Input </label>
-                <input
-                    type="text"
-                    name="text-4"
-                    placeholder="describe"
-                    id="g4"
-                    bind:value={text5}
-                />
+                <input type="text" name="text-4" placeholder="describe" bind:value={text5} />
                 <InitTextInput bind:value={text4} settings={{ case: "lower" }} />
-                <div class="help_text">
-                    input, lowercase formatter -
-                    <ShowCode file="input" component="input" bind:selected={example} />
-                </div>
+            </div>
+            <div class="help_text">
+                input, lowercase formatter -
+                <ShowCode file="input" component="input" bind:selected={example} />
             </div>
             <!-- example-input -->
 
             <!-- example-number -->
-            <div class="field">
-                <label for="ln"> Rating Input </label>
+            <div class="ui field">
+                <label for="_"> Rating Input </label>
                 <input
-                    id="ln"
                     type="text"
-                    name="rank"
                     placeholder="enter rank"
                     use:popup={{
                         content: "this input shares data bind with the slider",
                         position: "bottom right",
                     }}
                 />
-                <InitNumberInput bind:value={ratings[0]} />
-                <div class="help_text">
-                    number formatter -
-                    <ShowCode file="input" component="number" bind:selected={example} />
-                </div>
+                <InitNumberInput bind:value={ratings[0]} validate={[rule.minValue(6)]} />
+                <!-- // FIXME: doesn't trigger validation on the first run with "range[6..]" -->
+            </div>
+            <div class="help_text">
+                number formatter -
+                <ShowCode file="input" component="number" bind:selected={example} />
             </div>
             <!-- uses {ratings} array -->
             <!-- example-number -->
@@ -276,18 +264,16 @@ function toggleActive(): void {
                 <!-- example-slider -->
                 <div class="field">
                     <label for="_"> Rating Slider </label>
-                    <div id="sl1" class="ui labeled ticked slider bottom aligned"></div>
+                    <div class="ui labeled ticked slider bottom aligned"></div>
                     <InitSlider
                         settings={{ min: 0, max: 10 }}
                         bind:value={ratings[0]}
                         validate={[rule.not("0"), rule.not("1")]}
                     />
-                    <div class="help_text">
-                        <span style="display: block; margin-top: 5px;">
-                            number with slider UI -
-                            <ShowCode file="input" component="slider" bind:selected={example} />
-                        </span>
-                    </div>
+                </div>
+                <div class="help_text">
+                    number with slider UI -
+                    <ShowCode file="input" component="slider" bind:selected={example} />
                 </div>
                 <!-- uses {ratings} array -->
                 <!-- example-slider -->
@@ -301,16 +287,10 @@ function toggleActive(): void {
                         bind:value={ratings}
                         validate={[rule.not("1,3")]}
                     />
-                    <div class="help_text">
-                        <span style="display: block; margin-top: 5px;">
-                            number with slider UI -
-                            <ShowCode
-                                file="input"
-                                component="range_slider"
-                                bind:selected={example}
-                            />
-                        </span>
-                    </div>
+                </div>
+                <div class="help_text">
+                    number with slider UI -
+                    <ShowCode file="input" component="range_slider" bind:selected={example} />
                 </div>
                 <!-- example-range_slider -->
             {/if}
@@ -331,6 +311,8 @@ form {
     font-style: italic;
     color: grey;
     float: right;
+    margin-top: -7px;
+    margin-bottom: 7px;
 }
 
 .ui.divider {

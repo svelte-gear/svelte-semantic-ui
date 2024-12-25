@@ -13,11 +13,11 @@ import type { RuleDefinition } from "../data/common";
 import type { JQueryApi } from "../data/dom-jquery";
 import type { DropdownSettings } from "../data/semantic-types";
 import { equalStringArrays } from "../data/common";
-import { copyParentKey, findComponent, findLabelWithBlank } from "../data/dom-jquery";
+import { findComponent, findLabelWithBlank } from "../data/dom-jquery";
 // import { dropdownDefaults } from "../data/settings";
 import { FieldController } from "../data/form-controller";
 
-const FIELD_PREFIX: string = "f_dropdown";
+// const FIELD_PREFIX: string = "f_dropdown";
 const DROPDOWN_PREVENT_CLEARING_BAD_DATA: boolean = false;
 
 interface Props {
@@ -90,7 +90,7 @@ function svelteToInput(newValue: string | string[] | undefined): void {
             console.debug(`Dropdown(${fieldCtrl?.key}) : value -> ${toStr(newValue)}`);
             // NOTE: use 'set exactly' instead of 'set selected'!!!
             elem.dropdown("set exactly", newValue);
-            fieldCtrl?.revalidate();
+            void fieldCtrl?.revalidate();
         }
     } else {
         // single-select
@@ -102,11 +102,11 @@ function svelteToInput(newValue: string | string[] | undefined): void {
             const exists: unknown = elem.dropdown("get item", value);
             if (exists) {
                 elem.dropdown("set selected", value);
-                fieldCtrl?.revalidate();
+                void fieldCtrl?.revalidate();
             } else {
                 // if value is invalid - clear the dropdown
                 elem.dropdown("clear");
-                fieldCtrl?.revalidate();
+                void fieldCtrl?.revalidate();
             }
         }
     }
@@ -139,7 +139,7 @@ function inputToSvelte(inputValue: string | string[] | undefined): void {
         if (!equalStringArrays(value as string[], inputValue as string[])) {
             console.debug(`Dropdown(${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
             value = inputValue;
-            fieldCtrl?.revalidate();
+            void fieldCtrl?.revalidate();
         }
     } else {
         if (value !== inputValue) {
@@ -148,11 +148,11 @@ function inputToSvelte(inputValue: string | string[] | undefined): void {
                 const exists: unknown = elem.dropdown("get item", inputValue);
                 if (exists) {
                     value = inputValue;
-                    fieldCtrl?.revalidate();
+                    void fieldCtrl?.revalidate();
                 }
             } else {
                 value = inputValue;
-                fieldCtrl?.revalidate();
+                void fieldCtrl?.revalidate();
             }
         }
     }
@@ -187,7 +187,7 @@ function labelClick(): void {
 }
 
 onMount(async () => {
-    // delay initialization till all DOM UI elements are ready
+    // delay initialization till form controller is ready
     await tick();
 
     // Initialize Semantic component and subscribe for changes
@@ -213,7 +213,6 @@ onMount(async () => {
 
     // Find select or inner input
     input = elem.find("input,select");
-    copyParentKey(input, elem, FIELD_PREFIX);
 
     // show dropdown on label click, if for="_"
     const label: JQueryApi | undefined = findLabelWithBlank(elem);

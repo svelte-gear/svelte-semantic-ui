@@ -41,7 +41,7 @@ const formPrompt: FormPrompt = {
     // addErrors: "{name}: {error}",
     start: "{name} debe empezar con '{ruleValue}'",
     isoDate: "{name} debe seguir el formato 'AAAA-MM-DD' (año-mes-día)",
-    startEnd: "{name} debe empezar y terminar con '{ruleValue}'",
+    wrappedIn: "{name} debe empezar y terminar con '{ruleValue}'",
 };
 
 const formText: FormText = {

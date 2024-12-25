@@ -87,7 +87,7 @@ function svelteToInput(newValue: Date | undefined): void {
         console.debug(`Calendar(${fieldCtrl?.key}) value -> ${toStr(newValue)}`);
         elem.calendar("set date", newValue);
     }
-    fieldCtrl?.revalidate();
+    void fieldCtrl?.revalidate();
 }
 
 /** The effect rune calls svelteToInput when prop value changes */
@@ -105,7 +105,7 @@ function inputToSvelte(inputValue: Date): void {
         console.debug(`Calendar(${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
         value = inputValue;
     }
-    fieldCtrl?.revalidate();
+    void fieldCtrl?.revalidate();
 }
 
 /** The callback function is calls inputToSvelte when calendar value is changed by user. */
@@ -143,7 +143,7 @@ function labelClick(): void {
 }
 
 onMount(async () => {
-    // delay initialization till all DOM UI elements are ready
+    // delay initialization till form controller is ready
     await tick();
 
     // Initialize Semantic component and subscribe for changes

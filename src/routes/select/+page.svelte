@@ -77,7 +77,7 @@ function reset(): void {
     country = "ar";
     gender = "";
     chb = true;
-    test = "";
+    test = "abc";
 }
 reset();
 
@@ -152,9 +152,9 @@ function toggleActive(): void {
             -->
 
             <!-- example-select -->
-            <div class="field">
-                <label for="numb1"> Rank 1 </label>
-                <select id="numb1" class="ui selection dropdown">
+            <div class="field" id="r1">
+                <label for="_"> Rank 1 </label>
+                <select class="ui selection dropdown">
                     {#each options as m}
                         <option value={m}>Number {m}</option>
                     {/each}
@@ -166,16 +166,16 @@ function toggleActive(): void {
                         clearable: true,
                     }}
                 />
-                <div class="help_text">
-                    single select with 'clear' option -
-                    <ShowCode file="select" component="select" bind:selected={example} />
-                </div>
+            </div>
+            <div class="help_text">
+                single select with 'clear' option -
+                <ShowCode file="select" component="select" bind:selected={example} />
             </div>
             <!-- example-select -->
 
             <!-- example-select_2 -->
             <div class="field">
-                <label for="numb2"> Rank 2 </label>
+                <label for="_"> Rank 2 </label>
                 <InitDropdown
                     bind:value={rank}
                     validate={[rule.not("1")]}
@@ -183,32 +183,35 @@ function toggleActive(): void {
                         clearable: true,
                     }}
                 >
-                    <select id="numb2" class="ui selection dropdown">
+                    <select class="ui selection dropdown">
                         {#each options as m}
                             <option value={m}>Number {m}</option>
                         {/each}
                     </select>
                 </InitDropdown>
-                <div class="help_text">
-                    single select with 'clear' option -
-                    <ShowCode file="select" component="select_2" bind:selected={example} />
-                </div>
+            </div>
+            <div class="help_text">
+                single select with 'clear' option -
+                <ShowCode file="select" component="select_2" bind:selected={example} />
             </div>
             <!-- example-select_2 -->
 
             <!-- example-multiselect -->
-            <div class="field" id="x">
-                <label for="numb3"> Teams </label>
-                <select id="numb3" class="ui selection dropdown fluid" multiple>
+            <div class="field">
+                <label for="_"> Teams </label>
+                <select class="ui selection dropdown fluid" multiple>
                     {#each options as m}
                         <option value={m}>Num {m}</option>
                     {/each}
                 </select>
-                <InitDropdown bind:value={teams} validate={[rule.empty()]} />
-                <div class="help_text">
-                    multi-select -
-                    <ShowCode file="select" component="multiselect" bind:selected={example} />
-                </div>
+                <InitDropdown
+                    bind:value={teams}
+                    validate={[rule.empty(), rule.doesntContainExactly("4")]}
+                />
+            </div>
+            <div class="help_text">
+                multi-select -
+                <ShowCode file="select" component="multiselect" bind:selected={example} />
             </div>
             <!-- example-multiselect -->
 
@@ -226,8 +229,8 @@ function toggleActive(): void {
             <!-- example-select_with_flags -->
             <div class="field">
                 <label for="_"> Country </label>
-                <div class="ui search selection dropdown">
-                    <input type="hidden" name="country" />
+                <div class="ui search selection dropdown" id="country">
+                    <input type="hidden" />
                     <i class="dropdown icon"></i>
                     <div class="default text">Select Country</div>
                     <div class="menu">
@@ -254,10 +257,10 @@ function toggleActive(): void {
                         fullTextSearch: "exact",
                     }}
                 />
-                <div class="help_text">
-                    decorated dropdown with search -
-                    <ShowCode file="select" component="select_with_flags" bind:selected={example} />
-                </div>
+            </div>
+            <div class="help_text">
+                decorated dropdown with search -
+                <ShowCode file="select" component="select_with_flags" bind:selected={example} />
             </div>
             <!--
                 includes hidden input, icon, and div for text display;
@@ -267,9 +270,9 @@ function toggleActive(): void {
 
             <div class="ui divider"></div>
 
-            <div style="float:right" id="zz">
+            <div style="float:right">
                 <div class="ui checkbox">
-                    <input type="checkbox" bind:checked={showGender} id="zx" />
+                    <input type="checkbox" bind:checked={showGender} />
                     <label for="_">Show gender</label>
                 </div>
                 <InitCheckbox />
@@ -281,7 +284,7 @@ function toggleActive(): void {
                     <!-- class:error={gender == "male"} -->
                     <label for="_"> Gender </label>
                     <div class="ui selection dropdown">
-                        <input type="hidden" id="gend" />
+                        <input type="hidden" />
                         <i class="dropdown icon"></i>
                         <div class="default text"></div>
                     </div>
@@ -295,19 +298,15 @@ function toggleActive(): void {
                             ],
                         }}
                     />
-                    <div class="help_text">
-                        dropdown with options from array -
-                        <ShowCode
-                            file="select"
-                            component="select_with_JS"
-                            bind:selected={example}
-                        />
-                    </div>
+                </div>
+                <div class="help_text">
+                    dropdown with options from array -
+                    <ShowCode file="select" component="select_with_JS" bind:selected={example} />
                 </div>
                 <!--
-                includes hidden input, icon, and div for text display,
-                values are supplied from JS
-            -->
+                    includes hidden input, icon, and div for text display,
+                    values are supplied from JS
+                -->
                 <!-- example-select_with_JS -->
 
                 <!-- example-select_with_JS_2 -->
@@ -325,33 +324,29 @@ function toggleActive(): void {
                         }}
                     >
                         <div class="ui selection dropdown">
-                            <input type="hidden" id="gend2" />
+                            <input type="hidden" />
                             <i class="dropdown icon"></i>
                             <div class="default text"></div>
                         </div>
                     </InitDropdown>
-                    <div class="help_text">
-                        dropdown with options from array -
-                        <ShowCode
-                            file="select"
-                            component="select_with_JS_2"
-                            bind:selected={example}
-                        />
-                    </div>
+                </div>
+                <div class="help_text">
+                    dropdown with options from array -
+                    <ShowCode file="select" component="select_with_JS_2" bind:selected={example} />
                 </div>
                 <!-- example-select_with_JS_2 -->
 
                 <!-- example-checkbox -->
                 <div class="field">
                     <div class="ui checkbox">
-                        <input type="checkbox" id="ch" bind:checked={chb} />
+                        <input type="checkbox" bind:checked={chb} />
                         <label for="ch"> I Agree </label>
                     </div>
                     <InitCheckbox validate={[rule.checked()]} />
-                    <div class="help_text">
-                        single checkbox -
-                        <ShowCode file="select" component="checkbox" bind:selected={example} />
-                    </div>
+                </div>
+                <div class="help_text">
+                    single checkbox -
+                    <ShowCode file="select" component="checkbox" bind:selected={example} />
                 </div>
                 <!-- example-checkbox -->
             {/if}
@@ -371,20 +366,20 @@ function toggleActive(): void {
             <!-- example-radio -->
             <div class="field">
                 <div class="ui radio checkbox">
-                    <input type="radio" id="ch1" bind:group={gender} value="male" />
-                    <label for="ch1">Male</label>
+                    <input type="radio" bind:group={gender} value="male" />
+                    <label for="_">Male</label>
                 </div>
                 <InitCheckbox />
                 &nbsp;
                 <div class="ui radio checkbox">
-                    <input type="radio" id="ch2" bind:group={gender} value="female" />
-                    <label for="ch2">Female</label>
+                    <input type="radio" bind:group={gender} value="female" />
+                    <label for="_">Female</label>
                 </div>
                 <InitCheckbox />
-                <div class="help_text">
-                    radio checkboxes -
-                    <ShowCode file="select" component="radio" bind:selected={example} />
-                </div>
+            </div>
+            <div class="help_text">
+                radio checkboxes -
+                <ShowCode file="select" component="radio" bind:selected={example} />
             </div>
             <!-- example-radio -->
 
@@ -393,15 +388,15 @@ function toggleActive(): void {
                 Teams: &nbsp;
                 {#each options as m}
                     <div class="ui checkbox">
-                        <input type="checkbox" id="ch2{m}" bind:group={teams} value={m} />
-                        <label for="ch2{m}">{m}</label>
+                        <input type="checkbox" bind:group={teams} value={m} />
+                        <label for="_">{m}</label>
                     </div>
                     &nbsp; &nbsp;
                 {/each}
-                <div class="help_text">
-                    checkbox group -
-                    <ShowCode file="select" component="checkbox_group" bind:selected={example} />
-                </div>
+            </div>
+            <div class="help_text">
+                checkbox group -
+                <ShowCode file="select" component="checkbox_group" bind:selected={example} />
             </div>
             <!-- example-checkbox_group -->
 
@@ -418,13 +413,13 @@ function toggleActive(): void {
 
             <!-- example-input -->
             <div class="field">
-                <label for="xx5"> Test 1 </label>
-                <input id="xx5" />
+                <label for="_"> Test 1 </label>
+                <input />
                 <InitTextInput bind:value={test} validate={[rule.empty()]} />
             </div>
             <div class="field">
-                <label for="xx2"> Test 2 </label>
-                <input id="xx2" bind:value={test} />
+                <label for="_"> Test 2 </label>
+                <input bind:value={test} />
                 <InitTextInput validate={[rule.empty()]} />
             </div>
             <div class="help_text">
@@ -450,6 +445,8 @@ form {
     font-style: italic;
     color: grey;
     float: right;
+    margin-top: -7px;
+    margin-bottom: 7px;
 }
 
 .ui.divider {

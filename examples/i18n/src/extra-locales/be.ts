@@ -41,7 +41,7 @@ const formPrompt: FormPropmt = {
 
     start: "{name} павінен пачынацца з '{ruleValue}'",
     isoDate: "{name} павінен адпавядаць фармату 'ГГГГ-ММ-ДД' (год-месяц-дзень)",
-    startEnd: "{name} павінен пачынацца і заканчвацца на '{ruleValue}'",
+    wrappedIn: "{name} павінен пачынацца і заканчвацца на '{ruleValue}'",
 };
 
 const formText: FormText = {

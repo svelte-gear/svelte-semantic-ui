@@ -7,6 +7,7 @@ import type { FormPrompt, FormSettings, RuleFunc } from "../data/semantic-types"
 import type { SettingsObject } from "../data/settings";
 import { formDefaults } from "../data/settings";
 import { isoDate } from "../data/common";
+import { parse } from "../data/helpers";
 
 /*
                               dP                                            dP
@@ -18,13 +19,42 @@ import { isoDate } from "../data/common";
 
 */
 
-// date: () => "date",
-// greaterThan   (type: "N"|"D"|"S", val: number|Date|string) -> greaterThan[D|2012-01-01]
-// greaterOrEqual(type: "N"|"D"|"S", val: number|Date|string) -> greaterOrEqual[N|0]
-// lessThan      (type: "N"|"D"|"S", val: number|Date|string) -> lessThan[S|Abc]
-// lessOrEqual   (type: "N"|"D"|"S", val: number|Date|string) -> lessOrEqual[Abc]
+/** Try to parse date as locale date or as any date */
+function tryToParseDate(value: string): Date | undefined {
+    // first try to parse as locale-specific date
+    let d: Date | undefined = parse.date(value);
 
-// Add custom rule
+    if (!d) {
+        // then try JS Date
+        try {
+            d = new Date(`${value} 13:00`);
+        } catch (ex) {
+            // ignore
+        }
+    }
+    return d;
+}
+
+/** Try to parse date as locale date or as any date */
+function tryToParseNumber(value: string): number | undefined {
+    let n: number | undefined = undefined;
+
+    // first try to parse as locale-specific date
+    n = parse.num6(value);
+    if (n) return n;
+
+    n = parse.money(value);
+    if (n) return n;
+
+    // then try JS number
+    n = parseFloat(value);
+    if (Number.isNaN(n)) {
+        n = undefined;
+    }
+    return n;
+}
+
+/** Returns true if value string represents a date in ISO format */
 function isoDateFn(value: string): boolean {
     let d: Date | undefined = undefined;
     try {
@@ -35,16 +65,129 @@ function isoDateFn(value: string): boolean {
     return value === isoDate(d);
 }
 
-// Add custom rule
-function startFn(value: string, ruleValue: string): boolean {
-    console.log("---", value);
+// /** Returns true if value string may be parsed as date */
+// function someDateFn(value: string): boolean {
+//     const d: Date | undefined = parse.date(value);
+//     return value !== undefined;
+// }
+
+// /** Returns true if value string represents a date in current locale format */
+// function localeDateFn(value: string): boolean {
+//     const d: Date | undefined = parse.date(value);
+//     const s: string = fmt.date(d);
+//     return value === s;
+// }
+
+/** Returns true if the string starts with the given value */
+function startsWithFn(value: string, ruleValue: string): boolean {
+    // console.log("startFn", value);
     return value.startsWith(ruleValue);
 }
 
-// Add custom rule
-function startEndFn(value: string, ruleValue: string): boolean {
-    console.info(`startEnd : ${value} - ${ruleValue}`);
+/** Returns true if the string starts and ends with the given character */
+function wrappedInFn(value: string, ruleValue: string): boolean {
+    console.info(`wrappedInFn : ${value} - ${ruleValue}`);
     return value.startsWith(ruleValue);
+}
+
+/*
+                                              oo       dP
+                                                       88
+ .d8888b. dP   .dP .d8888b. 88d888b. 88d888b. dP .d888b88 .d8888b. .d8888b.
+ 88'  `88 88   d8' 88ooood8 88'  `88 88'  `88 88 88'  `88 88ooood8 Y8ooooo.
+ 88.  .88 88 .88'  88.  ... 88       88       88 88.  .88 88.  ...       88
+ `88888P' 8888P'   `88888P' dP       dP       dP `88888P8 `88888P' `88888P'
+
+*/
+type CompareFn = (v1: string | number, v2: string | number) => boolean;
+
+function greaterOrEqual(v1: string | number, v2: string | number): boolean {
+    return v1 >= v2;
+}
+
+function lessOrEqual(v1: string | number, v2: string | number): boolean {
+    return v1 <= v2;
+}
+
+/** Return true is value id equal or greater that rule parameter.
+    Rule parameter should have type designation like `minValue[D|2015-01-19]` */
+function compareTyped(value: string, ruleValue: string, compare: CompareFn): boolean {
+    if (!value || !ruleValue) {
+        return true;
+    }
+    let ruleVal: string = ruleValue.trim();
+
+    // let type: string | undefined = undefined;
+    // const parts: string[] = ruleVal.split(":").map((s: string) => s.trim());
+    // if (parts.length >= 2) {
+    //     if (["date", "dat"].includes(parts[1])) {
+    //         type = "D";
+    //     }
+    //     if (["number", "num"].includes(parts[1])) {
+    //         type = "N";
+    //     }
+    //     if (["string", "str"].includes(parts[1])) {
+    //         type = "S";
+    //     }
+    //     if (type) {
+    //         ruleVal = parts[0];
+    //     }
+    // }
+    // if (ruleVal.startsWith("'") && ruleVal.endsWith("'")) {
+    //     type = "S";
+    //     ruleVal = ruleVal.slice(1, -1);
+    // }
+    // if (type === "D") {
+    //     const d: Date | undefined = tryToParseDate(value);
+    //     const dr: Date | undefined = tryToParseDate(ruleVal);
+    //     return d && dr ? compare(d.getTime(), dr.getTime()) : true;
+    // }
+    // if (type === "N") {
+    //     const n: number | undefined = tryToParseNumber(value);
+    //     const nr: number | undefined = tryToParseNumber(ruleVal);
+    //     return n && nr ? compare(n, nr) : true;
+    // }
+    // if (type === "S") {
+    //     return compare(value, ruleVal);
+    // }
+
+    // compare as string if rule value is wrapped in single quotes
+    if (ruleVal.startsWith("'") && ruleVal.endsWith("'")) {
+        ruleVal = ruleVal.slice(1, -1);
+        return compare(value, ruleVal);
+    }
+
+    // compare as date if rule value looks like ISO date
+    const isoDateRx: RegExp = /^\d{4}[-/.]\d{2}[-/.]\d{2}$/;
+    const isoDateRule: boolean = isoDateRx.test(ruleVal);
+    const ruleDate: Date | undefined = tryToParseDate(ruleVal);
+    if (isoDateRule && ruleDate) {
+        const d: Date | undefined = tryToParseDate(value);
+        return d !== undefined ? compare(d.getTime(), ruleDate.getTime()) : true;
+    }
+
+    // compare as number if rule value looks like decimal number
+    const numberRx: RegExp = /^\d*\.?\d*$/;
+    const numberRule: boolean = numberRx.test(ruleVal);
+    const ruleNumber: number | undefined = tryToParseNumber(ruleVal);
+    if (numberRule && ruleNumber) {
+        const n: number | undefined = tryToParseNumber(value);
+        return n !== undefined ? compare(n, ruleNumber) : true;
+    }
+
+    // compare as string
+    return compare(value, ruleVal);
+}
+
+function minValueFn(value: string, ruleValue: string): boolean {
+    const res: boolean = compareTyped(value, ruleValue, greaterOrEqual);
+    console.log("COMPARE :", value, ">=", ruleValue, "=", res);
+    return res;
+}
+function maxValueFn(value: string, ruleValue: string): boolean {
+    const res: boolean = compareTyped(value, ruleValue, lessOrEqual);
+    console.log("COMPARE :", value, "<=", ruleValue, "=", res);
+    return res;
 }
 
 /*
@@ -65,7 +208,10 @@ export function registerRule(name: string, fn: RuleFunc, defaultPrompt: string):
 
 /** Must be called after DOM is initialized. Like in sveltekit rotes/layout.ts load(). */
 export function extendValidationRules(): void {
-    registerRule("start", startFn, "{name} must start with '{ruleValue}'");
+    registerRule("start", startsWithFn, "{name} must start with '{ruleValue}'");
     registerRule("isoDate", isoDateFn, "{name} must follow the 'YYYY-MM-DD' format");
-    registerRule("startEnd", startEndFn, "{name} must start and end with '{ruleValue}'");
+    registerRule("wrappedIn", wrappedInFn, "{name} must start and end with '{ruleValue}'");
+
+    registerRule("minValue", minValueFn, "{name} must be greater or equal {ruleValue}");
+    registerRule("maxValue", maxValueFn, "{name} must be less or equal {ruleValue}");
 }

@@ -6,7 +6,8 @@ Svelte action to initialize semantic UI `Modal` dialogue component.
 <svelte:options runes={true} />
 
 <script lang="ts">
-import { onDestroy, onMount, tick, type Snippet } from "svelte";
+import type { Snippet } from "svelte";
+import { onDestroy, onMount } from "svelte";
 
 import type { JQueryApi } from "../data/dom-jquery";
 import type { ModalSettings } from "../data/semantic-types";
@@ -105,9 +106,6 @@ function onModalHidden(this: JQuery<HTMLElement>): void {
 }
 
 onMount(async () => {
-    // delay initialization till all DOM UI elements are ready
-    await tick();
-
     // Initialize Semantic component and subscribe for changes
     elem = findComponent(span!, ".ui.modal", forId);
     if (!elem.modal) {

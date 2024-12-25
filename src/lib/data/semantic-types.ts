@@ -113,7 +113,14 @@ export type FormPrompt = Omit<FomanticUI.Form.Settings.Prompts, "contain" | "con
     // custom rules
     start: string;
     isoDate: string;
-    startEnd: string;
+    wrappedIn: string;
+
+    // newer rules?
+    maxValue?: string;
+    minValue?: string;
+    range?: string;
+    size?: string;
+    // TODO: translate range and size, make the field required in translations
 };
 
 export type FormText = FomanticUI.Form.Settings.Texts;
@@ -151,7 +158,7 @@ export type DropdownMessages = FomanticUI.Dropdown.Settings.Messages;
  dP                          d8888P
 */
 
-// TODO: 3. implement init-progress
+// TODO: implement init-progress
 /** @see {@link https://fomantic-ui.com/modules/progress.html#/settings} */
 export type ProgressSettings = Partial<FomanticUI.ProgressSettings>;
 
@@ -179,7 +186,6 @@ export type FlyoutTexts = {
     cancel: string; // "Cancel"
     close: string; //  "Close"
 };
-// TODO: 3. add flyout to translation
 
 /** @see {@link https://fomantic-ui.com/modules/flyout.html#/settings} */
 export type FlyoutSettings = Partial<FomanticUI.FlyoutSettings> & {

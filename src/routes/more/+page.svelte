@@ -48,12 +48,13 @@ function noFn(): void {
         >
             Show Toast
         </button>
-        <br />
+        <br /><br />
         <div class="help_text">
             display a toast in the corner of the screen
             <ShowCode file="more" component="toast" bind:selected={example} />
         </div>
         <!-- example-toast -->
+        &nbsp;
 
         <div class="ui divider"></div>
 
@@ -69,6 +70,7 @@ function noFn(): void {
         >
             Show Dialog
         </button>
+        <br /><br />
         <div class="help_text">
             display a dialogue and receive a callback
             <ShowCode file="more" component="dialog" bind:selected={example} />
@@ -102,6 +104,7 @@ function noFn(): void {
             }}
         />
         <!-- example-dialog -->
+        &nbsp;
     </div>
 </main>
 
@@ -112,6 +115,8 @@ function noFn(): void {
     font-style: italic;
     color: grey;
     float: right;
+    margin-top: -7px;
+    margin-bottom: 7px;
 }
 
 .ui.divider {

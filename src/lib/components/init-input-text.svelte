@@ -72,7 +72,7 @@ function svelteToInput(newValue: string | string[]): void {
     if (!equalStringArrays(parsedValue, value)) {
         value = parsedValue;
     }
-    fieldCtrl?.revalidate(); // AK 01
+    void fieldCtrl?.revalidate();
 }
 
 $effect(() => {
@@ -105,7 +105,7 @@ function inputToSvelte(inputText: string): void {
         elem?.val(formattedStr);
         elem?.get(0)!.dispatchEvent(new CustomEvent("input"));
     }
-    fieldCtrl?.revalidate(); // AK 01
+    void fieldCtrl?.revalidate();
 }
 
 /** The callback function is calls inputToSvelte when input value is changed by user. */
@@ -121,7 +121,7 @@ function labelClick(): void {
 }
 
 onMount(async () => {
-    // delay initialization till all DOM UI elements are ready
+    // delay initialization till form controller is ready
     await tick();
 
     // Initialize Semantic component and subscribe for changes
@@ -149,9 +149,13 @@ onMount(async () => {
     fieldCtrl = new FieldController(elem, validate);
 
     // push initial value into the Semantic UI element
-    if (value) {
-        svelteToInput(value);
-    }
+    svelteToInput(value);
+    // if (value !== undefined) {
+    //     svelteToInput(value);
+    // } else {
+    //     inputToSvelte(elem.val() as string);
+    //     // TODO: check if this is required for inputs bound directly in input tag
+    // }
 });
 
 /** Remove the subscription */

@@ -12,6 +12,7 @@ import type {
     CalendarSettings,
     CalendarText,
     DropdownMessages,
+    FlyoutTexts,
     FormPrompt,
     FormText,
     ProgressTexts,
@@ -32,8 +33,8 @@ const formPrompt: FormPrompt = {
     notExactly: "{name} cannot be set to exactly '{ruleValue}'",
     contains: "{name} must contain '{ruleValue}'",
     containsExactly: "{name} must contain exactly '{ruleValue}'",
-    doesntContain: "{name} must contain  '{ruleValue}'",
-    doesntContainExactly: "{name} must contain exactly '{ruleValue}'",
+    doesntContain: "{name} cannot contain '{ruleValue}'",
+    doesntContainExactly: "{name} cannot contain exactly '{ruleValue}'",
     minLength: "{name} must be at least {ruleValue} characters",
     exactLength: "{name} must be exactly {ruleValue} characters",
     maxLength: "{name} cannot be longer than {ruleValue} characters",
@@ -46,7 +47,12 @@ const formPrompt: FormPrompt = {
 
     start: "{name} must start with '{ruleValue}'",
     isoDate: "{name} must follow the 'YYYY-MM-DD' format",
-    startEnd: "{name} must start and end with '{ruleValue}'",
+    wrappedIn: "{name} must start and end with '{ruleValue}'",
+
+    // maxValue: "{name} must have a maximum value of {ruleValue}", // doesn't work
+    // minValue: "{name} must have a minimum value of {ruleValue}", // doesn't work
+    range: "{name} must be in a range [{ruleValue}]", // min & max doesn't work here, but works in 'size'
+    size: "{name} must have a length between {min} and {max} characters",
 };
 
 const formText: FormText = {
@@ -112,7 +118,7 @@ const numberSettings: NumberSettings = {
     moneyPrecision: 2,
 };
 
-// TODO: 3. translate dropdownMessages and progressTexts to other languages
+// TODO: translate dropdownMessages, progressTexts, flyoutTexts to other languages
 const dropdownMessages: DropdownMessages = {
     addResult: "Add <b>{term}</b>",
     count: "{count} selected",
@@ -124,6 +130,12 @@ const dropdownMessages: DropdownMessages = {
 const progressTexts: ProgressTexts = {
     percent: "{percent}%",
     ratio: "{value} of {total}",
+};
+
+const flyoutTexts: FlyoutTexts = {
+    ok: "Ok",
+    cancel: "Cancel",
+    close: "Close",
 };
 
 export default {
@@ -143,5 +155,8 @@ export default {
     },
     progress: {
         text: progressTexts,
+    },
+    flyout: {
+        text: flyoutTexts,
     },
 };

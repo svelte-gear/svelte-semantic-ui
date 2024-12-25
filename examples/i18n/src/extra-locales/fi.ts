@@ -41,7 +41,7 @@ const formPrompt: FormPropmt = {
 
     start: "{name} pitää alkaa '{ruleValue}'",
     isoDate: "{name} pitää olla muodossa 'VVVV-KK-PP' (vuosi-kuukausi-päivä)",
-    startEnd: "{name} pitää alkaa ja loppua '{ruleValue}'",
+    wrappedIn: "{name} pitää alkaa ja loppua '{ruleValue}'",
 };
 
 const formText: FormText = {

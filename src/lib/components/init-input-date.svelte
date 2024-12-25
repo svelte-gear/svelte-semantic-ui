@@ -55,7 +55,7 @@ let fieldCtrl: FieldController | undefined = undefined;
 
 // FUNCTIONS ------------------------------------------------------------------
 
-function valueToInput(newValue: Date | undefined): void {
+function svelteToInput(newValue: Date | undefined): void {
     if (!elem || !formatter) {
         // effect and svelteToInput may be called before onMount()
         return;
@@ -72,12 +72,12 @@ function valueToInput(newValue: Date | undefined): void {
     // if (roundedValue !== value) {
     //     value = roundedValue;
     // }
-    fieldCtrl?.revalidate(); // AK 01
+    void fieldCtrl?.revalidate();
 }
 
 $effect(() => {
     void value;
-    valueToInput(value);
+    svelteToInput(value);
 });
 
 //-----------------------------------------------------------------------------
@@ -96,7 +96,7 @@ function inputToSvelte(inputText: string): void {
         elem?.val(formattedStr);
         elem?.get(0)!.dispatchEvent(new CustomEvent("input"));
     }
-    fieldCtrl?.revalidate(); // AK 01
+    void fieldCtrl?.revalidate();
 }
 
 /** The callback function is calls inputToSvelte when input value is changed by user. */
@@ -112,7 +112,7 @@ function labelClick(): void {
 }
 
 onMount(async () => {
-    // delay initialization till all DOM UI elements are ready
+    // delay initialization till form controller is ready
     await tick();
 
     // Initialize Semantic component and subscribe for changes
@@ -140,7 +140,7 @@ onMount(async () => {
     fieldCtrl = new FieldController(elem, validate);
 
     // push initial value into the Semantic UI element
-    valueToInput(value);
+    svelteToInput(value);
 });
 
 /** Remove the subscription */
