@@ -1,6 +1,6 @@
 {
     "name": "@svelte-gear/svelte-semantic-ui-examples-svelte-kit",
-    "version": "0.6.0-alpha",
+    "version": "0.6.4-beta",
     "type": "module",
     "license": "MIT",
     "description": "Sample application using sveltekit-i18n and svelte-semantic-ui with extra locales",
@@ -12,18 +12,20 @@
         "svelte": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
     },
     "dependencies": {
-        "svelte": "5.14.0",
-        "@svelte-gear/svelte-semantic-ui": "0.6.2-alpha",
+        "svelte": "5.16.0",
+        "@svelte-gear/svelte-semantic-ui": "0.6.4-beta",
         "sveltekit-i18n": "2.4.2"
     },
     "devDependencies": {
-        "@sveltejs/adapter-static": "3.0.6",
-        "@sveltejs/kit": "2.11.1",
+        "@sveltejs/adapter-static": "3.0.8",
+        "@sveltejs/kit": "2.15.0",
         "@sveltejs/package": "2.3.7",
-        "@sveltejs/vite-plugin-svelte": "5.0.2",
+        "@sveltejs/vite-plugin-svelte": "5.0.3",
+        "fomantic-ui-css": "2.9.3",
+        "@types/jquery": "3.5.32",
         "publint": "0.2.12",
         "svelte-check": "4.1.1",
         "typescript": "5.6.3",
-        "vite": "6.0.3"
+        "vite": "6.0.5"
     }
 }

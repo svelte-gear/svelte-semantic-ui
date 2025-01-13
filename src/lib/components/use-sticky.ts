@@ -3,8 +3,7 @@
  * @module components/use-sticky
  */
 
-import type { JQueryApi } from "../data/dom-jquery";
-import type { StickySettings } from "../data/semantic-types";
+import type { StickySettings, JQueryApi } from "../data/semantic-types";
 import { jQueryElem } from "../data/dom-jquery";
 
 /** Svelte action to initialize Semantic UI `Sticky` component.

@@ -10,8 +10,7 @@ import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition } from "../data/common";
-import type { JQueryApi } from "../data/dom-jquery";
-import type { DropdownSettings } from "../data/semantic-types";
+import type { DropdownSettings, JQueryApi } from "../data/semantic-types";
 import { equalStringArrays } from "../data/common";
 import { findComponent, findLabelWithBlank } from "../data/dom-jquery";
 // import { dropdownDefaults } from "../data/settings";

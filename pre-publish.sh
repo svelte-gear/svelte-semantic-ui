@@ -2,7 +2,7 @@
 # add missing namespace references
 
 if ! grep -q '/// <reference types="jquery" />' dist/data/semantic-types.d.ts; then
-  sed -i '/ * @module data\/semantic-ui-types/a \
+  sed -i '/ * @module data\/semantic-types/a \
  */\
 /// <reference types="jquery" />\
 /// <reference types="fomantic-ui-css" />\

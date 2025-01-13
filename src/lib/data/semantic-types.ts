@@ -7,9 +7,12 @@
  * @module data/semantic-types
  */
 
+/// <reference types="jquery" />
 /// <reference types="fomantic-ui-css" />
 
 import type { RuleDefinition } from "../data/common";
+
+export type JQueryApi = JQuery<HTMLElement>;
 
 /*
                    dP                         dP

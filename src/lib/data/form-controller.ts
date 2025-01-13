@@ -6,8 +6,7 @@
 import { tick } from "svelte";
 
 import type { RuleDefinition } from "../data/common";
-import type { JQueryApi } from "../data/dom-jquery";
-import type { FormSettings } from "../data/semantic-types";
+import type { FormSettings, JQueryApi } from "../data/semantic-types";
 import {
     nextUid,
     findParentForm,

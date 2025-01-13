@@ -9,8 +9,7 @@ Svelte action to initialize semantic UI `Modal` dialogue component.
 import type { Snippet } from "svelte";
 import { onDestroy, onMount } from "svelte";
 
-import type { JQueryApi } from "../data/dom-jquery";
-import type { ModalSettings } from "../data/semantic-types";
+import type { ModalSettings, JQueryApi } from "../data/semantic-types";
 import { findComponent, jQueryElemById, nextUid } from "../data/dom-jquery";
 // import { modalDefaults } from "../data/settings";
 

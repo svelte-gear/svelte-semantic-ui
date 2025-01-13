@@ -7,12 +7,12 @@
 import type {
     CalendarSettings,
     CalendarText,
-    FormPropmt,
+    FormPrompt,
     FormText,
     NumberSettings,
 } from "@svelte-gear/svelte-semantic-ui";
 
-const formPrompt: FormPropmt = {
+const formPrompt: FormPrompt = {
     empty: "{name} täytyy olla arvo",
     checked: "{name} täytyy olla valittu",
     email: "{name} täytyy olla kelvollinen sähköposti",

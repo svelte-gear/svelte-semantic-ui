@@ -7,12 +7,12 @@
 import type {
     CalendarSettings,
     CalendarText,
-    FormPropmt,
+    FormPrompt,
     FormText,
     NumberSettings,
 } from "@svelte-gear/svelte-semantic-ui";
 
-const formPrompt: FormPropmt = {
+const formPrompt: FormPrompt = {
     empty: "{name} павінна мець значэнне",
     checked: "{name} павінна быць адзначана",
     email: "{name} павінна быць сапраўдным электронным адрасам",

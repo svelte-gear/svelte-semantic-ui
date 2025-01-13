@@ -1,13 +1,9 @@
 /**
- * Common types, jQuery API, Form and Data controllers, utility functions.
- * @module data/common
+ * DOM search and manipulation, uses jQuery.
+ * @module data/dom-jquery
  */
 
-/// <reference types="jquery" />
-
-export type JQueryApi = JQuery<HTMLElement>;
-
-//-----------------------------------------------------------------------------
+import type { JQueryApi } from "./semantic-types";
 
 /** Name of the jQuery data attribute used to store form controller */
 export const SVELTE_FORM_STORE: string = "svelte_form_store";

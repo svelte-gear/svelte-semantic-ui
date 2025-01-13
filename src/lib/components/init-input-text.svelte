@@ -11,7 +11,7 @@ import { onMount, onDestroy, tick } from "svelte";
 
 import { equalStringArrays, type RuleDefinition, type TextInputSettings } from "../data/common";
 import type { TextFormatter } from "../data/format-text";
-import type { JQueryApi } from "../data/dom-jquery";
+import type { JQueryApi } from "../data/semantic-types";
 
 import { findComponent, findLabelWithBlank, getOrAssignKey } from "../data/dom-jquery";
 import { FieldController } from "../data/form-controller";

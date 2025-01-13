@@ -7,12 +7,12 @@
 import type {
     CalendarSettings,
     CalendarText,
-    FormPropmt,
+    FormPrompt,
     FormText,
     NumberSettings,
 } from "@svelte-gear/svelte-semantic-ui";
 
-const formPrompt: FormPropmt = {
+const formPrompt: FormPrompt = {
     empty: "{name}には値が必要です",
     checked: "{name}をチェックする必要があります",
     email: "{name}は有効なメールアドレスでなければなりません",

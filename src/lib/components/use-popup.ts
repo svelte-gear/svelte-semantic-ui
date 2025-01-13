@@ -5,8 +5,7 @@
 
 import type { ActionReturn } from "svelte/action";
 
-import type { JQueryApi } from "../data/dom-jquery";
-import type { PopupSettings } from "../data/semantic-types";
+import type { PopupSettings, JQueryApi } from "../data/semantic-types";
 import { jQueryElem } from "../data/dom-jquery";
 
 /** Svelte action to initialize Semantic UI `Popup` component.

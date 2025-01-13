@@ -10,8 +10,7 @@ import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition } from "../data/common";
-import type { JQueryApi } from "../data/dom-jquery";
-import type { CalendarSettings } from "../data/semantic-types";
+import type { CalendarSettings, JQueryApi } from "../data/semantic-types";
 import { equalDates, isoDate, isoTime } from "../data/common";
 import { findComponent, findLabelWithBlank, copyParentKey } from "../data/dom-jquery";
 import { FieldController } from "../data/form-controller";

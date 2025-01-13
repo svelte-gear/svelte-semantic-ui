@@ -14,8 +14,7 @@ Provides Svelte bindings for Semantic-UI `Form` validator.
 import type { Snippet } from "svelte";
 import { onMount, onDestroy } from "svelte";
 
-import type { JQueryApi } from "../data/dom-jquery";
-import type { FormSettings } from "../data/semantic-types";
+import type { FormSettings, JQueryApi } from "../data/semantic-types";
 import { SuiFormController } from "../data/form-controller";
 import { equalStringArrays } from "../data/common";
 import {

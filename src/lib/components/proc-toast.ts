@@ -3,8 +3,7 @@
  * @module components/proc-toast
  */
 
-import type { JQueryApi } from "../data/dom-jquery";
-import type { ToastSettings } from "../data/semantic-types";
+import type { ToastSettings, JQueryApi } from "../data/semantic-types";
 import { jQueryElem } from "../data/dom-jquery";
 
 /** Imperative function to display Semantic UI Toast component.

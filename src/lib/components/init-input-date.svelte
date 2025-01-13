@@ -11,8 +11,7 @@ import { onMount, onDestroy, tick } from "svelte";
 
 import type { RuleDefinition } from "../data/common";
 import type { DateFormatter } from "../data/format-date";
-import type { JQueryApi } from "../data/dom-jquery";
-import type { CalendarSettings } from "../data/semantic-types";
+import type { CalendarSettings, JQueryApi } from "../data/semantic-types";
 import { findComponent, findLabelWithBlank, getOrAssignKey } from "../data/dom-jquery";
 import { FieldController } from "../data/form-controller";
 import { DateFmt } from "../data/format-date";
