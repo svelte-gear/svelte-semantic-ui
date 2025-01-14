@@ -9,8 +9,7 @@ Svelte data binder and initializer for Semantic-UI `Dropdown` components.
 import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
-import type { RuleDefinition } from "../data/common";
-import type { DropdownSettings, JQueryApi } from "../data/semantic-types";
+import type { DropdownSettings, JQueryApi, RuleDefinition } from "../data/semantic-types";
 import { equalStringArrays } from "../data/common";
 import { findComponent, findLabelWithBlank } from "../data/dom-jquery";
 // import { dropdownDefaults } from "../data/settings";
@@ -47,7 +46,15 @@ let span: Element | undefined = undefined;
 
 type DropdownApi = {
     dropdown(settings: DropdownSettings): void;
-    dropdown(command: string, arg1?: unknown): unknown;
+    dropdown(command: "get value"): string | string[];
+    dropdown(command: "get values"): string[];
+    dropdown(command: "set exactly", val: string[]): void;
+    dropdown(command: "get item", val: string): Element;
+    dropdown(command: "set selected", val: string): void;
+    dropdown(command: "clear"): void;
+    dropdown(command: "focus"): void;
+    dropdown(command: "clear"): void;
+    dropdown(command: "destroy"): void;
 };
 /** jQuery dropdown component */
 let elem: (JQueryApi & DropdownApi) | undefined = undefined;
@@ -79,13 +86,13 @@ function svelteToInput(newValue: string | string[] | undefined): void {
         // effect and svelteToInput may be called before onMount()
         return;
     }
-    const curValue: string | string[] = elem.dropdown("get value");
     if (multi) {
         // multi-select
+        const curValue: string[] = elem.dropdown("get values");
         if (!Array.isArray(newValue)) {
             throw new Error(`Multi-value dropdown expects string[] value, got ${newValue}`);
         }
-        if (!equalStringArrays(newValue, curValue as string[])) {
+        if (!equalStringArrays(newValue, curValue)) {
             console.debug(`Dropdown(${fieldCtrl?.key}) : value -> ${toStr(newValue)}`);
             // NOTE: use 'set exactly' instead of 'set selected'!!!
             elem.dropdown("set exactly", newValue);
@@ -93,14 +100,15 @@ function svelteToInput(newValue: string | string[] | undefined): void {
         }
     } else {
         // single-select
+        const curValue: string | string[] = elem.dropdown("get value");
         if (Array.isArray(newValue)) {
             throw new Error(`Simple-value dropdown expects string value, got ${toStr(newValue)}`);
         }
         if (curValue !== newValue) {
             console.debug(`Dropdown(${fieldCtrl?.key}) : value -> ${toStr(newValue)}`);
-            const exists: unknown = elem.dropdown("get item", value);
+            const exists: unknown = elem.dropdown("get item", value as string);
             if (exists) {
-                elem.dropdown("set selected", value);
+                elem.dropdown("set selected", value as string);
                 void fieldCtrl?.revalidate();
             } else {
                 // if value is invalid - clear the dropdown
@@ -144,7 +152,7 @@ function inputToSvelte(inputValue: string | string[] | undefined): void {
         if (value !== inputValue) {
             console.debug(`Dropdown(${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
             if (DROPDOWN_PREVENT_CLEARING_BAD_DATA) {
-                const exists: unknown = elem.dropdown("get item", inputValue);
+                const exists: unknown = elem.dropdown("get item", inputValue as string);
                 if (exists) {
                     value = inputValue;
                     void fieldCtrl?.revalidate();
@@ -190,7 +198,7 @@ onMount(async () => {
     await tick();
 
     // Initialize Semantic component and subscribe for changes
-    elem = findComponent(span!, ".ui.dropdown", forId);
+    elem = findComponent(span!, ".ui.dropdown", forId) as JQueryApi & DropdownApi;
     if (!elem.dropdown) {
         throw new Error("Semantic UI dropdown is not initialized");
     }

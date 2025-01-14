@@ -1,12 +1,11 @@
 /**
- * Svelte action to activate validation framework for the form.
+ * Svelte form validation controller, reusable field validation controller, validateForm() function.
  * @module data/form-controller
  */
 
 import { tick } from "svelte";
 
-import type { RuleDefinition } from "../data/common";
-import type { FormSettings, JQueryApi } from "../data/semantic-types";
+import type { FormSettings, JQueryApi, RuleDefinition } from "../data/semantic-types";
 import {
     nextUid,
     findParentForm,
@@ -18,17 +17,35 @@ import {
 
 export type FormApi = {
     form(settings?: FormSettings): void;
-    form(command: string, arg1?: unknown, arg2?: unknown): unknown;
+    form(command: "add rule", key: string, rule: RuleDefinition): void;
+    form(command: "remove field", key: string): void;
+    form(command: "validate field"): void;
+    form(command: "validate form"): void;
+    form(command: "is valid"): boolean;
+    form(command: "destroy"): void;
 };
 
 /** Controls Semantic UI form element and it's data validation.
-    Hides implementation details of SuiFormController from the FieldController. */
+ *  Hides implementation details of SuiFormController from the FieldController.
+ *  Is accessed from both `<InitForm>` and individual `<InitField>` components. */
 export interface FormController {
+    /** Register the field validation rule, activate the rule if the form validation is active */
     addRule: (key: string, rules: RuleDefinition) => void;
+
+    /** Remove the field validation rule */
     removeRule: (key: string, rules: RuleDefinition) => void;
-    doValidateField: (key: string) => void;
+
+    // /** It seems that field validation doesn't affect UI */
+    // doValidateField: (key: string) => void;
+
+    /** Check form validation rules; if necessary, update the UI with error prompts */
     doValidateForm: () => void;
+
+    /** Flag the form as requiring validation; used to dedupe multiple validation calls */
     markForValidation(key: string): void;
+
+    /** Perform form validation, if marked; used to dedupe multiple validation calls.
+     *  Returns false if the validation has already been performed from another async call. */
     validateIfMarked(): boolean;
 }
 
@@ -47,35 +64,26 @@ function ruleToStr(rule: RuleDefinition): string {
     return isObject ? JSON.stringify(rule) : String(rule);
 }
 
-/**
- * Form validation controller. Is accessed by both `<FormValidation>` and individual `<InitField>`.
- * */
-
+/** Form validation controller. Is accessed only from `<InitForm>` component. */
 export class SuiFormController implements FormController {
+    /** Form identifier for debug purposes */
     formId: string;
 
+    /** jQuery form element */
     elem: JQueryApi & FormApi;
 
+    /** Form validation is active */
     isActive: boolean = false;
 
+    /** Map of field validation rules */
     rules: Record<string, RuleDefinition> = {};
 
-    hasToValidate: boolean = false;
-
-    // validCallback: (valid: boolean) => void;
-
-    // errorsCallback: (errors: string[]) => void;
+    /** Form validation has been triggered by markForValidation(), but not yet performed by validateIfMarked() */
+    mustValidate: boolean = false;
 
     constructor(elem: JQueryApi) {
         this.elem = elem;
         this.formId = `FORM_${elem.attr("id") ?? nextUid()}`;
-
-        // this.errMsg = elem.find(".ui.message.error");
-        // if (this.errMsg.length === 0) {
-        //     throw new Error("Semantic form is not initialized");
-        // }
-        // this.validCallback = validCallback;
-        // this.errorsCallback = errorsCallback;
     }
 
     private activateRule(key: string, rule: RuleDefinition): void {
@@ -155,30 +163,30 @@ export class SuiFormController implements FormController {
     //     // }
     // }
 
-    doValidateField(key: string): void {
-        this.elem.form("validate field", key);
-        // this.checkIfValid();
-        this.elem.form("is valid");
-    }
+    // doValidateField(key: string): void {
+    //     this.elem.form("validate field", key);
+    //     // this.checkIfValid();
+    //     this.elem.form("is valid");
+    // }
 
     doValidateForm(): void {
         this.elem.form("validate form");
         // this.checkIfValid();
-        this.elem.form("is valid");
+        this.elem.form("is valid"); // TODO: is this required? remove?
     }
 
     markForValidation(key: string): void {
         if (this.isActive) {
             console.log(`${this.formId} : mark (${key})`);
-            this.hasToValidate = true;
+            this.mustValidate = true;
         }
     }
 
     validateIfMarked(): boolean {
-        if (this.isActive && this.hasToValidate) {
+        if (this.isActive && this.mustValidate) {
             console.log(`${this.formId} : validate`);
             this.doValidateForm();
-            this.hasToValidate = false;
+            this.mustValidate = false;
             return true;
         } else {
             return false;
@@ -197,10 +205,15 @@ export class SuiFormController implements FormController {
 */
 
 /** Adds validation rule to the field.
-    Common class used by all Init* components to control field validation */
+ *  Common class used by all Init* components to control field validation */
 export class FieldController {
+    /** Field key used for form validation, is initialized for all fields. */
     key: string | undefined;
+
+    /** Optional reference to form controlled, is initialized only if the field has validation rules. */
     formCtrl?: FormController;
+
+    /** Field validation rules */
     rules?: RuleDefinition;
 
     constructor(elem: JQueryApi, validationRules?: RuleDefinition) {
@@ -220,15 +233,14 @@ export class FieldController {
                     `Form controller for ${this.key} is not initialized, use <InitForm> on the parent form element`
                 );
             }
-
             this.formCtrl.addRule(this.key, validationRules);
             this.rules = validationRules;
         }
     }
 
     /** Validate the new field value, if the field is validated (has form controller).
-        This method is `async` as it debounces (deduplicates) the validation event
-        in case multiple fields are modified in a single Svelte "tick". */
+     *  This method is `async` as it debounces (deduplicates) the validation event
+     *  in case multiple fields are modified in a single Svelte 'tick'. */
     async revalidate(): Promise<void> {
         if (this.formCtrl) {
             this.formCtrl.markForValidation(this.key!);
@@ -242,7 +254,7 @@ export class FieldController {
     removeRules(): void {
         if (this.formCtrl && this.rules) {
             this.formCtrl.removeRule(this.key!, this.rules);
-            // revalidate after the form has updated it's definition after the field is hidden
+            // revalidate after the form has updated it's definition
             void this.revalidate();
         }
     }
@@ -258,9 +270,10 @@ export class FieldController {
 
 */
 
-/** Imperatively call form validation, may be passed by name in event handler from within the form.
-    In this case it will find the parent form using event target.
-    Or may be called with form id attribute as a string. */
+/** Imperatively call form validation.
+ *  The function may be passed by name in event handler from within the form -
+ *  in this case it will find the parent form using event target.
+ *  Alternatively it may accept form id attribute as a parameter. */
 export function validateForm(e: MouseEvent | KeyboardEvent | string): void {
     if (!e) {
         throw new Error("validateForm() requires a parameter: event or string dom id");

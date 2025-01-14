@@ -9,8 +9,7 @@ Svelte data binder and initializer for Semantic-UI `Slider` components.
 import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
-import type { RuleDefinition } from "../data/common";
-import type { SliderSettings, JQueryApi } from "../data/semantic-types";
+import type { SliderSettings, JQueryApi, RuleDefinition } from "../data/semantic-types";
 import { equalNumberArrays } from "../data/common";
 import { copyParentKey, findComponent } from "../data/dom-jquery";
 // import { sliderDefaults } from "../data/settings";
@@ -47,8 +46,13 @@ let span: Element | undefined = undefined;
 
 type SliderApi = {
     slider(settings: SliderSettings): void;
-    slider(command: string, arg1?: unknown, arg2?: unknown): unknown;
+    slider(command: "get thumbValue", arg: "first" | "second"): number;
+    slider(command: "set rangeValue", v1: number, v2: number): void;
+    slider(command: "set value", val: number): void;
+    slider(command: "get value"): number;
+    slider(command: "destroy"): void;
 };
+
 /** jQuery calendar component */
 let elem: (JQueryApi & SliderApi) | undefined = undefined;
 

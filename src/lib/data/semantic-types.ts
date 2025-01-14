@@ -1,5 +1,5 @@
 /**
- * Semantic UI types and helper to access settings.
+ * Semantic UI types.
  *
  * Re-exports Semantic UI types from the module instead of namespaces.
  *
@@ -9,8 +9,6 @@
 
 /// <reference types="jquery" />
 /// <reference types="fomantic-ui-css" />
-
-import type { RuleDefinition } from "../data/common";
 
 export type JQueryApi = JQuery<HTMLElement>;
 
@@ -32,7 +30,7 @@ export type DateParseFn = (
 
 /**
  * Fomantic UI Calendar settings.
- * Adds 'formatter' documentation and the fix for 'onChange' arguments.
+ * Adds 'formatter' and 'parser' documentation and fixes 'onChange' arguments.
  *
  * @see {@link https://fomantic-ui.com/modules/calendar.html#/settings}
  */
@@ -75,7 +73,6 @@ export type CalendarSettings = Omit<Partial<FomanticUI.CalendarSettings>, "onCha
     };
 };
 
-// export type CalendarText = Required<FomanticUI.CalendarSettings["text"]>;
 export type CalendarText = FomanticUI.Calendar.Settings.Texts;
 
 /*
@@ -88,20 +85,28 @@ export type CalendarText = FomanticUI.Calendar.Settings.Texts;
 
 */
 
-export type RuleFunc = (value: string, ruleValue: string, form: JQuery) => boolean;
-
-export type FormRules = {
-    [key: string]: RuleFunc;
+/** Validation rule object: rule string and custom error prompt */
+export type RuleObj = {
+    type: string;
+    prompt?: string;
 };
+
+/** Rule definition takes array or single instance of string or RuleObj */
+export type RuleDefinition = string | string[] | RuleObj | RuleObj[]; // | BaseSchema;
+
+/** Custom validation function */
+export type RuleFunc = (value: string, ruleValue: string, form: JQuery) => boolean;
 
 /**
  * Fomantic UI form validation behavior.
+ * Adds 'fields' and 'rules'
  *
  * @see {@link https://fomantic-ui.com/behaviors/form.html#/settings}
  */
 export type FormSettings = Partial<FomanticUI.FormSettings> & {
     fields?: Record<string, RuleDefinition>;
-    rules?: FormRules;
+    rules?: Record<string, RuleFunc>;
+    on?: "blur" | "change"; // remove "submit"
 };
 
 // formatter:
@@ -109,16 +114,16 @@ export type FormSettings = Partial<FomanticUI.FormSettings> & {
 // Actually exclusively used with calendar fields(through the dateHandling: 'formatter' setting).
 
 export type FormPrompt = Omit<FomanticUI.Form.Settings.Prompts, "contain" | "containExactly"> & {
-    // fixes
+    // fix contain[s] spelling
     contains: string;
     containsExactly: string;
 
-    // custom rules
+    // add custom rules
     start: string;
     isoDate: string;
     wrappedIn: string;
 
-    // newer rules?
+    // define newer rules
     maxValue?: string;
     minValue?: string;
     range?: string;
@@ -139,14 +144,16 @@ export type FormText = FomanticUI.Form.Settings.Texts;
                             dP
 */
 
-/** @see {@link http://fomantic-ui.com/modules/dropdown.html#/settings} */
+/**
+ * Dropdown initialization settings.
+ * Fixes onChange signature to allow string[] for multi-select
+ *
+ * @see {@link http://fomantic-ui.com/modules/dropdown.html#/settings}
+ */
 export type DropdownSettings = Omit<Partial<FomanticUI.DropdownSettings>, "onChange"> & {
-    /**
-     * Is called after a dropdown value changes.
-     * Receives the name and value of selection and the active menu element.
-     */
+    /** Is called after a dropdown value changes.
+     *  Receives the name and value of selection and the active menu element. */
     onChange?(value: string | string[], text: string, $choice: JQuery): void;
-    // fix signature to allow string[] for multi-select
 };
 
 export type DropdownMessages = FomanticUI.Dropdown.Settings.Messages;
@@ -167,9 +174,9 @@ export type ProgressSettings = Partial<FomanticUI.ProgressSettings>;
 
 /**
  * Text content for each state, uses simple templating with {percent}, {value}, {total} and {bar}.
-
-   {bar} is useful to show bar names on multiple bars.
-   Names of bars are provided by text.bars in the forms of array of string. E.g. ['bar1', 'bar2'].
+ *
+ * {bar} is useful to show bar names on multiple bars.
+ * Names of bars are provided by text.bars in the forms of array of string. E.g. ['bar1', 'bar2'].
  */
 export type ProgressTexts = Partial<FomanticUI.Progress.Settings.Texts>;
 

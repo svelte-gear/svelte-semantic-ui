@@ -1,5 +1,5 @@
 /**
- * Common types, jQuery API, Form and Data controllers, utility functions.
+ * Settings helper and global defaults.
  * @module data/settings
  */
 
@@ -16,31 +16,14 @@ import type {
     ToastSettings,
 } from "../data/semantic-types";
 
-/*
-                     dP     dP   oo
-                     88     88
- .d8888b. .d8888b. d8888P d8888P dP 88d888b. .d8888b. .d8888b.
- Y8ooooo. 88ooood8   88     88   88 88'  `88 88'  `88 Y8ooooo.
-       88 88.  ...   88     88   88 88    88 88.  .88       88
- `88888P' `88888P'   dP     dP   dP dP    dP `8888P88 `88888P'
-                                                  .88
-                                              d8888P
-*/
+export type SettingsObject = Record<string, unknown>;
 
-export type SettingsObject = {
-    [key: string]: unknown;
-};
-
-export type AllSettingsJson = {
-    [key: string]: SettingsObject;
-};
+export type AllSettingsJson = Record<string, SettingsObject>;
 
 /* prettier-ignore */
 type WithJQuery = {
     jQuery?: {
-        fn: {
-            [key: string]: SettingsObject | undefined;
-        };
+        fn: Record<string, SettingsObject | undefined>;
     };
 };
 
@@ -88,11 +71,6 @@ export function copyFields(target: SettingsObject, source: SettingsObject, logNa
         }
     });
 }
-
-// /** Utility type to mark all fields and sub-objects Readonly. */
-// export type DeepReadonly<T> = T extends unknown
-//     ? { readonly [K in keyof T]: DeepReadonly<T[K]> }
-//     : T;
 
 function ensureNumberSettings(jQuery: JQuerySettings): void {
     if (!jQuery.fn.number) {
@@ -156,17 +134,6 @@ export class SettingsHelper<T> {
     }
 }
 
-/*
-                            dP
-                            88
- .d8888b. 88d888b. 88d888b. 88 dP    dP
- 88'  `88 88'  `88 88'  `88 88 88    88
- 88.  .88 88.  .88 88.  .88 88 88.  .88
- `88888P8 88Y888P' 88Y888P' dP `8888P88
-          88       88               .88
-          dP       dP           d8888P
-*/
-
 /** Copy settings into the global SUI components and number object in jQuery. */
 export function applyAllSettings(json: AllSettingsJson): void {
     const jQuery: JQuerySettings | undefined = (window as unknown as WithJQuery).jQuery;
@@ -220,5 +187,6 @@ export function applyDefaultSettings(locale?: string): void {
     });
     formDefaults.apply({
         keyboardShortcuts: false,
+        on: "blur",
     });
 }

@@ -39,11 +39,7 @@ import type { Readable } from "svelte/store";
 import type { Config } from "sveltekit-i18n";
 import i18n from "sveltekit-i18n";
 
-type StringMap = {
-    [key: string]: string;
-};
-
-const langList: StringMap = {
+const langList: Record<string, string> = {
     en: "English",
     es: "Español",
     fr: "Française",
@@ -68,14 +64,9 @@ const ski18n = new i18n(config);
 
 type LtRes = Promise<void | void[]> | undefined;
 
-type AnyMap = {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [key: string]: any;
-};
-
 /** Translation function used in the application  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const t: Readable<(key: string, ...params: AnyMap[]) => any> = ski18n.t;
+export const t: Readable<(key: string, ...params: Record<string, any>[]) => any> = ski18n.t;
 
 /** Load translation files for locale and path. */
 export const loadTranslations: (locale: string, route?: string) => LtRes = ski18n.loadTranslations;

@@ -8,7 +8,9 @@ import type { JQueryApi } from "./semantic-types";
 /** Name of the jQuery data attribute used to store form controller */
 export const SVELTE_FORM_STORE: string = "svelte_form_store";
 
-/** Determines how <InitComponent> is positioned related to the input to control */
+//-----------------------------------------------------------------------------
+
+/** Determines how <InitComponent> is positioned related to the input which it controls */
 export type ComponentInitMode = "parent" | "child" | "sibling";
 
 /** List of all init modes, used for runtime check */
@@ -23,8 +25,8 @@ export function getComponentInitMode(): ComponentInitMode[] {
 }
 
 /** Change component finding algorithm.
-Setting to all modes will find component in any of the 3 locations.
-Setting to empty array makes Init* component work only using forId param. */
+ *  Setting to all modes will find component in any of the 3 locations.
+ *  Setting to empty array makes Init* component work only using forId param. */
 export function setComponentInitMode(modes: ComponentInitMode[]): void {
     modes.forEach((mode: ComponentInitMode) => {
         if (!ALL_MODES.includes(mode)) {
@@ -41,14 +43,13 @@ let unum: number = 100;
 
 /** Generate an unique number */
 export function nextUid(): string {
-    // const num = new Date().getTime();
-    // const num = Math.round(window.performance.now());
     unum = unum + 1;
-    return `000000${unum % 1000}`.slice(-3);
+    return `00${unum % 1000}`.slice(-3);
 }
+
 //-----------------------------------------------------------------------------
 
-/** Gets jQuery element by id attribute. */
+/** Find jQuery element by id attribute. */
 export function jQueryElemById(id: string): JQueryApi {
     type SelectorFn = (selector: string) => JQueryApi;
     type WithJQuerySelector = {
@@ -61,7 +62,7 @@ export function jQueryElemById(id: string): JQueryApi {
     return jQuery(`#${id}`);
 }
 
-/** Gets jQuery element by dom node. */
+/** Gets jQuery element for the dom node. */
 export function jQueryElem(node: Element): JQueryApi {
     type NodeFn = (node: Element) => JQueryApi;
     type WithJQueryNode = {
@@ -75,8 +76,8 @@ export function jQueryElem(node: Element): JQueryApi {
 }
 
 /** Find corresponding Semantic UI component,
-where the `span` Element is a parent, child, or next sibling of the component.
-Search mode is usually set in setComponentInitMode(), but may be overridden by `search` parameter. */
+ *  where the `span` Element is a parent, child, or next sibling of the component.
+ *  Search mode is usually set in setComponentInitMode(), but may be overridden by `search` parameter. */
 export function findComponent(
     span: Element,
     selector: string,
@@ -114,6 +115,8 @@ export function findComponent(
     throw new Error(`Can't find '${selector}' component as a ${searchModes.join("|")}`);
 }
 
+//-----------------------------------------------------------------------------
+
 /** Get field identifier: id, name, data-validate */
 export function getFieldKey(elem: JQueryApi): string | undefined {
     return elem.attr("id") ?? elem.attr("name") ?? elem.attr("data-validate");
@@ -130,7 +133,7 @@ export function getOrAssignKey(elem: JQueryApi, prefix: string): string {
     return key;
 }
 
-/** If the elem doesn't have key, copy parent field identifier: id, name, data-validate */
+/** If the elem doesn't have key, copy parent field identifier: id, name, data-validate; or assign a unique id. */
 export function copyParentKey(elem: JQueryApi, parent: JQueryApi, prefix: string): string {
     let key: string | undefined = getFieldKey(elem);
     if (!key) {
@@ -142,8 +145,9 @@ export function copyParentKey(elem: JQueryApi, parent: JQueryApi, prefix: string
     return key;
 }
 
-/** If the elem doesn't have key, copy parent field identifier: id, name, data-validate */
-export function copyParentKeyIfExists(
+/** If the elem doesn't have key, copy parent field identifier: id, name, data-validate.
+ *  But only if the parent key exists. */
+function copyParentKeyIfExists(
     elem: JQueryApi,
     parent: JQueryApi,
     prefix: string
@@ -203,6 +207,8 @@ export function ensureFieldKey(elem: JQueryApi): string {
     // assign new attribute
     return getOrAssignKey(elem, "f");
 }
+
+//-----------------------------------------------------------------------------
 
 /** Search DOM tree for a parent form element  */
 export function findParentForm(elem: JQueryApi): JQueryApi | undefined {

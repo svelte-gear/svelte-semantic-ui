@@ -16,16 +16,7 @@
          d8888P  dP
 */
 
-/** Validation rule object: rule string and custom error prompt */
-export type RuleObj = {
-    type: string;
-    prompt?: string;
-};
-
-/** Rule definition takes array or single instance of string or RuleObj */
-export type RuleDefinition = string | string[] | RuleObj | RuleObj[]; // | BaseSchema;
-
-/** Settings controlling number, money, and list formatting. */
+/** Settings controlling number and money formatting. */
 export interface NumberSettings {
     decimalSeparator: string;
     thousandSeparator: string;
@@ -34,12 +25,13 @@ export interface NumberSettings {
     moneyPrecision: number;
 }
 
-/** Settings used to initialize a number input component. */
+/** Settings used to initialize a number input component: number settings, type, and precision */
 export interface NumberInputSettings extends Partial<NumberSettings> {
     type?: "integer" | "decimal" | "money";
     precision?: number;
 }
 
+/** Settings used to initialize a text input component */
 export type TextInputSettings = {
     case?: "upper" | "lower" | "title" | "none";
     charset?: "any" | "euro" | "latin" | "ascii" | "id_alpha" | "id_hex" | "id_num";
@@ -108,8 +100,9 @@ export function equalStringArrays(
             }
         }
         return true;
+    } else {
+        return a1 === a2;
     }
-    return a1 === a2;
 }
 
 /** Compare two number arrays or numbers */
@@ -127,8 +120,9 @@ export function equalNumberArrays(
             }
         }
         return true;
+    } else {
+        return a1 === a2;
     }
-    return a1 === a2;
 }
 
 /** Format a number, padded with "0" to the minimum length */

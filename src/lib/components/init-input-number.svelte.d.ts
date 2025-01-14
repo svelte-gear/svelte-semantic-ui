@@ -4,8 +4,9 @@
  */
 
 import type { Snippet, Component } from "svelte";
-import type { RuleDefinition, NumberInputSettings } from "../data/common";
+import type { NumberInputSettings } from "../data/common";
 import type { NumberFormatter } from "../data/format-number";
+import type { RuleDefinition } from "../data/semantic-types";
 
 /**
  * Svelte data binder and initializer for number input.

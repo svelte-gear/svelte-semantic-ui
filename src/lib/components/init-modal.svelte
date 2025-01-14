@@ -41,7 +41,10 @@ let span: Element | undefined = undefined; // $state();
 
 type ModalApi = {
     modal(settings?: ModalSettings): void;
-    modal(command: string): unknown;
+    modal(command: "is active"): boolean;
+    modal(command: "show"): void;
+    modal(command: "hide"): void;
+    modal(command: "destroy"): void;
 };
 /** jQuery modal component */
 let elem: (JQueryApi & ModalApi) | undefined = undefined;

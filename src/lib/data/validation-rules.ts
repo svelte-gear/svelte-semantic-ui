@@ -117,40 +117,6 @@ function compareTyped(value: string, ruleValue: string, compare: CompareFn): boo
     }
     let ruleVal: string = ruleValue.trim();
 
-    // let type: string | undefined = undefined;
-    // const parts: string[] = ruleVal.split(":").map((s: string) => s.trim());
-    // if (parts.length >= 2) {
-    //     if (["date", "dat"].includes(parts[1])) {
-    //         type = "D";
-    //     }
-    //     if (["number", "num"].includes(parts[1])) {
-    //         type = "N";
-    //     }
-    //     if (["string", "str"].includes(parts[1])) {
-    //         type = "S";
-    //     }
-    //     if (type) {
-    //         ruleVal = parts[0];
-    //     }
-    // }
-    // if (ruleVal.startsWith("'") && ruleVal.endsWith("'")) {
-    //     type = "S";
-    //     ruleVal = ruleVal.slice(1, -1);
-    // }
-    // if (type === "D") {
-    //     const d: Date | undefined = tryToParseDate(value);
-    //     const dr: Date | undefined = tryToParseDate(ruleVal);
-    //     return d && dr ? compare(d.getTime(), dr.getTime()) : true;
-    // }
-    // if (type === "N") {
-    //     const n: number | undefined = tryToParseNumber(value);
-    //     const nr: number | undefined = tryToParseNumber(ruleVal);
-    //     return n && nr ? compare(n, nr) : true;
-    // }
-    // if (type === "S") {
-    //     return compare(value, ruleVal);
-    // }
-
     // compare as string if rule value is wrapped in single quotes
     if (ruleVal.startsWith("'") && ruleVal.endsWith("'")) {
         ruleVal = ruleVal.slice(1, -1);

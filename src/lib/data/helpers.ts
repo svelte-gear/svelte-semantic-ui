@@ -1,5 +1,5 @@
 /**
- * 'fmt', 'parse', and 'rule' utility object.
+ * Global `fmt` and `parse` objects with default formatting settings, autocomplete helper for validation rules.
  * @module data/helpers
  */
 
@@ -17,8 +17,8 @@ import { NumberFmt } from "./format-number";
 
 */
 
-// Global fmt and parse objects with default formatting settings.
-// Lazily initialized, to give user the chance to change defaults.
+// The formatter objects are lazily initialized, to give user the chance to change defaults.
+// 'int' differs from 'num' by not using thousand separator.
 
 let dateFmt: DateFmt | null = null;
 let timeFmt: DateFmt | null = null;

@@ -1,5 +1,6 @@
 /**
- * 'fmt' and 'parse' utility object, input formatter classes.
+ * Number formatter object, is initialized using NumberInputSettings,
+ * which includes NumberSettings, type, and precision.
  * @module data/input-formatter
  */
 
@@ -17,6 +18,7 @@ function escapeRegExp(val: string): string {
     return val.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").trim();
 }
 
+/** NumberFormatter implementation, which supports integer number, and locale-aware decimal and money */
 export class NumberFmt implements NumberFormatter {
     type: "integer" | "decimal" | "money";
 

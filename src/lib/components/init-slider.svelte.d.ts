@@ -4,8 +4,7 @@
  */
 
 import type { Snippet, Component } from "svelte";
-import type { SliderSettings } from "../data/semantic-types";
-import type { RuleDefinition } from "../data/common";
+import type { SliderSettings, RuleDefinition } from "../data/semantic-types";
 
 /**
  * Svelte data binder and initializer for Semantic UI `Slider` component.

@@ -15,6 +15,7 @@ import type { Snippet } from "svelte";
 import { onMount, onDestroy } from "svelte";
 
 import type { FormSettings, JQueryApi } from "../data/semantic-types";
+import type { FormApi } from "../data/form-controller";
 import { SuiFormController } from "../data/form-controller";
 import { equalStringArrays } from "../data/common";
 import {
@@ -36,11 +37,13 @@ interface Props {
     /** Read-only binding for validation error messages. */
     errors?: string[];
 
-    /** Form validation settings */
+    /** Form validation settings, see https://fomantic-ui.com/behaviors/form.html#/settings */
     settings?: FormSettings;
 
+    /** Id of the Semantic UI form element, takes precedence over tag position */
     forId?: string;
 
+    /** If InitForm is used as a parent, render the children components */
     children?: Snippet;
 }
 
@@ -64,11 +67,11 @@ let span: Element | undefined = undefined;
 // DATA -----------------------------------------------------------------------
 
 /** jQuery form component */
-let elem: JQueryApi | undefined = undefined;
+let elem: (JQueryApi & FormApi) | undefined = undefined;
 
 let formCtrl: SuiFormController | undefined = undefined;
 
-// fix CSS fir Init as a parent wrapper
+// fix CSS for Init as a parent wrapper
 if (getComponentInitMode().includes("parent")) {
     void import("../init-wrapper-fix.css");
 }
@@ -83,7 +86,7 @@ $effect(() => {
     }
 });
 
-/** When store value changes, modify the corresponding prop. */
+/** When form validation result changes, modify the corresponding prop. */
 function onValidChange(ctrlValue: boolean): void {
     if (ctrlValue !== valid) {
         console.debug(`${formCtrl!.formId} : valid <- ${ctrlValue}`);
@@ -91,7 +94,7 @@ function onValidChange(ctrlValue: boolean): void {
     }
 }
 
-/** When store value changes, modify the corresponding prop. */
+/** When form validation messages change, modify the corresponding prop. */
 function onErrorsChange(ctrlValue: string[]): void {
     if (!equalStringArrays(ctrlValue, errors)) {
         console.debug(`${formCtrl!.formId} : errors <- [ ${ctrlValue.join(" | ")} ]`);
@@ -99,12 +102,9 @@ function onErrorsChange(ctrlValue: string[]): void {
     }
 }
 
+/** Validation callback */
 function onSuccessCallback(this: JQueryApi, event: Event, fields: object[]): void {
     console.log("SUCCESS");
-    // const def: FormSettings = formDefaults.read();
-    // if (def.onSuccess) {
-    //     def.onSuccess.call(this, event, fields);
-    // }
     // user-specified handler for this component
     // if default handler is present, user handler may call it before, after, or not call at all
     if (settings && settings.onSuccess) {
@@ -114,12 +114,9 @@ function onSuccessCallback(this: JQueryApi, event: Event, fields: object[]): voi
     onErrorsChange([]);
 }
 
+/** Validation callback */
 function onFailureCallback(this: JQueryApi, formErrors: object[], fields: object[]): void {
     console.log("FAILURE");
-    // const def: FormSettings = formDefaults.read();
-    // if (def.onFailure) {
-    //     def.onFailure.call(this, formErrors, fields);
-    // }
     // user-specified handler for this component
     // if default handler is present, user handler may call it before, after, or not call at all
     if (settings && settings.onFailure) {
@@ -131,7 +128,6 @@ function onFailureCallback(this: JQueryApi, formErrors: object[], fields: object
 
 //-----------------------------------------------------------------------------
 
-/**  */
 onMount(async () => {
     // DOM is ready, initialize the form immediately, field will wait a tick to ensure that the form is ready
 
@@ -159,12 +155,13 @@ onMount(async () => {
     formCtrl.setActive(active);
 });
 
-/** Remove the subscription */
 onDestroy(() => {
     if (formCtrl) {
+        // stop validation
         formCtrl.isActive = false;
     }
     if (elem) {
+        // remove event handlers
         elem.form("destroy");
     }
 });

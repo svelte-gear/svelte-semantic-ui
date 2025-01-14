@@ -4,8 +4,7 @@
  */
 
 import type { Snippet, Component } from "svelte";
-import type { DropdownSettings } from "../data/semantic-types";
-import type { RuleDefinition } from "../data/common";
+import type { DropdownSettings, RuleDefinition } from "../data/semantic-types";
 
 /**
  * Svelte data binder and initializer for Semantic UI `Dropdown` component.

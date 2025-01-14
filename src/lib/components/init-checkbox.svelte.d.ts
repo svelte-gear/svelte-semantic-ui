@@ -4,8 +4,7 @@
  */
 
 import type { Snippet, Component } from "svelte";
-import type { CheckboxSettings } from "../data/semantic-types";
-import type { RuleDefinition } from "../data/common";
+import type { CheckboxSettings, RuleDefinition } from "../data/semantic-types";
 
 /** Svelte action to initialize Semantic UI `Checkbox` component.
  * https://semantic-ui.com/modules/checkbox.html

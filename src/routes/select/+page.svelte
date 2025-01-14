@@ -100,10 +100,9 @@ function toggleActive(): void {
                 bind:valid={valid}
                 bind:errors={errors}
                 settings={{
-                    // keyboardShortcuts: false,
                     inline: true,
-                    on: "change",
                     autoCheckRequired: true,
+                    revalidate: true,
                     // fields: { xx3: "empty" },
                 }}
             />

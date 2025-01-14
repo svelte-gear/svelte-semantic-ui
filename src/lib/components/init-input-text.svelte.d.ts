@@ -4,8 +4,9 @@
  */
 
 import type { Snippet, Component } from "svelte";
-import type { RuleDefinition, TextInputSettings } from "../data/common";
+import type { TextInputSettings } from "../data/common";
 import type { TextFormatter } from "../data/format-text";
+import type { RuleDefinition } from "../data/semantic-types";
 
 /**
  * Svelte data binder and initializer for text input.

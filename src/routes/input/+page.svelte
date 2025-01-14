@@ -99,9 +99,7 @@ function toggleActive(): void {
                 active={active}
                 bind:valid={valid}
                 settings={{
-                    // keyboardShortcuts: false,
                     inline: true,
-                    on: "change",
                     autoCheckRequired: true,
                 }}
             />

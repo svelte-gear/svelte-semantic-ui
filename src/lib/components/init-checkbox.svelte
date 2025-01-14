@@ -9,8 +9,7 @@ Svelte initializer for Semantic UI `Checkbox` component.
 import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
-import type { RuleDefinition } from "../data/common";
-import type { CheckboxSettings, JQueryApi } from "../data/semantic-types";
+import type { CheckboxSettings, JQueryApi, RuleDefinition } from "../data/semantic-types";
 import { copyParentKey, findComponent } from "../data/dom-jquery";
 import { FieldController } from "../data/form-controller";
 // import { checkboxDefaults } from "../data/settings";
@@ -43,7 +42,7 @@ let span: Element | undefined = undefined;
 
 type CheckboxApi = {
     checkbox(settings: CheckboxSettings): void;
-    checkbox(command: string, arg1?: unknown): unknown;
+    checkbox(command: "destroy"): void;
 };
 /** jQuery dropdown component */
 let elem: (JQueryApi & CheckboxApi) | undefined = undefined;

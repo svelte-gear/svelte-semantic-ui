@@ -51,7 +51,7 @@
         "semantic-ui-css": "for semantic-ui, add optional fomantic modules: calendar, slider, toast, and form"
     },
     "peerDependencies": {
-        "svelte": "^3.59.2 || ^4.2.18 || ^5.14.1",
+        "svelte": "^3.59.2 || ^4.2.18 || ^5.17.4",
         "jquery": "^3.7.1",
         "fomantic-ui-css": "^2.9.3"
     },
@@ -76,8 +76,8 @@
     },
     "devDependencies": {
         "fomantic-ui-css": "2.9.3",
-        "svelte": "5.16.0",
-        "@sveltejs/kit": "2.15.0",
+        "svelte": "5.17.4",
+        "@sveltejs/kit": "2.15.2",
         "@sveltejs/adapter-static": "3.0.8",
         "@sveltejs/package": "2.3.7",
         "@sveltejs/vite-plugin-svelte": "5.0.3",
@@ -90,17 +90,17 @@
         "eslint-plugin-import": "2.31.0",
         "eslint-plugin-jsx-a11y": "6.10.2",
         "eslint-plugin-promise": "7.2.1",
-        "eslint-plugin-react": "7.37.2",
+        "eslint-plugin-react": "7.37.4",
         "prettier": "3.4.2",
-        "prettier-plugin-svelte": "3.3.2",
+        "prettier-plugin-svelte": "3.3.3",
 
         "@types/jquery": "3.5.32",
-        "@types/node": "22.10.2",
+        "@types/node": "22.10.6",
         "cpy-cli": "5.0.0",
-        "svelte-check": "4.1.1",
-        "publint": "0.2.12",
-        "typedoc": "0.27.5",
+        "svelte-check": "4.1.4",
+        "publint": "0.3.2",
+        "typedoc": "0.27.6",
         "typescript": "5.6.3",
-        "vite": "6.0.5"
+        "vite": "6.0.7"
     }
 }

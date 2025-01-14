@@ -1,5 +1,7 @@
 /**
- * 'fmt' and 'parse' utility object, input formatter classes.
+ * Text formatter object, is initialized using TextInputSettings,
+ * which includes Number Settings , type, and precision.
+ * @module data/input-formatter
  * @module data/input-formatter
  */
 
@@ -15,6 +17,7 @@ function escapeRegex(input: string): string {
     return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+/** Text formatter implementation; supports case, charset, maxLen and list options */
 export class TextFmt implements TextFormatter {
     settings: TextInputSettings;
 

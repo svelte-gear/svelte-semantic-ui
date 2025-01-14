@@ -9,8 +9,7 @@ Svelte data binder and initializer for Semantic-UI `Calendar` components.
 import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
-import type { RuleDefinition } from "../data/common";
-import type { CalendarSettings, JQueryApi } from "../data/semantic-types";
+import type { CalendarSettings, JQueryApi, RuleDefinition } from "../data/semantic-types";
 import { equalDates, isoDate, isoTime } from "../data/common";
 import { findComponent, findLabelWithBlank, copyParentKey } from "../data/dom-jquery";
 import { FieldController } from "../data/form-controller";
@@ -45,7 +44,10 @@ let span: Element | undefined = undefined;
 
 type CalendarApi = {
     calendar(settings: CalendarSettings): void;
-    calendar(command: string, arg1?: unknown): unknown;
+    calendar(command: "get date"): Date | Date[];
+    calendar(command: "set date", val: Date | undefined): void;
+    calendar(command: "focus"): void;
+    calendar(command: "destroy"): void;
 };
 /** jQuery calendar component */
 let elem: (JQueryApi & CalendarApi) | undefined = undefined;
@@ -77,10 +79,10 @@ function svelteToInput(newValue: Date | undefined): void {
         // effect and svelteToInput may be called before onMount()
         return;
     }
-    let val: Date | Date[] = elem.calendar("get date") as Date;
+    let val: Date | Date[] = elem.calendar("get date") as Date | Date[];
     if (Array.isArray(val)) {
         console.log(`Calendar(${fieldCtrl?.key}) : GOT ARRAY`, val);
-        val = val[0] as Date;
+        val = val[0];
     }
     if (!equalDates(newValue, val)) {
         console.debug(`Calendar(${fieldCtrl?.key}) value -> ${toStr(newValue)}`);
@@ -146,7 +148,7 @@ onMount(async () => {
     await tick();
 
     // Initialize Semantic component and subscribe for changes
-    elem = findComponent(span!, ".ui.calendar", forId);
+    elem = findComponent(span!, ".ui.calendar", forId) as JQueryApi & CalendarApi;
     if (!elem.calendar) {
         throw new Error("Semantic calendar is not initialized");
     }

@@ -9,9 +9,8 @@ Svelte data binder and formatter for date input.
 import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
-import type { RuleDefinition } from "../data/common";
 import type { DateFormatter } from "../data/format-date";
-import type { CalendarSettings, JQueryApi } from "../data/semantic-types";
+import type { CalendarSettings, JQueryApi, RuleDefinition } from "../data/semantic-types";
 import { findComponent, findLabelWithBlank, getOrAssignKey } from "../data/dom-jquery";
 import { FieldController } from "../data/form-controller";
 import { DateFmt } from "../data/format-date";

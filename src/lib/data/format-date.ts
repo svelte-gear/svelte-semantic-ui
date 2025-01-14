@@ -1,5 +1,5 @@
 /**
- * 'fmt' and 'parse' utility object, input formatter classes.
+ * DateFormatter object, is initialized using a portion of CalendarSettings.
  * @module data/input-formatter
  */
 
@@ -13,6 +13,7 @@ export interface DateFormatter {
     parse: (val: string) => Date | undefined;
 }
 
+/** DateFormatter implementation which uses a copy of FomanticCalendar code */
 export class DateFmt implements DateFormatter {
     private settings: CalendarSettings;
 
@@ -58,11 +59,11 @@ export class DateFmt implements DateFormatter {
         if (!(val instanceof Date)) {
             throw new Error(`dateFormatter expects Date as data type, got ${typeof val} = ${val}`);
         }
-        const type: string = this.settings.type!;
-        type SettingsFormatter = {
-            [key: string]: string | DateFormatFn;
-        };
+
+        type SettingsFormatter = Record<string, string | DateFormatFn>;
+
         const formatter: SettingsFormatter = this.settings.formatter! as SettingsFormatter;
+        const type: string = this.settings.type!;
         const formatStrOrFunc: string | DateFormatFn = formatter[type];
         return helperDateFormat(formatStrOrFunc, val, this.settings as Required<CalendarSettings>);
     }

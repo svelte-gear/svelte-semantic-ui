@@ -4,8 +4,7 @@
  */
 
 import type { Snippet, Component } from "svelte";
-import type { CalendarSettings } from "../data/semantic-types";
-import type { RuleDefinition } from "../data/common";
+import type { CalendarSettings, RuleDefinition } from "../data/semantic-types";
 
 /**
  * Svelte data binder and initializer for Semantic UI `Calendar` component.

@@ -9,9 +9,9 @@ Svelte data binder and formatter for number input.
 import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
-import type { RuleDefinition, NumberInputSettings } from "../data/common";
+import type { NumberInputSettings } from "../data/common";
 import type { NumberFormatter } from "../data/format-number";
-import type { JQueryApi } from "../data/semantic-types";
+import type { JQueryApi, RuleDefinition } from "../data/semantic-types";
 
 import { findComponent, findLabelWithBlank, getOrAssignKey } from "../data/dom-jquery";
 import { FieldController } from "../data/form-controller";

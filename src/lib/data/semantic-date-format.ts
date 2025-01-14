@@ -77,11 +77,7 @@ export function helperDateFormat(
     // eslint-disable-next-line func-names, prefer-arrow-callback
     return format.replace(settings.regExp.token!, function (match: string): string {
         if (match in tokens) {
-            return (
-                tokens as unknown as {
-                    [key: string]: string;
-                }
-            )[match];
+            return (tokens as unknown as Record<string, string>)[match];
         }
 
         return match.slice(1, -1);
