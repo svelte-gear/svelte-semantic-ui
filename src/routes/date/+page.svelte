@@ -74,13 +74,13 @@ function toggleActive(): void {
                 bind:valid={valid}
                 settings={{
                     inline: true,
-                    autoCheckRequired: true,
                 }}
             />
 
             {#if example === ""}
                 <div class="ui right rail">
                     <div class="ui segment sticky" use:sticky={{ offset: 10 }}>
+                        <h2>Data bindings</h2>
                         <div class="ui message" style:font-family="monospace">
                             {json}
                         </div>

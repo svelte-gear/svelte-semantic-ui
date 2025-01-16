@@ -189,10 +189,6 @@ onMount(async () => {
     input = elem.find("input");
     copyParentKey(input, elem, FIELD_PREFIX);
 
-    // const sliderId: string | undefined = getFieldKey(elem);
-    // const inputId: string = `${FIELD_PREFIX}_${sliderId ? sliderId : nextUid()}`;
-    // elem.append(`<input type="hidden" data-validate="${inputId}"/>`);
-
     // apply validation rule if the rule is supplied in <InitSlider >
     fieldCtrl = new FieldController(input, validate);
 

@@ -172,7 +172,7 @@ export class SuiFormController implements FormController {
     doValidateForm(): void {
         this.elem.form("validate form");
         // this.checkIfValid();
-        this.elem.form("is valid"); // TODO: is this required? remove?
+        // this.elem.form("is valid"); // FIXME: is this required? remove?
     }
 
     markForValidation(key: string): void {
@@ -296,6 +296,7 @@ export function validateForm(e: MouseEvent | KeyboardEvent | string): void {
     const ctrl: FormController = form.data(SVELTE_FORM_STORE) as FormController;
     ctrl.doValidateForm();
 }
+// FIXME: this doesn't work as error display elements are hidden if not active
 
 // function getFieldByKey(key: string): JQueryApi {
 //     let field = elem.find(`#${key}`);

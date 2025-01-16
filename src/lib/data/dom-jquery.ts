@@ -147,14 +147,10 @@ export function copyParentKey(elem: JQueryApi, parent: JQueryApi, prefix: string
 
 /** If the elem doesn't have key, copy parent field identifier: id, name, data-validate.
  *  But only if the parent key exists. */
-function copyParentKeyIfExists(
-    elem: JQueryApi,
-    parent: JQueryApi,
-    prefix: string
-): string | undefined {
+function copyKeyIfExists(elem: JQueryApi, parent: JQueryApi, prefix: string): string | undefined {
     let key: string | undefined = getFieldKey(elem);
     if (!key) {
-        // assign new attribute
+        // get parent key
         const parentKey: string | undefined = getFieldKey(parent);
         if (parentKey) {
             key = `${prefix}_${parentKey}`;
@@ -164,47 +160,41 @@ function copyParentKeyIfExists(
     return key;
 }
 
-/** Perform lookup for known parent types, copy parent id if it can. */
+/** Perform lookup for known parent types or .field with id, copy parent id if it can. */
 export function ensureFieldKey(elem: JQueryApi): string {
     const key: string | undefined = getFieldKey(elem);
     if (key) {
         return key;
     }
     let parent: JQueryApi = elem.parent();
+
     while (parent && parent.length > 0) {
-        // first try the component
         if (parent.is(".ui.calendar")) {
-            const k: string | undefined = copyParentKeyIfExists(elem, parent, "f_calendar");
+            const k: string | undefined = copyKeyIfExists(elem, parent, "f_calendar");
+            if (k) return k;
+        } else if (parent.is(".ui.dropdown")) {
+            const k: string | undefined = copyKeyIfExists(elem, parent, "f_dropdown");
+            if (k) return k;
+        } else if (parent.is(".ui.checkbox")) {
+            const k: string | undefined = copyKeyIfExists(elem, parent, "f_checkbox");
+            if (k) return k;
+        } else if (parent.is(".ui.slider")) {
+            const k: string | undefined = copyKeyIfExists(elem, parent, "f_slider");
             if (k) return k;
         }
-        if (parent.is(".ui.dropdown")) {
-            const k: string | undefined = copyParentKeyIfExists(elem, parent, "f_dropdown");
-            if (k) return k;
-        }
-        if (parent.is(".ui.checkbox")) {
-            const k: string | undefined = copyParentKeyIfExists(elem, parent, "f_checkbox");
-            if (k) return k;
-        }
-        if (parent.is(".ui.slider")) {
-            const k: string | undefined = copyParentKeyIfExists(elem, parent, "f_slider");
-            if (k) return k;
-        }
-
-        // then field
         if (parent.is(".field")) {
-            const k: string | undefined = copyParentKeyIfExists(elem, parent, "f_field");
+            const k: string | undefined = copyKeyIfExists(elem, parent, "f_field");
             if (k) return k;
-            break;
+            break; // while
         }
-
-        // exit if component or field is not found in form
         if (parent.is("form")) {
-            break;
+            break; // while
         }
+        // continue going up in DOM hierarchy
         parent = parent.parent();
     }
 
-    // assign new attribute
+    // no key where found, assign new attribute
     return getOrAssignKey(elem, "f");
 }
 
@@ -212,13 +202,9 @@ export function ensureFieldKey(elem: JQueryApi): string {
 
 /** Search DOM tree for a parent form element  */
 export function findParentForm(elem: JQueryApi): JQueryApi | undefined {
-    let node: JQueryApi = elem;
-    do {
-        node = node.parent();
-    } while (node && !node.is("form.ui.form"));
-
-    if (node.is("form.ui.form")) {
-        return node;
+    const form: JQueryApi = elem.closest("form.ui.form");
+    if (form.length) {
+        return form;
     } else {
         return undefined;
     }

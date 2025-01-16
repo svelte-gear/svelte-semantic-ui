@@ -151,11 +151,11 @@ onMount(async () => {
 
     // push initial value into the Semantic UI element
     svelteToInput(value);
+    // // FIXME: check if this is required for inputs bound directly in input tag
     // if (value !== undefined) {
     //     svelteToInput(value);
     // } else {
     //     inputToSvelte(elem.val() as string);
-    //     // FIXME: check if this is required for inputs bound directly in input tag
     // }
 });
 

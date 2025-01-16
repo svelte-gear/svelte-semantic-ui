@@ -15,6 +15,7 @@ import {
     InitTextInput,
     InitCheckbox,
     validateForm,
+    popup,
 } from "../../lib";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import ShowCode from "../show-code.svelte";
@@ -49,6 +50,8 @@ let json: string = $derived(
         gender: gender,
         agree: chb,
         test: test,
+        x: "----------------",
+        valid: valid,
         errors: errors,
     })
         .replace(/,"/g, ', "')
@@ -101,8 +104,6 @@ function toggleActive(): void {
                 bind:errors={errors}
                 settings={{
                     inline: true,
-                    autoCheckRequired: true,
-                    revalidate: true,
                     // fields: { xx3: "empty" },
                 }}
             />
@@ -110,7 +111,7 @@ function toggleActive(): void {
             {#if example === ""}
                 <div class="ui right rail" id="side">
                     <div class="ui segment sticky" use:sticky={{ offset: 10 }}>
-                        <!-- <h1>Data bindings</h1> -->
+                        <h2>Data bindings</h2>
                         <div class="ui message" style:font-family="monospace">
                             {json}
                         </div>
@@ -132,7 +133,12 @@ function toggleActive(): void {
                                 Validate
                             {/if}
                         </button>
-                        <button class="ui icon button" onclick={validateForm} aria-label="reload">
+                        <button
+                            class="ui icon button"
+                            onclick={validateForm}
+                            aria-label="re-validate"
+                            use:popup={{ content: "Re-validate" }}
+                        >
                             <i class="icon redo"></i>
                         </button>
                         <div class="ui message error"></div>
@@ -416,7 +422,7 @@ function toggleActive(): void {
                 <input />
                 <InitTextInput bind:value={test} validate={[rule.empty()]} />
             </div>
-            <div class="field">
+            <div class="field" id="xx">
                 <label for="_"> Test 2 </label>
                 <input bind:value={test} />
                 <InitTextInput validate={[rule.empty()]} />

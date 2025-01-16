@@ -28,6 +28,10 @@ let num2Fmt: NumberFmt | null = null;
 let num6Fmt: NumberFmt | null = null;
 let moneyFmt: NumberFmt | null = null;
 
+/** Default formatter helper. Intended to be used from code of svelte components:
+ * ```
+ * Total: {fmt.money(value)}
+ * ``` */
 export const fmt: {
     date: (d: Date | undefined) => string;
     time: (d: Date | undefined) => string;
@@ -77,6 +81,7 @@ export const fmt: {
  dP
 */
 
+/** Default parser helper. Intended to be used from code. */
 export const parse: {
     date: (s: string) => Date | undefined;
     time: (s: string) => Date | undefined;
@@ -127,7 +132,7 @@ export const parse: {
                                                        dP
 */
 
-/** Autocomplete helper for validation rules */
+/** Autocomplete helper for validation rules. */
 /* prettier-ignore */
 // eslint-disable-next-line @typescript-eslint/typedef
 export const rule = {
