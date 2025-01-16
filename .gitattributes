@@ -1,2 +1,4 @@
 static/** linguist-vendored
 examples/** linguist-vendored
+*.md linguist-documentation=false
+*.md linguist-detectable
