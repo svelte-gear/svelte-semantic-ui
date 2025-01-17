@@ -94,8 +94,41 @@ export type RuleObj = {
 /** Rule definition takes array or single instance of string or RuleObj */
 export type RuleDefinition = string | string[] | RuleObj | RuleObj[]; // | BaseSchema;
 
+type SuiValue = string | boolean | number | Date;
+/** @see https://fomantic-ui.com/behaviors/form.html#behaviors */
+type SuiModule = {
+    clear: () => void;
+    determine: {
+        isValid: () => boolean;
+        isDirty: () => boolean;
+    };
+    get: {
+        field: (identifier: string, strict: boolean) => JQueryApi;
+        fields: (identifiers: string[], strict: boolean) => JQueryApi;
+        fieldLabel: (identifier: string, useIdAsFallback: boolean) => string;
+        value: (identifiers: string, strict: boolean) => SuiValue | SuiValue[] | undefined;
+        values: (identifiers: string[], strict: boolean) => Record<string, SuiValue | SuiValue[]>;
+        dirtyFields: () => JQueryApi;
+    };
+    has: {
+        field: (identifier: string) => boolean;
+    };
+    is: {
+        blank: (field: JQueryApi) => boolean;
+        empty: (field: JQueryApi) => boolean;
+        valid: (() => boolean) | ((fieldName: string, showErrors?: boolean) => boolean);
+        clean: () => boolean;
+        dirty: () => boolean;
+        fieldDirty: (field: JQueryApi) => boolean;
+        checkboxDirty: (field: JQueryApi) => boolean;
+        justDirty: () => boolean;
+        justClean: () => boolean;
+    };
+    reset: () => void;
+};
+
 /** Custom validation function */
-export type RuleFunc = (value: string, ruleValue: string, form: JQuery) => boolean;
+export type RuleFunc = (value: string, ruleValue: string, module: SuiModule) => boolean;
 
 /**
  * Fomantic UI form validation behavior.
