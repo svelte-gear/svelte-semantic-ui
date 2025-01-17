@@ -100,6 +100,7 @@ function toggleActive(): void {
                 bind:valid={valid}
                 settings={{
                     inline: true,
+                    // revalidate: false,
                 }}
             />
 
@@ -184,14 +185,13 @@ function toggleActive(): void {
             <!-- example-text -->
             <div class="field">
                 <label for="_"> Text Area </label>
-                <textarea placeholder="describe" rows="3"></textarea>
+                <textarea placeholder="describe" rows="3" bind:value={text3}></textarea>
                 <InitTextInput
-                    bind:value={text3}
-                    validate={[rule.empty(), rule.contains("X"), rule.size(3, 6)]}
+                    validate={[rule.contains("X"), rule.size(3, 6)]}
                     settings={{
                         charset: "ascii",
                         // charset: "id_hex",
-                        // case: "upper",
+                        case: "upper",
                         // blockEmoji: true,
                         // list: true,
                         // listSeparator: "\n",

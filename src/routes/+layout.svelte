@@ -97,6 +97,11 @@ div.app-layout {
         min-width: 240px;
     }
 }
+
+.ui.button.basic b {
+    color: black;
+}
+
 /* :global prevents removal of "unused" .active */
 nav :global(a.active) {
     font-weight: bold !important;

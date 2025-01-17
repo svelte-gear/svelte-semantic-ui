@@ -15,6 +15,18 @@ import {
     ensureFieldKey,
 } from "../data/dom-jquery";
 
+const REVALIDATE: boolean = true;
+
+/*
+ oo            dP                     .8888b
+               88                     88   "
+ dP 88d888b. d8888P .d8888b. 88d888b. 88aaa  .d8888b. .d8888b. .d8888b.
+ 88 88'  `88   88   88ooood8 88'  `88 88     88'  `88 88'  `"" 88ooood8
+ 88 88    88   88   88.  ... 88       88     88.  .88 88.  ... 88.  ...
+ dP dP    dP   dP   `88888P' dP       dP     `88888P8 `88888P' `88888P'
+
+*/
+
 export type FormApi = {
     form(settings?: FormSettings): void;
     form(command: "add rule", key: string, rule: RuleDefinition): void;
@@ -23,6 +35,7 @@ export type FormApi = {
     form(command: "validate form"): void;
     form(command: "is valid"): boolean;
     form(command: "destroy"): void;
+    form(command: "get field", key: string): JQueryApi;
 };
 
 /** Controls Semantic UI form element and it's data validation.
@@ -47,6 +60,9 @@ export interface FormController {
     /** Perform form validation, if marked; used to dedupe multiple validation calls.
      *  Returns false if the validation has already been performed from another async call. */
     validateIfMarked(): boolean;
+
+    /** Get validated field by the key (id, name, or data-validate) */
+    getField(key: string): JQueryApi;
 }
 
 /*
@@ -121,11 +137,12 @@ export class SuiFormController implements FormController {
                 this.activateRule(key, this.rules[key]);
             });
             this.isActive = true;
-            this.markForValidation("FORM");
-            setTimeout(() => {
-                this.validateIfMarked();
-                // this.doValidateForm();
-            }, 0);
+            if (REVALIDATE) {
+                this.markForValidation("FORM");
+                setTimeout(() => {
+                    this.validateIfMarked();
+                }, 0);
+            }
         }
 
         // eslint-disable-next-line eqeqeq
@@ -192,6 +209,10 @@ export class SuiFormController implements FormController {
             return false;
         }
     }
+
+    getField(key: string): JQueryApi {
+        return this.elem.form("get field", key) as unknown as JQueryApi;
+    }
 }
 
 /*
@@ -243,10 +264,16 @@ export class FieldController {
      *  in case multiple fields are modified in a single Svelte 'tick'. */
     async revalidate(): Promise<void> {
         if (this.formCtrl) {
-            this.formCtrl.markForValidation(this.key!);
-            await tick();
-            this.formCtrl.validateIfMarked();
-            // this.formCtrl.onFieldChange(this.key!);
+            if (REVALIDATE) {
+                this.formCtrl.markForValidation(this.key!);
+                await tick();
+                this.formCtrl.validateIfMarked();
+            } else {
+                const input: JQueryApi = this.formCtrl.getField(this.key!);
+                // input.get(0)!.dispatchEvent(new CustomEvent("input"));
+                // input.get(0)!.dispatchEvent(new CustomEvent("change"));
+                input.get(0)!.dispatchEvent(new CustomEvent("blur"));
+            }
         }
     }
 
