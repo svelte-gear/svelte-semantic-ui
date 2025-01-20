@@ -89,6 +89,10 @@ $effect(() => {
     }
     svelteToInput(value);
 });
+$effect(() => {
+    void validate;
+    fieldCtrl?.replaceRules(validate);
+});
 
 //-----------------------------------------------------------------------------
 

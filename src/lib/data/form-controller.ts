@@ -5,7 +5,7 @@
 
 import { tick } from "svelte";
 
-import type { FormSettings, JQueryApi, RuleDefinition } from "../data/semantic-types";
+import type { FormSettings, JQueryApi, RuleDefinition, RuleObj } from "../data/semantic-types";
 import {
     nextUid,
     findParentForm,
@@ -256,6 +256,51 @@ export class FieldController {
             }
             this.formCtrl.addRule(this.key, validationRules);
             this.rules = validationRules;
+        }
+    }
+
+    replaceRules(validationRules?: RuleDefinition): void {
+        function isEmpty(val?: RuleDefinition): boolean {
+            return val === undefined || val === "" || (Array.isArray(val) && val.length === 0);
+        }
+        if (isEmpty(this.rules) && !isEmpty(validationRules)) {
+            // No rules previously, now we have rules
+            this.rules = validationRules!;
+            this.formCtrl?.addRule(this.key!, this.rules);
+            // TODO: Maybe trigger validation
+            return;
+        } else if (!isEmpty(this.rules) && isEmpty(validationRules)) {
+            // Replace rules we had with nothing
+            this.rules = validationRules;
+            this.removeRules();
+            // TODO: clear validation if required
+            return;
+        }
+        function isRuleObj(val?: RuleDefinition): val is RuleObj {
+            return typeof val === "object" && "type" in val;
+        }
+        function isEqual(lhs?: RuleDefinition, rhs?: RuleDefinition): boolean {
+            if (lhs === rhs) {
+                return true;
+            } else if (isRuleObj(lhs) && isRuleObj(rhs)) {
+                return lhs.type === rhs.type && lhs.prompt === rhs.prompt;
+            } else if (Array.isArray(lhs) && Array.isArray(rhs)) {
+                if (lhs.length === rhs.length) {
+                    for (let i: number = 0, len: number = lhs.length; i !== len; ++i) {
+                        if (!isEqual(lhs[i], rhs[i])) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+        if (!isEqual(this.rules, validationRules)) {
+            this.formCtrl?.removeRule(this.key!, this.rules!);
+            this.rules = validationRules!;
+            this.formCtrl?.addRule(this.key!, this.rules);
         }
     }
 
