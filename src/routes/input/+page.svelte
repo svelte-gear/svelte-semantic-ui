@@ -308,7 +308,12 @@ function toggleActive(): void {
 
             <div class="ui divider"></div>
 
-            <div style="float:right">
+            <div class="field">
+                <label for="_"> Dynamic Validation Input </label>
+                <input type="text" bind:value={dynRulesText} />
+                <InitTextInput validate={dynRules} />
+            </div>
+            <div id="dyn-choice" class="field">
                 <div class="ui radio checkbox">
                     <input type="radio" bind:group={dynRulesChoice} value={0} />
                     <label for="_">No rules</label>
@@ -324,11 +329,6 @@ function toggleActive(): void {
                     <label for="_">Length-based</label>
                 </div>
                 <InitCheckbox />
-            </div>
-            <div class="field">
-                <label for="_"> Text Input </label>
-                <input type="text" bind:value={dynRulesText} />
-                <InitTextInput validate={dynRules} />
             </div>
             {JSON.stringify(dynRules)}
         </form>
@@ -353,5 +353,10 @@ form {
 
 .ui.divider {
     clear: both;
+}
+
+#dyn-choice {
+    display: flex;
+    justify-content: space-between;
 }
 </style>

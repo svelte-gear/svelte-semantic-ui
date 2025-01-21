@@ -267,13 +267,11 @@ export class FieldController {
             // No rules previously, now we have rules
             this.rules = validationRules!;
             this.formCtrl?.addRule(this.key!, this.rules);
-            // TODO: Maybe trigger validation
             return;
         } else if (!isEmpty(this.rules) && isEmpty(validationRules)) {
             // Replace rules we had with nothing
             this.rules = validationRules;
             this.removeRules();
-            // TODO: clear validation if required
             return;
         }
         function isRuleObj(val?: RuleDefinition): val is RuleObj {
