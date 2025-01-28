@@ -18,5 +18,4 @@ export async function load(): Promise<void> {
     formLog.build("debug");
     compLog.build("debug");
     initLog.build("debug");
-    // TODO: use new logs
 }

@@ -10,9 +10,8 @@ import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
 import type { DropdownSettings, JQueryApi, RuleDefinition } from "../data/semantic-types";
-import { equalStringArrays } from "../data/common";
+import { compLog, equalStringArrays } from "../data/common";
 import { findComponent, findLabelWithBlank } from "../data/dom-jquery";
-// import { dropdownDefaults } from "../data/settings";
 import { FieldController } from "../data/form-controller";
 
 // const FIELD_PREFIX: string = "f_dropdown";
@@ -93,7 +92,7 @@ function svelteToInput(newValue: string | string[] | undefined): void {
             throw new Error(`Multi-value dropdown expects string[] value, got ${newValue}`);
         }
         if (!equalStringArrays(newValue, curValue)) {
-            console.debug(`Dropdown(${fieldCtrl?.key}) : value -> ${toStr(newValue)}`);
+            compLog.log(`Dropdown (${fieldCtrl?.key}) : value -> ${toStr(newValue)}`);
             // NOTE: use 'set exactly' instead of 'set selected'!!!
             elem.dropdown("set exactly", newValue);
             void fieldCtrl?.revalidate();
@@ -105,7 +104,7 @@ function svelteToInput(newValue: string | string[] | undefined): void {
             throw new Error(`Simple-value dropdown expects string value, got ${toStr(newValue)}`);
         }
         if (curValue !== newValue) {
-            console.debug(`Dropdown(${fieldCtrl?.key}) : value -> ${toStr(newValue)}`);
+            compLog.log(`Dropdown (${fieldCtrl?.key}) : value -> ${toStr(newValue)}`);
             const exists: unknown = elem.dropdown("get item", value as string);
             if (exists) {
                 elem.dropdown("set selected", value as string);
@@ -133,11 +132,12 @@ $effect(() => {
     }
     svelteToInput(value);
 });
+
 /** Update rules when the validate value changes. Fire a change event to trigger revalidation if deemed appropriate. */
 $effect(() => {
     void validate;
     fieldCtrl?.replaceRules(validate);
-    elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
+    // elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
 });
 
 //-----------------------------------------------------------------------------
@@ -150,13 +150,13 @@ function inputToSvelte(inputValue: string | string[] | undefined): void {
     // store in the prop only if the value is different
     if (multi) {
         if (!equalStringArrays(value as string[], inputValue as string[])) {
-            console.debug(`Dropdown(${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
+            compLog.log(`Dropdown (${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
             value = inputValue;
             void fieldCtrl?.revalidate();
         }
     } else {
         if (value !== inputValue) {
-            console.debug(`Dropdown(${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
+            compLog.log(`Dropdown (${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
             if (DROPDOWN_PREVENT_CLEARING_BAD_DATA) {
                 const exists: unknown = elem.dropdown("get item", inputValue as string);
                 if (exists) {
@@ -180,11 +180,6 @@ function onDropdownChange(
     choice: JQueryApi
 ): void {
     void choice;
-    // // global dropdown settings
-    // const def: DropdownSettings = dropdownDefaults.read();
-    // if (def.onChange) {
-    //     def.onChange.call(this, newValue, text, choice);
-    // }
     // user-specified handler for this component
     if (settings && settings.onChange) {
         settings.onChange.call(this, newValue, text, choice);

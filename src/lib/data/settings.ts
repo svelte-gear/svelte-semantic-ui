@@ -15,6 +15,7 @@ import type {
     StickySettings,
     ToastSettings,
 } from "../data/semantic-types";
+import { initLog } from "../data/common";
 
 export type SettingsObject = Record<string, unknown>;
 
@@ -55,19 +56,19 @@ export function copyFields(target: SettingsObject, source: SettingsObject, logNa
                     );
                 } else {
                     // obj <- prim|fn|arr
-                    console.log(`Setting: '${key}' in ${logName} must be an Object.`);
+                    initLog.warn(`Setting: '${key}' in ${logName} must be an Object.`);
                 }
             } else {
                 if (so) {
                     // prim|fn|arr <- obj
-                    console.log(`Setting: '${key}' in ${logName} can't be an Object.`);
+                    initLog.warn(`Setting: '${key}' in ${logName} can't be an Object.`);
                 } else {
                     // prim|fn|arr <- prim|fn|arr
                     target[key] = source[key];
                 }
             }
         } else {
-            console.log(`Unrecognized setting: '${key}' in ${logName}.`);
+            initLog.warn(`Unrecognized setting: '${key}' in ${logName}.`);
         }
     });
 }
@@ -148,7 +149,7 @@ export function applyAllSettings(json: AllSettingsJson): void {
     Object.keys(json).forEach((name: string) => {
         const settings: SettingsObject | undefined = jQuery.fn[name]?.settings as SettingsObject;
         if (!settings) {
-            console.log(`Ignoring unrecognized Semantic UI component: ${name}`);
+            initLog.warn(`Ignoring unrecognized Semantic UI component: ${name}`);
         } else {
             copyFields(settings, json[name], name);
         }
@@ -187,6 +188,6 @@ export function applyDefaultSettings(locale?: string): void {
     });
     formDefaults.apply({
         keyboardShortcuts: false,
-        // revalidate: false, // helps to avoid second re-validation on text area
+        revalidate: false, // helps to avoid second re-validation on text area
     });
 }

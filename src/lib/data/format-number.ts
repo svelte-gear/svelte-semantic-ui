@@ -68,7 +68,6 @@ export class NumberFmt implements NumberFormatter {
             return undefined;
         }
         const pwr: number = 10.0 ** -this.precision;
-        // console.log("PWR", pwr, val, num, Math.round(num / pwr) * pwr);
         const res: number = Math.round(num / pwr) * pwr;
         return Number(res.toFixed(6));
     }

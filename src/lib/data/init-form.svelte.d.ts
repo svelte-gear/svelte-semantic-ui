@@ -40,10 +40,11 @@ import type { FormSettings } from "../data/semantic-types";
 declare const InitForm: Component<{
     /** Determines if any field change will cause form re-validation;
      *  `valid` and `errors` bindings are readable only if `active` == true */
-    active?: boolean;
+    active?: boolean; // TODO: rename into 'validateForm' ?
+    // FIXME: make it work 'onTouch' ?!
 
     /** Determines if empty fields are validated or not. */
-    ignoreEmpty?: boolean;
+    validateEmpty?: boolean;
 
     /** Read-only binding indicating form data changes. */
     dirty?: boolean;

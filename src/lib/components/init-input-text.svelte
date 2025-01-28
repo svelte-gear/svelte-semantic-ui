@@ -13,7 +13,7 @@ import type { TextInputSettings } from "../data/common";
 import type { TextFormatter } from "../data/format-text";
 import type { JQueryApi, RuleDefinition } from "../data/semantic-types";
 
-import { equalStringArrays } from "../data/common";
+import { compLog, equalStringArrays } from "../data/common";
 import { findComponent, findLabelWithBlank, getOrAssignKey } from "../data/dom-jquery";
 import { FieldController } from "../data/form-controller";
 import { TextFmt } from "../data/format-text";
@@ -64,7 +64,7 @@ function svelteToInput(newValue: string | string[]): void {
     const formattedStr: string = formatter.format(newValue);
     const inputText: string = `${elem?.val()}`;
     if (formattedStr !== inputText) {
-        console.debug(`TextInput(${fieldCtrl?.key}) : value -> ${newValue}`);
+        compLog.log(`TextInput (${fieldCtrl?.key}) : value -> ${newValue}`);
         elem.val(formattedStr);
         elem.get(0)!.dispatchEvent(new CustomEvent("input"));
     }
@@ -76,6 +76,7 @@ function svelteToInput(newValue: string | string[]): void {
     void fieldCtrl?.revalidate();
 }
 
+/** The effect rune calls svelteToInput when prop value changes */
 $effect(() => {
     void value;
     // a hack to trigger effect on array element change
@@ -89,11 +90,12 @@ $effect(() => {
     }
     svelteToInput(value);
 });
+
 /** Update rules when the validate value changes. Fire a change event to trigger revalidation if deemed appropriate. */
 $effect(() => {
     void validate;
     fieldCtrl?.replaceRules(validate);
-    elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
+    // elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
 });
 
 //-----------------------------------------------------------------------------
@@ -103,7 +105,7 @@ function inputToSvelte(inputText: string): void {
     // store in the prop only if the value is different
     const parsedValue: string | string[] = formatter!.parse(inputText);
     if (parsedValue !== value) {
-        console.debug(`TextInput(${fieldCtrl?.key}) : value <- ${inputText}`);
+        compLog.log(`TextInput (${fieldCtrl?.key}) : value <- ${inputText}`);
         value = parsedValue;
     }
     // update input if the formatted text is different

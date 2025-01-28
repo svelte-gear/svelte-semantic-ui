@@ -10,7 +10,7 @@ import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
 import type { CalendarSettings, JQueryApi, RuleDefinition } from "../data/semantic-types";
-import { equalDates, isoDate, isoTime } from "../data/common";
+import { equalDates, isoDate, isoTime, compLog } from "../data/common";
 import { findComponent, findLabelWithBlank, copyParentKey } from "../data/dom-jquery";
 import { FieldController } from "../data/form-controller";
 
@@ -81,11 +81,11 @@ function svelteToInput(newValue: Date | undefined): void {
     }
     let val: Date | Date[] = elem.calendar("get date") as Date | Date[];
     if (Array.isArray(val)) {
-        console.log(`Calendar(${fieldCtrl?.key}) : GOT ARRAY`, val);
+        compLog.warn(`Calendar (${fieldCtrl?.key}) : GOT ARRAY`, val);
         val = val[0];
     }
     if (!equalDates(newValue, val)) {
-        console.debug(`Calendar(${fieldCtrl?.key}) value -> ${toStr(newValue)}`);
+        compLog.log(`Calendar (${fieldCtrl?.key}) value -> ${toStr(newValue)}`);
         elem.calendar("set date", newValue);
     }
     void fieldCtrl?.revalidate();
@@ -96,11 +96,12 @@ $effect(() => {
     void value;
     svelteToInput(value);
 });
+
 /** Update rules when the validate value changes. Fire a change event to trigger revalidation if deemed appropriate. */
 $effect(() => {
     void validate;
     fieldCtrl?.replaceRules(validate);
-    elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
+    // elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
 });
 
 //-----------------------------------------------------------------------------
@@ -109,7 +110,7 @@ $effect(() => {
 function inputToSvelte(inputValue: Date): void {
     // store in the prop only if the value is different
     if (!equalDates(value, inputValue)) {
-        console.debug(`Calendar(${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
+        compLog.log(`Calendar (${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
         value = inputValue;
     }
     void fieldCtrl?.revalidate();
@@ -136,7 +137,7 @@ function onCalendarHidden(this: JQueryApi): void {
 
     // const calendarValue: Date | Date[] = this.calendar("get date") as Date | Date[];
     // if (Array.isArray(calendarValue)) {
-    //     console.log("GOT ARRAY", calendarValue);
+    //     compLog.warn("GOT ARRAY", calendarValue);
     //     inputToSvelte(calendarValue[0]); // [0] = new, [1] = old
     // } else {
     //     inputToSvelte(calendarValue);

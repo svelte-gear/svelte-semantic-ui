@@ -69,7 +69,7 @@ function onInputChange(this: JQueryApi): void {
 $effect(() => {
     void validate;
     fieldCtrl?.replaceRules(validate);
-    elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
+    // elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
 });
 
 onMount(async () => {

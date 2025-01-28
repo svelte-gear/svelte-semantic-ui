@@ -17,7 +17,7 @@ import { onMount, onDestroy } from "svelte";
 import type { FormSettings, JQueryApi } from "../data/semantic-types";
 import type { FormApi } from "../data/form-controller";
 import { SuiFormController } from "../data/form-controller";
-import { equalStringArrays } from "../data/common";
+import { equalStringArrays, formLog } from "../data/common";
 import {
     findComponent,
     jQueryElem,
@@ -34,7 +34,7 @@ interface Props {
     active?: boolean;
 
     /** Determines if empty fields are validated or not. */
-    ignoreEmpty?: boolean;
+    validateEmpty?: boolean;
 
     /** Read-only binding indicating that the form data changed after setAsClean() or reset(). */
     dirty?: boolean;
@@ -60,7 +60,7 @@ interface Props {
 
 let {
     active = true,
-    ignoreEmpty = false,
+    validateEmpty = false,
     dirty = $bindable(undefined),
     valid = $bindable(undefined),
     errors = $bindable(undefined),
@@ -107,16 +107,16 @@ $effect(() => {
     }
 });
 
-/** When 'ignoreEmpty' prop changes, update the Semantic UI form controller */
+/** When 'validateEmpty' prop changes, update the Semantic UI form controller.ignoreEmpty */
 $effect(() => {
-    void ignoreEmpty;
+    void validateEmpty;
     // eslint-disable-next-line eqeqeq
-    if (formCtrl && formCtrl.isIgnoreEmpty() == false && ignoreEmpty == true) {
-        formCtrl.setIgnoreEmpty(true);
+    if (formCtrl && formCtrl.isIgnoreEmpty() == true && validateEmpty == true) {
+        formCtrl.setIgnoreEmpty(false);
     }
     // eslint-disable-next-line eqeqeq
-    if (formCtrl && formCtrl.isIgnoreEmpty() == true && ignoreEmpty == false) {
-        formCtrl.setIgnoreEmpty(false);
+    if (formCtrl && formCtrl.isIgnoreEmpty() == false && validateEmpty == false) {
+        formCtrl.setIgnoreEmpty(true);
     }
 });
 
@@ -125,7 +125,7 @@ $effect(() => {
 /** When form validation result changes, modify the corresponding prop. */
 function changeValid(ctrlValue: boolean): void {
     if (ctrlValue !== valid) {
-        console.debug(`FORM (${formId}) : valid <- ${ctrlValue}`);
+        formLog.log(`(${formId}) : valid <- ${ctrlValue}`);
         valid = ctrlValue;
     }
 }
@@ -133,13 +133,13 @@ function changeValid(ctrlValue: boolean): void {
 /** When form validation messages change, modify the corresponding prop. */
 function changeErrors(ctrlValue: string[]): void {
     if (!equalStringArrays(ctrlValue, errors)) {
-        console.debug(`FORM (${formId}) : errors <- [ ${ctrlValue.join(" | ")} ]`);
+        formLog.log(`(${formId}) : errors <- [ ${ctrlValue.join(" | ")} ]`);
         errors = ctrlValue;
     }
 }
 
 function onSuccessCallback(this: JQueryApi, event: Event, fields: object[]): void {
-    console.log("SUCCESS");
+    // formLog.debug("SUCCESS");
     // user-specified handler for this component
     // if form defaults handler is present, user handler may call it before, after, or not call at all
     if (settings && settings.onSuccess) {
@@ -150,7 +150,7 @@ function onSuccessCallback(this: JQueryApi, event: Event, fields: object[]): voi
 }
 
 function onFailureCallback(this: JQueryApi, formErrors: object[], fields: object[]): void {
-    console.log("FAILURE");
+    // formLog.debug("FAILURE");
     // user-specified handler for this component
     // if default handler is present, user handler may call it before, after, or not call at all
     if (settings && settings.onFailure) {
@@ -166,7 +166,7 @@ function onDirtyCallback(this: JQueryApi): void {
         settings.onDirty.call(this);
     }
     dirty = true;
-    console.log("DIRTY:", dirty);
+    // formLog.debug("DIRTY:", dirty);
 }
 
 function onCleanCallback(this: JQueryApi): void {
@@ -174,7 +174,7 @@ function onCleanCallback(this: JQueryApi): void {
         settings.onClean.call(this);
     }
     dirty = false;
-    console.log("DIRTY:", dirty);
+    // formLog.debug("DIRTY:", dirty);
 }
 
 //-----------------------------------------------------------------------------
@@ -204,7 +204,7 @@ onMount(async () => {
     });
 
     // create form controller
-    formCtrl = new SuiFormController(elem, formId, active, ignoreEmpty);
+    formCtrl = new SuiFormController(elem, formId, active, !validateEmpty);
 
     // store form controller in the jQuery 'data' for fields to access
     elem.data(SVELTE_FORM_STORE, formCtrl);

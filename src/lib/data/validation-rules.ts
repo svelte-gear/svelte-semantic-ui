@@ -80,14 +80,12 @@ function isoDateFn(value: string): boolean {
 
 /** Returns true if the string starts with the given value */
 function startFn(value: string, ruleValue: string): boolean {
-    // console.log("startFn", value);
     return value.startsWith(ruleValue);
 }
 
 /** Returns true if the string starts and ends with the given character */
 function wrappedInFn(value: string, ruleValue: string): boolean {
-    console.info(`wrappedInFn : ${value} - ${ruleValue}`);
-    return value.startsWith(ruleValue);
+    return value.startsWith(ruleValue) && value.endsWith(ruleValue);
 }
 
 /*
@@ -147,12 +145,12 @@ function compareTyped(value: string, ruleValue: string, compare: CompareFn): boo
 
 function minValueFn(value: string, ruleValue: string): boolean {
     const res: boolean = compareTyped(value, ruleValue, greaterOrEqual);
-    // console.log("COMPARE :", value, ">=", ruleValue, "=", res);
+    // formLog.debug("COMPARE :", value, ">=", ruleValue, "=", res);
     return res;
 }
 function maxValueFn(value: string, ruleValue: string): boolean {
     const res: boolean = compareTyped(value, ruleValue, lessOrEqual);
-    // console.log("COMPARE :", value, "<=", ruleValue, "=", res);
+    // formLog.debug("COMPARE :", value, "<=", ruleValue, "=", res);
     return res;
 }
 

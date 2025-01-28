@@ -10,8 +10,8 @@ import type { Snippet } from "svelte";
 import { onDestroy, onMount } from "svelte";
 
 import type { ModalSettings, JQueryApi } from "../data/semantic-types";
+import { compLog } from "../data/common";
 import { findComponent, jQueryBySelector, nextUid } from "../data/dom-jquery";
-// import { modalDefaults } from "../data/settings";
 
 const MODAL_PREFIX: string = "modal";
 
@@ -59,10 +59,12 @@ function svelteToInput(value: boolean): void {
     }
     if (value) {
         if (!elem.modal("is active")) {
+            compLog.debug(`InitModal : show -> ${value}`);
             elem.modal("show");
         }
     } else {
         if (elem.modal("is active")) {
+            compLog.debug(`InitModal : show -> ${value}`);
             elem.modal("hide");
         }
     }
@@ -78,7 +80,7 @@ $effect(() => {
 /** When modal is opened or closed by the user */
 function inputToSvelte(newValue: boolean): void {
     if (newValue !== show) {
-        console.debug(`InitModal show <- ${newValue}`);
+        compLog.debug(`InitModal : show <- ${newValue}`);
         show = newValue;
     }
 }

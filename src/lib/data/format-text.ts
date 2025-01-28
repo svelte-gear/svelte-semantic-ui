@@ -5,7 +5,7 @@
  * @module data/input-formatter
  */
 
-import type { TextInputSettings } from "./common";
+import { compLog, type TextInputSettings } from "../data/common";
 
 /** Text format function, may be used to change case or limit charset. */
 export interface TextFormatter {
@@ -30,25 +30,25 @@ export class TextFmt implements TextFormatter {
             this.settings.charset = "any";
         }
         if (this.settings.blockEmoji && this.settings.charset !== "any") {
-            console.error(
+            compLog.warn(
                 `TextFmt: invalid settings - blockEmoji doesn't effect charset: "${this.settings.charset}"`
             );
         }
         if (this.settings.idAllowChars && !this.settings.charset.startsWith("id_")) {
-            console.error(
+            compLog.warn(
                 `TextFmt: invalid settings - idAllowChars doesn't effect charset: "${this.settings.charset}"`
             );
         }
         if (this.settings.idBlockChars && !this.settings.charset.startsWith("id_")) {
-            console.error(
+            compLog.warn(
                 `TextFmt: invalid settings - idBlockChars doesn't effect charset: "${this.settings.charset}"`
             );
         }
         if (this.settings.list && !this.settings.listSeparator) {
-            console.error("TextFmt: invalid settings - listSeparator is required if 'list:true'");
+            compLog.warn("TextFmt: invalid settings - listSeparator is required if 'list:true'");
         }
         if (!this.settings.list && this.settings.listSeparator) {
-            console.error("TextFmt: invalid settings - listSeparator is ignored if 'list:false'");
+            compLog.warn("TextFmt: invalid settings - listSeparator is ignored if 'list:false'");
         }
     }
 

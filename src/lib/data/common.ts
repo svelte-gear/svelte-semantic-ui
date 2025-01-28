@@ -214,6 +214,8 @@ function noop(..._args: unknown[]): void {
 type LogImplFunction = (level: LogLevel, ...args: unknown[]) => void;
 
 export class Logger {
+    prefix: string = "";
+
     error: LogFunction = noop;
     warn: LogFunction = noop;
     log: LogFunction = noop;
@@ -231,6 +233,10 @@ export class Logger {
         throw new Error(`Unrecognized log level: ${lev}`);
     }
 
+    constructor(prefix: string) {
+        this.prefix = prefix;
+    }
+
     build(level: LogLevel | "off", fn?: LogImplFunction): void {
         const numLevel: number = this.loglevelToNumber(level);
         for (let i: number = 1; i < this.LOG_LEVELS.length; i++) {
@@ -238,11 +244,11 @@ export class Logger {
             if (numLevel >= i) {
                 if (fn) {
                     this[iLevel] = (...args: unknown[]) => {
-                        fn(iLevel, ...args);
+                        fn(iLevel, this.prefix, ...args);
                     };
                 } else {
                     this[iLevel] = (...args: unknown[]) => {
-                        console[iLevel](...args);
+                        console[iLevel](this.prefix, ...args);
                     };
                 }
             } else {
@@ -283,6 +289,6 @@ export function buildHttpLogger(logger: Logger, level: LogLevel | "off", url: st
     logger.build(level, httpLogImpl);
 }
 
-export const formLog: Logger = new Logger();
-export const compLog: Logger = new Logger();
-export const initLog: Logger = new Logger();
+export const formLog: Logger = new Logger("FORM");
+export const compLog: Logger = new Logger("--");
+export const initLog: Logger = new Logger(">>>");

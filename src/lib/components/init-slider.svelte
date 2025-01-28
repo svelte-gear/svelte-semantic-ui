@@ -10,7 +10,7 @@ import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
 import type { SliderSettings, JQueryApi, RuleDefinition } from "../data/semantic-types";
-import { equalNumberArrays } from "../data/common";
+import { compLog, equalNumberArrays } from "../data/common";
 import { copyParentKey, findComponent } from "../data/dom-jquery";
 // import { sliderDefaults } from "../data/settings";
 import { FieldController } from "../data/form-controller";
@@ -83,7 +83,6 @@ function svelteToInput(newValue: number | number[], forceUpdate?: boolean): void
         // effect and svelteToInput may be called before onMount()
         return;
     }
-    // console.log(`Svelte->Slider(${fieldCtrl?.key})`, newValue);
     if (range) {
         if (!Array.isArray(newValue)) {
             throw new Error(`Ranged slider expects number[] value, got ${newValue}`);
@@ -91,7 +90,7 @@ function svelteToInput(newValue: number | number[], forceUpdate?: boolean): void
         const val1: number = elem.slider("get thumbValue", "first");
         const val2: number = elem.slider("get thumbValue", "second");
         if (newValue[0] !== val1 || newValue[1] !== val2 || forceUpdate) {
-            console.debug(`InitSlider -> prop change = ${toStr(newValue)}`);
+            compLog.log(`Slider (${fieldCtrl?.key}) : value -> ${toStr(newValue)}`);
             elem.slider("set rangeValue", newValue[0], newValue[1]);
             input!.val(`${newValue.join(",")}`);
             void fieldCtrl?.revalidate();
@@ -102,7 +101,7 @@ function svelteToInput(newValue: number | number[], forceUpdate?: boolean): void
         }
         const val: number = elem.slider("get value");
         if (newValue !== val || forceUpdate) {
-            console.debug(`InitSlider -> prop change = ${toStr(newValue)}`);
+            compLog.log(`Slider (${fieldCtrl?.key}) : value -> ${toStr(newValue)}`);
             elem.slider("set value", newValue);
             input!.val(`${newValue}`);
             void fieldCtrl?.revalidate();
@@ -120,11 +119,12 @@ $effect(() => {
     }
     svelteToInput(value);
 });
+
 /** Update rules when the validate value changes. Fire a change event to trigger revalidation if deemed appropriate. */
 $effect(() => {
     void validate;
     fieldCtrl?.replaceRules(validate);
-    elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
+    // elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
 });
 
 //-----------------------------------------------------------------------------
@@ -136,7 +136,7 @@ function inputToSvelte(inputValue: number | number[]): void {
     }
     // store in the prop only if the value is different
     if (!equalNumberArrays(value, inputValue)) {
-        console.debug(`InitSlider <- input = ${toStr(inputValue)}`);
+        compLog.log(`Slider (${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
         value = inputValue;
         if (range && Array.isArray(inputValue)) {
             input.val(inputValue.join(","));

@@ -5,6 +5,7 @@
 
 import type { ToastSettings, JQueryApi } from "../data/semantic-types";
 import { jQueryElem } from "../data/dom-jquery";
+import { compLog } from "../data/common";
 
 /** Imperative function to display Semantic UI Toast component.
  *
@@ -23,7 +24,7 @@ import { jQueryElem } from "../data/dom-jquery";
 ```
 */
 export function toast(settings?: ToastSettings): void {
-    console.debug("toast - created");
+    compLog.debug("Toast : created");
     type ToastInitializer = JQueryApi & {
         toast(settings?: ToastSettings): void;
     };

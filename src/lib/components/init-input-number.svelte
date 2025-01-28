@@ -13,6 +13,7 @@ import type { NumberInputSettings } from "../data/common";
 import type { NumberFormatter } from "../data/format-number";
 import type { JQueryApi, RuleDefinition } from "../data/semantic-types";
 
+import { compLog } from "../data/common";
 import { findComponent, findLabelWithBlank, getOrAssignKey } from "../data/dom-jquery";
 import { FieldController } from "../data/form-controller";
 import { NumberFmt } from "../data/format-number";
@@ -63,7 +64,7 @@ function svelteToInput(newValue: number | undefined): void {
     const formattedStr: string = formatter.format(newValue);
     const inputText: string = `${elem?.val()}`;
     if (formattedStr !== inputText) {
-        console.debug(`NumberInput(${fieldCtrl?.key}) : value -> ${newValue}`);
+        compLog.log(`NumberInput (${fieldCtrl?.key}) : value -> ${newValue}`);
         elem.val(formattedStr);
         elem.get(0)!.dispatchEvent(new CustomEvent("input"));
     }
@@ -75,15 +76,17 @@ function svelteToInput(newValue: number | undefined): void {
     void fieldCtrl?.revalidate();
 }
 
+/** The effect rune calls svelteToInput when prop value changes */
 $effect(() => {
     void value;
     svelteToInput(value);
 });
+
 /** Update rules when the validate value changes. Fire a change event to trigger revalidation if deemed appropriate. */
 $effect(() => {
     void validate;
     fieldCtrl?.replaceRules(validate);
-    elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
+    // elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
 });
 
 //-----------------------------------------------------------------------------
@@ -93,7 +96,7 @@ function inputToSvelte(inputText: string): void {
     // store in the prop only if the value is different
     const numValue: number | undefined = formatter!.parse(inputText);
     if (numValue !== value) {
-        console.debug(`NumberInput(${fieldCtrl?.key}) : value <- ${inputText}`);
+        compLog.log(`NumberInput (${fieldCtrl?.key}) : value <- ${inputText}`);
         value = numValue;
     }
     // update input if the formatted text is different

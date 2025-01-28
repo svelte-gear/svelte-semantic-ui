@@ -27,6 +27,7 @@ fr-FR    1 000,00 €   01/03/2024 14:50     1
  */
 
 import type { AllSettingsJson } from "../data/settings";
+import { initLog } from "../data/common";
 import { applyAllSettings } from "../data/settings";
 
 type Register = Record<string, () => Promise<object>>;
@@ -115,7 +116,7 @@ export function getLocale(): string {
     Returns applied local string or null if locale is not found */
 export async function applyLocale(locale: string): Promise<string | null> {
     if (!locale) {
-        console.debug("Missing locale");
+        initLog.warn("Missing locale");
         return null;
     }
     const lang: string = locale.split("-")[0];
@@ -123,11 +124,11 @@ export async function applyLocale(locale: string): Promise<string | null> {
     // translate semantic ui components
     const langFn: () => Promise<object> = languageRegister[lang];
     if (!langFn) {
-        console.debug(`No language translation for ${lang}`);
+        initLog.warn(`No language translation for ${lang}`);
         return null;
     }
     const langProm: Promise<object> = langFn();
-    console.debug(`Applying ${lang} language`);
+    initLog.log(`Applying ${lang} language`);
     await readAndApply(langProm);
 
     if (locale === lang) {
@@ -138,12 +139,12 @@ export async function applyLocale(locale: string): Promise<string | null> {
     // apply country formats
     const localeFn: () => Promise<object> = localeRegister[locale];
     if (!localeFn) {
-        console.debug(`No locale settings for ${locale}`);
+        initLog.warn(`No locale settings for ${locale}`);
         currLocale = lang;
         return currLocale;
     }
     const localeProm: Promise<object> = localeFn();
-    console.debug(`Applying ${locale} locale`);
+    initLog.log(`Applying ${locale} locale`);
     await readAndApply(localeProm);
 
     currLocale = locale;

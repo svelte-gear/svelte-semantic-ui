@@ -19,6 +19,7 @@ import {
     InitTextInput,
     InitCheckbox,
     validateForm,
+    InitDropdown,
 } from "../../lib";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -33,8 +34,8 @@ let incomeRaw: string = $state("");
 let text3: string = $state("");
 let text4: string = $state("");
 let text5: string = $state("");
-// let list: string[] = $state([]);
 let ratings: number[] = $state([]);
+let gender: string = $state("");
 
 /* Hide or show slider */
 let showSlider: boolean = $state(true);
@@ -58,7 +59,7 @@ let example: string = $state("");
 
 // form validation
 let active: boolean = $state(true);
-let ignore: boolean = $state(true);
+let vEmpty: boolean = $state(false);
 let valid: boolean = $state(false);
 let errors: string[] = $state([]);
 
@@ -71,9 +72,12 @@ let json: string = $derived(
         input: text4,
         input_live: text5,
         ratings: ratings.join(","),
+        dynVal: dynRulesText,
+        dynRules: dynRules,
+        gender: gender,
         x: "----------------",
         active: active,
-        ignore: ignore,
+        empty: vEmpty,
         valid: valid,
         errors: errors,
     })
@@ -97,7 +101,8 @@ function reset(): void {
     text3 = "";
     text4 = "";
     ratings = [0, 5];
-    // list = ["A", "b"];
+    dynRulesText = "";
+    gender = "";
 }
 
 reset();
@@ -128,7 +133,7 @@ function toggleActive(): void {
         <form class="ui form">
             <InitForm
                 active={active}
-                ignoreEmpty={ignore}
+                validateEmpty={vEmpty}
                 bind:valid={valid}
                 bind:errors={errors}
                 settings={{
@@ -164,28 +169,29 @@ function toggleActive(): void {
                         </button>
                         <button
                             class="ui icon button"
+                            class:yellow={vEmpty}
                             onclick={() => {
-                                ignore = !ignore;
+                                vEmpty = !vEmpty;
                             }}
-                            aria-label="re-validate"
-                            use:popup={{ content: ignore ? "Validate empty" : "Ignore empty" }}
+                            aria-label="empty fields"
+                            use:popup={{ content: vEmpty ? "validating empty" : "ignoring empty" }}
                         >
-                            {#if ignore}
-                                <i class="icon expand"></i>
-                            {:else}
+                            {#if vEmpty}
                                 <i class="icon compress"></i>
+                            {:else}
+                                <i class="icon expand"></i>
                             {/if}
                         </button>
                         <button
-                            class="ui icon button"
+                            class="ui icon button right floated"
                             onclick={validateForm}
-                            aria-label="re-validate"
-                            use:popup={{ content: "Re-validate" }}
+                            aria-label="revalidate"
+                            use:popup={{ content: "revalidate" }}
                         >
                             <i class="icon redo"></i>
                         </button>
 
-                        <div class="ui message error"></div>
+                        <div class="ui message error" style="clear:both"></div>
                     </div>
                 </div>
             {/if}
@@ -360,6 +366,20 @@ function toggleActive(): void {
                 <input type="text" bind:value={dynRulesText} />
                 <InitTextInput validate={dynRules} />
             </div>
+            <div class="field">
+                <select class="ui dropdown selection"></select>
+                <InitDropdown
+                    bind:value={gender}
+                    validate={dynRules}
+                    settings={{
+                        values: [
+                            { name: "Male", value: "male" },
+                            { name: "Female", value: "female" },
+                        ],
+                        clearable: true,
+                    }}
+                />
+            </div>
             <div id="dyn-choice" class="field">
                 <div class="ui radio checkbox">
                     <input type="radio" bind:group={dynRulesChoice} value={0} />
@@ -377,7 +397,6 @@ function toggleActive(): void {
                 </div>
                 <InitCheckbox />
             </div>
-            {JSON.stringify(dynRules)}
         </form>
     </div>
 </main>
@@ -386,6 +405,10 @@ function toggleActive(): void {
 form {
     padding: 0.75rem;
     background-color: #f7f7f7;
+}
+
+.ui.rail {
+    width: 340px;
 }
 
 .help_text {

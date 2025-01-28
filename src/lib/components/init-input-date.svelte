@@ -11,6 +11,7 @@ import { onMount, onDestroy, tick } from "svelte";
 
 import type { DateFormatter } from "../data/format-date";
 import type { CalendarSettings, JQueryApi, RuleDefinition } from "../data/semantic-types";
+import { compLog } from "../data/common";
 import { findComponent, findLabelWithBlank, getOrAssignKey } from "../data/dom-jquery";
 import { FieldController } from "../data/form-controller";
 import { DateFmt } from "../data/format-date";
@@ -61,7 +62,7 @@ function svelteToInput(newValue: Date | undefined): void {
     const formattedStr: string = formatter.format(newValue);
     const inputText: string = `${elem?.val()}`;
     if (formattedStr !== inputText) {
-        console.debug(`DateInput(${fieldCtrl?.key}) : value -> ${newValue}`);
+        compLog.log(`DateInput (${fieldCtrl?.key}) : value -> ${newValue}`);
         elem.val(formattedStr);
         elem.get(0)!.dispatchEvent(new CustomEvent("input"));
     }
@@ -73,15 +74,17 @@ function svelteToInput(newValue: Date | undefined): void {
     void fieldCtrl?.revalidate();
 }
 
+/** The effect rune calls svelteToInput when prop value changes */
 $effect(() => {
     void value;
     svelteToInput(value);
 });
+
 /** Update rules when the validate value changes. Fire a change event to trigger revalidation if deemed appropriate. */
 $effect(() => {
     void validate;
     fieldCtrl?.replaceRules(validate);
-    elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
+    // elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
 });
 
 //-----------------------------------------------------------------------------
@@ -91,7 +94,7 @@ function inputToSvelte(inputText: string): void {
     // store in the prop only if the value is different
     const dateValue: Date | undefined = formatter!.parse(inputText);
     if (dateValue !== value) {
-        console.debug(`DateInput(${fieldCtrl?.key}) : value <- {inputText}`);
+        compLog.log(`DateInput (${fieldCtrl?.key}) : value <- {inputText}`);
         value = dateValue;
     }
     // update input if the formatted text is different

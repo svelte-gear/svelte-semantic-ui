@@ -6,6 +6,7 @@
 import { tick } from "svelte";
 
 import type { FormSettings, JQueryApi, RuleDefinition, RuleObj } from "../data/semantic-types";
+import { formLog, stringify } from "../data/common";
 import {
     findParentForm,
     SVELTE_FORM_STORE,
@@ -13,7 +14,6 @@ import {
     ensureFieldKey,
     jQueryBySelector,
 } from "../data/dom-jquery";
-import { stringify } from "./common";
 
 /*
  oo            dP                     .8888b
@@ -122,14 +122,14 @@ export class SuiFormController implements FormController {
 
     /** Make the rule active in Semantic UI */
     private activateRule(key: string, rule: RuleDefinition): void {
-        console.log(`FORM (${this.formId}) : add_rule - ${key} : ${ruleToStr(rule)}`);
+        formLog.log(`(${this.formId}) : add_rule - ${key} : ${ruleToStr(rule)}`);
         this.elem.form("add rule", key, rule);
     }
     // FIXME: prevent duplicate rules ?
 
     /** Make the rule inactive in Semantic UI */
     private deactivateRule(key: string, rule: RuleDefinition): void {
-        console.log(`FORM (${this.formId}) : remove_rule - ${key} : ${ruleToStr(rule)}`);
+        formLog.log(`(${this.formId}) : remove_rule - ${key} : ${ruleToStr(rule)}`);
         // must use 'remove field', not 'remove rule' if all the rules are removed
         this.elem.form("remove field", key);
     }
@@ -151,7 +151,7 @@ export class SuiFormController implements FormController {
 
     /** Flag the form as requiring validation; used to dedupe multiple form validation calls */
     private markForValidation(key: string): void {
-        console.log(`FORM (${this.formId}) : mark (${key})`);
+        formLog.debug(`(${this.formId}) : mark (${key})`);
         this.mustValidate = true;
     }
 
@@ -159,7 +159,7 @@ export class SuiFormController implements FormController {
      *  Returns false if the validation has already been performed from another async call. */
     private validateIfMarked(): boolean {
         if (this.mustValidate) {
-            console.log(`FORM (${this.formId}) : validate`);
+            formLog.debug(`(${this.formId}) : validate`);
             this.doValidateForm();
             this.mustValidate = false;
             return true;
@@ -185,7 +185,7 @@ export class SuiFormController implements FormController {
     }
 
     setActive(newValue: boolean): void {
-        console.debug(`FORM (${this.formId}) : validate -> ${newValue}`);
+        formLog.log(`(${this.formId}) : validate -> ${newValue}`);
         if (newValue === true) {
             this.active = true;
             void this.revalidateForm();
@@ -201,7 +201,7 @@ export class SuiFormController implements FormController {
 
     /** Deactivate rules and store in ignoredField, if field is empty. */
     setIgnoreEmpty(newValue: boolean): void {
-        console.debug(`FORM (${this.formId}) : ignore -> ${newValue}`);
+        formLog.log(`(${this.formId}) : ignore -> ${newValue}`);
         if (newValue === true) {
             Object.keys(this.rules).forEach((key: string) => {
                 if (this.fieldIsEmpty(key)) {
@@ -349,6 +349,7 @@ export class FieldController {
         }
     }
 
+    /** Update filed validation rules if they are changed at runtime */
     replaceRules(validationRules?: RuleDefinition): void {
         function isEmpty(val?: RuleDefinition): boolean {
             return val === undefined || val === "" || (Array.isArray(val) && val.length === 0);
@@ -356,12 +357,14 @@ export class FieldController {
         if (isEmpty(this.rules) && !isEmpty(validationRules)) {
             // No rules previously, now we have rules
             this.rules = validationRules!;
-            this.formCtrl?.addRule(this.key!, this.rules);
+            this.formCtrl?.addRule(this.key, this.rules);
+            void this.revalidate();
             return;
         } else if (!isEmpty(this.rules) && isEmpty(validationRules)) {
             // Replace rules we had with nothing
             this.rules = validationRules;
             this.removeRules();
+            void this.revalidate();
             return;
         }
         function isRuleObj(val?: RuleDefinition): val is RuleObj {
@@ -386,11 +389,25 @@ export class FieldController {
             return false;
         }
         if (!isEqual(this.rules, validationRules)) {
-            this.formCtrl?.removeRule(this.key!, this.rules!);
+            this.formCtrl?.removeRule(this.key, this.rules!);
             this.rules = validationRules!;
-            this.formCtrl?.addRule(this.key!, this.rules);
+            this.formCtrl?.addRule(this.key, this.rules);
+            void this.revalidate();
         }
     }
+
+    // /** Simpler replaceRules function, assumes that it is called only when rules change */
+    // replaceRules(validationRules?: RuleDefinition): void {
+    //     if (this.rules) {
+    //         this.formCtrl?.removeRule(this.key, this.rules);
+    //         this.rules = undefined;
+    //     }
+    //     if (validationRules) {
+    //         this.formCtrl?.addRule(this.key, validationRules);
+    //         this.rules = validationRules;
+    //     }
+    //     void this.revalidate();
+    // }
 
     /** Validate the new field value, if the field is validated (has form controller).
      *  This method is `async` as it debounces (deduplicates) the validation event
