@@ -15,8 +15,8 @@ import type { Snippet } from "svelte";
 import { onMount, onDestroy } from "svelte";
 
 import type { FormSettings, JQueryApi } from "../data/semantic-types";
-import type { FormApi } from "../data/form-controller";
-import { SuiFormController } from "../data/form-controller";
+import type { FormApi } from "./form-controller-impl";
+import { FormControllerImpl } from "./form-controller-impl";
 import { equalStringArrays, formLog } from "../data/common";
 import {
     findComponent,
@@ -82,7 +82,7 @@ let elem: (JQueryApi & FormApi) | undefined = undefined;
 let formId: string;
 
 /** Form controller */
-let formCtrl: SuiFormController | undefined = undefined;
+let formCtrl: FormControllerImpl | undefined = undefined;
 
 // amend CSS if Init is allowed as a parent wrapper
 if (getComponentInitMode().includes("parent")) {
@@ -166,7 +166,7 @@ function onDirtyCallback(this: JQueryApi): void {
         settings.onDirty.call(this);
     }
     dirty = true;
-    // formLog.debug("DIRTY:", dirty);
+    formLog.debug("DIRTY:", dirty);
 }
 
 function onCleanCallback(this: JQueryApi): void {
@@ -174,7 +174,7 @@ function onCleanCallback(this: JQueryApi): void {
         settings.onClean.call(this);
     }
     dirty = false;
-    // formLog.debug("DIRTY:", dirty);
+    formLog.debug("DIRTY:", dirty);
 }
 
 //-----------------------------------------------------------------------------
@@ -204,7 +204,7 @@ onMount(async () => {
     });
 
     // create form controller
-    formCtrl = new SuiFormController(elem, formId, active, !validateEmpty);
+    formCtrl = new FormControllerImpl(elem, formId, active, !validateEmpty);
 
     // store form controller in the jQuery 'data' for fields to access
     elem.data(SVELTE_FORM_STORE, formCtrl);

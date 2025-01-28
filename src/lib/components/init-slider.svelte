@@ -12,8 +12,7 @@ import { onMount, onDestroy, tick } from "svelte";
 import type { SliderSettings, JQueryApi, RuleDefinition } from "../data/semantic-types";
 import { compLog, equalNumberArrays } from "../data/common";
 import { copyParentKey, findComponent } from "../data/dom-jquery";
-// import { sliderDefaults } from "../data/settings";
-import { FieldController } from "../data/form-controller";
+import { FieldController } from "../data/field-controller";
 
 const FIELD_PREFIX: string = "f_slider";
 const INITIAL_SLIDER_VALUE: number = 0;

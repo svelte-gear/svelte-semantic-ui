@@ -15,7 +15,7 @@ import type { JQueryApi, RuleDefinition } from "../data/semantic-types";
 
 import { compLog } from "../data/common";
 import { findComponent, findLabelWithBlank, getOrAssignKey } from "../data/dom-jquery";
-import { FieldController } from "../data/form-controller";
+import { FieldController } from "../data/field-controller";
 import { NumberFmt } from "../data/format-number";
 
 const FIELD_PREFIX: string = "f_input";

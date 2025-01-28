@@ -12,10 +12,10 @@ export const prerender: boolean = true;
 
 /** Runs before the application is displayed, saves loaded locale into the context */
 export async function load(): Promise<void> {
+    initLog.build("debug");
+    formLog.build("debug");
+    compLog.build("debug");
     await initializeFramework();
     setComponentInitMode(["parent", "child", "sibling"]); // allow all possible locations (for testing)
     await applyLocale("en-CA");
-    formLog.build("debug");
-    compLog.build("debug");
-    initLog.build("debug");
 }

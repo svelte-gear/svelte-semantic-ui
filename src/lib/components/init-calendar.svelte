@@ -12,7 +12,7 @@ import { onMount, onDestroy, tick } from "svelte";
 import type { CalendarSettings, JQueryApi, RuleDefinition } from "../data/semantic-types";
 import { equalDates, isoDate, isoTime, compLog } from "../data/common";
 import { findComponent, findLabelWithBlank, copyParentKey } from "../data/dom-jquery";
-import { FieldController } from "../data/form-controller";
+import { FieldController } from "../data/field-controller";
 
 const FIELD_PREFIX: string = "f_calendar";
 

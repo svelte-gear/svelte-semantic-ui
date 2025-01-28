@@ -11,7 +11,7 @@ import { onMount, onDestroy, tick } from "svelte";
 
 import type { CheckboxSettings, JQueryApi, RuleDefinition } from "../data/semantic-types";
 import { copyParentKey, findComponent } from "../data/dom-jquery";
-import { FieldController } from "../data/form-controller";
+import { FieldController } from "../data/field-controller";
 // import { checkboxDefaults } from "../data/settings";
 
 const FIELD_PREFIX: string = "f_checkbox";
@@ -21,7 +21,7 @@ interface Props {
     validate?: RuleDefinition;
     forId?: string;
     children?: Snippet;
-    // TODO: add checked nd group binding ?
+    // TODO: add checked and group binding ?
 }
 
 // REACTIVE -------------------------------------------------------------------

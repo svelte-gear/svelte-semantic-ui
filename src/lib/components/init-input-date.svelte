@@ -13,7 +13,7 @@ import type { DateFormatter } from "../data/format-date";
 import type { CalendarSettings, JQueryApi, RuleDefinition } from "../data/semantic-types";
 import { compLog } from "../data/common";
 import { findComponent, findLabelWithBlank, getOrAssignKey } from "../data/dom-jquery";
-import { FieldController } from "../data/form-controller";
+import { FieldController } from "../data/field-controller";
 import { DateFmt } from "../data/format-date";
 
 const FIELD_PREFIX: string = "f_input";

@@ -12,7 +12,7 @@ import { onMount, onDestroy, tick } from "svelte";
 import type { DropdownSettings, JQueryApi, RuleDefinition } from "../data/semantic-types";
 import { compLog, equalStringArrays } from "../data/common";
 import { findComponent, findLabelWithBlank } from "../data/dom-jquery";
-import { FieldController } from "../data/form-controller";
+import { FieldController } from "../data/field-controller";
 
 // const FIELD_PREFIX: string = "f_dropdown";
 const DROPDOWN_PREVENT_CLEARING_BAD_DATA: boolean = false;
