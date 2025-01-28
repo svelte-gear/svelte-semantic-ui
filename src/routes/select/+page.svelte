@@ -16,7 +16,7 @@ import {
     InitDropdown,
     InitTextInput,
     InitCheckbox,
-    validateForm,
+    doValidateForm,
     popup,
     getFormController,
 } from "../../lib";
@@ -95,7 +95,8 @@ function toggleActive(): void {
 onMount(async () => {
     reset();
     await tick();
-    getFormController("#form1").setAsClean();
+    // remember default values
+    getFormController("#form1").doSetAsClean();
 });
 </script>
 
@@ -156,7 +157,7 @@ onMount(async () => {
                         </button>
                         <button
                             class="ui icon button"
-                            onclick={validateForm}
+                            onclick={doValidateForm}
                             aria-label="re-validate"
                             use:popup={{ content: "Re-validate" }}
                         >

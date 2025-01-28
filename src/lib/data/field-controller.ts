@@ -32,6 +32,12 @@ export interface FormController {
     /** Remove the field validation rule */
     removeRule: (key: string, rules: RuleDefinition) => void;
 
+    /** If form controller is `active` - perform deduped form validation, otherwise - validate one field.
+     *  Modify the rules if `ignoreEmpty` and field value has changed from or to 'empty'. */
+    revalidateField: (key: string) => Promise<void>;
+
+    //-------------------------------------------------------------------------
+
     /** Trigger validation of the field */
     doValidateField: (key: string) => void;
 
@@ -39,11 +45,10 @@ export interface FormController {
     doValidateForm: () => void;
 
     /** Set the state of the form to clean and set current values as default */
-    setAsClean(): void;
+    doSetAsClean(): void;
 
-    /** If form controller is `active` - perform deduped form validation, otherwise - validate one field.
-     *  Modify the rules if `ignoreEmpty` and field value has changed from or to 'empty'. */
-    revalidateField: (key: string) => Promise<void>;
+    /** Restore default data and clear validation prompts. */
+    doReset(): void;
 }
 
 /*
@@ -220,7 +225,7 @@ export function getFormController(e: Event | string | Element): FormController {
  *  The function may be passed by name in event handler from within the form -
  *  in this case it will find the parent form using event target.
  *  Alternatively it may accept jQuery selector or DOM Element as a parameter. */
-export function validateForm(e: Event | string | Element): void {
+export function doValidateForm(e: Event | string | Element): void {
     if (!e) {
         throw new Error("validateForm() requires a parameter: event, selector, or Element");
     }
@@ -229,10 +234,19 @@ export function validateForm(e: Event | string | Element): void {
 }
 
 /** Remember current form values as its 'clean' state. */
-export function setFormAsClean(e: Event | string | Element): void {
+export function doSetFormAsClean(e: Event | string | Element): void {
     if (!e) {
         throw new Error("setFormAsClean() requires a parameter: event, selector, or Element");
     }
     const ctrl: FormController = getFormController(e);
-    ctrl.setAsClean();
+    ctrl.doSetAsClean();
+}
+
+/** Restore default data and clear validation prompts. */
+export function doResetForm(e: Event | string | Element): void {
+    if (!e) {
+        throw new Error("setFormAsClean() requires a parameter: event, selector, or Element");
+    }
+    const ctrl: FormController = getFormController(e);
+    ctrl.doReset();
 }

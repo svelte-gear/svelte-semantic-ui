@@ -14,7 +14,7 @@ import {
     InitCalendar,
     InitDateInput,
     InitCheckbox,
-    validateForm,
+    doValidateForm,
     popup,
 } from "../../lib";
 import { isoDate, isoTime } from "../../lib/data/common";
@@ -128,7 +128,7 @@ function toggleActive(): void {
                         </button>
                         <button
                             class="ui icon button"
-                            onclick={validateForm}
+                            onclick={doValidateForm}
                             aria-label="re-validate"
                             use:popup={{ content: "Re-validate" }}
                         >

@@ -60,7 +60,7 @@ interface Props {
 
 let {
     active = true,
-    validateEmpty = false,
+    validateEmpty = true,
     dirty = $bindable(undefined),
     valid = $bindable(undefined),
     errors = $bindable(undefined),

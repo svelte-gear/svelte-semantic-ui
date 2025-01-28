@@ -6,6 +6,7 @@
 
 // eslint-disable-next-line import/no-unresolved, import/extensions
 import { page } from "$app/state";
+import { onMount, tick } from "svelte";
 
 import {
     popup,
@@ -18,7 +19,7 @@ import {
     InitDateInput,
     InitTextInput,
     InitCheckbox,
-    validateForm,
+    doValidateForm,
     InitDropdown,
 } from "../../lib";
 
@@ -110,6 +111,14 @@ reset();
 function toggleActive(): void {
     active = !active;
 }
+
+onMount(async () => {
+    // FIXME: have to start active, then wait twice to trigger 'touch' mode
+    await tick();
+    await tick();
+    active = false;
+    // FIXME: triggering validateForm causes field revalidation, even when active == false
+});
 </script>
 
 <!------------------------------------------------------------------------------------------------>
@@ -184,7 +193,7 @@ function toggleActive(): void {
                         </button>
                         <button
                             class="ui icon button right floated"
-                            onclick={validateForm}
+                            onclick={doValidateForm}
                             aria-label="revalidate"
                             use:popup={{ content: "revalidate" }}
                         >

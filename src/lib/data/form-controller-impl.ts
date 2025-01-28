@@ -20,7 +20,7 @@ export type FormApi = {
     form(command: "destroy"): void;
     form(command: "get field", key: string): JQueryApi;
     form(command: "set as clean"): void;
-    form(command: "get value", key: string): unknown;
+    form(command: "reset"): void;
 };
 
 function ruleToStr(rule: RuleDefinition): string {
@@ -37,7 +37,7 @@ export class FormControllerImpl implements FormController {
     private elem: FormApi;
 
     /** Validate form on each field change */
-    private active: boolean = false;
+    private active: boolean = true;
 
     /** Form doesn't validate empty fields */
     private ignoreEmpty: boolean = false;
@@ -53,16 +53,16 @@ export class FormControllerImpl implements FormController {
     private mustValidate: boolean = false;
 
     /*
-                                  oo                     dP
-                                                         88
-                88d888b. 88d888b. dP dP   .dP .d8888b. d8888P .d8888b.
-    88888888    88'  `88 88'  `88 88 88   d8' 88'  `88   88   88ooood8
-                88.  .88 88       88 88 .88'  88.  .88   88   88.  ...
-                88Y888P' dP       dP 8888P'   `88888P8   dP   `88888P'
-                88
-                dP
-    */
+                      oo                     dP
+                                             88
+    88d888b. 88d888b. dP dP   .dP .d8888b. d8888P .d8888b.
+    88'  `88 88'  `88 88 88   d8' 88'  `88   88   88ooood8
+    88.  .88 88       88 88 .88'  88.  .88   88   88.  ...
+    88Y888P' dP       dP 8888P'   `88888P8   dP   `88888P'
+    88
+    dP
 
+    */
     /** Create new form controller, is used from InitForm. */
     constructor(elem: FormApi, formId: string, active: boolean, ignoreEmpty: boolean) {
         this.elem = elem;
@@ -76,7 +76,7 @@ export class FormControllerImpl implements FormController {
         formLog.log(`(${this.formId}) : add_rule - ${key} : ${ruleToStr(rule)}`);
         this.elem.form("add rule", key, rule);
     }
-    // FIXME: prevent duplicate rules ?
+    // TODO: prevent duplicate rules ?
 
     /** Make the rule inactive in Semantic UI */
     private deactivateRule(key: string, rule: RuleDefinition): void {
@@ -84,7 +84,7 @@ export class FormControllerImpl implements FormController {
         // must use 'remove field', not 'remove rule' if all the rules are removed
         this.elem.form("remove field", key);
     }
-    // FIXME: can't remove one rule ?
+    // TODO: can't remove one rule ?
 
     /** Check if the field value is empty */
     private fieldIsEmpty(key: string): boolean {
@@ -120,13 +120,15 @@ export class FormControllerImpl implements FormController {
     }
 
     /*
-                oo          oo   dP       .8888b
-                                 88       88   "
-                dP 88d888b. dP d8888P     88aaa  .d8888b. 88d888b. 88d8b.d8b.
-    88888888    88 88'  `88 88   88       88     88'  `88 88'  `88 88'`88'`88
-                88 88    88 88   88       88     88.  .88 88       88  88  88
-                dP dP    dP dP   dP       dP     `88888P' dP       dP  dP  dP
 
+    oo                     dP
+                           88
+    dP 88d8b.d8b. 88d888b. 88
+    88 88'`88'`88 88'  `88 88
+    88 88  88  88 88.  .88 88
+    dP dP  dP  dP 88Y888P' dP
+                    88
+                    dP
     */
 
     // used from InitForm.svelte
@@ -139,11 +141,14 @@ export class FormControllerImpl implements FormController {
     setActive(newValue: boolean): void {
         formLog.log(`(${this.formId}) : validate -> ${newValue}`);
         if (newValue === true) {
+            // live form validation, updating read-only `valid` and `error` bindings
             this.active = true;
             void this.revalidateForm();
         } else {
+            // remove validation prompts and switch into validate-as-touched mode
             this.active = false;
-            // TODO: reset form UI ?
+            this.doSetAsClean();
+            this.doReset();
         }
     }
 
@@ -155,6 +160,7 @@ export class FormControllerImpl implements FormController {
     setIgnoreEmpty(newValue: boolean): void {
         formLog.log(`(${this.formId}) : ignore -> ${newValue}`);
         if (newValue === true) {
+            // remove rules from empty fields
             Object.keys(this.rules).forEach((key: string) => {
                 if (this.fieldIsEmpty(key)) {
                     this.deactivateRule(key, this.rules[key]);
@@ -166,6 +172,7 @@ export class FormControllerImpl implements FormController {
                 void this.revalidateForm();
             }
         } else {
+            // reactivate all validation rules
             Object.keys(this.ignoredFields).forEach((key: string) => {
                 this.activateRule(key, this.rules[key]);
             });
@@ -178,14 +185,15 @@ export class FormControllerImpl implements FormController {
     }
 
     /*
-                                  dP       dP oo
-                                  88       88
-                88d888b. dP    dP 88d888b. 88 dP .d8888b.
-    88888888    88'  `88 88    88 88'  `88 88 88 88'  `""
-                88.  .88 88.  .88 88.  .88 88 88 88.  ...
-                88Y888P' `88888P' 88Y8888' dP dP `88888P'
-                88
-                dP
+                      dP       dP oo
+                      88       88
+    88d888b. dP    dP 88d888b. 88 dP .d8888b.
+    88'  `88 88    88 88'  `88 88 88 88'  `""
+    88.  .88 88.  .88 88.  .88 88 88 88.  ...
+    88Y888P' `88888P' 88Y8888' dP dP `88888P'
+    88
+    dP
+
     */
 
     // accessible from Field Controller and static functions
@@ -205,21 +213,6 @@ export class FormControllerImpl implements FormController {
         delete this.rules[key];
         delete this.ignoredFields[key];
         this.deactivateRule(key, rule);
-    }
-
-    /** Trigger validation of the field */
-    doValidateField(key: string): void {
-        this.elem.form("validate field", key);
-    }
-
-    /** Check form validation rules; if necessary, update the UI with error prompts */
-    doValidateForm(): void {
-        this.elem.form("validate form");
-    }
-
-    /** Set the state of the form to 'clean', store current field values as default */
-    setAsClean(): void {
-        this.elem.form("set as clean");
     }
 
     /** Modify the rules if `ignoreEmpty` and field value has changed from or to 'empty'.
@@ -247,5 +240,27 @@ export class FormControllerImpl implements FormController {
         }
         // doValidateField looks redundant for active, but helps with updating UI after formatter,
         // looks like 'revalidate' option somehow triggers extra field validation with old (empty) rule
+    }
+
+    //-------------------------------------------------------------------------
+
+    /** Trigger validation of the field */
+    doValidateField(key: string): void {
+        this.elem.form("validate field", key);
+    }
+
+    /** Check form validation rules; if necessary, update the UI with error prompts */
+    doValidateForm(): void {
+        this.elem.form("validate form");
+    }
+
+    /** Set the state of the form to 'clean', store current field values as default */
+    doSetAsClean(): void {
+        this.elem.form("set as clean");
+    }
+
+    /** Set the state of the form to 'clean', store current field values as default */
+    doReset(): void {
+        this.elem.form("reset");
     }
 }
