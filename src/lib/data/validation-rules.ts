@@ -147,12 +147,12 @@ function compareTyped(value: string, ruleValue: string, compare: CompareFn): boo
 
 function minValueFn(value: string, ruleValue: string): boolean {
     const res: boolean = compareTyped(value, ruleValue, greaterOrEqual);
-    console.log("COMPARE :", value, ">=", ruleValue, "=", res);
+    // console.log("COMPARE :", value, ">=", ruleValue, "=", res);
     return res;
 }
 function maxValueFn(value: string, ruleValue: string): boolean {
     const res: boolean = compareTyped(value, ruleValue, lessOrEqual);
-    console.log("COMPARE :", value, "<=", ruleValue, "=", res);
+    // console.log("COMPARE :", value, "<=", ruleValue, "=", res);
     return res;
 }
 

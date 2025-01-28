@@ -135,7 +135,7 @@ onMount(async () => {
 
     // apply validation rule if the rule is supplied in <InitDateInput >
     getOrAssignKey(elem, FIELD_PREFIX);
-    fieldCtrl = new FieldController(elem, validate);
+    fieldCtrl = new FieldController("input", elem, validate);
 
     // push initial value into the Semantic UI element
     svelteToInput(value);

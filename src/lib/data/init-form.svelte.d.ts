@@ -38,8 +38,15 @@ import type { FormSettings } from "../data/semantic-types";
 /* eslint-disable @typescript-eslint/naming-convention, @typescript-eslint/ban-types */
 /* prettier-ignore */
 declare const InitForm: Component<{
-    /** Determines if any field change will cause form re-validation. */
-    active: boolean;
+    /** Determines if any field change will cause form re-validation;
+     *  `valid` and `errors` bindings are readable only if `active` == true */
+    active?: boolean;
+
+    /** Determines if empty fields are validated or not. */
+    ignoreEmpty?: boolean;
+
+    /** Read-only binding indicating form data changes. */
+    dirty?: boolean;
 
     /** Read-only binding indicating validation result. */
     valid?: boolean;
@@ -55,7 +62,7 @@ declare const InitForm: Component<{
 
     /** If InitForm is used as a parent, render the children components */
     children?: Snippet;
-}, {}, "valid" | "errors">;
+}, {}, "valid" | "errors" | "dirty">;
 /* eslint-enable */
 
 export default InitForm;

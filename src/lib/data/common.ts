@@ -3,6 +3,8 @@
  * @module data/common
  */
 
+import type { JQueryApi } from "./semantic-types";
+
 //-----------------------------------------------------------------------------
 
 /*
@@ -154,3 +156,133 @@ export function isoTime(d: Date | undefined): string {
     const minute: string = pad(d.getMinutes(), 2);
     return `${hour}:${minute}`;
 }
+
+/** Convert objects to JSON string, for jQuery and DOM elements - get the HTML */
+export function stringify(obj: unknown): string {
+    if (!obj || typeof obj !== "object") {
+        return `${obj}`;
+    }
+    const jqueryObj: JQueryApi = obj as JQueryApi;
+    if (jqueryObj.prop && typeof jqueryObj.prop === "function") {
+        const html: string = jqueryObj.prop("outerHTML") as string;
+        if (html) {
+            return `jQuery: ${html.slice(0, html.indexOf(">") + 1)}`;
+        }
+    }
+    const domObj: Element = obj as Element;
+    if (domObj.outerHTML) {
+        const html: string = domObj.outerHTML;
+        if (html) {
+            return `DOM: ${html.slice(0, html.indexOf(">") + 1)}`;
+        }
+    }
+    // Exclude circular references and '__' props
+    const seen: WeakSet<object> = new WeakSet();
+    return JSON.stringify(obj, (key: string, value: unknown) => {
+        if (typeof value === "object" && value !== null) {
+            if (seen.has(value)) {
+                return undefined;
+            }
+            seen.add(value);
+        }
+        if (key.startsWith("__")) {
+            return undefined;
+        }
+        return value;
+    });
+}
+
+/*
+ dP
+ 88
+ 88 .d8888b. .d8888b.
+ 88 88'  `88 88'  `88
+ 88 88.  .88 88.  .88
+ dP `88888P' `8888P88
+                  .88
+              d8888P
+*/
+
+export type LogLevel = "error" | "warn" | "log" | "info" | "debug";
+
+type LogFunction = (...args: unknown[]) => void;
+
+function noop(..._args: unknown[]): void {
+    void _args;
+}
+
+type LogImplFunction = (level: LogLevel, ...args: unknown[]) => void;
+
+export class Logger {
+    error: LogFunction = noop;
+    warn: LogFunction = noop;
+    log: LogFunction = noop;
+    info: LogFunction = noop;
+    debug: LogFunction = noop;
+
+    private LOG_LEVELS: Array<LogLevel | "off"> = ["off", "error", "warn", "log", "info", "debug"];
+
+    private loglevelToNumber(lev: LogLevel | "off"): number {
+        for (let i: number = 0; i < this.LOG_LEVELS.length; i++) {
+            if (this.LOG_LEVELS[i] === lev) {
+                return i;
+            }
+        }
+        throw new Error(`Unrecognized log level: ${lev}`);
+    }
+
+    build(level: LogLevel | "off", fn?: LogImplFunction): void {
+        const numLevel: number = this.loglevelToNumber(level);
+        for (let i: number = 1; i < this.LOG_LEVELS.length; i++) {
+            const iLevel: LogLevel = this.LOG_LEVELS[i] as LogLevel;
+            if (numLevel >= i) {
+                if (fn) {
+                    this[iLevel] = (...args: unknown[]) => {
+                        fn(iLevel, ...args);
+                    };
+                } else {
+                    this[iLevel] = (...args: unknown[]) => {
+                        console[iLevel](...args);
+                    };
+                }
+            } else {
+                this[iLevel] = noop;
+            }
+        }
+    }
+}
+
+function localTime(): string {
+    const currentDate: Date = new Date();
+    const localDate: Date = new Date(
+        currentDate.getTime() - currentDate.getTimezoneOffset() * 60000
+    );
+    return localDate.toISOString().slice(0, -1).replace("T", " ");
+}
+
+export function buildHttpLogger(logger: Logger, level: LogLevel | "off", url: string): void {
+    function httpLogImpl(lev: LogLevel, ...args: unknown[]): void {
+        async function sendHttpLog(): Promise<void> {
+            const params: Record<string, string> = {};
+            params.time = localTime();
+            params.level = lev;
+            args.forEach((arg: unknown, ind: number) => {
+                params[`msg_${ind}`] = stringify(arg);
+            });
+            const urlWithParams: string = `${url}?${new URLSearchParams(params).toString()}`;
+            try {
+                const response: Response = await fetch(urlWithParams);
+                await response.text();
+            } catch (error) {
+                // ignore errors
+            }
+        }
+        // don't wait for promise completion
+        void sendHttpLog();
+    }
+    logger.build(level, httpLogImpl);
+}
+
+export const formLog: Logger = new Logger();
+export const compLog: Logger = new Logger();
+export const initLog: Logger = new Logger();

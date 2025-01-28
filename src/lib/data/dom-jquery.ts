@@ -49,8 +49,8 @@ export function nextUid(): string {
 
 //-----------------------------------------------------------------------------
 
-/** Find jQuery element by id attribute. */
-export function jQueryElemById(id: string): JQueryApi {
+/** Find jQuery element by string selector. */
+export function jQueryBySelector(selector: string): JQueryApi {
     type SelectorFn = (selector: string) => JQueryApi;
     type WithJQuerySelector = {
         jQuery: SelectorFn;
@@ -59,7 +59,7 @@ export function jQueryElemById(id: string): JQueryApi {
     if (!jQuery) {
         throw new Error("jQuery is not initialized");
     }
-    return jQuery(`#${id}`);
+    return jQuery(selector);
 }
 
 /** Gets jQuery element for the dom node. */
@@ -87,7 +87,7 @@ export function findComponent(
     let elem: JQueryApi;
     if (id) {
         // use "forId" attribute to find the element to connect to
-        elem = jQueryElemById(id);
+        elem = jQueryBySelector(`#${id}`);
         if (elem.length && elem.is(selector)) {
             return elem;
         }
@@ -119,6 +119,9 @@ export function findComponent(
 
 /** Get field identifier: id, name, data-validate */
 export function getFieldKey(elem: JQueryApi): string | undefined {
+    if (!elem) {
+        return undefined;
+    }
     return elem.attr("id") ?? elem.attr("name") ?? elem.attr("data-validate");
 }
 

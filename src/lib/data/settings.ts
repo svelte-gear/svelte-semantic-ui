@@ -187,11 +187,6 @@ export function applyDefaultSettings(locale?: string): void {
     });
     formDefaults.apply({
         keyboardShortcuts: false,
-        // on-blur is consistent with formatter logic
-        // on-change is consistent with revalidate; n=by default a field switches to on-change after an error
-        // on-submit would show errors only after a field has been changed
-        //     but it is difficult to implement with components as their bindings trigger re-validation
-        //     // FIXME: should the binding just update the field value, leaving validation triggering to the form ?
-        on: "blur",
+        // revalidate: false, // helps to avoid second re-validation on text area
     });
 }

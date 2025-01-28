@@ -3,6 +3,8 @@
  * @module components/use-sticky
  */
 
+import type { ActionReturn } from "svelte/action";
+
 import type { StickySettings, JQueryApi } from "../data/semantic-types";
 import { jQueryElem } from "../data/dom-jquery";
 
@@ -20,7 +22,7 @@ By default attaches itself to the parent component.
     </div>
 ```
 */
-export function sticky(node: Element, settings?: StickySettings): void {
+export function sticky(node: Element, settings?: StickySettings): ActionReturn {
     type StickyInitializer = JQueryApi & {
         sticky(settings?: StickySettings): void;
     };
@@ -29,7 +31,12 @@ export function sticky(node: Element, settings?: StickySettings): void {
         throw new Error("Semantic sticky is not initialized");
     }
     elem.sticky({
-        // ...stickyDefaults,
         ...settings,
     });
+
+    return {
+        update(newSettings?: StickySettings) {
+            elem.sticky(newSettings);
+        },
+    };
 }

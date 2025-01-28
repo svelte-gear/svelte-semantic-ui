@@ -7,15 +7,13 @@ import { tick } from "svelte";
 
 import type { FormSettings, JQueryApi, RuleDefinition } from "../data/semantic-types";
 import {
-    nextUid,
     findParentForm,
     SVELTE_FORM_STORE,
-    jQueryElemById,
     jQueryElem,
     ensureFieldKey,
+    jQueryBySelector,
 } from "../data/dom-jquery";
-
-const REVALIDATE: boolean = true;
+import { stringify } from "./common";
 
 /*
  oo            dP                     .8888b
@@ -27,20 +25,8 @@ const REVALIDATE: boolean = true;
 
 */
 
-export type FormApi = {
-    form(settings?: FormSettings): void;
-    form(command: "add rule", key: string, rule: RuleDefinition): void;
-    form(command: "remove field", key: string): void;
-    form(command: "validate field"): void;
-    form(command: "validate form"): void;
-    form(command: "is valid"): boolean;
-    form(command: "destroy"): void;
-    form(command: "get field", key: string): JQueryApi;
-};
-
-/** Controls Semantic UI form element and it's data validation.
- *  Hides implementation details of SuiFormController from the FieldController.
- *  Is accessed from both `<InitForm>` and individual `<InitField>` components. */
+/** FormController exposes Semantic UI form element and it's data validation.
+ *  Hides implementation details of SuiFormController from the FieldController. */
 export interface FormController {
     /** Register the field validation rule, activate the rule if the form validation is active */
     addRule: (key: string, rules: RuleDefinition) => void;
@@ -48,21 +34,18 @@ export interface FormController {
     /** Remove the field validation rule */
     removeRule: (key: string, rules: RuleDefinition) => void;
 
-    // /** It seems that field validation doesn't affect UI */
-    // doValidateField: (key: string) => void;
+    /** Trigger validation of the field */
+    doValidateField: (key: string) => void;
 
     /** Check form validation rules; if necessary, update the UI with error prompts */
     doValidateForm: () => void;
 
-    /** Flag the form as requiring validation; used to dedupe multiple validation calls */
-    markForValidation(key: string): void;
+    /** Set the state of the form to clean and set current values as default */
+    setAsClean(): void;
 
-    /** Perform form validation, if marked; used to dedupe multiple validation calls.
-     *  Returns false if the validation has already been performed from another async call. */
-    validateIfMarked(): boolean;
-
-    /** Get validated field by the key (id, name, or data-validate) */
-    getField(key: string): JQueryApi;
+    /** If form controller is `active` - perform deduped form validation, otherwise - validate one field.
+     *  Modify the rules if `ignoreEmpty` and field value has changed from or to 'empty'. */
+    revalidateField: (key: string) => Promise<void>;
 }
 
 /*
@@ -75,6 +58,20 @@ export interface FormController {
 
 */
 
+/** Semantic UI form behavior */
+export type FormApi = {
+    form(settings?: FormSettings): void;
+    form(command: "add rule", key: string, rule: RuleDefinition): void;
+    form(command: "remove field", key: string): void;
+    form(command: "validate field", key: string): void;
+    form(command: "validate form"): void;
+    form(command: "is valid"): boolean;
+    form(command: "destroy"): void;
+    form(command: "get field", key: string): JQueryApi;
+    form(command: "set as clean"): void;
+    form(command: "get value", key: string): unknown;
+};
+
 function ruleToStr(rule: RuleDefinition): string {
     const isObject: boolean = Array.isArray(rule) || typeof rule === "object";
     return isObject ? JSON.stringify(rule) : String(rule);
@@ -83,125 +80,86 @@ function ruleToStr(rule: RuleDefinition): string {
 /** Form validation controller. Is accessed only from `<InitForm>` component. */
 export class SuiFormController implements FormController {
     /** Form identifier for debug purposes */
-    formId: string;
+    private formId: string;
 
     /** jQuery form element */
-    elem: JQueryApi & FormApi;
+    private elem: FormApi;
 
-    /** Form validation is active */
-    isActive: boolean = false;
+    /** Validate form on each field change */
+    private active: boolean = false;
+
+    /** Form doesn't validate empty fields */
+    private ignoreEmpty: boolean = false;
 
     /** Map of field validation rules */
-    rules: Record<string, RuleDefinition> = {};
+    private rules: Record<string, RuleDefinition> = {};
+
+    /** Map of field where the validation rules are currently deactivated because the field is empty.
+     *  Each rule from the `rules` is either activated or listed in `ignoredFields` */
+    private ignoredFields: Record<string, boolean> = {};
 
     /** Form validation has been triggered by markForValidation(), but not yet performed by validateIfMarked() */
-    mustValidate: boolean = false;
+    private mustValidate: boolean = false;
 
-    constructor(elem: JQueryApi) {
+    /*
+                                  oo                     dP
+                                                         88
+                88d888b. 88d888b. dP dP   .dP .d8888b. d8888P .d8888b.
+    88888888    88'  `88 88'  `88 88 88   d8' 88'  `88   88   88ooood8
+                88.  .88 88       88 88 .88'  88.  .88   88   88.  ...
+                88Y888P' dP       dP 8888P'   `88888P8   dP   `88888P'
+                88
+                dP
+    */
+
+    /** Create new form controller, is used from InitForm. */
+    constructor(elem: FormApi, formId: string, active: boolean, ignoreEmpty: boolean) {
         this.elem = elem;
-        this.formId = `FORM_${elem.attr("id") ?? nextUid()}`;
+        this.formId = formId;
+        this.active = active;
+        this.ignoreEmpty = ignoreEmpty;
     }
 
+    /** Make the rule active in Semantic UI */
     private activateRule(key: string, rule: RuleDefinition): void {
-        console.log(`${this.formId} : add_rule - ${key} : ${ruleToStr(rule)}`);
+        console.log(`FORM (${this.formId}) : add_rule - ${key} : ${ruleToStr(rule)}`);
         this.elem.form("add rule", key, rule);
     }
+    // FIXME: prevent duplicate rules ?
 
+    /** Make the rule inactive in Semantic UI */
     private deactivateRule(key: string, rule: RuleDefinition): void {
-        console.log(`${this.formId} : remove_rule - ${key} : ${ruleToStr(rule)}`);
+        console.log(`FORM (${this.formId}) : remove_rule - ${key} : ${ruleToStr(rule)}`);
         // must use 'remove field', not 'remove rule' if all the rules are removed
         this.elem.form("remove field", key);
     }
+    // FIXME: can't remove one rule ?
 
-    addRule(key: string, rule: RuleDefinition): void {
-        this.rules[key] = rule;
-        if (this.isActive) {
-            this.activateRule(key, rule);
-        }
+    /** Check if the field value is empty */
+    private fieldIsEmpty(key: string): boolean {
+        const field: JQueryApi = this.elem.form("get field", key) as unknown as JQueryApi;
+        const value: unknown = field.val();
+        return !value;
     }
 
-    removeRule(key: string, rule: RuleDefinition): void {
-        delete this.rules[key];
-        if (this.isActive) {
-            this.deactivateRule(key, rule);
-        }
+    /** Perform (deduped) form validation */
+    private async revalidateForm(): Promise<void> {
+        this.markForValidation("_form_");
+        await tick();
+        this.validateIfMarked();
     }
 
-    setActive(newValue: boolean): void {
-        console.debug(`${this.formId} : active -> ${newValue}`);
-
-        // eslint-disable-next-line eqeqeq
-        if (this.isActive == false && newValue == true) {
-            // start validating
-            Object.keys(this.rules).forEach((key: string) => {
-                this.activateRule(key, this.rules[key]);
-            });
-            this.isActive = true;
-            if (REVALIDATE) {
-                this.markForValidation("FORM");
-                setTimeout(() => {
-                    this.validateIfMarked();
-                }, 0);
-            }
-        }
-
-        // eslint-disable-next-line eqeqeq
-        if (this.isActive == true && newValue == false) {
-            Object.keys(this.rules).forEach((key: string) => {
-                this.deactivateRule(key, this.rules[key]);
-            });
-            // remove validation highlights
-            this.elem.find(".field.error").removeClass("error");
-            this.elem.find(".message.error").html("");
-            this.elem.find(".prompt").remove();
-            this.isActive = false;
-        }
+    /** Flag the form as requiring validation; used to dedupe multiple form validation calls */
+    private markForValidation(key: string): void {
+        console.log(`FORM (${this.formId}) : mark (${key})`);
+        this.mustValidate = true;
     }
 
-    // private checkIfValid(): void {
-    //     console.debug("CHECK IF VALID");
-
-    //     // update 'valid' binding
-    //     const res: boolean = this.elem.form("is valid");
-    //     // this.validCallback(res);
-
-    //     // // get errors from message and update 'errors' binding
-    //     // if (this.errMsg.length) {
-    //     //     // const newErrors: string[] = [];
-    //     //     // msg.find("ul li").each((_idx: number, item: Element) => {
-    //     //     //     newErrors.push(jQueryElem(item).text());
-    //     //     // });
-    //     //     const newErrors: string[] = this.errMsg
-    //     //         .find("ul li")
-    //     //         .map((_ind: number, el: Element) => jQueryElem(el).text())
-    //     //         .get();
-    //     //     console.debug("NEW ERRORS", this.errMsg, newErrors);
-    //     //     this.errorsCallback(newErrors);
-    //     // }
-    // }
-
-    // doValidateField(key: string): void {
-    //     this.elem.form("validate field", key);
-    //     // this.checkIfValid();
-    //     this.elem.form("is valid");
-    // }
-
-    doValidateForm(): void {
-        this.elem.form("validate form");
-        // this.checkIfValid();
-        // this.elem.form("is valid"); // FIXME: is this required? remove?
-    }
-
-    markForValidation(key: string): void {
-        if (this.isActive) {
-            console.log(`${this.formId} : mark (${key})`);
-            this.mustValidate = true;
-        }
-    }
-
-    validateIfMarked(): boolean {
-        if (this.isActive && this.mustValidate) {
-            console.log(`${this.formId} : validate`);
+    /** Perform form validation, if marked; used to dedupe multiple validation calls.
+     *  Returns false if the validation has already been performed from another async call. */
+    private validateIfMarked(): boolean {
+        if (this.mustValidate) {
+            console.log(`FORM (${this.formId}) : validate`);
             this.doValidateForm();
             this.mustValidate = false;
             return true;
@@ -210,8 +168,132 @@ export class SuiFormController implements FormController {
         }
     }
 
-    getField(key: string): JQueryApi {
-        return this.elem.form("get field", key) as unknown as JQueryApi;
+    /*
+                oo          oo   dP       .8888b
+                                 88       88   "
+                dP 88d888b. dP d8888P     88aaa  .d8888b. 88d888b. 88d8b.d8b.
+    88888888    88 88'  `88 88   88       88     88'  `88 88'  `88 88'`88'`88
+                88 88    88 88   88       88     88.  .88 88       88  88  88
+                dP dP    dP dP   dP       dP     `88888P' dP       dP  dP  dP
+
+    */
+    // used from InitForm.svelte
+
+    /** Returns true if the form is revalidated on each field change */
+    isActive(): boolean {
+        return this.active;
+    }
+
+    setActive(newValue: boolean): void {
+        console.debug(`FORM (${this.formId}) : validate -> ${newValue}`);
+        if (newValue === true) {
+            this.active = true;
+            void this.revalidateForm();
+        } else {
+            this.active = false;
+            // TODO: reset form UI ?
+        }
+    }
+
+    isIgnoreEmpty(): boolean {
+        return this.ignoreEmpty;
+    }
+
+    /** Deactivate rules and store in ignoredField, if field is empty. */
+    setIgnoreEmpty(newValue: boolean): void {
+        console.debug(`FORM (${this.formId}) : ignore -> ${newValue}`);
+        if (newValue === true) {
+            Object.keys(this.rules).forEach((key: string) => {
+                if (this.fieldIsEmpty(key)) {
+                    this.deactivateRule(key, this.rules[key]);
+                    this.ignoredFields[key] = true;
+                }
+            });
+            this.ignoreEmpty = true;
+            if (this.active) {
+                void this.revalidateForm();
+            }
+        } else {
+            Object.keys(this.ignoredFields).forEach((key: string) => {
+                this.activateRule(key, this.rules[key]);
+            });
+            this.ignoredFields = {};
+            this.ignoreEmpty = false;
+            if (this.active) {
+                void this.revalidateForm();
+            }
+        }
+    }
+
+    /*
+                                  dP       dP oo
+                                  88       88
+                88d888b. dP    dP 88d888b. 88 dP .d8888b.
+    88888888    88'  `88 88    88 88'  `88 88 88 88'  `""
+                88.  .88 88.  .88 88.  .88 88 88 88.  ...
+                88Y888P' `88888P' 88Y8888' dP dP `88888P'
+                88
+                dP
+    */
+    // accessible from field controller and static function
+
+    /** Register the field validation rule, activate the rule if the form validation is active */
+    addRule(key: string, rule: RuleDefinition): void {
+        this.rules[key] = rule;
+        if (this.ignoreEmpty && this.fieldIsEmpty(key)) {
+            this.ignoredFields[key] = true;
+        } else {
+            this.activateRule(key, rule);
+        }
+    }
+
+    /** Remove the field validation rule */
+    removeRule(key: string, rule: RuleDefinition): void {
+        delete this.rules[key];
+        delete this.ignoredFields[key];
+        this.deactivateRule(key, rule);
+    }
+
+    /** Trigger validation of the field */
+    doValidateField(key: string): void {
+        this.elem.form("validate field", key);
+    }
+
+    /** Check form validation rules; if necessary, update the UI with error prompts */
+    doValidateForm(): void {
+        this.elem.form("validate form");
+    }
+
+    /** Set the state of the form to 'clean', store current field values as default */
+    setAsClean(): void {
+        this.elem.form("set as clean");
+    }
+
+    /** Modify the rules if `ignoreEmpty` and field value has changed from or to 'empty'.
+     *  If `active` - perform (deduped) form validation, otherwise - validate one field. */
+    async revalidateField(key: string): Promise<void> {
+        if (this.ignoreEmpty && this.rules[key]) {
+            // remove form rules if field became empty
+            if (this.fieldIsEmpty(key) && !this.ignoredFields[key]) {
+                this.deactivateRule(key, this.rules[key]);
+                this.ignoredFields[key] = true;
+            }
+            // add form rules if field became not-empty
+            if (!this.fieldIsEmpty(key) && this.ignoredFields[key]) {
+                this.activateRule(key, this.rules[key]); // FIXME: must ignore duplicates
+                delete this.ignoredFields[key];
+            }
+        }
+        if (this.active) {
+            this.markForValidation(key);
+            await tick();
+            this.doValidateField(key);
+            this.validateIfMarked();
+        } else {
+            this.doValidateField(key);
+        }
+        // doValidateField looks redundant for active, but helps with updating UI after formatter,
+        // looks like 'revalidate' option somehow triggers extra field validation with old (empty) rule
     }
 }
 
@@ -225,11 +307,15 @@ export class SuiFormController implements FormController {
 
 */
 
+export type FieldType = "calendar" | "dropdown" | "slider" | "checkbox" | "input";
+
 /** Adds validation rule to the field.
  *  Common class used by all Init* components to control field validation */
 export class FieldController {
     /** Field key used for form validation, is initialized for all fields. */
-    key: string | undefined;
+    key: string;
+
+    type: FieldType;
 
     /** Optional reference to form controlled, is initialized only if the field has validation rules. */
     formCtrl?: FormController;
@@ -237,12 +323,14 @@ export class FieldController {
     /** Field validation rules */
     rules?: RuleDefinition;
 
-    constructor(elem: JQueryApi, validationRules?: RuleDefinition) {
-        this.key = ensureFieldKey(elem);
+    /** Create ne field controller for the input. If it is validated, find and store form controller */
+    constructor(type: FieldType, input: JQueryApi, validationRules?: RuleDefinition) {
+        this.type = type;
+        this.key = ensureFieldKey(input);
 
         // get parent form and form controller
         if (validationRules) {
-            const form: JQueryApi | undefined = findParentForm(elem);
+            const form: JQueryApi | undefined = findParentForm(input);
             if (!form) {
                 throw new Error(
                     `Validated field ${this.key} must be a child of a <form class="ui form">`
@@ -256,6 +344,8 @@ export class FieldController {
             }
             this.formCtrl.addRule(this.key, validationRules);
             this.rules = validationRules;
+            // revalidate after the form has updated it's definition
+            void this.revalidate(); // NEW
         }
     }
 
@@ -264,23 +354,14 @@ export class FieldController {
      *  in case multiple fields are modified in a single Svelte 'tick'. */
     async revalidate(): Promise<void> {
         if (this.formCtrl) {
-            if (REVALIDATE) {
-                this.formCtrl.markForValidation(this.key!);
-                await tick();
-                this.formCtrl.validateIfMarked();
-            } else {
-                const input: JQueryApi = this.formCtrl.getField(this.key!);
-                // input.get(0)!.dispatchEvent(new CustomEvent("input"));
-                // input.get(0)!.dispatchEvent(new CustomEvent("change"));
-                input.get(0)!.dispatchEvent(new CustomEvent("blur"));
-            }
+            await this.formCtrl.revalidateField(this.key);
         }
     }
 
     /** Remove rules and revalidate */
     removeRules(): void {
         if (this.formCtrl && this.rules) {
-            this.formCtrl.removeRule(this.key!, this.rules);
+            this.formCtrl.removeRule(this.key, this.rules);
             // revalidate after the form has updated it's definition
             void this.revalidate();
         }
@@ -290,63 +371,59 @@ export class FieldController {
 /*
  .8888b                              dP   oo
  88   "                              88
- 88aaa  dP    dP 88d888b. .d8888b. d8888P dP .d8888b. 88d888b.
- 88     88    88 88'  `88 88'  `""   88   88 88'  `88 88'  `88
- 88     88.  .88 88    88 88.  ...   88   88 88.  .88 88    88
- dP     `88888P' dP    dP `88888P'   dP   dP `88888P' dP    dP
+ 88aaa  dP    dP 88d888b. .d8888b. d8888P dP .d8888b. 88d888b. .d8888b.
+ 88     88    88 88'  `88 88'  `""   88   88 88'  `88 88'  `88 Y8ooooo.
+ 88     88.  .88 88    88 88.  ...   88   88 88.  .88 88    88       88
+ dP     `88888P' dP    dP `88888P'   dP   dP `88888P' dP    dP `88888P'
 
 */
+
+/** Find form controller based on event target, selector, or DOM Element of the form or its child */
+export function getFormController(e: Event | string | Element): FormController {
+    if (!e) {
+        throw new Error("Form not found: the function requires a parameter");
+    }
+    let elem: JQueryApi | undefined = undefined;
+    if (typeof e === "string") {
+        elem = jQueryBySelector(e);
+    } else if (e instanceof Event) {
+        elem = jQueryElem(e.target as Element);
+    } else if (e instanceof Element) {
+        elem = jQueryElem(e);
+    }
+    if (!elem) {
+        throw new Error(`Form not found: can't find element for ${stringify(e)}`);
+    } else if (elem.length > 1) {
+        throw new Error(`Form not found: there are multiple element for ${stringify(e)}`);
+    }
+    const form: JQueryApi | undefined = findParentForm(elem);
+    if (!form) {
+        throw new Error(`Form not found for ${stringify(elem)}, ensure it has '.ui.form' class`);
+    }
+    const ctrl: FormController = form.data(SVELTE_FORM_STORE) as FormController;
+    if (!ctrl) {
+        throw new Error("Sematic UI Form is not initialized, use InitForm");
+    }
+    return ctrl;
+}
 
 /** Imperatively call form validation.
  *  The function may be passed by name in event handler from within the form -
  *  in this case it will find the parent form using event target.
- *  Alternatively it may accept form id attribute as a parameter. */
-export function validateForm(e: MouseEvent | KeyboardEvent | string): void {
+ *  Alternatively it may accept jQuery selector or DOM Element as a parameter. */
+export function validateForm(e: Event | string | Element): void {
     if (!e) {
-        throw new Error("validateForm() requires a parameter: event or string dom id");
+        throw new Error("validateForm() requires a parameter: event, selector, or Element");
     }
-    let elem: JQueryApi | undefined = undefined;
-    if (typeof e === "string") {
-        elem = jQueryElemById(e);
-    } else {
-        if (!e.target) {
-            throw new Error(
-                `validateForm() requires a parameter: event or string dom id, got ${typeof e} ${e.type}`
-            );
-        }
-        elem = jQueryElem(e.target as Element);
-    }
-    const form: JQueryApi | undefined = findParentForm(elem);
-    if (!form) {
-        throw new Error("Form not found");
-    }
-    const ctrl: FormController = form.data(SVELTE_FORM_STORE) as FormController;
+    const ctrl: FormController = getFormController(e);
     ctrl.doValidateForm();
 }
-// FIXME: this doesn't work as error display elements are hidden if not active
 
-// function getFieldByKey(key: string): JQueryApi {
-//     let field = elem.find(`#${key}`);
-//     if (field.length > 0) {
-//         return field;
-//     }
-//     field = elem.find(`[name=${key}]`);
-//     if (field.length > 0) {
-//         return field;
-//     }
-//     field = elem.find(`[data-validate=${key}]`);
-//     if (field.length > 0) {
-//         return field;
-//     }
-//     throw new Error(`Field not found for key=${key}`);
-// }
-
-// function getFieldPrompt(key: string): string {
-//     const field = getFieldByKey(key);
-//     const prompt = field.parent().find(".prompt");
-//     if (prompt.length > 0) {
-//         return prompt.text();
-//     } else {
-//         return "";
-//     }
-// }
+/** Remember current form values as its 'clean' state. */
+export function setFormAsClean(e: Event | string | Element): void {
+    if (!e) {
+        throw new Error("setFormAsClean() requires a parameter: event, selector, or Element");
+    }
+    const ctrl: FormController = getFormController(e);
+    ctrl.setAsClean();
+}

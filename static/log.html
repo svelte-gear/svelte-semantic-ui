@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<body>
+    <h3>Log</h3>
+    <pre id="queryData"></pre>
+
+    <script>
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            const time = params.get("time");
+            const level = params.get("level");
+            const messages = [];
+            let cnt = 0;
+            let msg = params.get(`msg_${cnt}`)
+            while (msg) {
+                messages.push(msg);
+                cnt++;
+                msg = params.get(`msg_${cnt}`)
+            }
+            return {
+                time: time,
+                level: level,
+                messages: messages,
+            };
+        }
+        const queryData = getQueryParams();
+        setTimeout(() => {
+            document.getElementById('queryData').innerHTML = JSON.stringify(queryData).slice(1, -1);
+        }, 500);
+    </script>
+</body>
+</html>

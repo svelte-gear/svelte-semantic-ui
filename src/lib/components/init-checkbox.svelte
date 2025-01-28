@@ -21,12 +21,14 @@ interface Props {
     validate?: RuleDefinition;
     forId?: string;
     children?: Snippet;
+    // TODO: add checked nd group binding ?
 }
 
 // REACTIVE -------------------------------------------------------------------
 /* eslint-disable prefer-const */
 
 let {
+    // TODO: add 'checked' and 'group' bindings for live validation update
     settings = undefined,
     validate = undefined,
     forId = undefined,
@@ -84,7 +86,7 @@ onMount(async () => {
     // no need for label for="_" shortcut
 
     // apply validation rule if the rule is supplied in <InitCheckbox >
-    fieldCtrl = new FieldController(input, validate);
+    fieldCtrl = new FieldController("checkbox", input, validate);
     void fieldCtrl.revalidate();
 });
 

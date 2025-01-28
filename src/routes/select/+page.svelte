@@ -5,6 +5,8 @@
 // form/+page.svelte
 // Sample form page with components, data binding, and validation.
 
+import { onMount, tick } from "svelte";
+
 // eslint-disable-next-line import/no-unresolved, import/extensions
 import { page } from "$app/state";
 import {
@@ -16,6 +18,7 @@ import {
     InitCheckbox,
     validateForm,
     popup,
+    getFormController,
 } from "../../lib";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import ShowCode from "../show-code.svelte";
@@ -36,6 +39,7 @@ let example: string = $state("");
 
 // form validation
 let active: boolean = $state(true);
+let dirty: boolean = $state(false);
 let valid: boolean = $state(false);
 let errors: string[] = $state([]);
 
@@ -51,6 +55,7 @@ let json: string = $derived(
         agree: chb,
         test: test,
         x: "----------------",
+        dirty: dirty,
         valid: valid,
         errors: errors,
     })
@@ -82,11 +87,16 @@ function reset(): void {
     chb = true;
     test = "abc";
 }
-reset();
 
 function toggleActive(): void {
     active = !active;
 }
+
+onMount(async () => {
+    reset();
+    await tick();
+    getFormController("#form1").setAsClean();
+});
 </script>
 
 <!------------------------------------------------------------------------------------------------>
@@ -96,12 +106,23 @@ function toggleActive(): void {
 
     <!-- https://github.com/noahsalvi/svelte-use-form -->
 
+    <!--
+ .8888b
+ 88   "
+ 88aaa  .d8888b. 88d888b. 88d8b.d8b.
+ 88     88'  `88 88'  `88 88'`88'`88
+ 88     88.  .88 88       88  88  88
+ dP     `88888P' dP       dP  dP  dP
+
+    -->
+
     <div style:max-width="360px" style:margin="0 auto" style:text-align="left">
-        <form class="ui form">
+        <form class="ui form" id="form1">
             <InitForm
                 active={active}
                 bind:valid={valid}
                 bind:errors={errors}
+                bind:dirty={dirty}
                 settings={{
                     inline: true,
                     // fields: { xx3: "empty" },
@@ -345,6 +366,7 @@ function toggleActive(): void {
                 <div class="field">
                     <div class="ui checkbox">
                         <input type="checkbox" bind:checked={chb} />
+                        <!-- FIXME: doesn't revalidate on reset() as it is bound directly -->
                         <label for="ch"> I Agree </label>
                     </div>
                     <InitCheckbox validate={[rule.checked()]} />
@@ -421,11 +443,13 @@ function toggleActive(): void {
                 <label for="_"> Test 1 </label>
                 <input />
                 <InitTextInput bind:value={test} validate={[rule.empty()]} />
+                <!-- FIXME: doesn't revalidate on reset() while bound in Init -->
             </div>
             <div class="field" id="xx">
                 <label for="_"> Test 2 </label>
-                <input bind:value={test} />
-                <InitTextInput validate={[rule.empty()]} />
+                <input />
+                <!-- // TODO: test with direct bind on input -->
+                <InitTextInput bind:value={test} validate={[rule.empty()]} />
             </div>
             <div class="help_text">
                 bind in Init and directly -

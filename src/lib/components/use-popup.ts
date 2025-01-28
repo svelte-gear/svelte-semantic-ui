@@ -31,11 +31,15 @@ export function popup(node: Element, settings?: PopupSettings): ActionReturn {
         throw new Error("Semantic popup is not initialized");
     }
     elem.popup({
-        // ...popupDefaults,
         ...settings,
     });
 
     return {
+        update(newSettings?: PopupSettings) {
+            elem.popup("destroy");
+            elem.popup(newSettings);
+        },
+
         destroy(): void {
             elem.popup("destroy");
         },

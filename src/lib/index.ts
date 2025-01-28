@@ -26,7 +26,8 @@ export async function initializeFramework(): Promise<void> {
 export { popup } from "./components/use-popup";
 export { sticky } from "./components/use-sticky";
 export { toast } from "./components/proc-toast";
-export { validateForm } from "./data/form-controller";
+export { validateForm, setFormAsClean, getFormController } from "./data/form-controller";
+// TODO: remove validateForm ?
 
 // DATA
 
@@ -96,3 +97,5 @@ export {
 } from "./i18n";
 
 export { registerRule } from "./data/validation-rules";
+
+export { formLog, compLog, initLog } from "./data/common";

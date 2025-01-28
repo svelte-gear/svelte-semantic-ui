@@ -190,7 +190,7 @@ onMount(async () => {
     copyParentKey(input, elem, FIELD_PREFIX);
 
     // apply validation rule if the rule is supplied in <InitSlider >
-    fieldCtrl = new FieldController(input, validate);
+    fieldCtrl = new FieldController("slider", input, validate);
 
     // push initial value into the Semantic UI element, required for slider as it has 0 as default
     svelteToInput(value, true);

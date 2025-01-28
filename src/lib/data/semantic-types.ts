@@ -139,7 +139,6 @@ export type RuleFunc = (value: string, ruleValue: string, module: SuiModule) => 
 export type FormSettings = Partial<FomanticUI.FormSettings> & {
     fields?: Record<string, RuleDefinition>;
     rules?: Record<string, RuleFunc>;
-    on?: "blur" | "change"; // remove "submit"
 };
 
 // formatter:

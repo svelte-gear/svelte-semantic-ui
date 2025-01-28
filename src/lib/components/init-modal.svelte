@@ -10,7 +10,7 @@ import type { Snippet } from "svelte";
 import { onDestroy, onMount } from "svelte";
 
 import type { ModalSettings, JQueryApi } from "../data/semantic-types";
-import { findComponent, jQueryElemById, nextUid } from "../data/dom-jquery";
+import { findComponent, jQueryBySelector, nextUid } from "../data/dom-jquery";
 // import { modalDefaults } from "../data/settings";
 
 const MODAL_PREFIX: string = "modal";
@@ -126,7 +126,7 @@ onMount(async () => {
     });
 
     // IMPORTANT: the element has been moved in dom, find i't new location
-    elem = jQueryElemById(modalId);
+    elem = jQueryBySelector(`#${modalId}`);
 
     svelteToInput(show);
 });

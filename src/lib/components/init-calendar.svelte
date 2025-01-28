@@ -169,7 +169,7 @@ onMount(async () => {
     }
 
     // apply validation rule if the rule is supplied in <InitCalendar >
-    fieldCtrl = new FieldController(input, validate);
+    fieldCtrl = new FieldController("calendar", input, validate);
 
     // push initial value into the Semantic UI element
     svelteToInput(value);

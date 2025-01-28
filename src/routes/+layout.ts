@@ -3,7 +3,7 @@
 
 // import type { LoadEvent } from "@sveltejs/kit";
 
-import { initializeFramework, setComponentInitMode } from "../lib";
+import { initializeFramework, setComponentInitMode, compLog, formLog, initLog } from "../lib";
 import { applyLocale } from "../lib/i18n";
 
 // single-page client-side app
@@ -15,4 +15,8 @@ export async function load(): Promise<void> {
     await initializeFramework();
     setComponentInitMode(["parent", "child", "sibling"]); // allow all possible locations (for testing)
     await applyLocale("en-CA");
+    formLog.build("debug");
+    compLog.build("debug");
+    initLog.build("debug");
+    // TODO: use new logs
 }

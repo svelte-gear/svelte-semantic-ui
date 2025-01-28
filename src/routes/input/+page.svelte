@@ -18,6 +18,7 @@ import {
     InitDateInput,
     InitTextInput,
     InitCheckbox,
+    validateForm,
 } from "../../lib";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -43,7 +44,9 @@ let example: string = $state("");
 
 // form validation
 let active: boolean = $state(true);
+let ignore: boolean = $state(true);
 let valid: boolean = $state(false);
+let errors: string[] = $state([]);
 
 let json: string = $derived(
     JSON.stringify({
@@ -54,7 +57,11 @@ let json: string = $derived(
         input: text4,
         input_live: text5,
         ratings: ratings.join(","),
-        // list: list,
+        x: "----------------",
+        active: active,
+        ignore: ignore,
+        valid: valid,
+        errors: errors,
     })
         .replace(/,"/g, ', "')
         .replace("{", "{ ")
@@ -93,11 +100,23 @@ function toggleActive(): void {
 
     <!-- https://github.com/noahsalvi/svelte-use-form -->
 
+    <!--
+ .8888b
+ 88   "
+ 88aaa  .d8888b. 88d888b. 88d8b.d8b.
+ 88     88'  `88 88'  `88 88'`88'`88
+ 88     88.  .88 88       88  88  88
+ dP     `88888P' dP       dP  dP  dP
+
+    -->
+
     <div style:max-width="360px" style:margin="0 auto" style:text-align="left">
         <form class="ui form">
             <InitForm
                 active={active}
+                ignoreEmpty={ignore}
                 bind:valid={valid}
+                bind:errors={errors}
                 settings={{
                     inline: true,
                     // revalidate: false,
@@ -129,6 +148,29 @@ function toggleActive(): void {
                                 Validate
                             {/if}
                         </button>
+                        <button
+                            class="ui icon button"
+                            onclick={() => {
+                                ignore = !ignore;
+                            }}
+                            aria-label="re-validate"
+                            use:popup={{ content: ignore ? "Validate empty" : "Ignore empty" }}
+                        >
+                            {#if ignore}
+                                <i class="icon expand"></i>
+                            {:else}
+                                <i class="icon compress"></i>
+                            {/if}
+                        </button>
+                        <button
+                            class="ui icon button"
+                            onclick={validateForm}
+                            aria-label="re-validate"
+                            use:popup={{ content: "Re-validate" }}
+                        >
+                            <i class="icon redo"></i>
+                        </button>
+
                         <div class="ui message error"></div>
                     </div>
                 </div>
@@ -185,8 +227,9 @@ function toggleActive(): void {
             <!-- example-text -->
             <div class="field">
                 <label for="_"> Text Area </label>
-                <textarea placeholder="describe" rows="3" bind:value={text3}></textarea>
+                <textarea placeholder="describe" rows="3"></textarea>
                 <InitTextInput
+                    bind:value={text3}
                     validate={[rule.contains("X"), rule.size(3, 6)]}
                     settings={{
                         charset: "ascii",
@@ -209,7 +252,11 @@ function toggleActive(): void {
             <div class="field">
                 <label for="g4"> Text Input </label>
                 <input type="text" name="text-4" placeholder="describe" bind:value={text5} />
-                <InitTextInput bind:value={text4} settings={{ case: "lower" }} />
+                <InitTextInput
+                    bind:value={text4}
+                    settings={{ case: "lower" }}
+                    validate={[rule.contains(".")]}
+                />
             </div>
             <div class="help_text">
                 input, lowercase formatter -

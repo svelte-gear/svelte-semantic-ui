@@ -24,12 +24,20 @@ import {
     SVELTE_FORM_STORE,
     getComponentInitMode,
     ensureFieldKey,
+    nextUid,
 } from "../data/dom-jquery";
 // import { formDefaults } from "../data/settings";
 
 interface Props {
-    /** Determines if any field change will cause form re-validation. */
-    active: boolean;
+    /** Determines if any field change will cause form re-validation;
+     *  `valid` and `errors` bindings are readable only if `active` == true */
+    active?: boolean;
+
+    /** Determines if empty fields are validated or not. */
+    ignoreEmpty?: boolean;
+
+    /** Read-only binding indicating that the form data changed after setAsClean() or reset(). */
+    dirty?: boolean;
 
     /** Read-only binding indicating validation result. */
     valid?: boolean;
@@ -51,9 +59,11 @@ interface Props {
 /* eslint-disable prefer-const */
 
 let {
-    active,
+    active = true,
+    ignoreEmpty = false,
+    dirty = $bindable(undefined),
     valid = $bindable(undefined),
-    errors = $bindable([]),
+    errors = $bindable(undefined),
     settings = undefined,
     forId = undefined,
     children = undefined,
@@ -69,9 +79,12 @@ let span: Element | undefined = undefined;
 /** jQuery form component */
 let elem: (JQueryApi & FormApi) | undefined = undefined;
 
+let formId: string;
+
+/** Form controller */
 let formCtrl: SuiFormController | undefined = undefined;
 
-// fix CSS for Init as a parent wrapper
+// amend CSS if Init is allowed as a parent wrapper
 if (getComponentInitMode().includes("parent")) {
     void import("../init-wrapper-fix.css");
 }
@@ -81,40 +94,61 @@ if (getComponentInitMode().includes("parent")) {
 /** When 'active' prop changes, update the Semantic UI form controller */
 $effect(() => {
     void active;
-    if (formCtrl && active !== formCtrl.isActive) {
-        formCtrl.setActive(active);
+    // eslint-disable-next-line eqeqeq
+    if (formCtrl && formCtrl.isActive() == false && active == true) {
+        formCtrl.setActive(true);
+    }
+    // eslint-disable-next-line eqeqeq
+    if (formCtrl && formCtrl.isActive() == true && active == false) {
+        formCtrl.setActive(false);
+        // reset read-only bindings
+        valid = undefined;
+        errors = undefined;
     }
 });
 
+/** When 'ignoreEmpty' prop changes, update the Semantic UI form controller */
+$effect(() => {
+    void ignoreEmpty;
+    // eslint-disable-next-line eqeqeq
+    if (formCtrl && formCtrl.isIgnoreEmpty() == false && ignoreEmpty == true) {
+        formCtrl.setIgnoreEmpty(true);
+    }
+    // eslint-disable-next-line eqeqeq
+    if (formCtrl && formCtrl.isIgnoreEmpty() == true && ignoreEmpty == false) {
+        formCtrl.setIgnoreEmpty(false);
+    }
+});
+
+// ----------------------------------------------------------------------------
+
 /** When form validation result changes, modify the corresponding prop. */
-function onValidChange(ctrlValue: boolean): void {
+function changeValid(ctrlValue: boolean): void {
     if (ctrlValue !== valid) {
-        console.debug(`${formCtrl!.formId} : valid <- ${ctrlValue}`);
+        console.debug(`FORM (${formId}) : valid <- ${ctrlValue}`);
         valid = ctrlValue;
     }
 }
 
 /** When form validation messages change, modify the corresponding prop. */
-function onErrorsChange(ctrlValue: string[]): void {
+function changeErrors(ctrlValue: string[]): void {
     if (!equalStringArrays(ctrlValue, errors)) {
-        console.debug(`${formCtrl!.formId} : errors <- [ ${ctrlValue.join(" | ")} ]`);
+        console.debug(`FORM (${formId}) : errors <- [ ${ctrlValue.join(" | ")} ]`);
         errors = ctrlValue;
     }
 }
 
-/** Validation callback */
 function onSuccessCallback(this: JQueryApi, event: Event, fields: object[]): void {
     console.log("SUCCESS");
     // user-specified handler for this component
-    // if default handler is present, user handler may call it before, after, or not call at all
+    // if form defaults handler is present, user handler may call it before, after, or not call at all
     if (settings && settings.onSuccess) {
         settings.onSuccess.call(this, event, fields);
     }
-    onValidChange(true);
-    onErrorsChange([]);
+    changeValid(true);
+    changeErrors([]);
 }
 
-/** Validation callback */
 function onFailureCallback(this: JQueryApi, formErrors: object[], fields: object[]): void {
     console.log("FAILURE");
     // user-specified handler for this component
@@ -122,17 +156,37 @@ function onFailureCallback(this: JQueryApi, formErrors: object[], fields: object
     if (settings && settings.onFailure) {
         settings.onFailure.call(this, formErrors, fields);
     }
-    onValidChange(false);
-    onErrorsChange(formErrors as unknown as string[]);
+    changeValid(false);
+    changeErrors(formErrors as unknown[] as string[]);
+}
+
+function onDirtyCallback(this: JQueryApi): void {
+    // user-specified handler for this component
+    if (settings && settings.onDirty) {
+        settings.onDirty.call(this);
+    }
+    dirty = true;
+    console.log("DIRTY:", dirty);
+}
+
+function onCleanCallback(this: JQueryApi): void {
+    if (settings && settings.onClean) {
+        settings.onClean.call(this);
+    }
+    dirty = false;
+    console.log("DIRTY:", dirty);
 }
 
 //-----------------------------------------------------------------------------
 
 onMount(async () => {
-    // DOM is ready, initialize the form immediately, field will wait a tick to ensure that the form is ready
+    // DOM is ready, initialize the form immediately
+    // field will wait a tick to ensure that the form initialization is complete, no matter were InitForm is placed
 
-    // Initialize Semantic component and subscribe for changes, always allow to be a child
+    // Initialize Semantic component and subscribe for changes, always allow InitForm to be a child of form
     elem = findComponent(span!, ".ui.form", forId, [...getComponentInitMode(), "child"]);
+    formId = elem.attr("id") ?? `fm_${nextUid()}`;
+
     if (!elem.form) {
         throw new Error("Semantic UI form is not initialized");
     }
@@ -140,26 +194,23 @@ onMount(async () => {
         ...settings,
         onSuccess: onSuccessCallback,
         onFailure: onFailureCallback,
+        onDirty: onDirtyCallback,
+        onClean: onCleanCallback,
     });
-
-    formCtrl = new SuiFormController(elem /* , onValidChange, onErrorsChange */);
-    // store controller in jQuery data for fields to access
-    elem.data(SVELTE_FORM_STORE, formCtrl);
 
     // make sure all inputs have ids, so form validation doesn't show warnings
     elem.find("input,select").each((_idx: number, input: Element): void => {
         ensureFieldKey(jQueryElem(input));
     });
 
-    // no need for delay as revalidate is already deduped
-    formCtrl.setActive(active);
+    // create form controller
+    formCtrl = new SuiFormController(elem, formId, active, ignoreEmpty);
+
+    // store form controller in the jQuery 'data' for fields to access
+    elem.data(SVELTE_FORM_STORE, formCtrl);
 });
 
 onDestroy(() => {
-    if (formCtrl) {
-        // stop validation
-        formCtrl.isActive = false;
-    }
     if (elem) {
         // remove event handlers
         elem.form("destroy");

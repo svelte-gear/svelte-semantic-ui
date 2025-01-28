@@ -7,7 +7,16 @@
 // eslint-disable-next-line import/no-unresolved, import/extensions
 import { page } from "$app/state";
 
-import { sticky, InitForm, rule, InitCalendar, InitDateInput, InitCheckbox } from "../../lib";
+import {
+    sticky,
+    InitForm,
+    rule,
+    InitCalendar,
+    InitDateInput,
+    InitCheckbox,
+    validateForm,
+    popup,
+} from "../../lib";
 import { isoDate, isoTime } from "../../lib/data/common";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import ShowCode from "../show-code.svelte";
@@ -28,12 +37,16 @@ let example: string = $state("");
 // form validation
 let active: boolean = $state(true);
 let valid: boolean = $state(false);
+let errors: string[] = $state([]);
 
 let json: string = $derived(
     JSON.stringify({
         date: `${isoDate(dat)}_${isoTime(dat)}`,
         time: isoTime(tim),
         text: dateText,
+        x: "----------------",
+        valid: valid,
+        errors: errors,
     })
         .replace(/,"/g, ', "')
         .replace("{", "{ ")
@@ -67,11 +80,22 @@ function toggleActive(): void {
 
     <!-- https://github.com/noahsalvi/svelte-use-form -->
 
+    <!--
+ .8888b
+ 88   "
+ 88aaa  .d8888b. 88d888b. 88d8b.d8b.
+ 88     88'  `88 88'  `88 88'`88'`88
+ 88     88.  .88 88       88  88  88
+ dP     `88888P' dP       dP  dP  dP
+
+    -->
+
     <div style:max-width="360px" style:margin="0 auto" style:text-align="left">
         <form class="ui form">
             <InitForm
                 active={active}
                 bind:valid={valid}
+                bind:errors={errors}
                 settings={{
                     inline: true,
                 }}
@@ -102,6 +126,15 @@ function toggleActive(): void {
                                 Validate
                             {/if}
                         </button>
+                        <button
+                            class="ui icon button"
+                            onclick={validateForm}
+                            aria-label="re-validate"
+                            use:popup={{ content: "Re-validate" }}
+                        >
+                            <i class="icon redo"></i>
+                        </button>
+
                         <div class="ui message error"></div>
                     </div>
                 </div>
