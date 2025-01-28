@@ -39,6 +39,20 @@ let ratings: number[] = $state([]);
 /* Hide or show slider */
 let showSlider: boolean = $state(true);
 
+/* Dynamic rule set */
+let dynRulesText: string = $state("");
+let dynRulesChoice: number = $state(0);
+let dynRules: string[] = $derived.by(() => {
+    switch (dynRulesChoice) {
+        case 1:
+            return [rule.empty()];
+        case 2:
+            return [rule.maxLength(10), rule.minLength(5)];
+        default:
+            return [];
+    }
+});
+
 /** Which example to show */
 let example: string = $state("");
 
@@ -338,6 +352,32 @@ function toggleActive(): void {
                 <!-- example-range_slider -->
             {/if}
             &nbsp;
+
+            <div class="ui divider"></div>
+
+            <div class="field">
+                <label for="_"> Dynamic Validation Input </label>
+                <input type="text" bind:value={dynRulesText} />
+                <InitTextInput validate={dynRules} />
+            </div>
+            <div id="dyn-choice" class="field">
+                <div class="ui radio checkbox">
+                    <input type="radio" bind:group={dynRulesChoice} value={0} />
+                    <label for="_">No rules</label>
+                </div>
+                <InitCheckbox />
+                <div class="ui radio checkbox">
+                    <input type="radio" bind:group={dynRulesChoice} value={1} />
+                    <label for="_">Required</label>
+                </div>
+                <InitCheckbox />
+                <div class="ui radio checkbox">
+                    <input type="radio" bind:group={dynRulesChoice} value={2} />
+                    <label for="_">Length-based</label>
+                </div>
+                <InitCheckbox />
+            </div>
+            {JSON.stringify(dynRules)}
         </form>
     </div>
 </main>
@@ -360,5 +400,10 @@ form {
 
 .ui.divider {
     clear: both;
+}
+
+#dyn-choice {
+    display: flex;
+    justify-content: space-between;
 }
 </style>

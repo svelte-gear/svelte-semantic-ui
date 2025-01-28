@@ -77,6 +77,12 @@ $effect(() => {
     void value;
     svelteToInput(value);
 });
+/** Update rules when the validate value changes. Fire a change event to trigger revalidation if deemed appropriate. */
+$effect(() => {
+    void validate;
+    fieldCtrl?.replaceRules(validate);
+    elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
+});
 
 //-----------------------------------------------------------------------------
 

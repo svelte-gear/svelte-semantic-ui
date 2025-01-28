@@ -95,7 +95,7 @@ export type RuleObj = {
 export type RuleDefinition = string | string[] | RuleObj | RuleObj[]; // | BaseSchema;
 
 type SuiValue = string | boolean | number | Date;
-/** @see https://fomantic-ui.com/behaviors/form.html#behaviors */
+/** @see {@link https://fomantic-ui.com/behaviors/form.html#behaviors} */
 type SuiModule = {
     clear: () => void;
     determine: {
