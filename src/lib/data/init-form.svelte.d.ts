@@ -38,20 +38,29 @@ import type { FormSettings } from "../data/semantic-types";
 /* eslint-disable @typescript-eslint/naming-convention, @typescript-eslint/ban-types */
 /* prettier-ignore */
 declare const InitForm: Component<{
-    /** Determines if any field change will cause form re-validation;
-     *  `valid` and `errors` bindings are readable only if `validateForm` == true; defaults to true */
+    /** Determines if any field change will cause form re-validation.
+     *
+     *  If validateForm == true (default),
+     *  all fields are validated live; `valid` and `errors` bindings are updated reactively.
+     *
+     *  If validateForm == false,
+     *  field are validated as they are touched by the user; `valid` and `errors` bindings are undefined;
+     *  if form setting inline == false, fields are validated live but form validation message block is not updated. */
     validateForm?: boolean;
 
-    /** Determines if empty fields are validated or not; defaults to true */
+    /** Determines if empty fields are validated or not; optional, defaults to true.
+     *  May be set to false to hide required fields warnings,
+     *  and set back to true when user tries to submit the form. */
     validateEmpty?: boolean;
 
-    /** Read-only binding indicating form data changes. */
+    /** Read-only binding indicating form data changes.
+     *  In most cases it should be set to false by calling doResetForm(), after form data is initialized. */
     dirty?: boolean;
 
-    /** Read-only binding indicating validation result. */
+    /** Read-only binding indicating validation result. Is undefined if `validateForm` == false */
     valid?: boolean;
 
-    /** Read-only binding for validation error messages. */
+    /** Read-only binding for validation error messages. Is undefined if `validateForm` == false */
     errors?: string[];
 
     /** Form validation settings, see https://fomantic-ui.com/behaviors/form.html#/settings */

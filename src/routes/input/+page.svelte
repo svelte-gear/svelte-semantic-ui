@@ -62,6 +62,7 @@ let example: string = $state("");
 // form validation
 let active: boolean = $state(false);
 let vEmpty: boolean = $state(false);
+let dirty: boolean = $state(false);
 let valid: boolean | undefined = $state();
 let errors: string[] | undefined = $state();
 
@@ -80,6 +81,7 @@ let json: string = $derived(
         x: "----------------",
         active: active,
         empty: vEmpty,
+        dirty: dirty,
         valid: valid,
         errors: errors,
     })
@@ -97,7 +99,7 @@ $effect(() => {
     }
 });
 
-function resetData(): void {
+async function loadData(): Promise<void> {
     dat = new Date("2022-02-01 13:00");
     income = 12345;
     text3 = "";
@@ -105,6 +107,8 @@ function resetData(): void {
     ratings = [0, 5];
     dynRulesText = "";
     gender = "";
+    await tick(); // wait for fields to initialize
+    getFormController("form").doResetForm();
 }
 
 function toggleActive(): void {
@@ -116,10 +120,9 @@ function resetErrors(): void {
 }
 
 onMount(async () => {
-    resetData();
-    // wait for fields to initialize
-    await tick();
-    getFormController("form").doResetForm();
+    console.info("before loadData");
+    await loadData();
+    console.info("after loadData");
 });
 </script>
 
@@ -145,11 +148,11 @@ onMount(async () => {
             <InitForm
                 validateForm={active}
                 validateEmpty={vEmpty}
+                bind:dirty={dirty}
                 bind:valid={valid}
                 bind:errors={errors}
                 settings={{
-                    inline: true,
-                    // revalidate: false,
+                    // inline: true,
                 }}
             />
 
@@ -160,7 +163,7 @@ onMount(async () => {
                         <div class="ui message" style:font-family="monospace">
                             {json}
                         </div>
-                        <button type="button" class="ui button blue" onclick={resetData}>
+                        <button type="button" class="ui button blue" onclick={loadData}>
                             Reset
                         </button>
                         <button

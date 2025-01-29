@@ -26,19 +26,25 @@ export interface FormController {
     /** Remove the field validation rule */
     removeRule: (key: string, rules: RuleDefinition) => void;
 
-    /** If form controller is `active` - perform deduped form validation, otherwise - validate one field.
-     *  Modify the rules if `ignoreEmpty` and field value has changed from or to 'empty'. */
+    /** If form validation is active - perform deduped form validation, otherwise - validate one field.
+     *  Modify the rules if `ignoreEmpty` == true and field value has changed from or to 'empty'. */
     revalidateField: (key: string) => Promise<void>;
 
     //-------------------------------------------------------------------------
 
-    /** Trigger validation of the field */
+    /** Trigger validation of the individual field.
+     *  Form validation is not necessary triggered at the same time. */
     doValidateField: (key: string) => void;
 
-    /** Check form validation rules; if necessary, update the UI with error prompts */
+    /** Check form validation rules; update the UI with error prompts.
+     *  If InitForm validateForm == true, doValidateForm() becomes redundant. */
     doValidateForm: () => void;
 
-    /** Remove error messages, clear 'dirty' flag, and set current values as defaults */
+    /** Clear 'dirty' flag, and set current values as defaults.
+     *  Is usually called after form data is loaded.
+     *
+     *  If InitForm validateForm == false,
+     *  doResetForm() removes error messages and triggers "validate-on-touch" behavior. */
     doResetForm(): void;
 }
 
