@@ -1,12 +1,12 @@
 /**
- * Svelte form validation controller, reusable field validation controller, validateForm() function.
- * @module data/form-controller
+ * Svelte form validation controller, used by InitForm, implements FormController interface.
+ * @module data/form-controller-impl
  */
 
 import { tick } from "svelte";
 
 import type { FormSettings, JQueryApi, RuleDefinition } from "./semantic-types";
-import type { FormController } from "./field-controller";
+import type { FormController } from "./form-controller";
 import { formLog } from "./common";
 
 /** Semantic UI form behavior */
@@ -37,10 +37,10 @@ export class FormControllerImpl implements FormController {
     private elem: FormApi;
 
     /** Validate form on each field change */
-    private active: boolean = true;
+    private active: boolean;
 
     /** Form doesn't validate empty fields */
-    private ignoreEmpty: boolean = false;
+    private ignoreEmpty: boolean;
 
     /** Map of field validation rules */
     private rules: Record<string, RuleDefinition> = {};
@@ -95,9 +95,13 @@ export class FormControllerImpl implements FormController {
 
     /** Perform (deduped) form validation */
     private async revalidateForm(): Promise<void> {
-        this.markForValidation("_form_");
-        await tick();
-        this.validateIfMarked();
+        if (this.active) {
+            this.markForValidation("_form_");
+            await tick();
+            this.validateIfMarked();
+        } else {
+            formLog.info(`(${this.formId}) : skip form revalidation`);
+        }
     }
 
     /** Flag the form as requiring validation; used to dedupe multiple form validation calls */
@@ -138,6 +142,7 @@ export class FormControllerImpl implements FormController {
         return this.active;
     }
 
+    /** Set active flag, ensure that form is validated or reset according to the flag */
     setActive(newValue: boolean): void {
         formLog.log(`(${this.formId}) : validate -> ${newValue}`);
         if (newValue === true) {
@@ -147,16 +152,18 @@ export class FormControllerImpl implements FormController {
         } else {
             // remove validation prompts and switch into validate-as-touched mode
             this.active = false;
-            this.doSetAsClean();
-            this.doReset();
+            this.doResetForm();
         }
     }
 
+    /** Returns true if validation rules are deactivated for empty fields */
     isIgnoreEmpty(): boolean {
         return this.ignoreEmpty;
     }
 
-    /** Deactivate rules and store in ignoredField, if field is empty. */
+    /** If field is empty, deactivate the filed rules and store in ignoredFields.
+     *  Changing 'ignoreEmpty' causes one-time form validation, similar to doValidateForm().
+     *  To avoid side effects call setIgnoreEmpty() before calling setActive(false). */
     setIgnoreEmpty(newValue: boolean): void {
         formLog.log(`(${this.formId}) : ignore -> ${newValue}`);
         if (newValue === true) {
@@ -170,6 +177,8 @@ export class FormControllerImpl implements FormController {
             this.ignoreEmpty = true;
             if (this.active) {
                 void this.revalidateForm();
+            } else {
+                formLog.info("ignoring empty");
             }
         } else {
             // reactivate all validation rules
@@ -180,9 +189,13 @@ export class FormControllerImpl implements FormController {
             this.ignoreEmpty = false;
             if (this.active) {
                 void this.revalidateForm();
+            } else {
+                formLog.info("validating empty");
             }
         }
     }
+    // FIXME: changing 'ignoreEmpty' forces inactive form to revalidate, why ?
+    // Dynamic rules don't have this effect...
 
     /*
                       dP       dP oo
@@ -254,13 +267,12 @@ export class FormControllerImpl implements FormController {
         this.elem.form("validate form");
     }
 
-    /** Set the state of the form to 'clean', store current field values as default */
-    doSetAsClean(): void {
+    /** Clear 'dirty' flag and sets current values as defaults.
+     *  If active == false, removes error messages, which may have appeared when form rules were added or changed. */
+    doResetForm(): void {
         this.elem.form("set as clean");
-    }
-
-    /** Set the state of the form to 'clean', store current field values as default */
-    doReset(): void {
-        this.elem.form("reset");
+        if (!this.active) {
+            this.elem.form("reset");
+        }
     }
 }

@@ -39,11 +39,10 @@ import type { FormSettings } from "../data/semantic-types";
 /* prettier-ignore */
 declare const InitForm: Component<{
     /** Determines if any field change will cause form re-validation;
-     *  `valid` and `errors` bindings are readable only if `active` == true */
-    active?: boolean; // TODO: rename into 'validateForm' ?
-    // FIXME: make it work 'onTouch' ?!
+     *  `valid` and `errors` bindings are readable only if `validateForm` == true; defaults to true */
+    validateForm?: boolean;
 
-    /** Determines if empty fields are validated or not. */
+    /** Determines if empty fields are validated or not; defaults to true */
     validateEmpty?: boolean;
 
     /** Read-only binding indicating form data changes. */

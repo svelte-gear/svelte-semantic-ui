@@ -93,7 +93,7 @@ function toggleActive(): void {
     <div style:max-width="360px" style:margin="0 auto" style:text-align="left">
         <form class="ui form">
             <InitForm
-                active={active}
+                validateForm={active}
                 bind:valid={valid}
                 bind:errors={errors}
                 settings={{
@@ -108,15 +108,15 @@ function toggleActive(): void {
                         <div class="ui message" style:font-family="monospace">
                             {json}
                         </div>
-                        <button class="ui button blue" type="button" onclick={reset}>
+                        <button type="button" class="ui button blue" onclick={reset}>
                             Reset
                         </button>
                         <button
+                            type="button"
                             class="ui button icon"
                             class:yellow={!active}
                             class:green={active && valid}
                             class:red={active && !valid}
-                            type="button"
                             onclick={toggleActive}
                         >
                             {#if active}
@@ -127,6 +127,7 @@ function toggleActive(): void {
                             {/if}
                         </button>
                         <button
+                            type="button"
                             class="ui icon button"
                             onclick={doValidateForm}
                             aria-label="re-validate"

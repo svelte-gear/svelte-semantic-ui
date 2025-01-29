@@ -36,6 +36,7 @@ function noFn(): void {
     <div style:max-width="360px" style:margin="0 auto" style:text-align="center" id="more">
         <!-- example-toast -->
         <button
+            type="button"
             class="ui button"
             onclick={() => {
                 toast({
@@ -63,6 +64,7 @@ function noFn(): void {
             Modal dialog is {#if !show}NOT{/if} active.
         </p>
         <button
+            type="button"
             class="ui button"
             onclick={() => {
                 show = true;

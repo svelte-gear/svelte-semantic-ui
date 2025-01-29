@@ -4,9 +4,9 @@
 // form/+page.svelte
 // Sample form page with components, data binding, and validation.
 
+import { onMount, tick } from "svelte";
 // eslint-disable-next-line import/no-unresolved, import/extensions
 import { page } from "$app/state";
-import { onMount, tick } from "svelte";
 
 import {
     popup,
@@ -21,6 +21,7 @@ import {
     InitCheckbox,
     doValidateForm,
     InitDropdown,
+    getFormController,
 } from "../../lib";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -29,13 +30,13 @@ import ShowCode from "../show-code.svelte";
 // REACTIVE -------------------------------------------------------------------
 /* eslint-disable prefer-const */
 
-let dat: Date | undefined = $state();
+let dat: Date | undefined = $state(new Date());
 let income: number | undefined = $state();
 let incomeRaw: string = $state("");
 let text3: string = $state("");
 let text4: string = $state("");
 let text5: string = $state("");
-let ratings: number[] = $state([]);
+let ratings: number[] = $state([0, 0]); // has to be initialized as we use ratings[0] on the page
 let gender: string = $state("");
 
 /* Hide or show slider */
@@ -59,10 +60,10 @@ let dynRules: string[] = $derived.by(() => {
 let example: string = $state("");
 
 // form validation
-let active: boolean = $state(true);
+let active: boolean = $state(false);
 let vEmpty: boolean = $state(false);
-let valid: boolean = $state(false);
-let errors: string[] = $state([]);
+let valid: boolean | undefined = $state();
+let errors: string[] | undefined = $state();
 
 let json: string = $derived(
     JSON.stringify({
@@ -96,7 +97,7 @@ $effect(() => {
     }
 });
 
-function reset(): void {
+function resetData(): void {
     dat = new Date("2022-02-01 13:00");
     income = 12345;
     text3 = "";
@@ -106,18 +107,19 @@ function reset(): void {
     gender = "";
 }
 
-reset();
-
 function toggleActive(): void {
     active = !active;
 }
 
+function resetErrors(): void {
+    getFormController("form").doResetForm();
+}
+
 onMount(async () => {
-    // FIXME: have to start active, then wait twice to trigger 'touch' mode
+    resetData();
+    // wait for fields to initialize
     await tick();
-    await tick();
-    active = false;
-    // FIXME: triggering validateForm causes field revalidation, even when active == false
+    getFormController("form").doResetForm();
 });
 </script>
 
@@ -141,7 +143,7 @@ onMount(async () => {
     <div style:max-width="360px" style:margin="0 auto" style:text-align="left">
         <form class="ui form">
             <InitForm
-                active={active}
+                validateForm={active}
                 validateEmpty={vEmpty}
                 bind:valid={valid}
                 bind:errors={errors}
@@ -158,25 +160,26 @@ onMount(async () => {
                         <div class="ui message" style:font-family="monospace">
                             {json}
                         </div>
-                        <button class="ui button blue" type="button" onclick={reset}>
+                        <button type="button" class="ui button blue" onclick={resetData}>
                             Reset
                         </button>
                         <button
+                            type="button"
                             class="ui button icon"
                             class:yellow={!active}
                             class:green={active && valid}
                             class:red={active && !valid}
-                            type="button"
                             onclick={toggleActive}
                         >
                             {#if active}
-                                Validating
+                                {valid ? "Valid" : "Invalid"}
                                 <i class="icon" class:check={valid} class:close={!valid}></i>
                             {:else}
                                 Validate
                             {/if}
                         </button>
                         <button
+                            type="button"
                             class="ui icon button"
                             class:yellow={vEmpty}
                             onclick={() => {
@@ -191,14 +194,26 @@ onMount(async () => {
                                 <i class="icon expand"></i>
                             {/if}
                         </button>
-                        <button
-                            class="ui icon button right floated"
-                            onclick={doValidateForm}
-                            aria-label="revalidate"
-                            use:popup={{ content: "revalidate" }}
-                        >
-                            <i class="icon redo"></i>
-                        </button>
+                        {#if !active || true}
+                            <button
+                                type="button"
+                                class="ui icon button right floated"
+                                onclick={doValidateForm}
+                                aria-label="revalidate"
+                                use:popup={{ content: "revalidate" }}
+                            >
+                                <i class="icon redo"></i>
+                            </button>
+                            <button
+                                type="button"
+                                class="ui icon button right floated"
+                                onclick={resetErrors}
+                                aria-label="clear errors"
+                                use:popup={{ content: "clear errors" }}
+                            >
+                                <i class="icon times"></i>
+                            </button>
+                        {/if}
 
                         <div class="ui message error" style="clear:both"></div>
                     </div>
@@ -280,7 +295,7 @@ onMount(async () => {
             <!-- example-input -->
             <div class="field">
                 <label for="g4"> Text Input </label>
-                <input type="text" name="text-4" placeholder="describe" bind:value={text5} />
+                <input type="text" placeholder="describe" bind:value={text5} />
                 <InitTextInput
                     bind:value={text4}
                     settings={{ case: "lower" }}
@@ -417,7 +432,7 @@ form {
 }
 
 .ui.rail {
-    width: 340px;
+    width: 360px;
 }
 
 .help_text {

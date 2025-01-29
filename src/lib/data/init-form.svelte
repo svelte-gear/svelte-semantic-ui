@@ -30,10 +30,10 @@ import {
 
 interface Props {
     /** Determines if any field change will cause form re-validation;
-     *  `valid` and `errors` bindings are readable only if `active` == true */
-    active?: boolean;
+     *  `valid` and `errors` bindings are readable only if `validateForm` == true; defaults to true */
+    validateForm?: boolean;
 
-    /** Determines if empty fields are validated or not. */
+    /** Determines if empty fields are validated or not; defaults to true */
     validateEmpty?: boolean;
 
     /** Read-only binding indicating that the form data changed after setAsClean() or reset(). */
@@ -59,7 +59,7 @@ interface Props {
 /* eslint-disable prefer-const */
 
 let {
-    active = true,
+    validateForm = true,
     validateEmpty = true,
     dirty = $bindable(undefined),
     valid = $bindable(undefined),
@@ -93,13 +93,13 @@ if (getComponentInitMode().includes("parent")) {
 
 /** When 'active' prop changes, update the Semantic UI form controller */
 $effect(() => {
-    void active;
+    void validateForm;
     // eslint-disable-next-line eqeqeq
-    if (formCtrl && formCtrl.isActive() == false && active == true) {
+    if (formCtrl && formCtrl.isActive() == false && validateForm == true) {
         formCtrl.setActive(true);
     }
     // eslint-disable-next-line eqeqeq
-    if (formCtrl && formCtrl.isActive() == true && active == false) {
+    if (formCtrl && formCtrl.isActive() == true && validateForm == false) {
         formCtrl.setActive(false);
         // reset read-only bindings
         valid = undefined;
@@ -145,8 +145,10 @@ function onSuccessCallback(this: JQueryApi, event: Event, fields: object[]): voi
     if (settings && settings.onSuccess) {
         settings.onSuccess.call(this, event, fields);
     }
-    changeValid(true);
-    changeErrors([]);
+    if (formCtrl?.isActive()) {
+        changeValid(true);
+        changeErrors([]);
+    }
 }
 
 function onFailureCallback(this: JQueryApi, formErrors: object[], fields: object[]): void {
@@ -156,8 +158,10 @@ function onFailureCallback(this: JQueryApi, formErrors: object[], fields: object
     if (settings && settings.onFailure) {
         settings.onFailure.call(this, formErrors, fields);
     }
-    changeValid(false);
-    changeErrors(formErrors as unknown[] as string[]);
+    if (formCtrl?.isActive()) {
+        changeValid(false);
+        changeErrors(formErrors as unknown[] as string[]);
+    }
 }
 
 function onDirtyCallback(this: JQueryApi): void {
@@ -204,7 +208,7 @@ onMount(async () => {
     });
 
     // create form controller
-    formCtrl = new FormControllerImpl(elem, formId, active, !validateEmpty);
+    formCtrl = new FormControllerImpl(elem, formId, validateForm, !validateEmpty);
 
     // store form controller in the jQuery 'data' for fields to access
     elem.data(SVELTE_FORM_STORE, formCtrl);

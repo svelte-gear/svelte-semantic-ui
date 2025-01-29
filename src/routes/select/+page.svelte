@@ -96,7 +96,7 @@ onMount(async () => {
     reset();
     await tick();
     // remember default values
-    getFormController("#form1").doSetAsClean();
+    getFormController("#form1").doResetForm();
 });
 </script>
 
@@ -120,7 +120,7 @@ onMount(async () => {
     <div style:max-width="360px" style:margin="0 auto" style:text-align="left">
         <form class="ui form" id="form1">
             <InitForm
-                active={active}
+                validateForm={active}
                 bind:valid={valid}
                 bind:errors={errors}
                 bind:dirty={dirty}
@@ -137,15 +137,15 @@ onMount(async () => {
                         <div class="ui message" style:font-family="monospace">
                             {json}
                         </div>
-                        <button class="ui button blue" type="button" onclick={reset}>
+                        <button type="button" class="ui button blue" onclick={reset}>
                             Reset
                         </button>
                         <button
+                            type="button"
                             class="ui button icon"
                             class:yellow={!active}
                             class:green={active && valid}
                             class:red={active && !valid}
-                            type="button"
                             onclick={toggleActive}
                         >
                             {#if active}
@@ -156,6 +156,7 @@ onMount(async () => {
                             {/if}
                         </button>
                         <button
+                            type="button"
                             class="ui icon button"
                             onclick={doValidateForm}
                             aria-label="re-validate"
