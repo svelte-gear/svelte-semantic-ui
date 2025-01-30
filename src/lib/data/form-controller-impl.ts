@@ -76,7 +76,6 @@ export class FormControllerImpl implements FormController {
         formLog.log(`(${this.formId}) : add_rule - ${key} : ${ruleToStr(rule)}`);
         this.elem.form("add rule", key, rule);
     }
-    // TODO: prevent duplicate rules ?
 
     /** Make the rule inactive in Semantic UI */
     private deactivateRule(key: string, rule: RuleDefinition): void {
@@ -84,12 +83,19 @@ export class FormControllerImpl implements FormController {
         // must use 'remove field', not 'remove rule' if all the rules are removed
         this.elem.form("remove field", key);
     }
-    // TODO: can't remove one rule ?
 
     /** Check if the field value is empty */
     private fieldIsEmpty(key: string): boolean {
         const field: JQueryApi = this.elem.form("get field", key) as unknown as JQueryApi;
+        if (field.attr("type") === "checkbox") {
+            const checked: string | undefined = field.attr("checked");
+            return !checked;
+        }
+        // FIXME: deal with radio or checkbox group
         const value: unknown = field.val();
+        if (Array.isArray(value)) {
+            return value.length === 0;
+        }
         return !value;
     }
 
@@ -153,6 +159,7 @@ export class FormControllerImpl implements FormController {
             // remove validation prompts and switch into validate-as-touched mode
             this.active = false;
             this.doResetForm();
+            // FIXME: Calendar components perform field validation on reset
         }
     }
 
@@ -172,6 +179,8 @@ export class FormControllerImpl implements FormController {
                 if (this.fieldIsEmpty(key)) {
                     this.deactivateRule(key, this.rules[key]);
                     this.ignoredFields[key] = true;
+                    // remove error messages from touched empty fields
+                    this.doValidateField(key);
                 }
             });
             this.ignoreEmpty = true;
@@ -194,8 +203,6 @@ export class FormControllerImpl implements FormController {
             }
         }
     }
-    // FIXME: changing 'ignoreEmpty' forces inactive form to revalidate, why ?
-    // Dynamic rules don't have this effect...
 
     /*
                       dP       dP oo
@@ -239,7 +246,7 @@ export class FormControllerImpl implements FormController {
             }
             // add form rules if field became not-empty
             if (!this.fieldIsEmpty(key) && this.ignoredFields[key]) {
-                this.activateRule(key, this.rules[key]); // FIXME: must ignore duplicates
+                this.activateRule(key, this.rules[key]);
                 delete this.ignoredFields[key];
             }
         }
@@ -251,8 +258,8 @@ export class FormControllerImpl implements FormController {
         } else {
             this.doValidateField(key);
         }
-        // doValidateField looks redundant for active, but helps with updating UI after formatter,
-        // looks like 'revalidate' option somehow triggers extra field validation with old (empty) rule
+        // doValidateField() looks redundant for active, but helps with updating UI after formatter,
+        // it appears that 'revalidate' option somehow triggers extra field validation with old (empty) rule
     }
 
     //-------------------------------------------------------------------------
@@ -273,6 +280,12 @@ export class FormControllerImpl implements FormController {
         this.elem.form("set as clean");
         if (!this.active) {
             this.elem.form("reset");
+            // manually clear errors messages from the calendar component
+            (this.elem as unknown as JQueryApi)
+                .find(".field")
+                .removeClass("error")
+                .find(".prompt")
+                .remove();
         }
     }
 }

@@ -30,7 +30,7 @@ import ShowCode from "../show-code.svelte";
 // REACTIVE -------------------------------------------------------------------
 /* eslint-disable prefer-const */
 
-let dat: Date | undefined = $state(new Date());
+let dat: Date | undefined = $state();
 let income: number | undefined = $state();
 let incomeRaw: string = $state("");
 let text3: string = $state("");
@@ -44,12 +44,12 @@ let showSlider: boolean = $state(true);
 
 /* Dynamic rule set */
 let dynRulesText: string = $state("");
-let dynRulesChoice: number = $state(0);
+let dynRulesChoice: string = $state("0");
 let dynRules: string[] = $derived.by(() => {
     switch (dynRulesChoice) {
-        case 1:
+        case "1":
             return [rule.empty()];
-        case 2:
+        case "2":
             return [rule.maxLength(10), rule.minLength(5)];
         default:
             return [];
@@ -107,7 +107,10 @@ async function loadData(): Promise<void> {
     ratings = [0, 5];
     dynRulesText = "";
     gender = "";
-    await tick(); // wait for fields to initialize
+
+    // wait for fields to initialize
+    await tick();
+    // remember default values for proper 'dirty' state
     getFormController("form").doResetForm();
 }
 
@@ -152,7 +155,7 @@ onMount(async () => {
                 bind:valid={valid}
                 bind:errors={errors}
                 settings={{
-                    // inline: true,
+                    inline: true,
                 }}
             />
 
@@ -200,7 +203,7 @@ onMount(async () => {
                         {#if !active || true}
                             <button
                                 type="button"
-                                class="ui icon button right floated"
+                                class="ui icon basic button right floated"
                                 onclick={doValidateForm}
                                 aria-label="revalidate"
                                 use:popup={{ content: "revalidate" }}
@@ -209,7 +212,7 @@ onMount(async () => {
                             </button>
                             <button
                                 type="button"
-                                class="ui icon button right floated"
+                                class="ui icon basic button right floated"
                                 onclick={resetErrors}
                                 aria-label="clear errors"
                                 use:popup={{ content: "clear errors" }}
@@ -344,10 +347,10 @@ onMount(async () => {
 
             <div style="float:right">
                 <div class="ui checkbox">
-                    <input type="checkbox" bind:checked={showSlider} class="ui checkbox" />
+                    <input type="checkbox" class="ui checkbox" />
                     <label for="_">Show Sliders</label>
                 </div>
-                <InitCheckbox />
+                <InitCheckbox bind:checked={showSlider} />
             </div>
 
             {#if showSlider}
@@ -409,20 +412,20 @@ onMount(async () => {
             </div>
             <div id="dyn-choice" class="field">
                 <div class="ui radio checkbox">
-                    <input type="radio" bind:group={dynRulesChoice} value={0} />
+                    <input type="radio" value={0} />
                     <label for="_">No rules</label>
                 </div>
-                <InitCheckbox />
+                <InitCheckbox bind:group={dynRulesChoice} />
                 <div class="ui radio checkbox">
-                    <input type="radio" bind:group={dynRulesChoice} value={1} />
+                    <input type="radio" value={1} />
                     <label for="_">Required</label>
                 </div>
-                <InitCheckbox />
+                <InitCheckbox bind:group={dynRulesChoice} />
                 <div class="ui radio checkbox">
-                    <input type="radio" bind:group={dynRulesChoice} value={2} />
+                    <input type="radio" value={2} />
                     <label for="_">Length-based</label>
                 </div>
-                <InitCheckbox />
+                <InitCheckbox bind:group={dynRulesChoice} />
             </div>
         </form>
     </div>
@@ -454,6 +457,9 @@ form {
 
 #dyn-choice {
     display: flex;
-    justify-content: space-between;
+    justify-content: right;
+    div {
+        margin-left: 1rem;
+    }
 }
 </style>

@@ -94,7 +94,7 @@ function inputToSvelte(inputText: string): void {
     // store in the prop only if the value is different
     const dateValue: Date | undefined = formatter!.parse(inputText);
     if (dateValue !== value) {
-        compLog.log(`DateInput (${fieldCtrl?.key}) : value <- {inputText}`);
+        compLog.log(`DateInput (${fieldCtrl?.key}) : value <- ${inputText}`);
         value = dateValue;
     }
     // update input if the formatted text is different

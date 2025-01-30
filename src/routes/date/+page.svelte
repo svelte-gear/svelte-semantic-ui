@@ -4,6 +4,7 @@
 // form/+page.svelte
 // Sample form page with components, data binding, and validation.
 
+import { onMount, tick } from "svelte";
 // eslint-disable-next-line import/no-unresolved, import/extensions
 import { page } from "$app/state";
 
@@ -16,6 +17,7 @@ import {
     InitCheckbox,
     doValidateForm,
     popup,
+    getFormController,
 } from "../../lib";
 import { isoDate, isoTime } from "../../lib/data/common";
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -24,8 +26,8 @@ import ShowCode from "../show-code.svelte";
 // REACTIVE -------------------------------------------------------------------
 /* eslint-disable prefer-const */
 
-let dat: Date | undefined = $state();
-let tim: Date | undefined = $state();
+let dat1: Date | undefined = $state();
+let dat2: Date | undefined = $state();
 let dateText: string = $state("");
 
 /* Hide or show slider */
@@ -35,16 +37,21 @@ let showDate: boolean = $state(true);
 let example: string = $state("");
 
 // form validation
-let active: boolean = $state(true);
+let active: boolean = $state(false);
+let vEmpty: boolean = $state(true);
+let dirty: boolean = $state(false);
 let valid: boolean = $state(false);
 let errors: string[] = $state([]);
 
 let json: string = $derived(
     JSON.stringify({
-        date: `${isoDate(dat)}_${isoTime(dat)}`,
-        time: isoTime(tim),
+        date1: `${isoDate(dat1)}_${isoTime(dat1)}`,
+        date2: `${isoDate(dat1)}_${isoTime(dat2)}`,
         text: dateText,
         x: "----------------",
+        active: active,
+        empty: vEmpty,
+        dirty: dirty,
         valid: valid,
         errors: errors,
     })
@@ -62,15 +69,29 @@ $effect(() => {
     }
 });
 
-function reset(): void {
-    dat = new Date("2022-02-01 13:00");
-    tim = undefined;
+async function loadData(): Promise<void> {
+    dat1 = new Date("2022-02-01 13:00");
+    dat2 = undefined;
+
+    // wait for fields to initialize
+    await tick();
+    // remember default values for proper 'dirty' state
+    getFormController("form").doResetForm();
 }
-reset();
 
 function toggleActive(): void {
     active = !active;
 }
+
+function resetErrors(): void {
+    getFormController("form").doResetForm();
+}
+
+onMount(async () => {
+    console.info("before loadData");
+    await loadData();
+    console.info("after loadData");
+});
 </script>
 
 <!------------------------------------------------------------------------------------------------>
@@ -94,10 +115,12 @@ function toggleActive(): void {
         <form class="ui form">
             <InitForm
                 validateForm={active}
+                validateEmpty={vEmpty}
+                bind:dirty={dirty}
                 bind:valid={valid}
                 bind:errors={errors}
                 settings={{
-                    inline: true,
+                    inline: false,
                 }}
             />
 
@@ -108,7 +131,7 @@ function toggleActive(): void {
                         <div class="ui message" style:font-family="monospace">
                             {json}
                         </div>
-                        <button type="button" class="ui button blue" onclick={reset}>
+                        <button type="button" class="ui button blue" onclick={loadData}>
                             Reset
                         </button>
                         <button
@@ -120,7 +143,7 @@ function toggleActive(): void {
                             onclick={toggleActive}
                         >
                             {#if active}
-                                Validating
+                                {valid ? "Valid" : "Invalid"}
                                 <i class="icon" class:check={valid} class:close={!valid}></i>
                             {:else}
                                 Validate
@@ -129,14 +152,41 @@ function toggleActive(): void {
                         <button
                             type="button"
                             class="ui icon button"
-                            onclick={doValidateForm}
-                            aria-label="re-validate"
-                            use:popup={{ content: "Re-validate" }}
+                            class:yellow={vEmpty}
+                            onclick={() => {
+                                vEmpty = !vEmpty;
+                            }}
+                            aria-label="empty fields"
+                            use:popup={{ content: vEmpty ? "validating empty" : "ignoring empty" }}
                         >
-                            <i class="icon redo"></i>
+                            {#if vEmpty}
+                                <i class="icon compress"></i>
+                            {:else}
+                                <i class="icon expand"></i>
+                            {/if}
                         </button>
+                        {#if !active || true}
+                            <button
+                                type="button"
+                                class="ui icon basic button right floated"
+                                onclick={doValidateForm}
+                                aria-label="revalidate"
+                                use:popup={{ content: "revalidate" }}
+                            >
+                                <i class="icon redo"></i>
+                            </button>
+                            <button
+                                type="button"
+                                class="ui icon basic button right floated"
+                                onclick={resetErrors}
+                                aria-label="clear errors"
+                                use:popup={{ content: "clear errors" }}
+                            >
+                                <i class="icon times"></i>
+                            </button>
+                        {/if}
 
-                        <div class="ui message error"></div>
+                        <div class="ui message error" style="clear:both"></div>
                     </div>
                 </div>
             {/if}
@@ -161,7 +211,7 @@ function toggleActive(): void {
                     </div>
                 </div>
                 <InitCalendar
-                    bind:value={dat}
+                    bind:value={dat1}
                     settings={{ type: "datetime", maxDate: new Date() }}
                 />
             </div>
@@ -180,8 +230,8 @@ function toggleActive(): void {
             <div class="two fields">
                 <div class="field">
                     <label for="_"> Date </label>
-                    <div class="ui calendar">
-                        <InitCalendar bind:value={dat} settings={{ type: "date" }} />
+                    <div class="ui calendar" id="t1">
+                        <InitCalendar bind:value={dat1} settings={{ type: "date" }} />
                         <div class="ui input right icon">
                             <i class="calendar outline icon"></i>
                             <input type="text" placeholder="Date" />
@@ -192,7 +242,7 @@ function toggleActive(): void {
                 <div class="field">
                     <label for="_"> Time </label>
                     <InitCalendar
-                        bind:value={dat}
+                        bind:value={dat1}
                         settings={{
                             type: "time",
                         }}
@@ -244,7 +294,7 @@ function toggleActive(): void {
                 <InitCalendar
                     forId="cal"
                     settings={{ type: "date", startMode: "year" }}
-                    bind:value={dat}
+                    bind:value={dat2}
                     validate={[rule.start("19")]}
                 />
                 <div class="help_text">
@@ -269,7 +319,7 @@ function toggleActive(): void {
                 <div class="field">
                     <label for="z1"> Date input </label>
                     <input type="text" name="calendar-date" placeholder="date" id="z1" />
-                    <InitDateInput bind:value={dat} validate={[rule.empty()]} />
+                    <InitDateInput bind:value={dat2} validate={[rule.empty()]} />
                 </div>
                 <div class="help_text">
                     date input -
@@ -289,6 +339,10 @@ function toggleActive(): void {
 form {
     padding: 0.75rem;
     background-color: #f7f7f7;
+}
+
+.ui.rail {
+    width: 360px;
 }
 
 .help_text {

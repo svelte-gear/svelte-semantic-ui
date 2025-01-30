@@ -44,8 +44,8 @@ declare const InitForm: Component<{
      *  all fields are validated live; `valid` and `errors` bindings are updated reactively.
      *
      *  If validateForm == false,
-     *  field are validated as they are touched by the user; `valid` and `errors` bindings are undefined;
-     *  if form setting inline == false, fields are validated live but form validation message block is not updated. */
+     *  field are validated as they are touched by the user; `valid` and `errors` bindings are undefined.
+     *  For smooth validate-on-touch experience we recommend form settings: inline == true, on == "submit" (default). */
     validateForm?: boolean;
 
     /** Determines if empty fields are validated or not; optional, defaults to true.

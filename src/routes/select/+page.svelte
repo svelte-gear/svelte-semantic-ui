@@ -32,13 +32,14 @@ let rank: string = $state("");
 let teams: string[] = $state([]);
 let country: string = $state("");
 let gender: string = $state("");
-let chb: boolean = $state(false);
+let agree: boolean | null = $state(null);
 let test: string = $state("");
 
 let example: string = $state("");
 
 // form validation
 let active: boolean = $state(true);
+let vEmpty: boolean = $state(false);
 let dirty: boolean = $state(false);
 let valid: boolean = $state(false);
 let errors: string[] = $state([]);
@@ -52,9 +53,11 @@ let json: string = $derived(
         teams: teams,
         country: country,
         gender: gender,
-        agree: chb,
+        agree: agree,
         test: test,
         x: "----------------",
+        active: active,
+        empty: vEmpty,
         dirty: dirty,
         valid: valid,
         errors: errors,
@@ -79,24 +82,32 @@ $effect(() => {
     console.log(`inspect: teams [${teams.toString()}]`);
 });
 
-function reset(): void {
+async function loadData(): Promise<void> {
     rank = "1";
     teams = ["1", "2", "3"];
     country = "ar";
     gender = "";
-    chb = true;
+    agree = null;
     test = "abc";
+
+    // wait for fields to initialize
+    await tick();
+    // remember default values for proper 'dirty' state
+    getFormController("#form1").doResetForm();
 }
 
 function toggleActive(): void {
     active = !active;
 }
 
+function resetErrors(): void {
+    getFormController("form").doResetForm();
+}
+
 onMount(async () => {
-    reset();
-    await tick();
-    // remember default values
-    getFormController("#form1").doResetForm();
+    console.info("before loadData");
+    await loadData();
+    console.info("after loadData");
 });
 </script>
 
@@ -121,23 +132,24 @@ onMount(async () => {
         <form class="ui form" id="form1">
             <InitForm
                 validateForm={active}
+                validateEmpty={vEmpty}
                 bind:valid={valid}
                 bind:errors={errors}
                 bind:dirty={dirty}
                 settings={{
-                    inline: true,
-                    // fields: { xx3: "empty" },
+                    inline: false,
+                    fields: { tmg: rule.empty() }, // FIXME: shown error 5 times with the first label
                 }}
             />
 
             {#if example === ""}
-                <div class="ui right rail" id="side">
+                <div class="ui right rail">
                     <div class="ui segment sticky" use:sticky={{ offset: 10 }}>
                         <h2>Data bindings</h2>
                         <div class="ui message" style:font-family="monospace">
                             {json}
                         </div>
-                        <button type="button" class="ui button blue" onclick={reset}>
+                        <button type="button" class="ui button blue" onclick={loadData}>
                             Reset
                         </button>
                         <button
@@ -149,7 +161,7 @@ onMount(async () => {
                             onclick={toggleActive}
                         >
                             {#if active}
-                                Validating
+                                {valid ? "Valid" : "Invalid"}
                                 <i class="icon" class:check={valid} class:close={!valid}></i>
                             {:else}
                                 Validate
@@ -158,13 +170,42 @@ onMount(async () => {
                         <button
                             type="button"
                             class="ui icon button"
-                            onclick={doValidateForm}
-                            aria-label="re-validate"
-                            use:popup={{ content: "Re-validate" }}
+                            class:yellow={vEmpty}
+                            onclick={() => {
+                                vEmpty = !vEmpty;
+                            }}
+                            aria-label="empty fields"
+                            use:popup={{ content: vEmpty ? "validating empty" : "ignoring empty" }}
                         >
-                            <i class="icon redo"></i>
+                            {#if vEmpty}
+                                <i class="icon compress"></i>
+                            {:else}
+                                <i class="icon expand"></i>
+                            {/if}
                         </button>
-                        <div class="ui message error"></div>
+                        {#if !active || true}
+                            <button
+                                type="button"
+                                class="ui icon basic button right floated"
+                                onclick={doValidateForm}
+                                aria-label="revalidate"
+                                use:popup={{ content: "revalidate" }}
+                            >
+                                <i class="icon redo"></i>
+                            </button>
+                            <button
+                                type="button"
+                                class="ui icon basic button right floated"
+                                onclick={resetErrors}
+                                aria-label="clear errors"
+                                use:popup={{ content: "clear errors" }}
+                            >
+                                <i class="icon times"></i>
+                            </button>
+                        {/if}
+
+                        <div class="ui message error" style="clear:both"></div>
+                        &nbsp;
                     </div>
                 </div>
             {/if}
@@ -300,11 +341,12 @@ onMount(async () => {
 
             <div style="float:right">
                 <div class="ui checkbox">
-                    <input type="checkbox" bind:checked={showGender} />
+                    <input type="checkbox" />
                     <label for="_">Show gender</label>
                 </div>
-                <InitCheckbox />
+                <InitCheckbox bind:checked={showGender} />
             </div>
+            <br />
 
             {#if showGender}
                 <!-- example-select_with_JS -->
@@ -324,6 +366,7 @@ onMount(async () => {
                                 { name: "Male", value: "male" },
                                 { name: "Female", value: "female" },
                             ],
+                            clearable: true,
                         }}
                     />
                 </div>
@@ -367,11 +410,10 @@ onMount(async () => {
                 <!-- example-checkbox -->
                 <div class="field">
                     <div class="ui checkbox">
-                        <input type="checkbox" bind:checked={chb} />
-                        <!-- FIXME: doesn't revalidate on reset() as it is bound directly -->
-                        <label for="ch"> I Agree </label>
+                        <input type="checkbox" />
+                        <label for="_"> I Agree </label>
                     </div>
-                    <InitCheckbox validate={[rule.checked()]} />
+                    <InitCheckbox validate={[rule.checked()]} bind:checked={agree} />
                 </div>
                 <div class="help_text">
                     single checkbox -
@@ -395,16 +437,16 @@ onMount(async () => {
             <!-- example-radio -->
             <div class="field">
                 <div class="ui radio checkbox">
-                    <input type="radio" bind:group={gender} value="male" />
+                    <input type="radio" value="male" />
                     <label for="_">Male</label>
                 </div>
-                <InitCheckbox />
+                <InitCheckbox bind:group={gender} />
                 &nbsp;
                 <div class="ui radio checkbox">
-                    <input type="radio" bind:group={gender} value="female" />
+                    <input type="radio" value="female" />
                     <label for="_">Female</label>
                 </div>
-                <InitCheckbox />
+                <InitCheckbox bind:group={gender} />
             </div>
             <div class="help_text">
                 radio checkboxes -
@@ -417,9 +459,10 @@ onMount(async () => {
                 Teams: &nbsp;
                 {#each options as m}
                     <div class="ui checkbox">
-                        <input type="checkbox" bind:group={teams} value={m} />
+                        <input type="checkbox" value={m} name="tmg" />
                         <label for="_">{m}</label>
                     </div>
+                    <InitCheckbox bind:group={teams} />
                     &nbsp; &nbsp;
                 {/each}
             </div>
@@ -445,12 +488,10 @@ onMount(async () => {
                 <label for="_"> Test 1 </label>
                 <input />
                 <InitTextInput bind:value={test} validate={[rule.empty()]} />
-                <!-- FIXME: doesn't revalidate on reset() while bound in Init -->
             </div>
             <div class="field" id="xx">
                 <label for="_"> Test 2 </label>
                 <input />
-                <!-- // TODO: test with direct bind on input -->
                 <InitTextInput bind:value={test} validate={[rule.empty()]} />
             </div>
             <div class="help_text">
@@ -468,6 +509,10 @@ onMount(async () => {
 form {
     padding: 0.75rem;
     background-color: #f7f7f7;
+}
+
+.ui.rail {
+    width: 360px;
 }
 
 .help_text {
