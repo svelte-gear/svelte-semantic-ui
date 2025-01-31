@@ -1,6 +1,6 @@
 {
     "name": "@svelte-gear/svelte-semantic-ui-examples-svelte-kit",
-    "version": "0.6.4-beta",
+    "version": "0.6.5",
     "type": "module",
     "license": "MIT",
     "description": "Sample svelte kit application using svelte-semantic-ui",

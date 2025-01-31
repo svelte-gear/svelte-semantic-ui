@@ -28,7 +28,7 @@ export async function load({ params }: LoadEvent): Promise<LocaleObj> {
     initLog.build("debug");
     formLog.build("debug");
     compLog.build("debug");
-    await initializeFramework();
+    await initializeFramework(/* "debug" */);
 
     // Find the overlap between browser languages and supported locales
     const browserLocale: string | null = browserMatch(supportedLocales());

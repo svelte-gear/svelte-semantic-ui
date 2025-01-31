@@ -1,6 +1,6 @@
 {
     "name": "@svelte-gear/svelte-semantic-ui",
-    "version": "0.6.5",
+    "version": "0.6.6",
     "type": "module",
     "license": "MIT",
     "description": "svelte bindings for semantic-ui or fomantic-ui",
