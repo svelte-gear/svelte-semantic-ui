@@ -159,7 +159,6 @@ export class FormControllerImpl implements FormController {
             // remove validation prompts and switch into validate-as-touched mode
             this.active = false;
             this.doResetForm();
-            // FIXME: Calendar components perform field validation on reset
         }
     }
 
@@ -186,8 +185,6 @@ export class FormControllerImpl implements FormController {
             this.ignoreEmpty = true;
             if (this.active) {
                 void this.revalidateForm();
-            } else {
-                formLog.info("ignoring empty");
             }
         } else {
             // reactivate all validation rules
@@ -198,8 +195,6 @@ export class FormControllerImpl implements FormController {
             this.ignoreEmpty = false;
             if (this.active) {
                 void this.revalidateForm();
-            } else {
-                formLog.info("validating empty");
             }
         }
     }

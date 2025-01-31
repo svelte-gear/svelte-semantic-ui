@@ -6,6 +6,8 @@
 
 // INITIALIZATION
 
+// import type { LogLevel } from "./data/common";
+// import { initLog, formLog, compLog } from "./data/common";
 import { applyDefaultSettings } from "./data/settings";
 import { extendValidationRules } from "./data/validation-rules";
 import { registerBaseLocales } from "./i18n";
@@ -15,7 +17,10 @@ import { registerBaseLocales } from "./i18n";
  *
  * Must run after DOM is initialized, but before the application is displayed.
  * For example from sveltekit load() function. */
-export async function initializeFramework(): Promise<void> {
+export async function initializeFramework(/* loglevel: LogLevel = "warn" */): Promise<void> {
+    // initLog.build(loglevel);
+    // formLog.build(loglevel);
+    // compLog.build(loglevel);
     extendValidationRules();
     applyDefaultSettings();
     registerBaseLocales();

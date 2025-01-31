@@ -6,6 +6,9 @@ import {
     applyLocale,
     supportedLocales,
     initializeFramework,
+    initLog,
+    formLog,
+    compLog,
 } from "@svelte-gear/svelte-semantic-ui";
 
 import { browserMatch } from "../locale-info";
@@ -22,6 +25,9 @@ export async function load({ params }: LoadEvent): Promise<LocaleObj> {
     void params;
     let res: string | null = null;
 
+    initLog.build("debug");
+    formLog.build("debug");
+    compLog.build("debug");
     await initializeFramework();
 
     // Find the overlap between browser languages and supported locales

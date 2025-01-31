@@ -4,7 +4,8 @@
 // form/+page.svelte
 // Sample form page with components, data binding, and validation.
 
-// import { number, reach } from "yup";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { onMount, tick } from "svelte";
 import {
     InitDropdown,
     InitCalendar,
@@ -15,6 +16,7 @@ import {
     isoDate,
     getLocale,
     InitNumberInput,
+    doResetForm,
 } from "@svelte-gear/svelte-semantic-ui";
 
 const options: string[] = ["1", "2", "3", "4", "5"];
@@ -27,7 +29,7 @@ let income: number | undefined = $state();
 let gender: string = $state("male");
 let chb: boolean = $state(false);
 
-function reset(): void {
+async function loadData(): Promise<void> {
     selectedStr = "one";
     teams = ["1", "2", "3"];
     gender = "male";
@@ -35,8 +37,9 @@ function reset(): void {
     chb = true;
     dat = undefined;
     rating = 3;
+    await tick();
+    doResetForm("form");
 }
-reset();
 
 // eslint-disable-next-line prefer-const
 let json: string = $derived(
@@ -59,6 +62,11 @@ function toggleActive(): void {
     active = !active;
 }
 let valid: boolean = $state(false);
+
+onMount(async () => {
+    await tick(); // TODO: why do we need to wait before loading data?
+    await loadData();
+});
 </script>
 
 <!------------------------------------------------------------------------------------------------>
@@ -89,7 +97,7 @@ let valid: boolean = $state(false);
     <div style:max-width="360px" style:margin="0 auto" style:text-align="left">
         <form class="ui form">
             <InitForm
-                active={active}
+                validateForm={active}
                 bind:valid={valid}
                 settings={{
                     // keyboardShortcuts: false,
@@ -206,13 +214,13 @@ let valid: boolean = $state(false);
         <div class="ui message" style:font-family="monospace">
             {json}
         </div>
-        <button class="ui button blue" type="button" onclick={reset}> Reset </button>
+        <button type="button" class="ui button blue" onclick={loadData}> Reset </button>
         <button
+            type="button"
             class="ui button icon"
             class:yellow={!active}
             class:green={active && valid}
             class:red={active && !valid}
-            type="button"
             onclick={toggleActive}
         >
             {#if active}

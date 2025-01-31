@@ -45,7 +45,7 @@ let dat: Date | undefined = $state();
     <div class="ui divider"></div>
 
     <form class="ui form">
-        <InitForm active={validate} />
+        <InitForm validateForm={validate} />
 
         <div class="field">
             <label for="_"> Semantic UI Date Picker: </label>

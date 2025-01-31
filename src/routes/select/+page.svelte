@@ -138,7 +138,7 @@ onMount(async () => {
                 bind:dirty={dirty}
                 settings={{
                     inline: false,
-                    fields: { tmg: rule.empty() }, // FIXME: shown error 5 times with the first label
+                    fields: { tmg: rule.empty() }, // FIXME: shows error 5 times with the first label
                 }}
             />
 
