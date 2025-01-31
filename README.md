@@ -2,7 +2,9 @@
 
 Svelte actions and data bindings for Semantic UI components. <br/>
 https://fomantic-ui.com/ <br/>
-https://svelte.dev/
+https://svelte.dev/ <br/>
+https://github.com/svelte-gear/svelte-semantic-ui <br/>
+https://www.npmjs.com/package/@svelte-gear/svelte-semantic-ui
 
 ## Example
 
@@ -17,7 +19,7 @@ https://svelte.dev/
     </script>
     <form class="ui form"
         <InitForm
-            active={liveValidation}
+            validateForm={liveValidation}
             bind:valid={isValid}
             settings={{...}}>
         />
@@ -44,6 +46,12 @@ https://svelte.dev/
 
 ## Versions
 
+- Version 0.6.5
+    - implements both live validation and validate-as-you-touch approach
+    - allows to dynamically update validation rules
+    - adds option to ignore empty fields
+    - implements 'checked' and 'group' bindings for InitCheckbox
+    - breaking change: renamed InitForm 'active' to 'validateForm'.
 - Version 0.6.x introduces new simpler syntax and more type checks.
 - Version 0.5.x is using svelte 5 and runes.
 - Version 0.4.x is compiled in svelte 4, but may be used in Svelte 5 project.

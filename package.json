@@ -51,15 +51,13 @@
         "semantic-ui-css": "for semantic-ui, add optional fomantic modules: calendar, slider, toast, and form"
     },
     "peerDependencies": {
-        "svelte": "^3.59.2 || ^4.2.18 || ^5.17.4",
-        "jquery": "^3.7.1",
-        "fomantic-ui-css": "^2.9.3"
+        "fomantic-ui-css": "2.9.3",
+        "svelte": "^3.59.2 || ^4.2.18 || ^5.19.6"
     },
     "_dependencies": {
         "_none": "the library has no npm dependencies, but jQuery and semantic-ui must be present at runtime",
-        "jquery": "3.7.1 - doesn't seem to work, needs to be imported in app.html",
-        "fomantic-ui-css": "2.9.3 - required for import variants C, D, E",
-        "semantic-ui-css": "2.5.0 - required for import variants D, E"
+        "jquery": "3.7.1 - needs to be imported in app.html",
+        "fomantic-ui-css": "2.9.3 - to be imported in app.html"
     },
     "dependencies": {},
     "_devDependencies": {
