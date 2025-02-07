@@ -283,4 +283,9 @@ export class FormControllerImpl implements FormController {
                 .remove();
         }
     }
+
+    /** Synchronously check if form is valid */
+    isValid(): boolean {
+        return this.elem.form("is valid");
+    }
 }

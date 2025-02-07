@@ -491,8 +491,8 @@ onMount(async () => {
             </div>
             <div class="field" id="xx">
                 <label for="_"> Test 2 </label>
-                <input />
-                <InitTextInput bind:value={test} validate={[rule.empty()]} />
+                <input value="hello" />
+                <InitTextInput validate={[rule.empty()]} />
             </div>
             <div class="help_text">
                 bind in Init and directly -

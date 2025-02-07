@@ -46,6 +46,9 @@ export interface FormController {
      *  If InitForm validateForm == false,
      *  doResetForm() removes error messages and triggers "validate-on-touch" behavior. */
     doResetForm(): void;
+
+    /** Synchronously check if form is valid */
+    isValid(): boolean;
 }
 
 /*

@@ -33,7 +33,7 @@ interface Props {
 /* eslint-disable prefer-const */
 
 let {
-    value = $bindable(""),
+    value = $bindable(),
     settings = undefined,
     validate = undefined,
     formatter = undefined,
@@ -88,7 +88,9 @@ $effect(() => {
             void value[i];
         }
     }
-    svelteToInput(value);
+    if (value !== undefined) {
+        svelteToInput(value);
+    }
 });
 
 /** Update rules when the validate value changes. Fire a change event to trigger revalidation if deemed appropriate. */
@@ -158,13 +160,9 @@ onMount(async () => {
     fieldCtrl = new FieldController("input", elem, validate);
 
     // push initial value into the Semantic UI element
-    svelteToInput(value);
-    // // FIXME: check if this is required for inputs bound directly in input tag
-    // if (value !== undefined) {
-    //     svelteToInput(value);
-    // } else {
-    //     inputToSvelte(elem.val() as string);
-    // }
+    if (value !== undefined) {
+        svelteToInput(value);
+    }
 });
 
 /** Remove the subscription */

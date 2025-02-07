@@ -33,18 +33,17 @@
     "editor.wordWrapColumn": 120,
     "editor.wrappingIndent": "indent",
 
+    "diffEditor.ignoreTrimWhitespace": false,
     "eslint.lintTask.enable": true,
-
+    "git.confirmSync": false,
     "git.openRepositoryInParentFolders": "never",
 
     "todo-tree.highlights.useColourScheme": true,
-
-    "security.workspace.trust.untrustedFiles": "open",
-    "workbench.tree.indent": 20,        // larger indent in the left tree
     "typescript.updateImportsOnFileMove.enabled": "always",
     "window.zoomLevel": 1,
-    "diffEditor.ignoreTrimWhitespace": false,
-    "git.confirmSync": false,
+    "workbench.tree.indent": 20,        // larger indent in the left tree
+
+    // i18n-ally
     "i18n-ally.localesPaths": [
         "src/util/sveltekit-i18n"
     ],
@@ -67,6 +66,8 @@
     ],
     "i18n-ally.extract.keygenStyle": "kebab-case",
     "i18n-ally.extract.keyMaxLength": 40,
+
+    // cSpell
     "cSpell.words": [
         "Fomantic",
         "ooood",

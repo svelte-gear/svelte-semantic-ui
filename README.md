@@ -44,12 +44,16 @@ https://www.npmjs.com/package/@svelte-gear/svelte-semantic-ui
     </form>
 ```
 
+## Diagram
+
+https://raw.githubusercontent.com/svelte-gear/svelte-semantic-ui/refs/heads/main/doc/diagram/modules-and-files.webp
+
 ## Versions
 
 - Version 0.6.5
     - implements both live validation and validate-as-you-touch approach
     - allows to dynamically update validation rules
-    - adds option to ignore empty fields
+    - adds 'validateEmpty' option allowing to ignore empty fields
     - implements 'checked' and 'group' bindings for InitCheckbox
     - breaking change: renamed InitForm 'active' to 'validateForm'.
 - Version 0.6.x introduces new simpler syntax and more type checks.

@@ -18,7 +18,7 @@ import { FieldController } from "../data/field-controller";
 const DROPDOWN_PREVENT_CLEARING_BAD_DATA: boolean = false;
 
 interface Props {
-    value: string | string[] | undefined;
+    value: string | string[] | undefined; // TODO: decide on null or undefined for required binding
     settings?: DropdownSettings;
     validate?: RuleDefinition;
     forId?: string;

@@ -28,6 +28,7 @@ export async function initializeFramework(loglevel: LogLevel = "warn"): Promise<
 
 // COMPONENTS
 
+export type { FormController } from "./data/form-controller";
 export { popup } from "./components/use-popup";
 export { sticky } from "./components/use-sticky";
 export { toast } from "./components/proc-toast";

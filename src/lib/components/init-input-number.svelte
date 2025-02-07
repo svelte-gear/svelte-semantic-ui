@@ -149,7 +149,9 @@ onMount(async () => {
     fieldCtrl = new FieldController("input", elem, validate);
 
     // push initial value into the Semantic UI element
-    svelteToInput(value);
+    if (value !== undefined) {
+        svelteToInput(value);
+    }
 });
 
 /** Remove the subscription */
