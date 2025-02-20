@@ -151,6 +151,9 @@ onMount(async () => {
             `TextInput(${fieldCtrl?.key}) : 'formatter' will override 'settings', don't use both at the same time`
         );
     }
+    if (settings && settings.list && !settings.listSeparator) {
+        settings.listSeparator = ",";
+    }
     if (!formatter) {
         formatter = new TextFmt(settings);
     }

@@ -145,7 +145,6 @@ export function applyAllSettings(json: AllSettingsJson): void {
     if (!json) {
         return;
     }
-    // eslint-disable-next-line no-restricted-syntax, guard-for-in
     Object.keys(json).forEach((name: string) => {
         const settings: SettingsObject | undefined = jQuery.fn[name]?.settings as SettingsObject;
         if (!settings) {

@@ -138,7 +138,7 @@ onMount(async () => {
                 bind:dirty={dirty}
                 settings={{
                     inline: false,
-                    fields: { tmg: rule.empty() }, // FIXME: shows error 5 times with the first label
+                    // fields: { tmg: rule.empty() }, // BUG: shows error 5 times with the first label
                 }}
             />
 
@@ -352,7 +352,7 @@ onMount(async () => {
                 <!-- example-select_with_JS -->
                 <div class="field">
                     <!-- class:error={gender == "male"} -->
-                    <label for="_"> Gender </label>
+                    <label for="_"> Gender 1 </label>
                     <div class="ui selection dropdown">
                         <input type="hidden" />
                         <i class="dropdown icon"></i>
@@ -383,7 +383,7 @@ onMount(async () => {
                 <!-- example-select_with_JS_2 -->
                 <div class="field">
                     <!-- class:error={gender == "male"} -->
-                    <label for="_"> Gender </label>
+                    <label for="_"> Gender 2 </label>
                     <InitDropdown
                         bind:value={gender}
                         validate={[rule.not("male")]}
@@ -436,6 +436,7 @@ onMount(async () => {
 
             <!-- example-radio -->
             <div class="field">
+                <label for="_"> Gender 3 </label>
                 <div class="ui radio checkbox">
                     <input type="radio" value="male" />
                     <label for="_">Male</label>
@@ -447,6 +448,11 @@ onMount(async () => {
                     <label for="_">Female</label>
                 </div>
                 <InitCheckbox bind:group={gender} />
+
+                <!-- to validate a group of radios, in the same div.field,
+                     add a hidden input bound to the same state variable -->
+                <input type="hidden" />
+                <InitTextInput value={gender} validate={[rule.not("male")]} />
             </div>
             <div class="help_text">
                 radio checkboxes -
@@ -456,7 +462,7 @@ onMount(async () => {
 
             <!-- example-checkbox_group -->
             <div class="field">
-                Teams: &nbsp;
+                <label for="">Teams 2</label>
                 {#each options as m}
                     <div class="ui checkbox">
                         <input type="checkbox" value={m} name="tmg" />
@@ -465,6 +471,15 @@ onMount(async () => {
                     <InitCheckbox bind:group={teams} />
                     &nbsp; &nbsp;
                 {/each}
+
+                <!-- to validate a group of checkboxes, in the same div.field,
+                     add a hidden input bound to the same state variable -->
+                <input type="hidden" />
+                <InitTextInput
+                    settings={{ list: true }}
+                    value={teams}
+                    validate={[rule.empty(), rule.doesntContainExactly("4"), rule.maxCount(3)]}
+                />
             </div>
             <div class="help_text">
                 checkbox group -

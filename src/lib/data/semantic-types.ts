@@ -94,9 +94,9 @@ export type RuleObj = {
 /** Rule definition takes array or single instance of string or RuleObj */
 export type RuleDefinition = string | string[] | RuleObj | RuleObj[]; // | BaseSchema;
 
-type SuiValue = string | boolean | number | Date;
+export type SuiValue = string | boolean | number | Date;
 /** @see {@link https://fomantic-ui.com/behaviors/form.html#behaviors} */
-type SuiModule = {
+export type SuiModule = {
     clear: () => void;
     determine: {
         isValid: () => boolean;
@@ -160,7 +160,7 @@ export type FormPrompt = Omit<FomanticUI.Form.Settings.Prompts, "contain" | "con
     minValue?: string;
     range?: string;
     size?: string;
-    // TODO: translate range and size, make the field required in translations
+    // [x]: translate range and size, make the field required in translations
 };
 
 export type FormText = FomanticUI.Form.Settings.Texts;
@@ -200,7 +200,7 @@ export type DropdownMessages = FomanticUI.Dropdown.Settings.Messages;
  dP                          d8888P
 */
 
-// TODO: implement init-progress
+// [x]: implement init-progress
 /** @see {@link https://fomantic-ui.com/modules/progress.html#/settings} */
 export type ProgressSettings = Partial<FomanticUI.ProgressSettings>;
 

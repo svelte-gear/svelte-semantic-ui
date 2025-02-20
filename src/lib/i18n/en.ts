@@ -118,7 +118,7 @@ const numberSettings: NumberSettings = {
     moneyPrecision: 2,
 };
 
-// TODO: translate dropdownMessages, progressTexts, flyoutTexts to other languages
+// [x]: translate dropdownMessages, progressTexts, flyoutTexts to other languages
 const dropdownMessages: DropdownMessages = {
     addResult: "Add <b>{term}</b>",
     count: "{count} selected",

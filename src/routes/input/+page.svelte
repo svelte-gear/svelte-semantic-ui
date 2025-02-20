@@ -300,7 +300,7 @@ onMount(async () => {
 
             <!-- example-input -->
             <div class="field">
-                <label for="g4"> Text Input </label>
+                <label for="_"> Text Input </label>
                 <input type="text" placeholder="describe" bind:value={text5} />
                 <InitTextInput
                     bind:value={text4}

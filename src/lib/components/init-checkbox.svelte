@@ -236,6 +236,9 @@ onMount(async () => {
         } else {
             svelteToInput(value === group);
         }
+        // TODO: create hidden text input (if it doesn't yet exist)
+        // apply validation rules to it (make sure there are no duplicates)
+        // update input value on change, similar to slider
         return; // group overrides checked
     }
     if (checked !== undefined) {
