@@ -94,8 +94,11 @@ export type RuleObj = {
 /** Rule definition takes array or single instance of string or RuleObj */
 export type RuleDefinition = string | string[] | RuleObj | RuleObj[]; // | BaseSchema;
 
+/** Semantic UI value types */
 export type SuiValue = string | boolean | number | Date;
-/** @see {@link https://fomantic-ui.com/behaviors/form.html#behaviors} */
+
+/** Third argument of the rule validation function
+ *  @see {@link https://fomantic-ui.com/behaviors/form.html#behaviors} */
 export type SuiModule = {
     clear: () => void;
     determine: {

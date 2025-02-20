@@ -61,7 +61,7 @@ let span: Element | undefined = undefined;
 
 // DATA -----------------------------------------------------------------------
 
-type CheckboxApi = {
+interface CheckboxApi {
     checkbox(settings: CheckboxSettings): void;
     checkbox(command: "check"): void;
     checkbox(command: "set unchecked"): void;
@@ -71,7 +71,7 @@ type CheckboxApi = {
     checkbox(command: "is unchecked"): void;
     checkbox(command: "is indeterminate"): void;
     checkbox(command: "destroy"): void;
-};
+}
 /** jQuery dropdown component */
 let elem: (JQueryApi & CheckboxApi) | undefined = undefined;
 

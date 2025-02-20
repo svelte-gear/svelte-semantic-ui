@@ -10,7 +10,7 @@ import type { FormController } from "./form-controller";
 import { formLog } from "./common";
 
 /** Semantic UI form behavior */
-export type FormApi = {
+export interface FormApi {
     form(settings?: FormSettings): void;
     form(command: "add rule", key: string, rule: RuleDefinition): void;
     form(command: "remove field", key: string): void;
@@ -21,7 +21,7 @@ export type FormApi = {
     form(command: "get field", key: string): JQueryApi;
     form(command: "set as clean"): void;
     form(command: "reset"): void;
-};
+}
 
 function ruleToStr(rule: RuleDefinition): string {
     const isObject: boolean = Array.isArray(rule) || typeof rule === "object";

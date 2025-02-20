@@ -1,6 +1,9 @@
 # typedoc.sh
 # generates html documentation for the project
 
+# fix svelte type definition mistake (exists in svelte 5.20.2)
+sed -i 's/@param internal /@param internals /' node_modules/svelte/types/index.d.ts
+
 # # pre-process *.svelte components
 # WRK_DIR="src/lib/data"
 # PREFIX="_svelte-"

@@ -34,7 +34,7 @@ export interface NumberInputSettings extends Partial<NumberSettings> {
 }
 
 /** Settings used to initialize a text input component */
-export type TextInputSettings = {
+export interface TextInputSettings {
     case?: "upper" | "lower" | "title" | "none";
     charset?: "any" | "euro" | "latin" | "ascii" | "id_alpha" | "id_hex" | "id_num";
     idAllowChars?: Array<"_" | "-" | ".">;
@@ -52,7 +52,7 @@ export type TextInputSettings = {
 
     /** Character user to separate values */
     listSeparator?: string;
-};
+}
 
 // /** Semantic UI component behavior API */
 // export type SemanticCommand = (
@@ -203,16 +203,21 @@ export function stringify(obj: unknown): string {
               d8888P
 */
 
+/** Logger levels, matching browser console log functions */
 export type LogLevel = "error" | "warn" | "log" | "info" | "debug";
 
-type LogFunction = (...args: unknown[]) => void;
+/** Signature of the individual log function, like info() */
+export type LogFunction = (...args: unknown[]) => void;
 
 function noop(..._args: unknown[]): void {
     void _args;
 }
 
-type LogImplFunction = (level: LogLevel, ...args: unknown[]) => void;
+/** Function used to perform logging on the specified level, default implementation is browser console */
+export type LogImplFunction = (level: LogLevel, ...args: unknown[]) => void;
 
+/** Logger object abstracts console log and allows to enable logs by level, similar to log4j.
+ *  The framework uses three log objects: formLog, compLog, initLog. User may create and use their own log objects. */
 export class Logger {
     prefix: string = "";
 
@@ -237,6 +242,7 @@ export class Logger {
         this.prefix = prefix;
     }
 
+    /** Configures log level function to call fn() or do noop() */
     build(level: LogLevel | "off", fn?: LogImplFunction): void {
         const numLevel: number = this.loglevelToNumber(level);
         for (let i: number = 1; i < this.LOG_LEVELS.length; i++) {
@@ -266,6 +272,8 @@ function localTime(): string {
     return localDate.toISOString().slice(0, -1).replace("T", " ");
 }
 
+/** Modifies the logger to send messages to http service instead of the console.
+ *  It sends local time, level, and msg_# as URL params */
 export function buildHttpLogger(logger: Logger, level: LogLevel | "off", url: string): void {
     function httpLogImpl(lev: LogLevel, ...args: unknown[]): void {
         async function sendHttpLog(): Promise<void> {
@@ -289,6 +297,11 @@ export function buildHttpLogger(logger: Logger, level: LogLevel | "off", url: st
     logger.build(level, httpLogImpl);
 }
 
+/** Logger used by form validation routines */
 export const formLog: Logger = new Logger("FORM");
+
+/** Logger used by field component implementations */
 export const compLog: Logger = new Logger("--");
+
+/** Logger used by framework initialization functions */
 export const initLog: Logger = new Logger(">>>");

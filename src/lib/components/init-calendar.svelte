@@ -42,13 +42,13 @@ let span: Element | undefined = undefined;
 
 // DATA -----------------------------------------------------------------------
 
-type CalendarApi = {
+interface CalendarApi {
     calendar(settings: CalendarSettings): void;
     calendar(command: "get date"): Date | Date[];
     calendar(command: "set date", val: Date | undefined): void;
     calendar(command: "focus"): void;
     calendar(command: "destroy"): void;
-};
+}
 /** jQuery calendar component */
 let elem: (JQueryApi & CalendarApi) | undefined = undefined;
 

@@ -4,10 +4,13 @@
  */
 
 import type { Snippet, Component } from "svelte";
-import type { FormSettings } from "../data/semantic-types";
+import type { FormSettings } from "./semantic-types";
 
 // Manual override for typescript declarations
 // Svelte 5.1.9 & svelte kit 2.7.5, still generate ```props: Record<string, never>;```
+
+// Svelte 5.20.2 & svelte kit 2.17.2, properly copies Props interface, but uses deprecated SvelteComponentTyped class
+// using this manual d.ts override provides better mouse-over prompt in IDE
 
 /**
  * Svelte bindings for Semantic-UI form validation.

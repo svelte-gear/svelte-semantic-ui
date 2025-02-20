@@ -1,7 +1,7 @@
 /**
  * Number formatter object, is initialized using NumberInputSettings,
  * which includes NumberSettings, type, and precision.
- * @module data/input-formatter
+ * @module data/format-number
  */
 
 import type { NumberSettings, NumberInputSettings } from "../data/common";

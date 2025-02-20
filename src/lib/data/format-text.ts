@@ -1,8 +1,7 @@
 /**
  * Text formatter object, is initialized using TextInputSettings,
  * which includes Number Settings , type, and precision.
- * @module data/input-formatter
- * @module data/input-formatter
+ * @module data/format-text
  */
 
 import { compLog, type TextInputSettings } from "../data/common";

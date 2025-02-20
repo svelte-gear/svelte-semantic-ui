@@ -29,7 +29,7 @@ import {
 // import { formDefaults } from "../data/settings";
 
 interface Props {
-    /** Determines if any field change will cause form re-validation.
+    /** Determines if a field change will cause form re-validation.
      *
      *  If validateForm == true (default),
      *  all fields are validated live; `valid` and `errors` bindings are updated reactively.

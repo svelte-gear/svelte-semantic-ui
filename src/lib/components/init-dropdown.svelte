@@ -43,7 +43,7 @@ let span: Element | undefined = undefined;
 
 // DATA -----------------------------------------------------------------------
 
-type DropdownApi = {
+interface DropdownApi {
     dropdown(settings: DropdownSettings): void;
     dropdown(command: "get value"): string | string[];
     dropdown(command: "get values"): string[];
@@ -54,7 +54,7 @@ type DropdownApi = {
     dropdown(command: "focus"): void;
     dropdown(command: "clear"): void;
     dropdown(command: "destroy"): void;
-};
+}
 /** jQuery dropdown component */
 let elem: (JQueryApi & DropdownApi) | undefined = undefined;
 

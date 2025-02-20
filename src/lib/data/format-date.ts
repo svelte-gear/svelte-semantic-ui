@@ -1,6 +1,6 @@
 /**
  * DateFormatter object, is initialized using a portion of CalendarSettings.
- * @module data/input-formatter
+ * @module data/format-date
  */
 
 import type { CalendarSettings, DateFormatFn, DateParseFn } from "./semantic-types";

@@ -39,13 +39,13 @@ let span: Element | undefined = undefined; // $state();
 
 // DATA -----------------------------------------------------------------------
 
-type ModalApi = {
+interface ModalApi {
     modal(settings?: ModalSettings): void;
     modal(command: "is active"): boolean;
     modal(command: "show"): void;
     modal(command: "hide"): void;
     modal(command: "destroy"): void;
-};
+}
 /** jQuery modal component */
 let elem: (JQueryApi & ModalApi) | undefined = undefined;
 

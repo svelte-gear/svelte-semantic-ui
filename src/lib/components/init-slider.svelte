@@ -43,15 +43,14 @@ let span: Element | undefined = undefined;
 
 // DATA -----------------------------------------------------------------------
 
-type SliderApi = {
+interface SliderApi {
     slider(settings: SliderSettings): void;
     slider(command: "get thumbValue", arg: "first" | "second"): number;
     slider(command: "set rangeValue", v1: number, v2: number): void;
     slider(command: "set value", val: number): void;
     slider(command: "get value"): number;
     slider(command: "destroy"): void;
-};
-
+}
 /** jQuery calendar component */
 let elem: (JQueryApi & SliderApi) | undefined = undefined;
 
