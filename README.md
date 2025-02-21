@@ -87,15 +87,16 @@ https://raw.githubusercontent.com/svelte-gear/svelte-semantic-ui/refs/heads/main
 - The library introduces `InitDateInput`, `InitNumberInput`, and `InitTextInput` with field formatting behavior.
 - `InitDateInput` works very similar to the calendar component, as both take user input and produce a date object.
 - `InitNumberInput` supports integer, decimal and money formats controlled by i18n number settings.
-- `InitTextInput` may be used for simple formatting or validation.
+- `InitTextInput` may be used for simple formatting or validation, additionally it supports simple lists.
 - You may override format settings for individual input or create and use your own formatter.
 
 #### Validation
 
 - While formatting is strict and will remove invalid input, validation leaves entered data as is and displays a warning.
-- We recommend defining validation rules on field level to improve code readability.
+- We recommend specifying validation rules on field level to improve code readability.
 - Use `<Init* validate={...}` to define the rules using Semantic UI syntax (see https://fomantic-ui.com/behaviors/form.html#/settings)
 - You can register you own rules and use them in your app (see `src/lib/data/validation-rules.ts` )
+- InitForm settings has `rules` and `prompt` to define local rules which can access Svelte state data.
 
 #### i18n
 

@@ -1,6 +1,4 @@
-# List of Semantic UI settings
-
-There are 23 settings objects in JQuery:
+There are 23 Semantic UI settings objects in JQuery
 
 ## Implemented:
 
@@ -16,28 +14,31 @@ There are 23 settings objects in JQuery:
 
 - calendar <br/>
   `<div class=ui calendar>...</div>` <br/>
-  `<InitCalendar value={..} settings={..} />`
+  `<InitCalendar value={..} settings={..} />` ( Date | undefined )
 
 - dropdown <br/>
   `<div class=ui dropdown>...</div>` <br/>
-  `<InitDropdown value={..} settings={..} />`
+  `<InitDropdown value={..} settings={..} />` ( string | string[] | undefined )
 
 - slider <br/>
   `<div class=ui slider>...</div>` <br/>
-  `<InitSlider value={..} settings={..} />`
+  `<InitSlider value={..} settings={..} />` ( number | number[] )
 
 #### Inputs
 
 - input <br/>
-  `<input type="text" bind:value={..} />` ( text )<br/>
+  `<input type="text" />` ( text )<br/>
   `<InitNumberInput bind:value={..} />` ( number ) <br/>
   <br/>
+  `<input type="text" />` ( text )<br/>
   `<InitDateInput bind:value={..} />` ( Date ) <br/>
-  `<InitTextInput bind:value={..} />` ( string ) <br/>
+  <br/>
+  `<input type="text" />` ( text )<br/>
+  `<InitTextInput bind:value={..} />` ( string | string[] ) <br/>
 
 - checkbox <br/>
-  `<input type="checkbox" bind:checked={..} />` <br/>
-  `<InitCheckbox settings={..}`
+  `<input type="checkbox" />` <br/>
+  `<InitCheckbox settings={..} bind:group={...} />` ( string | string[] )
 
 #### Modal
 

@@ -348,6 +348,7 @@ embed:
     onPlay: function onPlay()
     onReset: function onReset()
     onStop: function onStop()
+
 flyout:
     actions: false
     autoShow: false

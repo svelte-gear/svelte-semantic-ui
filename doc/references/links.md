@@ -25,7 +25,7 @@
 
 5. https://dev.to/mhaecker/use-airbnb-s-eslint-config-with-typescript-prettier-in-svelte-apps-4fb7
 
-6. Click on the formatting section of the vsCode Text Editor tab and enable Format on Save Mode.
+6. In vsCode Settings > Text Editor > Formatting, enable Format on Save Mode.
 
 7. https://github.com/sveltejs/svelte-eslint-parser
 
@@ -39,3 +39,5 @@
    https://martyice.github.io/svelte-tutorial-part-4/
 
 3. https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks/Svelte_getting_started
+
+4. Read more about creating a library [in the docs](https://kit.svelte.dev/docs/packaging).

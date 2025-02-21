@@ -20,12 +20,12 @@ interface Props {
     /** To-way binding for the checkbox state, null value means 'indeterminate' [-].
      *
      *  For validation purposes 'indeterminate' is treated the same as 'unchecked'. */
-    checked?: boolean | null;
+    checked?: boolean | null; // FIXME: null or undefined ?
 
     /** Two-way binding for checkbox group.
      *
      * `group` bindings overrides `checked` binding, which becomes read-only */
-    group?: string | string[];
+    group?: string | string[]; // FIXME: can it be undefined or null
 
     /** Settings for Semantic UI component, see https://fomantic-ui.com/modules/dropdown.html#/settings */
     settings?: CheckboxSettings;
