@@ -139,9 +139,10 @@ export type RuleFunc = (value: string, ruleValue: string, module: SuiModule) => 
  *
  * @see {@link https://fomantic-ui.com/behaviors/form.html#/settings}
  */
-export type FormSettings = Partial<FomanticUI.FormSettings> & {
+export type FormSettings = Partial<Omit<FomanticUI.FormSettings, "prompt">> & {
     fields?: Record<string, RuleDefinition>;
     rules?: Record<string, RuleFunc>;
+    prompt?: FomanticUI.FormSettings["prompt"] & Record<string, string>;
 };
 
 // formatter:

@@ -127,6 +127,12 @@ onMount(async () => {
     await loadData();
     console.info("after loadData");
 });
+
+/** This custom validation function has access to all local variables */
+function customLocalRule(val: string): boolean {
+    const max: number = text3.length;
+    return !val || val.length <= max;
+}
 </script>
 
 <!------------------------------------------------------------------------------------------------>
@@ -156,6 +162,15 @@ onMount(async () => {
                 bind:errors={errors}
                 settings={{
                     inline: true,
+                    verbose: true,
+                    rules: {
+                        // register custom validation rule for this form
+                        custom: customLocalRule,
+                    },
+                    prompt: {
+                        // provide validation prompt for the rule
+                        custom: "{name} must not be longer than Text Area",
+                    },
                 }}
             />
 
@@ -301,12 +316,13 @@ onMount(async () => {
             <!-- example-input -->
             <div class="field">
                 <label for="_"> Text Input </label>
-                <input type="text" placeholder="describe" bind:value={text5} />
+                <input type="text" placeholder="describe" bind:value={text5} id="my-field" />
                 <InitTextInput
                     bind:value={text4}
                     settings={{ case: "lower" }}
-                    validate={[rule.contains(".")]}
+                    validate={["custom"]}
                 />
+                <!-- use custom validation rule -->
             </div>
             <div class="help_text">
                 input, lowercase formatter -

@@ -91,7 +91,6 @@ export class FormControllerImpl implements FormController {
             const checked: string | undefined = field.attr("checked");
             return !checked;
         }
-        // FIXME: deal with radio or checkbox group
         const value: unknown = field.val();
         if (Array.isArray(value)) {
             return value.length === 0;
@@ -215,9 +214,6 @@ export class FormControllerImpl implements FormController {
 
     /** Register the field validation rule, activate the rule if the form validation is active */
     addRule(key: string, rule: RuleDefinition): void {
-        // HACK: accept custom functions in rule definitions
-        // HACK: add the temp custom validation function, linked to the DOM input, remove it on destroy (remove rules)
-
         this.rules[key] = rule;
         if (this.ignoreEmpty && this.fieldIsEmpty(key)) {
             this.ignoredFields[key] = true;

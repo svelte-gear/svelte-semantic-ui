@@ -138,7 +138,6 @@ onMount(async () => {
                 bind:dirty={dirty}
                 settings={{
                     inline: false,
-                    // fields: { tmg: rule.empty() }, // BUG: shows error 5 times with the first label
                 }}
             />
 

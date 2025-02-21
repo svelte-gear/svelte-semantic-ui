@@ -65,19 +65,6 @@ function isoDateFn(value: string): boolean {
     return value === isoDate(d);
 }
 
-// /** Returns true if value string may be parsed as date */
-// function someDateFn(value: string): boolean {
-//     const d: Date | undefined = parse.date(value);
-//     return value !== undefined;
-// }
-
-// /** Returns true if value string represents a date in current locale format */
-// function localeDateFn(value: string): boolean {
-//     const d: Date | undefined = parse.date(value);
-//     const s: string = fmt.date(d);
-//     return value === s;
-// }
-
 /** Returns true if the string starts with the given value */
 function startFn(value: string, ruleValue: string): boolean {
     return value.startsWith(ruleValue);
