@@ -1,10 +1,22 @@
 There are 23 Semantic UI settings objects in JQuery
 
+### Index
+
+Components: `calendar` <sup>c</sup>, `checkbox` <sup>c</sup>, `dropdown` <sup>c</sup>, `form` <sup>c</sup>, `modal` <sup>c</sup>, `slider` <sup>c</sup>
+
+Other elements: `popup`, `sticky`, `toast` <sup>fn</sup>
+
+Planning to do: `dimmer` <sup>c</sup>, `embed`, `progress` <sup>c</sup>, `rating` <sup>c</sup>, `visibility`
+
+Considering: `accordion`, `flyout`, `shape`, `sidebar`, `tab` &nbsp; _( containers )_
+
+Not planned: `api`, `nag`, `site`, `search`, `state`, `transition`
+
 ## Implemented:
 
-### <Init\*> tag
+### <Init\*> tags
 
-( after the input, may be inside or around )
+( after the input, may be placed after inside or around )
 
 #### Semantic UI components
 
@@ -40,6 +52,12 @@ There are 23 Semantic UI settings objects in JQuery
   `<input type="checkbox" />` <br/>
   `<InitCheckbox settings={..} bind:group={...} />` ( string | string[] )
 
+#### Display (read-only)
+
+- progress <br>
+  `<div class="ui progress"><div class="bar"><div class="progress"></div></div></div>` <br>
+  `<InitProgress settings={...} value={...} total={100} />`
+
 #### Modal
 
 - modal <br/>
@@ -59,33 +77,25 @@ There are 23 Semantic UI settings objects in JQuery
 - toast <br/>
   `<script> toast(settings); </script>`
 
-## Have settings, not yet implemented:
+## Not yet implemented:
 
-- accordion &mdash; `open: number[]`
+### Planning to do
 
-- dimmer &mdash; `show() / hide()`
+- `rating` : <InitRating settings={...} bind:value={...} />
+- `visibility` : <div ... use:visibility={{ onTopVisible: ... }} />
+- `embed` : <div ... use:embed={{ ... }} />
+- `dimmer` : <InitDimmer bind:show={...} />
 
-- flyout &mdash; `show() / hide()` &nbsp; (beta)
+### Considering
 
-- nag &mdash; `show() / dismiss()`
+- `accordion` : bind:open - number[ ]
+- `sidebar` : bind:show
+- `flyout` : bind:show - new, beta
+- `shape` : 3D object, nextSide(selector, "up") - unusual
+- `tab` : <InitTab bind:path={...} settings={...} />
 
-- progress &mdash; `value`
+## Not planned:
 
-- rating &mdash; `value`
-
-- search &mdash; `function()`
-
-- shape &mdash; `3D object`
-
-- sidebar &mdash; `show() / hide()`
-
-- tab &mdash; `path`
-
-## Special:
-
-- api
-- embed
-- site
-- state
-- transition
-- visibility
+- `api`, `nag`, `search`, `state` - handle data/state in Svelte
+- `site` - configuration object
+- `transition` - use Svelte transitions

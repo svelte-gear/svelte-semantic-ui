@@ -127,6 +127,15 @@ export function equalNumberArrays(
     }
 }
 
+/** Output array as string */
+export function arrayToString(val: string | number | string[] | number[]): string {
+    if (Array.isArray(val)) {
+        return `[${val.join(", ")}]`;
+    } else {
+        return `${val}`;
+    }
+}
+
 /** Format a number, padded with "0" to the minimum length */
 export function pad(n: number, size: number): string {
     let str: string = n.toString();

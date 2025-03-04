@@ -204,17 +204,20 @@ export type DropdownMessages = FomanticUI.Dropdown.Settings.Messages;
  dP                          d8888P
 */
 
-// [x]: implement init-progress
 /** @see {@link https://fomantic-ui.com/modules/progress.html#/settings} */
-export type ProgressSettings = Partial<FomanticUI.ProgressSettings>;
+export type ProgressSettings = Partial<FomanticUI.ProgressSettings> & {
+    duration?: number;
+};
 
 /**
  * Text content for each state, uses simple templating with {percent}, {value}, {total} and {bar}.
+ * This type describes only prefilled texts (for translation purposes).
  *
  * {bar} is useful to show bar names on multiple bars.
  * Names of bars are provided by text.bars in the forms of array of string. E.g. ['bar1', 'bar2'].
  */
-export type ProgressTexts = Partial<FomanticUI.Progress.Settings.Texts>;
+export type ProgressTexts = Pick<FomanticUI.Progress.Settings.Texts, "percent" | "ratio">;
+// [x]: translate ratio text, ES: "50 por ciento"
 
 /*
  .8888b dP                              dP
@@ -265,3 +268,8 @@ export type StickySettings = Partial<FomanticUI.StickySettings>;
 
 /** @see {@link https://fomantic-ui.com/modules/toast.html#/settings} */
 export type ToastSettings = Partial<FomanticUI.ToastSettings>;
+
+// export type RatingSettings = Partial<FomanticUI.RatingSettings>;
+// export type VisibilitySettings = Partial<FomanticUI.VisibilitySettings>;
+// export type EmbedSettings = Partial<FomanticUI.EmbedSettings>;
+// export type DimmerSettings = Partial<FomanticUI.DimmerSettings>;

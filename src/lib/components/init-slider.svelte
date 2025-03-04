@@ -51,7 +51,7 @@ interface SliderApi {
     slider(command: "get value"): number;
     slider(command: "destroy"): void;
 }
-/** jQuery calendar component */
+/** jQuery slider component */
 let elem: (JQueryApi & SliderApi) | undefined = undefined;
 
 /** Hidden input for form validation */
@@ -95,7 +95,7 @@ function svelteToInput(newValue: number | number[], forceUpdate?: boolean): void
         }
     } else {
         if (Array.isArray(newValue)) {
-            throw new Error(`Simple slider expects number value, got ${newValue.join(",")}`);
+            throw new Error(`Simple slider expects number value, got [${newValue.join(",")}]`);
         }
         const val: number = elem.slider("get value");
         if (newValue !== val || forceUpdate) {

@@ -2,10 +2,11 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+import { onDestroy, onMount } from "svelte";
 // dialog/+page.svelte
 // Sample dialog page.
 
-import { InitModal, toast } from "../../lib";
+import { InitModal, InitProgress, toast } from "../../lib";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import ShowCode from "../show-code.svelte";
 
@@ -17,6 +18,10 @@ let show: boolean = $state(false);
 /** Which code example is shown */
 let example: string = $state("");
 
+let progress: number = $state(1);
+let progress2: number[] = $state([2, 1]);
+let tot: number = $state(210);
+
 /* eslint-enable */
 
 function okFn(): void {
@@ -26,6 +31,35 @@ function okFn(): void {
 function noFn(): void {
     console.log("dialog - no");
 }
+
+function setProgress(): void {
+    progress = Math.round(Math.random() * 100);
+}
+function incrementProgress(): void {
+    progress2[0] = 10 + Math.round(Math.random() * 80);
+    progress2[1] = 10 + Math.round(Math.random() * 40);
+    setProgress();
+}
+
+let iid: unknown;
+
+onMount(() => {
+    incrementProgress();
+
+    iid = setInterval(() => {
+        if (Math.random() < 0.4) {
+            progress2[0] += Math.round(Math.random() * 5);
+        } else {
+            progress2[1] += Math.round(Math.random() * 5);
+        }
+        if (progress2[0] + progress2[1] > tot) {
+            incrementProgress();
+        }
+    }, 500);
+});
+onDestroy(() => {
+    clearInterval(iid as number);
+});
 </script>
 
 <!------------------------------------------------------------------------------------------------>
@@ -33,7 +67,13 @@ function noFn(): void {
 <main>
     <h1>More</h1>
 
-    <div style:max-width="360px" style:margin="0 auto" style:text-align="center" id="more">
+    <div
+        style:max-width="360px"
+        style:margin="0 auto"
+        style:text-align="center"
+        id="more"
+        style="padding: 10px;"
+    >
         <!-- example-toast -->
         <button
             type="button"
@@ -107,6 +147,46 @@ function noFn(): void {
         />
         <!-- example-dialog -->
         &nbsp;
+
+        <div class="ui divider"></div>
+
+        <!-- example-progress -->
+        <p>Progress Bar</p>
+
+        <div class="ui multiple progress">
+            <div class="blue bar">
+                <div class="centered progress"></div>
+            </div>
+            <div class="red bar">
+                <div class="centered progress"></div>
+            </div>
+        </div>
+        <InitProgress
+            value={progress2}
+            total={tot}
+            settings={{
+                precision: 0.1,
+                text: { bars: ["Up", "Dw"], percent: "{bar}: {value}Mb" },
+                showActivity: false, // no "wave"
+                // duration: 0, // no intermediate values
+            }}
+        />
+
+        <div class="ui progress">
+            <div class="bar">
+                <div class="progress"></div>
+            </div>
+            <div class="label">{progress} files uploaded</div>
+        </div>
+        <InitProgress value={progress} settings={{}} />
+        <button type="button" class="ui button" onclick={setProgress}>Randomize</button>
+
+        <br /><br />
+        <div class="help_text">
+            randomly change progress value
+            <ShowCode file="more" component="progress" bind:selected={example} />
+        </div>
+        <!-- example-progress -->
     </div>
 </main>
 

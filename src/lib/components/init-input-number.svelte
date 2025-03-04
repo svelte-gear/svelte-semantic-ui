@@ -48,7 +48,7 @@ let span: Element | undefined = undefined; // $state();
 
 // DATA -----------------------------------------------------------------------
 
-/** jQuery calendar component */
+/** jQuery input component */
 let elem: JQueryApi | undefined = undefined;
 
 /** Field descriptor and validator */

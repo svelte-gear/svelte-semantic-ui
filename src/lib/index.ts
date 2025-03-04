@@ -47,6 +47,8 @@ export { default as InitTextInput } from "./components/init-input-text.svelte";
 export { default as InitSlider } from "./components/init-slider.svelte";
 export { default as InitModal } from "./components/init-modal.svelte";
 
+export { default as InitProgress } from "./components/init-progress.svelte";
+
 // HELPERS
 
 export { fmt, parse, rule } from "./data/helpers";
