@@ -38,7 +38,7 @@ declare const InitProgress: Component<{
     /** Settings for Semantic UI component, see https://fomantic-ui.com/modules/progress.html#/settings */
     settings?: ProgressSettings;
 
-    /** Id of the Semantic UI input element, takes precedence over tag position */
+    /** Id of the Semantic UI component element, takes precedence over tag position */
     forId?: string;
 
     /** If InitProgress is used as a parent, render the children components */

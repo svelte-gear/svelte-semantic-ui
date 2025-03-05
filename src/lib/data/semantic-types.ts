@@ -269,7 +269,9 @@ export type StickySettings = Partial<FomanticUI.StickySettings>;
 /** @see {@link https://fomantic-ui.com/modules/toast.html#/settings} */
 export type ToastSettings = Partial<FomanticUI.ToastSettings>;
 
-// export type RatingSettings = Partial<FomanticUI.RatingSettings>;
+/** @see {@link https://fomantic-ui.com/modules/rating.html#/settings} */
+export type RatingSettings = Partial<FomanticUI.RatingSettings>;
+
 // export type VisibilitySettings = Partial<FomanticUI.VisibilitySettings>;
 // export type EmbedSettings = Partial<FomanticUI.EmbedSettings>;
 // export type DimmerSettings = Partial<FomanticUI.DimmerSettings>;

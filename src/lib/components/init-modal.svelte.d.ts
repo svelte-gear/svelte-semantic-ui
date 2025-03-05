@@ -33,7 +33,7 @@ declare const InitModal: Component<{
     /** Settings for Semantic UI component, see https://fomantic-ui.com/modules/modal.html#/settings */
     settings?: ModalSettings;
 
-    /** Id of the Semantic UI input element, takes precedence over tag position */
+    /** Id of the Semantic UI component, takes precedence over tag position */
     forId?: string;
 
     /** If InitModal is used as a parent, render the children components */

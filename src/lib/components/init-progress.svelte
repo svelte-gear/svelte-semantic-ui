@@ -1,7 +1,7 @@
 <!--
 @component
-Svelte data binder and initializer for Semantic-UI `Slider` components.
-(see detailed description in init-slider.svelte.d.ts )
+Svelte data binder and initializer for Semantic-UI `Progress` components.
+(see detailed description in init-progress.svelte.d.ts )
 -->
 <svelte:options runes={true} />
 
@@ -23,7 +23,7 @@ interface Props {
     /** Settings for Semantic UI component, see https://fomantic-ui.com/modules/progress.html#/settings */
     settings?: ProgressSettings;
 
-    /** Id of the Semantic UI input element, takes precedence over tag position */
+    /** Id of the Semantic UI component, takes precedence over tag position */
     forId?: string;
 
     /** If InitProgress is used as a parent, render the children components */
@@ -75,6 +75,7 @@ function svelteToInput(newValue: number | number[], newTotal: number | undefined
     }
     // compLog.log(`Progress : value -> ${arrayToString(newValue)}`);
     elem.progress("set progress", newValue);
+    // TODO: compare with current if not multiple
 }
 
 /** The effect rune calls svelteToInput when prop value or total changes */
@@ -131,7 +132,7 @@ onDestroy(() => {
 });
 </script>
 
-<span class="InitSlider" style:display={children ? "contents" : "none"} bind:this={span}
+<span class="InitProgress" style:display={children ? "contents" : "none"} bind:this={span}
     >{@render children?.()}</span
 >
 

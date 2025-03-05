@@ -48,6 +48,7 @@ export { default as InitSlider } from "./components/init-slider.svelte";
 export { default as InitModal } from "./components/init-modal.svelte";
 
 export { default as InitProgress } from "./components/init-progress.svelte";
+export { default as InitRating } from "./components/init-rating.svelte";
 
 // HELPERS
 

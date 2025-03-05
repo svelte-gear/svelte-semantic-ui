@@ -10,7 +10,7 @@ import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
 import type { SliderSettings, JQueryApi, RuleDefinition } from "../data/semantic-types";
-import { compLog, equalNumberArrays } from "../data/common";
+import { arrayToString, compLog, equalNumberArrays } from "../data/common";
 import { copyParentKey, findComponent } from "../data/dom-jquery";
 import { FieldController } from "../data/field-controller";
 
@@ -65,16 +65,6 @@ let fieldCtrl: FieldController | undefined = undefined;
 
 // FUNCTIONS ------------------------------------------------------------------
 
-/** Textual presentation of the value. */
-function toStr(val: number | number[]): string {
-    if (Array.isArray(val)) {
-        return `${val[0]}..${val[1]}`;
-    }
-    return `${val}`;
-}
-
-//-----------------------------------------------------------------------------
-
 /** Propagate prop change to UI component */
 function svelteToInput(newValue: number | number[], forceUpdate?: boolean): void {
     if (!elem) {
@@ -88,7 +78,7 @@ function svelteToInput(newValue: number | number[], forceUpdate?: boolean): void
         const val1: number = elem.slider("get thumbValue", "first");
         const val2: number = elem.slider("get thumbValue", "second");
         if (newValue[0] !== val1 || newValue[1] !== val2 || forceUpdate) {
-            compLog.log(`Slider (${fieldCtrl?.key}) : value -> ${toStr(newValue)}`);
+            compLog.log(`Slider (${fieldCtrl?.key}) : value -> ${arrayToString(newValue)}`);
             elem.slider("set rangeValue", newValue[0], newValue[1]);
             input!.val(`${newValue.join(",")}`);
             void fieldCtrl?.revalidate();
@@ -99,7 +89,7 @@ function svelteToInput(newValue: number | number[], forceUpdate?: boolean): void
         }
         const val: number = elem.slider("get value");
         if (newValue !== val || forceUpdate) {
-            compLog.log(`Slider (${fieldCtrl?.key}) : value -> ${toStr(newValue)}`);
+            compLog.log(`Slider (${fieldCtrl?.key}) : value -> ${arrayToString(newValue)}`);
             elem.slider("set value", newValue);
             input!.val(`${newValue}`);
             void fieldCtrl?.revalidate();
@@ -134,7 +124,7 @@ function inputToSvelte(inputValue: number | number[]): void {
     }
     // store in the prop only if the value is different
     if (!equalNumberArrays(value, inputValue)) {
-        compLog.log(`Slider (${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
+        compLog.log(`Slider (${fieldCtrl?.key}) : value <- ${arrayToString(inputValue)}`);
         value = inputValue;
         if (range && Array.isArray(inputValue)) {
             input.val(inputValue.join(","));
@@ -180,11 +170,11 @@ onMount(async () => {
     // check if it is a single value or range input
     range = elem.hasClass("range");
     if (range && !Array.isArray(value)) {
-        throw new Error(`Range slider has a number[] 'value', got ${toStr(value)}`);
+        throw new Error(`Range slider has a number[] 'value', got ${arrayToString(value)}`);
     }
     if (!range && Array.isArray(value)) {
         throw new Error(
-            `Slider has a number 'value', got ${toStr(value)}, did you forget to add 'range' class?`
+            `Slider has a number 'value', got ${arrayToString(value)}, did you forget to add 'range' class?`
         );
     }
 

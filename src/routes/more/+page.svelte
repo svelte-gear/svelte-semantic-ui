@@ -6,7 +6,7 @@ import { onDestroy, onMount } from "svelte";
 // dialog/+page.svelte
 // Sample dialog page.
 
-import { InitModal, InitProgress, toast } from "../../lib";
+import { InitModal, InitProgress, InitRating, InitForm, rule, toast } from "../../lib";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import ShowCode from "../show-code.svelte";
 
@@ -21,6 +21,8 @@ let example: string = $state("");
 let progress: number = $state(1);
 let progress2: number[] = $state([2, 1]);
 let tot: number = $state(210);
+
+let rating: number = $state(2.5);
 
 /* eslint-enable */
 
@@ -187,6 +189,37 @@ onDestroy(() => {
             <ShowCode file="more" component="progress" bind:selected={example} />
         </div>
         <!-- example-progress -->
+
+        <div class="ui divider"></div>
+
+        <!-- example-rating -->
+        <form class="ui form">
+            <InitForm validateForm={true} validateEmpty={false} settings={{ inline: true }} />
+            <div class="ui field">
+                <label for="_">Rating:</label>
+                <div>
+                    <div class="ui red rating"></div>
+                    <InitRating
+                        bind:value={rating}
+                        settings={{ maxRating: 5, icon: "heart", clearable: true }}
+                        validate={[rule.minValue(4)]}
+                    />
+                </div>
+            </div>
+            <button
+                type="button"
+                class="ui button"
+                onclick={() => {
+                    rating = 2.5;
+                }}>R={rating} : reset</button
+            >
+        </form>
+        <br /><br />
+        <div class="help_text">
+            reset the rating
+            <ShowCode file="more" component="rating" bind:selected={example} />
+        </div>
+        <!-- example-rating -->
     </div>
 </main>
 

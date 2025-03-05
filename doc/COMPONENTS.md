@@ -2,11 +2,12 @@ There are 23 Semantic UI settings objects in JQuery
 
 ### Index
 
-Components: `calendar` <sup>c</sup>, `checkbox` <sup>c</sup>, `dropdown` <sup>c</sup>, `form` <sup>c</sup>, `modal` <sup>c</sup>, `slider` <sup>c</sup>
+Components: `calendar` <sup>c</sup>, `checkbox` <sup>c</sup>, `dropdown` <sup>c</sup>,
+`form` <sup>c</sup>, `modal` <sup>c</sup>, `slider` <sup>c</sup>, `progress` <sup>c</sup>
 
 Other elements: `popup`, `sticky`, `toast` <sup>fn</sup>
 
-Planning to do: `dimmer` <sup>c</sup>, `embed`, `progress` <sup>c</sup>, `rating` <sup>c</sup>, `visibility`
+Planning to do: `dimmer` <sup>c</sup>, `embed`, `rating` <sup>c</sup>, `visibility`
 
 Considering: `accordion`, `flyout`, `shape`, `sidebar`, `tab` &nbsp; _( containers )_
 
@@ -35,6 +36,10 @@ Not planned: `api`, `nag`, `site`, `search`, `state`, `transition`
 - slider <br/>
   `<div class=ui slider>...</div>` <br/>
   `<InitSlider value={..} settings={..} />` ( number | number[] )
+
+- rating <br>
+  `<div class=ui rating></div>` <br/>
+  `<InitRating settings={...} bind:value={...} />`
 
 #### Inputs
 
@@ -81,7 +86,6 @@ Not planned: `api`, `nag`, `site`, `search`, `state`, `transition`
 
 ### Planning to do
 
-- `rating` : <InitRating settings={...} bind:value={...} />
 - `visibility` : <div ... use:visibility={{ onTopVisible: ... }} />
 - `embed` : <div ... use:embed={{ ... }} />
 - `dimmer` : <InitDimmer bind:show={...} />
@@ -97,5 +101,5 @@ Not planned: `api`, `nag`, `site`, `search`, `state`, `transition`
 ## Not planned:
 
 - `api`, `nag`, `search`, `state` - handle data/state in Svelte
-- `site` - configuration object
 - `transition` - use Svelte transitions
+- `site` - configuration object

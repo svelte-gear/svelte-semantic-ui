@@ -46,7 +46,7 @@ declare const InitCalendar: Component<{
     To avoid typos, use `rules` helper from `data/helpers.ts` {@link data/helpers.rule}. */
     validate?: RuleDefinition;
 
-    /** Id of the Semantic UI input element, takes precedence over tag position */
+    /** Id of the Semantic UI component, takes precedence over tag position */
     forId?: string;
 
     /** If InitCalendar is used as a parent, render the children components */

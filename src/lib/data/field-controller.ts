@@ -17,7 +17,7 @@ import { findParentForm, SVELTE_FORM_STORE, ensureFieldKey } from "../data/dom-j
 
 */
 
-export type FieldType = "calendar" | "dropdown" | "slider" | "checkbox" | "input";
+export type FieldType = "calendar" | "dropdown" | "slider" | "checkbox" | "input" | "rating";
 
 /** Adds validation rule to the field.
  *  Common class used by all Init* components to control field validation */
