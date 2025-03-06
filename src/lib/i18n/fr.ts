@@ -14,6 +14,7 @@ import type { CalendarSettings, CalendarText, FormPrompt, FormText } from "../da
 
 const formPrompt: FormPrompt = {
     empty: "{name} doit avoir une valeur.",
+    notEmpty: "{name} doit avoir une valeur.",
     checked: "{name} doit être cochée.",
     email: "{name} doit être une adresse e-mail valide.",
     url: "{name} doit être une URL valide.",
@@ -42,6 +43,10 @@ const formPrompt: FormPrompt = {
     start: "{name} doit commencer par '{ruleValue}'",
     isoDate: "{name} doit suivre le format 'AAAA-MM-JJ' (année-mois-jour)",
     wrappedIn: "{name} doit commencer et se terminer par '{ruleValue}'",
+    maxValue: "// [x]",
+    minValue: "// [x]",
+    range: "// [x]",
+    size: "// [x]",
 };
 
 const formText: FormText = {
@@ -52,6 +57,8 @@ const formText: FormText = {
 };
 
 const calendarText: CalendarText = {
+    dayNames: ["// [x]", "_", "_", "_", "_", "_", "_"],
+    dayNamesShort: ["// [x]", "_", "_", "_", "_", "_", "_"],
     days: ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"],
     months: [
         "janvier",

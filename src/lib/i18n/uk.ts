@@ -12,6 +12,7 @@ import type { CalendarSettings, CalendarText, FormPrompt, FormText } from "../da
 
 const formPrompt: FormPrompt = {
     empty: "{name} має мати значення",
+    notEmpty: "{name} має мати значення",
     checked: "{name} має бути відмічений",
     email: "{name} має бути дійсною електронною поштою",
     url: "{name} має бути дійсним URL",
@@ -40,6 +41,10 @@ const formPrompt: FormPrompt = {
     start: "{name} має починатися з '{ruleValue}'",
     isoDate: "{name} має відповідати формату 'РРРР-ММ-ДД' (рік-місяць-день)",
     wrappedIn: "{name} має починатися і закінчуватися на '{ruleValue}'",
+    maxValue: "// [x]",
+    minValue: "// [x]",
+    range: "// [x]",
+    size: "// [x]",
 };
 
 const formText: FormText = {
@@ -49,6 +54,8 @@ const formText: FormText = {
 };
 
 const calendarText: CalendarText = {
+    dayNames: ["// [x]", "_", "_", "_", "_", "_", "_"],
+    dayNamesShort: ["// [x]", "_", "_", "_", "_", "_", "_"],
     days: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
     months: [
         "Січень",

@@ -19,6 +19,7 @@ import type {
 } from "../data/semantic-types";
 
 const formPrompt: FormPrompt = {
+    notEmpty: "{name} must have a value",
     empty: "{name} must have a value",
     checked: "{name} must be checked",
     email: "{name} must be a valid e-mail",
@@ -48,9 +49,8 @@ const formPrompt: FormPrompt = {
     start: "{name} must start with '{ruleValue}'",
     isoDate: "{name} must follow the 'YYYY-MM-DD' format",
     wrappedIn: "{name} must start and end with '{ruleValue}'",
-
-    // maxValue: "{name} must have a maximum value of {ruleValue}", // doesn't work
-    // minValue: "{name} must have a minimum value of {ruleValue}", // doesn't work
+    maxValue: "{name} must have a maximum value of {ruleValue}", // doesn't work
+    minValue: "{name} must have a minimum value of {ruleValue}", // doesn't work
     range: "{name} must be in a range [{ruleValue}]", // min & max doesn't work here, but works in 'size'
     size: "{name} must have a length between {min} and {max} characters",
 };
@@ -63,6 +63,8 @@ const formText: FormText = {
 };
 
 const calendarText: CalendarText = {
+    dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    dayNamesShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     days: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
     months: [
         "January",

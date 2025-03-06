@@ -79,8 +79,10 @@ function svelteToInput(newValue: number, forceUpdate?: boolean): void {
 
 /** The effect rune calls svelteToInput when prop value changes */
 $effect(() => {
+    // console.info("effect");
     void value;
     svelteToInput(value);
+    // return () => console.info("cleanup");
 });
 
 /** Update rules when the validate value changes. Fire a change event to trigger revalidation if deemed appropriate. */

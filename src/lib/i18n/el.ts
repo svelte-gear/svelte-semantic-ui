@@ -12,6 +12,7 @@ import type { CalendarSettings, CalendarText, FormPrompt, FormText } from "../da
 
 const formPrompt: FormPrompt = {
     empty: "{name} πρέπει να έχει μια τιμή",
+    notEmpty: "{name} πρέπει να έχει μια τιμή",
     checked: "{name} πρέπει να είναι επιλεγμένο",
     email: "{name} πρέπει να είναι έγκυρο email",
     url: "{name} πρέπει να είναι έγκυρο url",
@@ -40,6 +41,10 @@ const formPrompt: FormPrompt = {
     start: "{name} πρέπει να ξεκινά με '{ruleValue}'",
     isoDate: "{name} πρέπει να ακολουθεί τη μορφή 'ΕΕΕΕ-ΜΜ-ΗΗ'",
     wrappedIn: "{name} πρέπει να ξεκινά και να τελειώνει με '{ruleValue}'",
+    maxValue: "// [x]",
+    minValue: "// [x]",
+    range: "// [x]",
+    size: "// [x]",
 };
 
 const formText: FormText = {
@@ -50,6 +55,8 @@ const formText: FormText = {
 };
 
 const calendarText: CalendarText = {
+    dayNames: ["// [x]", "_", "_", "_", "_", "_", "_"],
+    dayNamesShort: ["// [x]", "_", "_", "_", "_", "_", "_"],
     days: ["Κυ", "Δε", "Τρ", "Τε", "Πε", "Πα", "Σα"],
     months: [
         "Ιανουάριος",

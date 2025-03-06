@@ -21,12 +21,11 @@ export type JQueryApi = JQuery<HTMLElement>;
  `88888P' `88888P8 dP `88888P' dP    dP `88888P8 `88888P8 dP
 
 */
+//-----------------------------------------------------------------------------
+// region Calendar
 
 export type DateFormatFn = (d: Date | undefined, settings?: CalendarSettings) => string;
-export type DateParseFn = (
-    date: string | undefined,
-    settings?: CalendarSettings
-) => Date | undefined;
+export type DateParseFn = (date: string | undefined, settings?: CalendarSettings) => Date | null;
 
 /**
  * Fomantic UI Calendar settings.
@@ -34,42 +33,42 @@ export type DateParseFn = (
  *
  * @see {@link https://fomantic-ui.com/modules/calendar.html#/settings}
  */
-export type CalendarSettings = Omit<Partial<FomanticUI.CalendarSettings>, "onChange"> & {
+export type CalendarSettings = Omit<Partial<FomanticUI.CalendarSettings>, "onChange" | "parser"> & {
     /** Is called after a calendar date has changed. */
     onChange?(this: JQuery<HTMLElement>, date: Date, text: string, mode: string): void;
+    // TODO: prove that mode is passed in 2.9.4
 
-    formatter?: {
-        cellTime?: string | DateFormatFn;
-        date?: string | DateFormatFn;
-        datetime?: string | DateFormatFn;
-        time?: string | DateFormatFn;
+    // formatter?: {
+    //     cellTime?: string | DateFormatFn; // : string
+    //     date?: string | DateFormatFn;
+    //     datetime?: string | DateFormatFn;
+    //     time?: string | DateFormatFn;
+    //     month?: string | DateFormatFn;
+    //     year?: string | DateFormatFn;
 
-        month?: string | DateFormatFn;
-        year?: string | DateFormatFn;
+    //     dayHeader?: string | DateFormatFn; // : string;
+    //     hourHeader?: string | DateFormatFn;
+    //     minuteHeader?: string | DateFormatFn;
+    //     monthHeader?: string | DateFormatFn;
+    //     yearHeader?: (date: Date, settings: CalendarSettings) => string; // settings?: CalendarSettings
 
-        dayHeader?: string | DateFormatFn;
-        hourHeader?: string | DateFormatFn;
-        minuteHeader?: string | DateFormatFn;
-        monthHeader?: string | DateFormatFn;
-        yearHeader?: (date: Date, settings: CalendarSettings) => string;
-
-        cell?: (
-            cell: JQuery,
-            date: Date,
-            options: {
-                mode: string;
-                adjacent: boolean;
-                disabled: boolean;
-                active: boolean;
-                today: boolean;
-            }
-        ) => string;
-        dayColumnHeader?: (day: number, settings: CalendarSettings) => string;
-        today?: (settings: CalendarSettings) => string;
-    };
+    //     cell?: (
+    //         cell: JQuery,
+    //         date: Date,
+    //         options: { // : any
+    //             mode: string;
+    //             adjacent: boolean;
+    //             disabled: boolean;
+    //             active: boolean;
+    //             today: boolean;
+    //         }
+    //     ) => string; // => any
+    //     dayColumnHeader?: (day: number, settings: CalendarSettings) => string;
+    //     today?: (settings: CalendarSettings) => string;
+    // };
 
     parser?: {
-        date?: DateParseFn;
+        date?: DateParseFn; // this function can return null
     };
 };
 
@@ -139,7 +138,8 @@ export type RuleFunc = (value: string, ruleValue: string, module: SuiModule) => 
  *
  * @see {@link https://fomantic-ui.com/behaviors/form.html#/settings}
  */
-export type FormSettings = Partial<Omit<FomanticUI.FormSettings, "prompt">> & {
+export type FormSettings = Partial<Omit<FomanticUI.FormSettings, "prompt" | "rules" | "fields">> & {
+    // TODO: check if new Semantic d.ts is correct and useful
     fields?: Record<string, RuleDefinition>;
     rules?: Record<string, RuleFunc>;
     prompt?: FomanticUI.FormSettings["prompt"] & Record<string, string>;
@@ -160,11 +160,10 @@ export type FormPrompt = Omit<FomanticUI.Form.Settings.Prompts, "contain" | "con
     wrappedIn: string;
 
     // define newer rules
-    maxValue?: string;
-    minValue?: string;
-    range?: string;
-    size?: string;
-    // [x]: translate range and size, make the field required in translations
+    maxValue: string;
+    minValue: string;
+    range: string;
+    size: string;
 };
 
 export type FormText = FomanticUI.Form.Settings.Texts;
