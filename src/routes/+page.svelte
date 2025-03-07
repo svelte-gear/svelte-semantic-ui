@@ -7,7 +7,7 @@
 
 import { getLocale } from "../lib/i18n";
 
-// REACTIVE -------------------------------------------------------------------
+// region data ------------------------------------------------------------------------------------
 /* eslint-disable prefer-const */
 
 let newLocale: string = $state(getLocale());
@@ -16,7 +16,9 @@ let newLocale: string = $state(getLocale());
 </script>
 
 <!------------------------------------------------------------------------------------------------>
-
+<!--
+    // region html
+-->
 <main>
     <h1>Home</h1>
     <p><b>Svelte Semantic UI</b> - demo and test pages</p>
@@ -39,6 +41,9 @@ let newLocale: string = $state(getLocale());
 <p>Semantic UI locale = {newLocale}</p>
 
 <style>
+/*
+    // region css
+*/
 main {
     text-align: left;
     padding: 0 10px;

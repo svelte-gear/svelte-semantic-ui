@@ -10,7 +10,8 @@ import { InitModal, InitProgress, InitRating, InitForm, rule, toast } from "../.
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import ShowCode from "../show-code.svelte";
 
-// REACTIVE -------------------------------------------------------------------
+// region data ------------------------------------------------------------------------------------
+
 /* eslint-disable prefer-const */
 
 let show: boolean = $state(false);
@@ -25,6 +26,8 @@ let tot: number = $state(210);
 let rating: number = $state(2.5);
 
 /* eslint-enable */
+
+// region init ------------------------------------------------------------------------------------
 
 function okFn(): void {
     console.log("dialog - ok");
@@ -76,6 +79,9 @@ onDestroy(() => {
         id="more"
         style="padding: 10px;"
     >
+        <!--
+            // region ex: toast
+        -->
         <!-- example-toast -->
         <button
             type="button"
@@ -101,6 +107,9 @@ onDestroy(() => {
 
         <div class="ui divider"></div>
 
+        <!--
+            // region ex: dialog
+        -->
         <!-- example-dialog -->
         <p>
             Modal dialog is {#if !show}NOT{/if} active.
@@ -152,6 +161,9 @@ onDestroy(() => {
 
         <div class="ui divider"></div>
 
+        <!--
+            // region ex: progress
+        -->
         <!-- example-progress -->
         <p>Progress Bar</p>
 
@@ -192,6 +204,9 @@ onDestroy(() => {
 
         <div class="ui divider"></div>
 
+        <!--
+            // region ex: rating
+        -->
         <!-- example-rating -->
         <form class="ui form">
             <InitForm validateForm={true} validateEmpty={false} settings={{ inline: true }} />
@@ -224,6 +239,10 @@ onDestroy(() => {
 </main>
 
 <style>
+/*
+    // region css
+*/
+
 .help_text {
     font-weight: 300;
     font-size: 80%;

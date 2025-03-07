@@ -10,9 +10,13 @@ import type { Snippet } from "svelte";
 import { page } from "$app/state";
 import { applyLocale, getLocale, supportedLocales } from "../lib/i18n";
 
+// region props -----------------------------------------------------------------------------------
+
 interface Props {
     children: Snippet;
 }
+
+// region data ------------------------------------------------------------------------------------
 
 // eslint-disable-next-line prefer-const
 let { children }: Props = $props();
@@ -22,6 +26,8 @@ let refresh: boolean = $state(false);
 let currLocale: string = $state(getLocale());
 
 let path: string = $state("");
+
+// region init ------------------------------------------------------------------------------------
 
 $effect(() => {
     path = page.url.pathname;
@@ -47,7 +53,9 @@ const nav: string[][] = [
 </script>
 
 <!------------------------------------------------------------------------------------------------>
-
+<!--
+    // region html
+-->
 <div class="app-layout">
     <nav class="ui buttons">
         {#each nav as pg}
@@ -86,6 +94,10 @@ const nav: string[][] = [
 <!------------------------------------------------------------------------------------------------>
 
 <style>
+/*
+    // region css
+*/
+
 div.app-layout {
     text-align: center;
     max-width: 360px;

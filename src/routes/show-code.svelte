@@ -1,6 +1,8 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+// region props -----------------------------------------------------------------------------------
+
 interface Props {
     /** Name of the source file */
     file: string;
@@ -12,7 +14,7 @@ interface Props {
     selected: string;
 }
 
-// REACTIVE -------------------------------------------------------------------
+// region data ------------------------------------------------------------------------------------
 /* eslint-disable prefer-const */
 
 let { file, component, selected = $bindable() }: Props = $props();
@@ -24,7 +26,8 @@ let code: string = $state("");
 let rows: number = $state(5);
 
 /* eslint-enable */
-// FUNCTIONS ------------------------------------------------------------------
+
+// region functions -------------------------------------------------------------------------------
 
 function getImportList(text: string): string[] {
     const imports: string[] = [];
@@ -112,6 +115,8 @@ function getLetLines(scriptText: string, varNames: string[]): string[] {
     return letLines;
 }
 
+// region init ------------------------------------------------------------------------------------
+
 async function loadCode(): Promise<void> {
     const resp: Response = await fetch(`/code/${file}/page.html`);
     const fullText: string = await resp.text();
@@ -172,6 +177,11 @@ function hideCode(): void {
 }
 </script>
 
+<!------------------------------------------------------------------------------------------------>
+<!--
+    // region html
+-->
+
 {#if selected !== component}
     <a href="#{component}" onclick={showCode}>show code</a>
 {/if}
@@ -191,6 +201,9 @@ function hideCode(): void {
 {/if}
 
 <style>
+/*
+    // region css
+*/
 a {
     font-weight: bold;
     opacity: 1;

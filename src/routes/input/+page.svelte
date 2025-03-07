@@ -27,7 +27,8 @@ import {
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import ShowCode from "../show-code.svelte";
 
-// REACTIVE -------------------------------------------------------------------
+// region data ------------------------------------------------------------------------------------
+
 /* eslint-disable prefer-const */
 
 let dat: Date | undefined = $state();
@@ -92,6 +93,8 @@ let json: string = $derived(
 
 /* eslint-enable */
 
+// region init ------------------------------------------------------------------------------------
+
 $effect(() => {
     const hash: string = page.url.hash;
     if (hash.length > 1) {
@@ -142,17 +145,10 @@ function customLocalRule(val: string): boolean {
 
     <!-- https://github.com/noahsalvi/svelte-use-form -->
 
-    <!--
- .8888b
- 88   "
- 88aaa  .d8888b. 88d888b. 88d8b.d8b.
- 88     88'  `88 88'  `88 88'`88'`88
- 88     88.  .88 88       88  88  88
- dP     `88888P' dP       dP  dP  dP
-
-    -->
-
     <div style:max-width="360px" style:margin="0 auto" style:text-align="left">
+        <!--
+            // region form
+        -->
         <form class="ui form">
             <InitForm
                 validateForm={active}
@@ -181,6 +177,9 @@ function customLocalRule(val: string): boolean {
                         <div class="ui message" style:font-family="monospace">
                             {json}
                         </div>
+                        <!--
+                            // region :    buttons
+                        -->
                         <button type="button" class="ui button blue" onclick={loadData}>
                             Reset
                         </button>
@@ -242,16 +241,8 @@ function customLocalRule(val: string): boolean {
             {/if}
 
             <!--
- oo                              dP
-                                 88
- dP 88d888b. 88d888b. dP    dP d8888P
- 88 88'  `88 88'  `88 88    88   88
- 88 88    88 88.  .88 88.  .88   88
- dP dP    dP 88Y888P' `88888P'   dP
-             88
-             dP
+                // region ex: date
             -->
-
             <!-- example-date -->
             <div class="field">
                 <label for="_"> Date Input </label>
@@ -268,6 +259,9 @@ function customLocalRule(val: string): boolean {
             </div>
             <!-- example-date -->
 
+            <!--
+                // region ex: money
+            -->
             <!-- example-money -->
             <div class="field">
                 <label for="_"> Income </label>
@@ -286,9 +280,11 @@ function customLocalRule(val: string): boolean {
                 <InitNumberInput bind:value> returns parsed number value,
                 while <input bind:value> return formatted text.
             -->
-
             <!-- example-money -->
 
+            <!--
+                // region ex: text
+            -->
             <!-- example-text -->
             <div class="field">
                 <label for="_"> Text Area </label>
@@ -313,6 +309,9 @@ function customLocalRule(val: string): boolean {
             </div>
             <!-- example-text -->
 
+            <!--
+                // region ex: input
+            -->
             <!-- example-input -->
             <div class="field">
                 <label for="_"> Text Input </label>
@@ -330,6 +329,9 @@ function customLocalRule(val: string): boolean {
             </div>
             <!-- example-input -->
 
+            <!--
+                // region ex: number
+            -->
             <!-- example-number -->
             <div class="ui field">
                 <label for="_"> Rating Input </label>
@@ -350,16 +352,10 @@ function customLocalRule(val: string): boolean {
             <!-- uses {ratings} array -->
             <!-- example-number -->
 
-            <!--
-          dP oo       dP
-           88          88
-  d8888b. 88 dP .d888b88 .d8888b. 88d888b.
- Y8ooooo. 88 88 88'  `88 88ooood8 88'  `88
-       88 88 88 88.  .88 88.  ... 88
- `88888P' dP dP `88888P8 `88888P' dP
-
-            -->
             <div class="ui divider"></div>
+            <!--
+                // region ex: sliders
+            -->
 
             <div style="float:right">
                 <div class="ui checkbox">
@@ -406,6 +402,10 @@ function customLocalRule(val: string): boolean {
             &nbsp;
 
             <div class="ui divider"></div>
+            <!--
+                // region ex: dynamic rules
+                // [x] show code example
+            -->
 
             <div class="field">
                 <label for="_"> Dynamic Validation Input </label>
@@ -448,6 +448,10 @@ function customLocalRule(val: string): boolean {
 </main>
 
 <style>
+/*
+// region css
+*/
+
 form {
     padding: 0.75rem;
     background-color: #f7f7f7;

@@ -197,12 +197,12 @@ export type ButtonTexts = {
 
 /** @see {@link https://fomantic-ui.com/modules/flyout.html#/settings} */
 export type FlyoutSettings = Partial<FomanticUI.FlyoutSettings> & {
-    text: ButtonTexts;
+    text?: ButtonTexts;
 };
 
 /** @see {@link https://fomantic-ui.com/modules/modal.html#/settings} */
 export type ModalSettings = Partial<FomanticUI.ModalSettings> & {
-    text: ButtonTexts;
+    text?: ButtonTexts;
 };
 
 //-------------------------------------------------------------------------------------------------

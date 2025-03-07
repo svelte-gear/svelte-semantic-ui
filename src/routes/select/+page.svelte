@@ -25,7 +25,8 @@ import ShowCode from "../show-code.svelte";
 
 const options: string[] = ["1", "2", "3", "4", "5"];
 
-// REACTIVE -------------------------------------------------------------------
+// region data ------------------------------------------------------------------------------------
+
 /* eslint-disable prefer-const */
 
 let rank: string = $state("");
@@ -68,6 +69,8 @@ let json: string = $derived(
 );
 
 /* eslint-enable */
+
+// region init ------------------------------------------------------------------------------------
 
 $effect(() => {
     const hash: string = page.url.hash;
@@ -118,17 +121,10 @@ onMount(async () => {
 
     <!-- https://github.com/noahsalvi/svelte-use-form -->
 
-    <!--
- .8888b
- 88   "
- 88aaa  .d8888b. 88d888b. 88d8b.d8b.
- 88     88'  `88 88'  `88 88'`88'`88
- 88     88.  .88 88       88  88  88
- dP     `88888P' dP       dP  dP  dP
-
-    -->
-
     <div style:max-width="360px" style:margin="0 auto" style:text-align="left">
+        <!--
+            // region form
+        -->
         <form class="ui form" id="form1">
             <InitForm
                 validateForm={active}
@@ -148,6 +144,9 @@ onMount(async () => {
                         <div class="ui message" style:font-family="monospace">
                             {json}
                         </div>
+                        <!--
+                            // region :    buttons
+                        -->
                         <button type="button" class="ui button blue" onclick={loadData}>
                             Reset
                         </button>
@@ -210,15 +209,8 @@ onMount(async () => {
             {/if}
 
             <!--
-                   dP                     dP
-                   88                     88
- .d8888b. .d8888b. 88 .d8888b. .d8888b. d8888P
- Y8ooooo. 88ooood8 88 88ooood8 88'  `""   88
-       88 88.  ... 88 88.  ... 88.  ...   88
- `88888P' `88888P' dP `88888P' `88888P'   dP
-
+                // region ex: select
             -->
-
             <!-- example-select -->
             <div class="field" id="r1">
                 <label for="_"> Rank 1 </label>
@@ -264,6 +256,9 @@ onMount(async () => {
             </div>
             <!-- example-select_2 -->
 
+            <!--
+                // region ex: multi-select
+            -->
             <!-- example-multiselect -->
             <div class="field">
                 <label for="_"> Teams </label>
@@ -284,16 +279,8 @@ onMount(async () => {
             <!-- example-multiselect -->
 
             <!--
-       dP                                  dP
-       88                                  88
- .d888b88 88d888b. .d8888b. 88d888b. .d888b88 .d8888b. dP  dP  dP 88d888b.
- 88'  `88 88'  `88 88'  `88 88'  `88 88'  `88 88'  `88 88  88  88 88'  `88
- 88.  .88 88       88.  .88 88.  .88 88.  .88 88.  .88 88.88b.88' 88    88
- `88888P8 dP       `88888P' 88Y888P' `88888P8 `88888P' 8888P Y8P  dP    dP
-                            88
-                            dP
+                // region ex: with flags
             -->
-
             <!-- example-select_with_flags -->
             <div class="field">
                 <label for="_"> Country </label>
@@ -337,6 +324,9 @@ onMount(async () => {
             <!-- example-select_with_flags -->
 
             <div class="ui divider"></div>
+            <!--
+                // region ex: gender
+            -->
 
             <div style="float:right">
                 <div class="ui checkbox">
@@ -406,6 +396,9 @@ onMount(async () => {
                 </div>
                 <!-- example-select_with_JS_2 -->
 
+                <!--
+                    // region ex: checkbox
+                -->
                 <!-- example-checkbox -->
                 <div class="field">
                     <div class="ui checkbox">
@@ -424,15 +417,8 @@ onMount(async () => {
             <div class="ui divider"></div>
 
             <!--
-          dP                         dP       dP
-          88                         88       88
- .d8888b. 88d888b. .d8888b. .d8888b. 88  .dP  88d888b. .d8888b. dP.  .dP
- 88'  `"" 88'  `88 88ooood8 88'  `"" 88888"   88'  `88 88'  `88  `8bd8'
- 88.  ... 88    88 88.  ... 88.  ... 88  `8b. 88.  .88 88.  .88  .d88b.
- `88888P' dP    dP `88888P' `88888P' dP   `YP 88Y8888' `88888P' dP'  `dP
-
--->
-
+                // region ex: radio
+            -->
             <!-- example-radio -->
             <div class="field">
                 <label for="_"> Gender 3 </label>
@@ -459,6 +445,9 @@ onMount(async () => {
             </div>
             <!-- example-radio -->
 
+            <!--
+                // region ex: checkbox group
+            -->
             <!-- example-checkbox_group -->
             <div class="field">
                 <label for="">Teams 2</label>
@@ -487,16 +476,8 @@ onMount(async () => {
             <!-- example-checkbox_group -->
 
             <!--
- oo                              dP
-                                 88
- dP 88d888b. 88d888b. dP    dP d8888P
- 88 88'  `88 88'  `88 88    88   88
- 88 88    88 88.  .88 88.  .88   88
- dP dP    dP 88Y888P' `88888P'   dP
-             88
-             dP
--->
-
+                // region ex: inputs
+            -->
             <!-- example-input -->
             <div class="field">
                 <label for="_"> Test 1 </label>
@@ -520,6 +501,10 @@ onMount(async () => {
 </main>
 
 <style>
+/*
+    // region css
+*/
+
 form {
     padding: 0.75rem;
     background-color: #f7f7f7;
