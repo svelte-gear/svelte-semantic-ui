@@ -20,16 +20,34 @@ import { NumberFmt } from "../data/format-number";
 
 const FIELD_PREFIX: string = "f_input";
 
+// region props -----------------------------------------------------------------------------------
+
 interface Props {
+    /** Two-way binding for setting and reading back numeric value */
     value?: number | undefined;
+
+    /** Settings for date formatter, see https://fomantic-ui.com/modules/calendar.html#/settings */
     settings?: NumberInputSettings;
+
+    /** Optional field value validator. Uses Semantic UI form validation syntax.
+    See https://fomantic-ui.com/behaviors/form.html#/examples.
+    To avoid typos, use `rules` helper from `data/helpers.ts` {@link data/helpers.rule}. */
     validate?: RuleDefinition;
+
+    /** In most cases you should use the default locale-aware formatter with `settings`.
+    Optional custom formatter may be used to implement non-standard formats or additional parsing logic.
+    It will override `settings`, don't use both at the same time. */
     formatter?: NumberFormatter;
+
+    /** Id of the Semantic UI input element, takes precedence over tag position */
     forId?: string;
+
+    /** If InitNumberInput is used as a parent, render the children components */
     children?: Snippet;
 }
 
-// REACTIVE -------------------------------------------------------------------
+// region data ------------------------------------------------------------------------------------
+
 /* eslint-disable prefer-const */
 
 let {
@@ -46,15 +64,13 @@ let span: Element | undefined = undefined; // $state();
 
 /* eslint-enable */
 
-// DATA -----------------------------------------------------------------------
-
 /** jQuery input component */
 let elem: JQueryApi | undefined = undefined;
 
 /** Field descriptor and validator */
 let fieldCtrl: FieldController | undefined = undefined;
 
-// FUNCTIONS ------------------------------------------------------------------
+// region svelte -> input -------------------------------------------------------------------------
 
 function svelteToInput(newValue: number | undefined): void {
     if (!elem || !formatter) {
@@ -89,7 +105,7 @@ $effect(() => {
     // elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
 });
 
-//-----------------------------------------------------------------------------
+// region input -> svelte -------------------------------------------------------------------------
 
 /** When input value changes, modify the svelte prop */
 function inputToSvelte(inputText: string): void {
@@ -114,7 +130,7 @@ function onInputChange(this: JQueryApi): void {
     inputToSvelte(inputText);
 }
 
-//-----------------------------------------------------------------------------
+// region init ------------------------------------------------------------------------------------
 
 function labelClick(): void {
     elem?.trigger("focus");

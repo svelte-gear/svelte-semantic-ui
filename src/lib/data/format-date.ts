@@ -13,6 +13,8 @@ export interface DateFormatter {
     parse: (val: string) => Date | undefined;
 }
 
+// region DateFmt ---------------------------------------------------------------------------------
+
 /** DateFormatter implementation which uses a copy of FomanticCalendar code */
 export class DateFmt implements DateFormatter {
     private settings: CalendarSettings;
@@ -43,6 +45,8 @@ export class DateFmt implements DateFormatter {
         };
         /* eslint-enable */
     }
+
+    // region :  public ---------------------------------------------------------------------------
 
     parse(val: string): Date | undefined {
         if (!val) {

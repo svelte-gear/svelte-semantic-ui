@@ -7,15 +7,7 @@ import type { JQueryApi, RuleDefinition, RuleObj } from "../data/semantic-types"
 import type { FormController } from "../data/form-controller";
 import { findParentForm, SVELTE_FORM_STORE, ensureFieldKey } from "../data/dom-jquery";
 
-/*
- .8888b oo          dP       dP
- 88   "             88       88
- 88aaa  dP .d8888b. 88 .d888b88
- 88     88 88ooood8 88 88'  `88
- 88     88 88.  ... 88 88.  .88
- dP     dP `88888P' dP `88888P8
-
-*/
+// region FieldController -------------------------------------------------------------------------
 
 export type FieldType = "calendar" | "dropdown" | "slider" | "checkbox" | "input" | "rating";
 
@@ -58,6 +50,8 @@ export class FieldController {
             void this.revalidate(); // NEW
         }
     }
+
+    // region :  public ---------------------------------------------------------------------------
 
     /** Update filed validation rules if they are changed at runtime */
     replaceRules(validationRules?: RuleDefinition): void {
@@ -106,18 +100,20 @@ export class FieldController {
         }
     }
 
-    // /** Simpler replaceRules function, assumes that it is called only when rules change */
-    // replaceRules(validationRules?: RuleDefinition): void {
-    //     if (this.rules) {
-    //         this.formCtrl?.removeRule(this.key, this.rules);
-    //         this.rules = undefined;
-    //     }
-    //     if (validationRules) {
-    //         this.formCtrl?.addRule(this.key, validationRules);
-    //         this.rules = validationRules;
-    //     }
-    //     void this.revalidate();
-    // }
+    /** Simpler replaceRules function, assumes that it is called only when rules change */
+    /*
+    replaceRules(validationRules?: RuleDefinition): void {
+        if (this.rules) {
+            this.formCtrl?.removeRule(this.key, this.rules);
+            this.rules = undefined;
+        }
+        if (validationRules) {
+            this.formCtrl?.addRule(this.key, validationRules);
+            this.rules = validationRules;
+        }
+        void this.revalidate();
+    }
+    */
 
     /** Validate the new field value, if the field is validated (has form controller).
      *  This method is `async` as it debounces (deduplicates) the validation event

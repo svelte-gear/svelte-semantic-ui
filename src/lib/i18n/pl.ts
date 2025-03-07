@@ -8,7 +8,15 @@
  */
 
 import type { NumberSettings } from "../data/common";
-import type { CalendarSettings, CalendarText, FormPrompt, FormText } from "../data/semantic-types";
+import type {
+    ButtonTexts,
+    CalendarSettings,
+    CalendarTexts,
+    CommonProgressTexts,
+    DropdownMessages,
+    FormPrompt,
+    FormText,
+} from "../data/semantic-types";
 
 const formPrompt: FormPrompt = {
     empty: "{name} musi mieć wartość",
@@ -41,10 +49,10 @@ const formPrompt: FormPrompt = {
     start: "{name} musi zaczynać się od '{ruleValue}'",
     isoDate: "{name} musi być w formacie 'RRRR-MM-DD' (rok-miesiąc-dzień)",
     wrappedIn: "{name} musi zaczynać się i kończyć na '{ruleValue}'",
-    maxValue: "// [x]",
-    minValue: "// [x]",
-    range: "// [x]",
-    size: "// [x]",
+    maxValue: "{name} musi być mniejsze lub równe {ruleValue}",
+    minValue: "{name} musi być większe lub równe {ruleValue}",
+    range: "{name} musi mieścić się w zakresie [{ruleValue}]",
+    size: "{name} musi mieć długość od {min} do {max} znaków",
 };
 
 const formText: FormText = {
@@ -54,23 +62,23 @@ const formText: FormText = {
         "Na tej stronie są niezapisane zmiany, które zostaną utracone, jeśli kontynuujesz.",
 };
 
-const calendarText: CalendarText = {
-    dayNames: ["// [x]", "_", "_", "_", "_", "_", "_"],
-    dayNamesShort: ["// [x]", "_", "_", "_", "_", "_", "_"],
+const calendarText: CalendarTexts = {
+    dayNames: ["niedziela", "poniedziałek", "wtorek", "środa", "czwartek", "piątek", "sobota"],
+    dayNamesShort: ["Nie", "Pon", "Wto", "Śro", "Czw", "Pią", "Sob"],
     days: ["Nd", "Pn", "Wt", "Śr", "Cz", "Pt", "So"],
     months: [
-        "Styczeń",
-        "Luty",
-        "Marzec",
-        "Kwiecień",
-        "Maj",
-        "Czerwiec",
-        "Lipiec",
-        "Sierpień",
-        "Wrzesień",
-        "Październik",
-        "Listopad",
-        "Grudzień",
+        "styczeń",
+        "luty",
+        "marzec",
+        "kwiecień",
+        "maj",
+        "czerwiec",
+        "lipiec",
+        "sierpień",
+        "wrzesień",
+        "październik",
+        "listopad",
+        "grudzień",
     ],
     monthsShort: [
         "Sty",
@@ -86,8 +94,8 @@ const calendarText: CalendarText = {
         "Lis",
         "Gru",
     ],
-    today: "Dzisiaj",
-    now: "Teraz",
+    today: "dzisiaj",
+    now: "teraz",
     am: "AM",
     pm: "PM",
     weekNo: "Tydzień",
@@ -112,6 +120,25 @@ const numberSettings: NumberSettings = {
     moneyPrecision: 2,
 };
 
+const dropdownTexts: DropdownMessages = {
+    addResult: "Dodaj <b>{term}</b>",
+    count: "{count} wybrane",
+    maxSelections: "Maksymalnie {maxCount} wyborów",
+    noResults: "Nie znaleziono wyników.",
+    serverError: "Wystąpił błąd podczas łączenia z serwerem",
+};
+
+const progressTexts: CommonProgressTexts = {
+    percent: "{percent}%",
+    ratio: "{value} z {total}",
+};
+
+const buttonTexts: ButtonTexts = {
+    ok: "Ok",
+    cancel: "Anuluj",
+    close: "Zamknij",
+};
+
 export default {
     form: {
         prompt: formPrompt,
@@ -123,5 +150,18 @@ export default {
     },
     number: {
         ...numberSettings,
+    },
+
+    flyout: {
+        text: buttonTexts,
+    },
+    modal: {
+        text: buttonTexts,
+    },
+    dropdown: {
+        message: dropdownTexts,
+    },
+    progress: {
+        text: progressTexts,
     },
 };

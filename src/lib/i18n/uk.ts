@@ -8,7 +8,15 @@
  */
 
 import type { NumberSettings } from "../data/common";
-import type { CalendarSettings, CalendarText, FormPrompt, FormText } from "../data/semantic-types";
+import type {
+    ButtonTexts,
+    CalendarSettings,
+    CalendarTexts,
+    CommonProgressTexts,
+    DropdownMessages,
+    FormPrompt,
+    FormText,
+} from "../data/semantic-types";
 
 const formPrompt: FormPrompt = {
     empty: "{name} має мати значення",
@@ -41,10 +49,10 @@ const formPrompt: FormPrompt = {
     start: "{name} має починатися з '{ruleValue}'",
     isoDate: "{name} має відповідати формату 'РРРР-ММ-ДД' (рік-місяць-день)",
     wrappedIn: "{name} має починатися і закінчуватися на '{ruleValue}'",
-    maxValue: "// [x]",
-    minValue: "// [x]",
-    range: "// [x]",
-    size: "// [x]",
+    maxValue: "{name} має бути менше або дорівнювати {ruleValue}",
+    minValue: "{name} має бути більше або дорівнювати {ruleValue}",
+    range: "{name} має бути в межах [{ruleValue}]",
+    size: "{name} має мати довжину від {min} до {max} символів",
 };
 
 const formText: FormText = {
@@ -53,23 +61,23 @@ const formText: FormText = {
     leavingMessage: "Є незбережені зміни на цій сторінці, які будуть втрачені, якщо ви продовжите.",
 };
 
-const calendarText: CalendarText = {
-    dayNames: ["// [x]", "_", "_", "_", "_", "_", "_"],
-    dayNamesShort: ["// [x]", "_", "_", "_", "_", "_", "_"],
+const calendarText: CalendarTexts = {
+    dayNames: ["неділя", "понеділок", "вівторок", "середа", "четвер", "п'ятниця", "субота"],
+    dayNamesShort: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
     days: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
     months: [
-        "Січень",
-        "Лютий",
-        "Березень",
-        "Квітень",
-        "Травень",
-        "Червень",
-        "Липень",
-        "Серпень",
-        "Вересень",
-        "Жовтень",
-        "Листопад",
-        "Грудень",
+        "січень",
+        "лютий",
+        "березень",
+        "квітень",
+        "травень",
+        "червень",
+        "липень",
+        "серпень",
+        "вересень",
+        "жовтень",
+        "листопад",
+        "грудень",
     ],
     monthsShort: [
         "Січ",
@@ -85,8 +93,8 @@ const calendarText: CalendarText = {
         "Лист",
         "Груд",
     ],
-    today: "Сьогодні",
-    now: "Зараз",
+    today: "сьогодні",
+    now: "зараз",
     am: "AM",
     pm: "PM",
     weekNo: "Тиждень",
@@ -111,6 +119,25 @@ const numberSettings: NumberSettings = {
     moneyPrecision: 0,
 };
 
+const dropdownTexts: DropdownMessages = {
+    addResult: "Додати <b>{term}</b>",
+    count: "{count} обрано",
+    maxSelections: "Максимум {maxCount} виборів",
+    noResults: "Нічого не знайдено.",
+    serverError: "Виникла помилка під час з'єднання з сервером",
+};
+
+const progressTexts: CommonProgressTexts = {
+    percent: "{percent}%",
+    ratio: "{value} з {total}",
+};
+
+const buttonTexts: ButtonTexts = {
+    ok: "Ок",
+    cancel: "Скасувати",
+    close: "Закрити",
+};
+
 export default {
     form: {
         prompt: formPrompt,
@@ -122,5 +149,18 @@ export default {
     },
     number: {
         ...numberSettings,
+    },
+
+    flyout: {
+        text: buttonTexts,
+    },
+    modal: {
+        text: buttonTexts,
+    },
+    dropdown: {
+        message: dropdownTexts,
+    },
+    progress: {
+        text: progressTexts,
     },
 };

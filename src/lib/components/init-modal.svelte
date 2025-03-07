@@ -15,14 +15,24 @@ import { findComponent, jQueryBySelector, nextUid } from "../data/dom-jquery";
 
 const MODAL_PREFIX: string = "modal";
 
+// region props -----------------------------------------------------------------------------------
+
 interface Props {
+    /** Two-way binding for setting and reading back modal dialog visibility */
     show: boolean;
+
+    /** Settings for Semantic UI component, see https://fomantic-ui.com/modules/modal.html#/settings */
     settings?: ModalSettings;
+
+    /** Id of the Semantic UI component, takes precedence over tag position */
     forId?: string;
+
+    /** If InitModal is used as a parent, render the children components */
     children?: Snippet;
 }
 
-// REACTIVE -------------------------------------------------------------------
+// region data ------------------------------------------------------------------------------------
+
 /* eslint-disable prefer-const */
 
 let {
@@ -37,8 +47,6 @@ let span: Element | undefined = undefined; // $state();
 
 /* eslint-enable */
 
-// DATA -----------------------------------------------------------------------
-
 interface ModalApi {
     modal(settings?: ModalSettings): void;
     modal(command: "is active"): boolean;
@@ -49,7 +57,7 @@ interface ModalApi {
 /** jQuery modal component */
 let elem: (JQueryApi & ModalApi) | undefined = undefined;
 
-// FUNCTIONS ------------------------------------------------------------------
+// region svelte -> modal -------------------------------------------------------------------------
 
 /** Propagate prop change to UI component */
 function svelteToInput(value: boolean): void {
@@ -75,7 +83,7 @@ $effect(() => {
     svelteToInput(show);
 });
 
-//-----------------------------------------------------------------------------
+// region modal -> svelte -------------------------------------------------------------------------
 
 /** When modal is opened or closed by the user */
 function inputToSvelte(newValue: boolean): void {
@@ -108,6 +116,8 @@ function onModalHidden(this: JQuery<HTMLElement>): void {
     }
     inputToSvelte(false);
 }
+
+// region init ------------------------------------------------------------------------------------
 
 onMount(async () => {
     // Initialize Semantic component and subscribe for changes

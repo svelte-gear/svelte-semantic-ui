@@ -17,15 +17,29 @@ import { FieldController } from "../data/field-controller";
 const FIELD_PREFIX: string = "f_slider";
 const INITIAL_SLIDER_VALUE: number = 0;
 
+// region props -----------------------------------------------------------------------------------
+
 interface Props {
+    /** Two-way binding for setting and reading back the slider value */
     value: number | number[];
+
+    /** Settings for Semantic UI component, see https://fomantic-ui.com/modules/slider.html#/settings */
     settings?: SliderSettings;
+
+    /** Optional field value validator. Uses Semantic UI form validation syntax.
+    See https://fomantic-ui.com/behaviors/form.html#/examples.
+    To avoid typos, use `rules` helper from `data/helpers.ts` {@link data/helpers.rule}. */
     validate?: RuleDefinition;
+
+    /** Id of the Semantic UI component, takes precedence over tag position */
     forId?: string;
+
+    /** If InitSlider is used as a parent, render the children components */
     children?: Snippet;
 }
 
-// REACTIVE -------------------------------------------------------------------
+// region data ------------------------------------------------------------------------------------
+
 /* eslint-disable prefer-const */
 
 let {
@@ -40,8 +54,6 @@ let {
 let span: Element | undefined = undefined;
 
 /* eslint-enable */
-
-// DATA -----------------------------------------------------------------------
 
 interface SliderApi {
     slider(settings: SliderSettings): void;
@@ -63,7 +75,7 @@ let range: boolean = false;
 /** Field descriptor and validator */
 let fieldCtrl: FieldController | undefined = undefined;
 
-// FUNCTIONS ------------------------------------------------------------------
+// region svelte -> slider ------------------------------------------------------------------------
 
 /** Propagate prop change to UI component */
 function svelteToInput(newValue: number | number[], forceUpdate?: boolean): void {
@@ -115,7 +127,7 @@ $effect(() => {
     // elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
 });
 
-//-----------------------------------------------------------------------------
+// region slider -> svelte ------------------------------------------------------------------------
 
 /** When input value changes, modify the svelte prop */
 function inputToSvelte(inputValue: number | number[]): void {
@@ -151,7 +163,7 @@ function onSliderChange(
     inputToSvelte(range ? [th1, th2] : newValue);
 }
 
-//-----------------------------------------------------------------------------
+// region init ------------------------------------------------------------------------------------
 
 onMount(async () => {
     // delay initialization till form controller is ready

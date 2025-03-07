@@ -4,13 +4,13 @@
  * @module _index
  */
 
-// INITIALIZATION
-
 import type { LogLevel } from "./data/common";
 import { initLog, formLog, compLog } from "./data/common";
 import { applyDefaultSettings } from "./data/settings";
 import { extendValidationRules } from "./data/validation-rules";
 import { registerBaseLocales } from "./i18n";
+
+// region initialization --------------------------------------------------------------------------
 
 /**
  * Prepares the framework defaults and locales.
@@ -26,15 +26,11 @@ export async function initializeFramework(loglevel: LogLevel = "warn"): Promise<
     registerBaseLocales();
 }
 
-// COMPONENTS
+export { registerRule } from "./data/validation-rules";
+export { setComponentInitMode } from "./data/dom-jquery";
+export { formLog, compLog, initLog } from "./data/common";
 
-export type { FormController } from "./data/form-controller";
-export { popup } from "./components/use-popup";
-export { sticky } from "./components/use-sticky";
-export { toast } from "./components/proc-toast";
-export { doValidateForm, doResetForm, getFormController } from "./data/form-controller";
-
-// DATA
+// region components ------------------------------------------------------------------------------
 
 export { default as InitForm } from "./data/init-form.svelte";
 
@@ -46,38 +42,43 @@ export { default as InitNumberInput } from "./components/init-input-number.svelt
 export { default as InitTextInput } from "./components/init-input-text.svelte";
 export { default as InitSlider } from "./components/init-slider.svelte";
 export { default as InitModal } from "./components/init-modal.svelte";
-
 export { default as InitProgress } from "./components/init-progress.svelte";
 export { default as InitRating } from "./components/init-rating.svelte";
 
-// HELPERS
+export { popup } from "./components/use-popup";
+export { sticky } from "./components/use-sticky";
+export { toast } from "./components/proc-toast";
 
+export type { FormController } from "./data/form-controller";
+
+export { doValidateForm, doResetForm, getFormController } from "./data/form-controller";
 export { fmt, parse, rule } from "./data/helpers";
 export { isoDate, isoTime } from "./data/common";
-export { setComponentInitMode } from "./data/dom-jquery";
+
+// region settings --------------------------------------------------------------------------------
 
 // TYPES
 
 export type { NumberSettings } from "./data/common";
 export type {
     CalendarSettings,
-    CalendarText,
+    CalendarTexts as CalendarText,
     CheckboxSettings,
     DropdownSettings,
     DropdownMessages,
-    FlyoutTexts,
+    ButtonTexts as FlyoutTexts,
     FormSettings,
     FormPrompt,
     FormText,
     ModalSettings,
     PopupSettings,
-    ProgressTexts,
+    CommonProgressTexts as ProgressTexts,
     SliderSettings,
     StickySettings,
     ToastSettings,
 } from "./data/semantic-types";
 
-// SETTINGS
+// DEFAULTS
 
 export {
     calendarDefaults,
@@ -92,7 +93,7 @@ export {
     formDefaults,
 } from "./data/settings";
 
-// I18N
+// region I18N ------------------------------------------------------------------------------------
 
 export {
     applyLocale,
@@ -103,7 +104,3 @@ export {
     supportedLanguages,
     supportedLocales,
 } from "./i18n";
-
-export { registerRule } from "./data/validation-rules";
-
-export { formLog, compLog, initLog } from "./data/common";

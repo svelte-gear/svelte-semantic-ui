@@ -16,6 +16,8 @@ function escapeRegex(input: string): string {
     return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+// region TextFmt ---------------------------------------------------------------------------------
+
 /** Text formatter implementation; supports case, charset, maxLen and list options */
 export class TextFmt implements TextFormatter {
     settings: TextInputSettings;
@@ -50,6 +52,8 @@ export class TextFmt implements TextFormatter {
             compLog.warn("TextFmt: invalid settings - listSeparator is ignored if 'list:false'");
         }
     }
+
+    // region :  private --------------------------------------------------------------------------
 
     private fixCase(val: string): string {
         switch (this.settings.case) {
@@ -91,7 +95,7 @@ export class TextFmt implements TextFormatter {
         }
     }
 
-    formatStr(val: string): string {
+    private formatString(val: string): string {
         if (typeof val !== "string") {
             throw new Error("textFormatter expects string as data type");
         }
@@ -151,6 +155,8 @@ export class TextFmt implements TextFormatter {
         return res;
     }
 
+    // region :  public ---------------------------------------------------------------------------
+
     format(val: string[] | string): string {
         if (this.settings.list) {
             if (!val) {
@@ -166,7 +172,7 @@ export class TextFmt implements TextFormatter {
                 formatSeparator = `${this.settings.listSeparator} `;
             }
             const res: string = val
-                .map((s: string) => this.formatStr(s))
+                .map((s: string) => this.formatString(s))
                 .filter((s: string) => !!s)
                 .join(formatSeparator);
             return res;
@@ -179,7 +185,7 @@ export class TextFmt implements TextFormatter {
                     `TextFormatter expects data of type string, got ${typeof val} ${val}`
                 );
             }
-            return this.formatStr(val);
+            return this.formatString(val);
         }
     }
 
@@ -188,12 +194,12 @@ export class TextFmt implements TextFormatter {
             if (!val) {
                 return [];
             }
-            return val.split(this.settings.listSeparator!).map((r: string) => this.formatStr(r));
+            return val.split(this.settings.listSeparator!).map((r: string) => this.formatString(r));
         } else {
             if (!val) {
                 return "";
             }
-            return this.formatStr(val);
+            return this.formatString(val);
         }
     }
 }

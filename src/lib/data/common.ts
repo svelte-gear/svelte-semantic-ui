@@ -5,18 +5,7 @@
 
 import type { JQueryApi } from "./semantic-types";
 
-//-----------------------------------------------------------------------------
-
-/*
-   dP
-   88
- d8888P dP    dP 88d888b. .d8888b. .d8888b.
-   88   88    88 88'  `88 88ooood8 Y8ooooo.
-   88   88.  .88 88.  .88 88.  ...       88
-   dP   `8888P88 88Y888P' `88888P' `88888P'
-             .88 88
-         d8888P  dP
-*/
+// region types -----------------------------------------------------------------------------------
 
 /** Settings controlling number and money formatting. */
 export interface NumberSettings {
@@ -67,17 +56,7 @@ export interface TextInputSettings {
 //     destroy: () => void;
 // } | void;
 
-//-----------------------------------------------------------------------------
-
-/*
-            dP   oo dP
-            88      88
- dP    dP d8888P dP 88
- 88    88   88   88 88
- 88.  .88   88   88 88
- `88888P'   dP   dP dP
-
-*/
+// region equals ----------------------------------------------------------------------------------
 
 /** Compare two Date objects */
 export function equalDates(a1: Date | undefined, a2: Date | undefined): boolean {
@@ -127,14 +106,7 @@ export function equalNumberArrays(
     }
 }
 
-/** Output array as string */
-export function arrayToString(val: string | number | string[] | number[]): string {
-    if (Array.isArray(val)) {
-        return `[${val.join(", ")}]`;
-    } else {
-        return `${val}`;
-    }
-}
+// region to string -------------------------------------------------------------------------------
 
 /** Format a number, padded with "0" to the minimum length */
 export function pad(n: number, size: number): string {
@@ -166,51 +138,27 @@ export function isoTime(d: Date | undefined): string {
     return `${hour}:${minute}`;
 }
 
-/** Convert objects to JSON string, for jQuery and DOM elements - get the HTML */
-export function stringify(obj: unknown): string {
-    if (!obj || typeof obj !== "object") {
-        return `${obj}`;
+/** Output array as string */
+export function arrayToString(val: string | number | string[] | number[] | undefined): string {
+    if (Array.isArray(val)) {
+        return `[${val.join(", ")}]`;
+    } else {
+        return `${val}`;
     }
-    const jqueryObj: JQueryApi = obj as JQueryApi;
-    if (jqueryObj.prop && typeof jqueryObj.prop === "function") {
-        const html: string = jqueryObj.prop("outerHTML") as string;
-        if (html) {
-            return `jQuery: ${html.slice(0, html.indexOf(">") + 1)}`;
-        }
-    }
-    const domObj: Element = obj as Element;
-    if (domObj.outerHTML) {
-        const html: string = domObj.outerHTML;
-        if (html) {
-            return `DOM: ${html.slice(0, html.indexOf(">") + 1)}`;
-        }
-    }
-    // Exclude circular references and '__' props
-    const seen: WeakSet<object> = new WeakSet();
-    return JSON.stringify(obj, (key: string, value: unknown) => {
-        if (typeof value === "object" && value !== null) {
-            if (seen.has(value)) {
-                return undefined;
-            }
-            seen.add(value);
-        }
-        if (key.startsWith("__")) {
-            return undefined;
-        }
-        return value;
-    });
 }
 
-/*
- dP
- 88
- 88 .d8888b. .d8888b.
- 88 88'  `88 88'  `88
- 88 88.  .88 88.  .88
- dP `88888P' `8888P88
-                  .88
-              d8888P
-*/
+/** Textual presentation of the date value */
+export function dateToStr(val: Date | Date[] | undefined): string {
+    if (val instanceof Date) {
+        return `${isoDate(val)} ${isoTime(val)}`;
+    }
+    if (Array.isArray(val)) {
+        return `[${val.map((d: Date) => `${isoDate(d)} ${isoTime(d)}`).toString()}]`;
+    }
+    return `${val}`;
+}
+
+// region Logger ----------------------------------------------------------------------------------
 
 /** Logger levels, matching browser console log functions */
 export type LogLevel = "error" | "warn" | "log" | "info" | "debug";
@@ -273,6 +221,54 @@ export class Logger {
     }
 }
 
+/** Logger used by form validation routines */
+export const formLog: Logger = new Logger("FORM");
+
+/** Logger used by field component implementations */
+export const compLog: Logger = new Logger("--");
+
+/** Logger used by framework initialization functions */
+export const initLog: Logger = new Logger(">>>");
+
+// region http log --------------------------------------------------------------------------------
+
+// TODO: move to examples ?
+
+/** Convert objects to JSON string, for jQuery and DOM elements - get the HTML */
+export function stringify(obj: unknown): string {
+    if (!obj || typeof obj !== "object") {
+        return `${obj}`;
+    }
+    const jqueryObj: JQueryApi = obj as JQueryApi;
+    if (jqueryObj.prop && typeof jqueryObj.prop === "function") {
+        const html: string = jqueryObj.prop("outerHTML") as string;
+        if (html) {
+            return `jQuery: ${html.slice(0, html.indexOf(">") + 1)}`;
+        }
+    }
+    const domObj: Element = obj as Element;
+    if (domObj.outerHTML) {
+        const html: string = domObj.outerHTML;
+        if (html) {
+            return `DOM: ${html.slice(0, html.indexOf(">") + 1)}`;
+        }
+    }
+    // Exclude circular references and '__' props
+    const seen: WeakSet<object> = new WeakSet();
+    return JSON.stringify(obj, (key: string, value: unknown) => {
+        if (typeof value === "object" && value !== null) {
+            if (seen.has(value)) {
+                return undefined;
+            }
+            seen.add(value);
+        }
+        if (key.startsWith("__")) {
+            return undefined;
+        }
+        return value;
+    });
+}
+
 function localTime(): string {
     const currentDate: Date = new Date();
     const localDate: Date = new Date(
@@ -305,12 +301,3 @@ export function buildHttpLogger(logger: Logger, level: LogLevel | "off", url: st
     }
     logger.build(level, httpLogImpl);
 }
-
-/** Logger used by form validation routines */
-export const formLog: Logger = new Logger("FORM");
-
-/** Logger used by field component implementations */
-export const compLog: Logger = new Logger("--");
-
-/** Logger used by framework initialization functions */
-export const initLog: Logger = new Logger(">>>");

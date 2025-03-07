@@ -10,22 +10,36 @@ import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
 import type { DropdownSettings, JQueryApi, RuleDefinition } from "../data/semantic-types";
-import { compLog, equalStringArrays } from "../data/common";
+import { arrayToString, compLog, equalStringArrays } from "../data/common";
 import { findComponent, findLabelWithBlank } from "../data/dom-jquery";
 import { FieldController } from "../data/field-controller";
 
 // const FIELD_PREFIX: string = "f_dropdown";
 const DROPDOWN_PREVENT_CLEARING_BAD_DATA: boolean = false;
 
+// region props -----------------------------------------------------------------------------------
+
 interface Props {
-    value: string | string[] | undefined; // TODO: decide on null or undefined for required binding
+    /** Two-way binding for setting and reading back the selected item or array of items */
+    value: string | string[] | undefined;
+
+    /** Settings for Semantic UI component, see https://fomantic-ui.com/modules/dropdown.html#/settings */
     settings?: DropdownSettings;
+
+    /** Optional field value validator. Uses Semantic UI form validation syntax.
+    See https://fomantic-ui.com/behaviors/form.html#/examples.
+    To avoid typos, use `rules` helper from `data/helpers.ts` {@link data/helpers.rule}. */
     validate?: RuleDefinition;
+
+    /** Id of the Semantic UI component, takes precedence over tag position */
     forId?: string;
+
+    /** If InitDropdown is used as a parent, render the children components */
     children?: Snippet;
 }
 
-// REACTIVE -------------------------------------------------------------------
+// region data ------------------------------------------------------------------------------------
+
 /* eslint-disable prefer-const */
 
 let {
@@ -40,8 +54,6 @@ let {
 let span: Element | undefined = undefined;
 
 /* eslint-enable */
-
-// DATA -----------------------------------------------------------------------
 
 interface DropdownApi {
     dropdown(settings: DropdownSettings): void;
@@ -67,17 +79,7 @@ let multi: boolean = false;
 /** Field descriptor and validator */
 let fieldCtrl: FieldController | undefined = undefined;
 
-// FUNCTIONS ------------------------------------------------------------------
-
-/** Textual presentation of the value. */
-function toStr(val: string | string[] | undefined): string {
-    if (Array.isArray(val)) {
-        return `[${val.toString()}]`;
-    }
-    return `${val}`;
-}
-
-//-----------------------------------------------------------------------------
+// region svelte -> dropdown ----------------------------------------------------------------------
 
 /** Propagate prop change to UI component */
 function svelteToInput(newValue: string | string[] | undefined): void {
@@ -92,7 +94,7 @@ function svelteToInput(newValue: string | string[] | undefined): void {
             throw new Error(`Multi-value dropdown expects string[] value, got ${newValue}`);
         }
         if (!equalStringArrays(newValue, curValue)) {
-            compLog.log(`Dropdown (${fieldCtrl?.key}) : value -> ${toStr(newValue)}`);
+            compLog.log(`Dropdown (${fieldCtrl?.key}) : value -> ${arrayToString(newValue)}`);
             // NOTE: use 'set exactly' instead of 'set selected'!!!
             elem.dropdown("set exactly", newValue);
             void fieldCtrl?.revalidate();
@@ -101,10 +103,12 @@ function svelteToInput(newValue: string | string[] | undefined): void {
         // single-select
         const curValue: string | string[] = elem.dropdown("get value");
         if (Array.isArray(newValue)) {
-            throw new Error(`Simple-value dropdown expects string value, got ${toStr(newValue)}`);
+            throw new Error(
+                `Simple-value dropdown expects string value, got ${arrayToString(newValue)}`
+            );
         }
         if (curValue !== newValue) {
-            compLog.log(`Dropdown (${fieldCtrl?.key}) : value -> ${toStr(newValue)}`);
+            compLog.log(`Dropdown (${fieldCtrl?.key}) : value -> ${arrayToString(newValue)}`);
             const exists: unknown = elem.dropdown("get item", value as string);
             if (exists) {
                 elem.dropdown("set selected", value as string);
@@ -140,7 +144,7 @@ $effect(() => {
     // elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
 });
 
-//-----------------------------------------------------------------------------
+// region dropdown -> svelte ----------------------------------------------------------------------
 
 /** When input value changes, modify the svelte prop */
 function inputToSvelte(inputValue: string | string[] | undefined): void {
@@ -150,13 +154,13 @@ function inputToSvelte(inputValue: string | string[] | undefined): void {
     // store in the prop only if the value is different
     if (multi) {
         if (!equalStringArrays(value as string[], inputValue as string[])) {
-            compLog.log(`Dropdown (${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
+            compLog.log(`Dropdown (${fieldCtrl?.key}) : value <- ${arrayToString(inputValue)}`);
             value = inputValue;
             void fieldCtrl?.revalidate();
         }
     } else {
         if (value !== inputValue) {
-            compLog.log(`Dropdown (${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
+            compLog.log(`Dropdown (${fieldCtrl?.key}) : value <- ${arrayToString(inputValue)}`);
             if (DROPDOWN_PREVENT_CLEARING_BAD_DATA) {
                 const exists: unknown = elem.dropdown("get item", inputValue as string);
                 if (exists) {
@@ -188,7 +192,7 @@ function onDropdownChange(
     inputToSvelte(newValue);
 }
 
-//-----------------------------------------------------------------------------
+// region init ------------------------------------------------------------------------------------
 
 function labelClick(): void {
     elem?.dropdown("focus");
@@ -211,11 +215,12 @@ onMount(async () => {
     // check if it is a multi-select
     multi = elem.hasClass("multiple");
     if (multi && !Array.isArray(value)) {
-        throw new Error(`Multi-value dropdown has a string[] 'value', got ${toStr(value)}`);
+        throw new Error(`Multi-value dropdown has a string[] 'value', got ${arrayToString(value)}`);
     }
     if (!multi && Array.isArray(value)) {
         throw new Error(
-            `Dropdown has a string 'value', got ${toStr(value)}, did you forget to add 'multiple' class or attr?`
+            // eslint-disable-next-line max-len
+            `Dropdown has a string 'value', got ${arrayToString(value)}, did you forget to add 'multiple' class or attr?`
         );
     }
 

@@ -7,15 +7,7 @@ import { DateFmt } from "../data/format-date";
 import { isoDate } from "./common";
 import { NumberFmt } from "./format-number";
 
-/*
- .8888b              dP
- 88   "              88
- 88aaa  88d8b.d8b. d8888P
- 88     88'`88'`88   88
- 88     88  88  88   88
- dP     dP  dP  dP   dP
-
-*/
+// region fmt -------------------------------------------------------------------------------------
 
 // The formatter objects are lazily initialized, to give user the chance to change defaults.
 // 'int' differs from 'num' by not using thousand separator.
@@ -71,15 +63,7 @@ export const fmt: {
     },
 };
 
-/*
-
- 88d888b. .d8888b. 88d888b. .d8888b. .d8888b.
- 88'  `88 88'  `88 88'  `88 Y8ooooo. 88ooood8
- 88.  .88 88.  .88 88             88 88.  ...
- 88Y888P' `88888P8 dP       `88888P' `88888P'
- 88
- dP
-*/
+// region parse -----------------------------------------------------------------------------------
 
 /** Default parser helper. Intended to be used from code. */
 export const parse: {
@@ -121,16 +105,7 @@ export const parse: {
     },
 };
 
-/*
-                   dP             dP                dP
-                   88             88                88
- 88d888b. dP    dP 88 .d8888b.    88d888b. .d8888b. 88 88d888b. .d8888b. 88d888b.
- 88'  `88 88    88 88 88ooood8    88'  `88 88ooood8 88 88'  `88 88ooood8 88'  `88
- 88       88.  .88 88 88.  ...    88    88 88.  ... 88 88.  .88 88.  ... 88
- dP       `88888P' dP `88888P'    dP    dP `88888P' dP 88Y888P' `88888P' dP
-                                                       88
-                                                       dP
-*/
+// region rule ------------------------------------------------------------------------------------
 
 /** Autocomplete helper for validation rules. */
 /* prettier-ignore */

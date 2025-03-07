@@ -18,6 +18,8 @@ function escapeRegExp(val: string): string {
     return val.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").trim();
 }
 
+// region NumberFmt -------------------------------------------------------------------------------
+
 /** NumberFormatter implementation, which supports integer number, and locale-aware decimal and money */
 export class NumberFmt implements NumberFormatter {
     type: "integer" | "decimal" | "money";
@@ -26,9 +28,9 @@ export class NumberFmt implements NumberFormatter {
 
     settings: NumberSettings;
 
-    prefixRegex: RegExp | undefined;
+    private prefixRegex: RegExp | undefined;
 
-    suffixRegex: RegExp | undefined;
+    private suffixRegex: RegExp | undefined;
 
     constructor(inputSettings: NumberInputSettings) {
         if (inputSettings.type && !["integer", "decimal", "money"].includes(inputSettings.type)) {
@@ -54,6 +56,8 @@ export class NumberFmt implements NumberFormatter {
             this.suffixRegex = new RegExp(`\\s*${escapeRegExp(this.settings.moneySuffix)}\\s*$`);
         }
     }
+
+    // region :  public ---------------------------------------------------------------------------
 
     parse(value: string): number | undefined {
         let val: string = value;

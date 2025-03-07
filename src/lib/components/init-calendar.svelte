@@ -10,21 +10,35 @@ import type { Snippet } from "svelte";
 import { onMount, onDestroy, tick } from "svelte";
 
 import type { CalendarSettings, JQueryApi, RuleDefinition } from "../data/semantic-types";
-import { equalDates, isoDate, isoTime, compLog } from "../data/common";
+import { equalDates, compLog, dateToStr } from "../data/common";
 import { findComponent, findLabelWithBlank, copyParentKey } from "../data/dom-jquery";
 import { FieldController } from "../data/field-controller";
 
 const FIELD_PREFIX: string = "f_calendar";
 
+// region props -----------------------------------------------------------------------------------
+
 interface Props {
+    /** Two-way binding for setting and reading back the Calendar date, time, or datetime */
     value: Date | undefined;
+
+    /** Settings for Semantic UI component, see https://fomantic-ui.com/modules/calendar.html#/settings */
     settings?: CalendarSettings;
+
+    /** Optional field value validator. Uses Semantic UI form validation syntax.
+    See https://fomantic-ui.com/behaviors/form.html#/examples.
+    To avoid typos, use `rules` helper from `data/helpers.ts` {@link data/helpers.rule}. */
     validate?: RuleDefinition;
+
+    /** Id of the Semantic UI component, takes precedence over tag position */
     forId?: string;
+
+    /** If InitCalendar is used as a parent, render the children components */
     children?: Snippet;
 }
 
-// REACTIVE -------------------------------------------------------------------
+// region data ------------------------------------------------------------------------------------
+
 /* eslint-disable prefer-const */
 
 let {
@@ -39,8 +53,6 @@ let {
 let span: Element | undefined = undefined;
 
 /* eslint-enable */
-
-// DATA -----------------------------------------------------------------------
 
 interface CalendarApi {
     calendar(settings: CalendarSettings): void;
@@ -58,20 +70,7 @@ let input: JQueryApi | undefined = undefined;
 /** Field descriptor and validator */
 let fieldCtrl: FieldController | undefined = undefined;
 
-// FUNCTIONS ------------------------------------------------------------------
-
-/** Textual presentation of the value. */
-function toStr(val: Date | Date[] | undefined): string {
-    if (val instanceof Date) {
-        return `${isoDate(val)} ${isoTime(val)}`;
-    }
-    if (Array.isArray(val)) {
-        return `[${val.map((d: Date) => `${isoDate(d)} ${isoTime(d)}`).toString()}]`;
-    }
-    return `${val}`;
-}
-
-//-----------------------------------------------------------------------------
+// region svelte -> calendar ----------------------------------------------------------------------
 
 /** Propagate prop change to UI component */
 function svelteToInput(newValue: Date | undefined): void {
@@ -85,7 +84,7 @@ function svelteToInput(newValue: Date | undefined): void {
         val = val[0];
     }
     if (!equalDates(newValue, val)) {
-        compLog.log(`Calendar (${fieldCtrl?.key}) value -> ${toStr(newValue)}`);
+        compLog.log(`Calendar (${fieldCtrl?.key}) value -> ${dateToStr(newValue)}`);
         elem.calendar("set date", newValue);
     }
     void fieldCtrl?.revalidate();
@@ -104,13 +103,13 @@ $effect(() => {
     // elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
 });
 
-//-----------------------------------------------------------------------------
+// region calendar -> svelte ----------------------------------------------------------------------
 
 /** When input value changes, modify the svelte prop */
 function inputToSvelte(inputValue: Date): void {
     // store in the prop only if the value is different
     if (!equalDates(value, inputValue)) {
-        compLog.log(`Calendar (${fieldCtrl?.key}) : value <- ${toStr(inputValue)}`);
+        compLog.log(`Calendar (${fieldCtrl?.key}) : value <- ${dateToStr(inputValue)}`);
         value = inputValue;
     }
     void fieldCtrl?.revalidate();
@@ -144,7 +143,7 @@ function onCalendarHidden(this: JQueryApi): void {
     // }
 }
 
-//-----------------------------------------------------------------------------
+// region init ------------------------------------------------------------------------------------
 
 function labelClick(): void {
     elem?.calendar("focus");

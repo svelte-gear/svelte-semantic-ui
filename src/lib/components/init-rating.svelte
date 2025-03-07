@@ -17,15 +17,29 @@ import { FieldController } from "../data/field-controller";
 const FIELD_PREFIX: string = "f_rating";
 const INITIAL_RATING_VALUE: number = 0;
 
+// region props -----------------------------------------------------------------------------------
+
 interface Props {
+    /** Two-way binding for setting and reading back the rating value */
     value: number;
+
+    /** Settings for Semantic UI component, see https://fomantic-ui.com/modules/rating.html#/settings */
     settings?: RatingSettings;
+
+    /** Optional field value validator. Uses Semantic UI form validation syntax.
+    See https://fomantic-ui.com/behaviors/form.html#/examples.
+    To avoid typos, use `rules` helper from `data/helpers.ts` {@link data/helpers.rule}. */
     validate?: RuleDefinition;
+
+    /** Id of the Semantic UI component, takes precedence over tag position */
     forId?: string;
+
+    /** If InitRating is used as a parent, render the children components */
     children?: Snippet;
 }
 
-// REACTIVE -------------------------------------------------------------------
+// region data ------------------------------------------------------------------------------------
+
 /* eslint-disable prefer-const */
 
 let {
@@ -40,8 +54,6 @@ let {
 let span: Element | undefined = undefined;
 
 /* eslint-enable */
-
-// DATA -----------------------------------------------------------------------
 
 interface RatingApi {
     rating(settings: RatingSettings): void;
@@ -60,7 +72,7 @@ let fieldCtrl: FieldController | undefined = undefined;
 
 // FIXME: implement isEmpty check for rating
 
-// FUNCTIONS ------------------------------------------------------------------
+// region svelte -> rating ------------------------------------------------------------------------
 
 /** Propagate prop change to UI component */
 function svelteToInput(newValue: number, forceUpdate?: boolean): void {
@@ -91,7 +103,7 @@ $effect(() => {
     fieldCtrl?.replaceRules(validate);
 });
 
-//-----------------------------------------------------------------------------
+// region rating -> svelte ------------------------------------------------------------------------
 
 /** When input value changes, modify the svelte prop */
 function inputToSvelte(inputValue: number): void {
@@ -118,7 +130,7 @@ function onRatingChange(this: JQuery<HTMLElement>, newValue: number): void {
     inputToSvelte(newValue);
 }
 
-//-----------------------------------------------------------------------------
+// region init ------------------------------------------------------------------------------------
 
 onMount(async () => {
     // delay initialization till form controller is ready

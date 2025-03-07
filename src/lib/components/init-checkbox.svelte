@@ -16,6 +16,8 @@ import { FieldController } from "../data/field-controller";
 
 const FIELD_PREFIX: string = "f_checkbox";
 
+// region props -----------------------------------------------------------------------------------
+
 interface Props {
     /** To-way binding for the checkbox state, null value means 'indeterminate' [-].
      *
@@ -42,7 +44,8 @@ interface Props {
     children?: Snippet;
 }
 
-// REACTIVE -------------------------------------------------------------------
+// region data ------------------------------------------------------------------------------------
+
 /* eslint-disable prefer-const */
 
 let {
@@ -58,8 +61,6 @@ let {
 let span: Element | undefined = undefined;
 
 /* eslint-enable */
-
-// DATA -----------------------------------------------------------------------
 
 interface CheckboxApi {
     checkbox(settings: CheckboxSettings): void;
@@ -81,7 +82,7 @@ let input: JQueryApi | undefined = undefined;
 /** Field descriptor and validator */
 let fieldCtrl: FieldController | undefined = undefined;
 
-// FUNCTIONS ------------------------------------------------------------------
+// region svelte -> checkbox ----------------------------------------------------------------------
 
 function svelteToInput(newValue: boolean | null): void {
     if (!elem) {
@@ -137,7 +138,7 @@ $effect(() => {
     // elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
 });
 
-//-----------------------------------------------------------------------------
+// region checkbox -> svelte ----------------------------------------------------------------------
 
 /** When input value changes, modify the svelte prop */
 function inputToSvelte(newState: boolean | null): void {
@@ -203,7 +204,7 @@ function onInputChange(this: JQueryApi): void {
     void inputToSvelte(state);
 }
 
-//-----------------------------------------------------------------------------
+// region init ------------------------------------------------------------------------------------
 
 onMount(async () => {
     // delay initialization till form controller is ready

@@ -26,7 +26,8 @@ import {
     ensureFieldKey,
     nextUid,
 } from "../data/dom-jquery";
-// import { formDefaults } from "../data/settings";
+
+// region props -----------------------------------------------------------------------------------
 
 interface Props {
     /** Determines if a field change will cause form re-validation.
@@ -64,7 +65,8 @@ interface Props {
     children?: Snippet;
 }
 
-// REACTIVE -------------------------------------------------------------------
+// region data ------------------------------------------------------------------------------------
+
 /* eslint-disable prefer-const */
 
 let {
@@ -83,8 +85,6 @@ let span: Element | undefined = undefined;
 
 /* eslint-enable */
 
-// DATA -----------------------------------------------------------------------
-
 /** jQuery form component */
 let elem: (JQueryApi & FormApi) | undefined = undefined;
 
@@ -98,7 +98,7 @@ if (getComponentInitMode().includes("parent")) {
     void import("../init-wrapper-fix.css");
 }
 
-// FUNCTIONS ------------------------------------------------------------------
+// region svelte -> form --------------------------------------------------------------------------
 
 /** When 'active' prop changes, update the Semantic UI form controller */
 $effect(() => {
@@ -106,6 +106,7 @@ $effect(() => {
     // eslint-disable-next-line eqeqeq
     if (formCtrl && formCtrl.isActive() == false && validateForm == true) {
         formCtrl.setActive(true);
+        return;
     }
     // eslint-disable-next-line eqeqeq
     if (formCtrl && formCtrl.isActive() == true && validateForm == false) {
@@ -122,6 +123,7 @@ $effect(() => {
     // eslint-disable-next-line eqeqeq
     if (formCtrl && formCtrl.isIgnoreEmpty() == true && validateEmpty == true) {
         formCtrl.setIgnoreEmpty(false);
+        return;
     }
     // eslint-disable-next-line eqeqeq
     if (formCtrl && formCtrl.isIgnoreEmpty() == false && validateEmpty == false) {
@@ -129,7 +131,7 @@ $effect(() => {
     }
 });
 
-// ----------------------------------------------------------------------------
+// region form -> svelte --------------------------------------------------------------------------
 
 /** When form validation result changes, modify the corresponding prop. */
 function changeValid(ctrlValue: boolean): void {
@@ -190,7 +192,7 @@ function onCleanCallback(this: JQueryApi): void {
     formLog.debug("DIRTY:", dirty);
 }
 
-//-----------------------------------------------------------------------------
+// region init ------------------------------------------------------------------------------------
 
 onMount(async () => {
     // DOM is ready, initialize the form immediately

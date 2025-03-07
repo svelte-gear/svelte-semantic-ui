@@ -8,7 +8,15 @@
  */
 
 import type { NumberSettings } from "../data/common";
-import type { CalendarSettings, CalendarText, FormPrompt, FormText } from "../data/semantic-types";
+import type {
+    ButtonTexts,
+    CalendarSettings,
+    CalendarTexts,
+    CommonProgressTexts,
+    DropdownMessages,
+    FormPrompt,
+    FormText,
+} from "../data/semantic-types";
 
 const formPrompt: FormPrompt = {
     empty: "{name} deve avere un valore",
@@ -41,10 +49,10 @@ const formPrompt: FormPrompt = {
     start: "{name} deve iniziare con '{ruleValue}'",
     isoDate: "{name} deve seguire il formato 'AAAA-MM-GG' (anno-mese-giorno)",
     wrappedIn: "{name} deve iniziare e finire con '{ruleValue}'",
-    maxValue: "// [x]",
-    minValue: "// [x]",
-    range: "// [x]",
-    size: "// [x]",
+    maxValue: "{name} deve essere minore o uguale a {ruleValue}",
+    minValue: "{name} deve essere maggiore o uguale a {ruleValue}",
+    range: "{name} deve essere compreso nell'intervallo [{ruleValue}]",
+    size: "{name} deve avere una lunghezza compresa tra {min} e {max} caratteri",
 };
 
 const formText: FormText = {
@@ -54,10 +62,10 @@ const formText: FormText = {
         "Ci sono modifiche non salvate in questa pagina che andranno perse se continui.",
 };
 
-const calendarText: CalendarText = {
-    dayNames: ["// [x]", "_", "_", "_", "_", "_", "_"],
-    dayNamesShort: ["// [x]", "_", "_", "_", "_", "_", "_"],
-    days: ["D", "L", "M", "M", "G", "V", "S"],
+const calendarText: CalendarTexts = {
+    dayNames: ["domenica", "lunedì", "martedì", "mercoledì", "giovedì", "venerdì", "sabato"],
+    dayNamesShort: ["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"],
+    days: ["Do", "Lu", "Ma", "Me", "Gi", "Ve", "Sa"],
     months: [
         "gennaio",
         "febbraio",
@@ -73,18 +81,18 @@ const calendarText: CalendarText = {
         "dicembre",
     ],
     monthsShort: [
-        "gen",
-        "feb",
-        "mar",
-        "apr",
-        "mag",
-        "giu",
-        "lug",
-        "ago",
-        "set",
-        "ott",
-        "nov",
-        "dic",
+        "Gen",
+        "Feb",
+        "Mar",
+        "Apr",
+        "Mag",
+        "Giu",
+        "Lug",
+        "Ago",
+        "Set",
+        "Ott",
+        "Nov",
+        "Dic",
     ],
     today: "oggi",
     now: "adesso",
@@ -112,6 +120,25 @@ const numberSettings: NumberSettings = {
     moneyPrecision: 2,
 };
 
+const dropdownTexts: DropdownMessages = {
+    addResult: "Aggiungi <b>{term}</b>",
+    count: "{count} selezionati",
+    maxSelections: "Massimo {maxCount} selezioni",
+    noResults: "Nessun risultato trovato.",
+    serverError: "Si è verificato un errore durante il contatto con il server",
+};
+
+const progressTexts: CommonProgressTexts = {
+    percent: "{percent}%",
+    ratio: "{value} di {total}",
+};
+
+const buttonTexts: ButtonTexts = {
+    ok: "Ok",
+    cancel: "Annulla",
+    close: "Chiudi",
+};
+
 export default {
     form: {
         prompt: formPrompt,
@@ -123,5 +150,18 @@ export default {
     },
     number: {
         ...numberSettings,
+    },
+
+    flyout: {
+        text: buttonTexts,
+    },
+    modal: {
+        text: buttonTexts,
+    },
+    dropdown: {
+        message: dropdownTexts,
+    },
+    progress: {
+        text: progressTexts,
     },
 };

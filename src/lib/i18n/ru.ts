@@ -10,7 +10,15 @@
 /* eslint-disable max-len */
 
 import type { NumberSettings } from "../data/common";
-import type { CalendarSettings, CalendarText, FormPrompt, FormText } from "../data/semantic-types";
+import type {
+    ButtonTexts,
+    CalendarSettings,
+    CalendarTexts,
+    CommonProgressTexts,
+    DropdownMessages,
+    FormPrompt,
+    FormText,
+} from "../data/semantic-types";
 
 const formPrompt: FormPrompt = {
     empty: "{name} должно иметь значение",
@@ -43,10 +51,10 @@ const formPrompt: FormPrompt = {
     start: "{name} должно начинаться с '{ruleValue}'",
     isoDate: "{name} должно быть в формате 'ГГГГ-ММ-ДД' (год-месяц-день)",
     wrappedIn: "{name} должно начинаться и заканчиваться '{ruleValue}'",
-    maxValue: "// [x]",
-    minValue: "// [x]",
-    range: "// [x]",
-    size: "// [x]",
+    maxValue: "{name} должно быть меньше или равно {ruleValue}",
+    minValue: "{name} должно быть больше или равно {ruleValue}",
+    range: "{name} должно находиться в диапазоне [{ruleValue}]",
+    size: "{name} должно иметь длину от {min} до {max} символов",
 };
 
 const formText: FormText = {
@@ -56,23 +64,23 @@ const formText: FormText = {
         "На этой странице есть несохраненные изменения, которые будут потеряны, если вы продолжите.",
 };
 
-const calendarText: CalendarText = {
-    dayNames: ["// [x]", "_", "_", "_", "_", "_", "_"],
-    dayNamesShort: ["// [x]", "_", "_", "_", "_", "_", "_"],
+const calendarText: CalendarTexts = {
+    dayNames: ["воскресенье", "понедельник", "вторник", "среда", "четверг", "пятница", "суббота"],
+    dayNamesShort: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
     days: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
     months: [
-        "Январь",
-        "Февраль",
-        "Март",
-        "Апрель",
-        "Май",
-        "Июнь",
-        "Июль",
-        "Август",
-        "Сентябрь",
-        "Октябрь",
-        "Ноябрь",
-        "Декабрь",
+        "январь",
+        "февраль",
+        "март",
+        "апрель",
+        "май",
+        "июнь",
+        "июль",
+        "август",
+        "сентябрь",
+        "октябрь",
+        "ноябрь",
+        "декабрь",
     ],
     monthsShort: [
         "Янв",
@@ -88,8 +96,8 @@ const calendarText: CalendarText = {
         "Ноя",
         "Дек",
     ],
-    today: "Сегодня",
-    now: "Сейчас",
+    today: "сегодня",
+    now: "сейчас",
     am: "AM",
     pm: "PM",
     weekNo: "Неделя",
@@ -114,6 +122,25 @@ const numberSettings: NumberSettings = {
     moneyPrecision: 0,
 };
 
+const dropdownTexts: DropdownMessages = {
+    addResult: "Добавить <b>{term}</b>",
+    count: "{count} выбрано",
+    maxSelections: "Максимум {maxCount} выборов",
+    noResults: "Ничего не найдено.",
+    serverError: "Произошла ошибка при подключении к серверу",
+};
+
+const progressTexts: CommonProgressTexts = {
+    percent: "{percent}%",
+    ratio: "{value} из {total}",
+};
+
+const buttonTexts: ButtonTexts = {
+    ok: "Ок",
+    cancel: "Отмена",
+    close: "Закрыть",
+};
+
 export default {
     form: {
         prompt: formPrompt,
@@ -125,5 +152,18 @@ export default {
     },
     number: {
         ...numberSettings,
+    },
+
+    flyout: {
+        text: buttonTexts,
+    },
+    modal: {
+        text: buttonTexts,
+    },
+    dropdown: {
+        message: dropdownTexts,
+    },
+    progress: {
+        text: progressTexts,
     },
 };

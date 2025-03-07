@@ -10,12 +10,12 @@
 import type { NumberSettings } from "../data/common";
 import type {
     CalendarSettings,
-    CalendarText,
+    CalendarTexts,
     DropdownMessages,
-    FlyoutTexts,
+    ButtonTexts,
     FormPrompt,
     FormText,
-    ProgressTexts,
+    CommonProgressTexts,
 } from "../data/semantic-types";
 
 const formPrompt: FormPrompt = {
@@ -49,8 +49,8 @@ const formPrompt: FormPrompt = {
     start: "{name} must start with '{ruleValue}'",
     isoDate: "{name} must follow the 'YYYY-MM-DD' format",
     wrappedIn: "{name} must start and end with '{ruleValue}'",
-    maxValue: "{name} must have a maximum value of {ruleValue}", // doesn't work
-    minValue: "{name} must have a minimum value of {ruleValue}", // doesn't work
+    maxValue: "{name} must be less or equal {ruleValue}",
+    minValue: "{name} must be greater or equal {ruleValue}",
     range: "{name} must be in a range [{ruleValue}]", // min & max doesn't work here, but works in 'size'
     size: "{name} must have a length between {min} and {max} characters",
 };
@@ -62,7 +62,7 @@ const formText: FormText = {
         "There are unsaved changes on this page which will be discarded if you continue.",
 };
 
-const calendarText: CalendarText = {
+const calendarText: CalendarTexts = {
     dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
     dayNamesShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     days: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
@@ -120,8 +120,7 @@ const numberSettings: NumberSettings = {
     moneyPrecision: 2,
 };
 
-// [x]: translate dropdownMessages, progressTexts, flyoutTexts to other languages
-const dropdownMessages: DropdownMessages = {
+const dropdownTexts: DropdownMessages = {
     addResult: "Add <b>{term}</b>",
     count: "{count} selected",
     maxSelections: "Max {maxCount} selections",
@@ -129,12 +128,12 @@ const dropdownMessages: DropdownMessages = {
     serverError: "There was an error contacting the server",
 };
 
-const progressTexts: ProgressTexts = {
+const progressTexts: CommonProgressTexts = {
     percent: "{percent}%",
     ratio: "{value} of {total}",
 };
 
-const flyoutTexts: FlyoutTexts = {
+const buttonTexts: ButtonTexts = {
     ok: "Ok",
     cancel: "Cancel",
     close: "Close",
@@ -152,13 +151,17 @@ export default {
     number: {
         ...numberSettings,
     },
+
+    flyout: {
+        text: buttonTexts,
+    },
+    modal: {
+        text: buttonTexts,
+    },
     dropdown: {
-        message: dropdownMessages,
+        message: dropdownTexts,
     },
     progress: {
         text: progressTexts,
-    },
-    flyout: {
-        text: flyoutTexts,
     },
 };

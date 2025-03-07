@@ -341,7 +341,7 @@ function customLocalRule(val: string): boolean {
                         position: "bottom right",
                     }}
                 />
-                <InitNumberInput bind:value={ratings[0]} validate={[rule.minValue(6)]} />
+                <InitNumberInput bind:value={ratings[0]} validate={[rule.range(6, 8)]} />
             </div>
             <div class="help_text">
                 number formatter -

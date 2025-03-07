@@ -13,6 +13,8 @@ import type { JQueryApi, ProgressSettings } from "../data/semantic-types";
 import { arrayToString } from "../data/common";
 import { findComponent } from "../data/dom-jquery";
 
+// region props -----------------------------------------------------------------------------------
+
 interface Props {
     /** Parameter for setting the current progress value */
     value: number | number[];
@@ -30,7 +32,8 @@ interface Props {
     children?: Snippet;
 }
 
-// REACTIVE -------------------------------------------------------------------
+// region data ------------------------------------------------------------------------------------
+
 /* eslint-disable prefer-const */
 
 let {
@@ -46,8 +49,6 @@ let span: Element | undefined = undefined;
 
 /* eslint-enable */
 
-// DATA -----------------------------------------------------------------------
-
 interface ProgressApi {
     progress(settings: ProgressSettings): void;
     progress(command: "get total"): number;
@@ -61,7 +62,7 @@ let elem: (JQueryApi & ProgressApi) | undefined = undefined;
 /** Does this progress have multiple bars */
 let multiple: boolean = false;
 
-// FUNCTIONS ------------------------------------------------------------------
+// region svelte -> progress ----------------------------------------------------------------------
 
 /** Propagate prop change to UI component */
 function svelteToInput(newValue: number | number[], newTotal: number | undefined): void {
@@ -94,7 +95,7 @@ $effect(() => {
     svelteToInput(value, total);
 });
 
-//-----------------------------------------------------------------------------
+// region init ------------------------------------------------------------------------------------
 
 onMount(async () => {
     // delay initialization. only to be consistent with other Init components

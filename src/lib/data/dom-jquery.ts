@@ -8,7 +8,7 @@ import type { JQueryApi } from "./semantic-types";
 /** Name of the jQuery data attribute used to store form controller */
 export const SVELTE_FORM_STORE: string = "svelte_form_store";
 
-//-----------------------------------------------------------------------------
+// region init mode -------------------------------------------------------------------------------
 
 /** Determines how <InitComponent> is positioned related to the input which it controls */
 export type ComponentInitMode = "parent" | "child" | "sibling";
@@ -36,18 +36,7 @@ export function setComponentInitMode(modes: ComponentInitMode[]): void {
     COMPONENT_INIT_MODES = modes;
 }
 
-//-----------------------------------------------------------------------------
-
-/** Global unique id sequence */
-let unum: number = 100;
-
-/** Generate an unique number */
-export function nextUid(): string {
-    unum = unum + 1;
-    return `00${unum % 1000}`.slice(-3);
-}
-
-//-----------------------------------------------------------------------------
+// region jQuery ----------------------------------------------------------------------------------
 
 /** Find jQuery element by string selector. */
 export function jQueryBySelector(selector: string): JQueryApi {
@@ -74,6 +63,8 @@ export function jQueryElem(node: Element): JQueryApi {
     }
     return jQuery(node);
 }
+
+// region find component --------------------------------------------------------------------------
 
 /** Find corresponding Semantic UI component,
  *  where the `span` Element is a parent, child, or next sibling of the component.
@@ -115,7 +106,37 @@ export function findComponent(
     throw new Error(`Can't find '${selector}' component as a ${searchModes.join("|")}`);
 }
 
-//-----------------------------------------------------------------------------
+/** Search DOM tree for a parent form element  */
+export function findParentForm(elem: JQueryApi): JQueryApi | undefined {
+    const form: JQueryApi = elem.closest("form.ui.form");
+    if (form.length) {
+        return form;
+    } else {
+        return undefined;
+    }
+}
+
+/** Find the label in the the same .ui.field with for="_" */
+export function findLabelWithBlank(node: JQueryApi): JQueryApi | undefined {
+    const field: JQueryApi = node.parent().filter(".field");
+    const label: JQueryApi = field.find("label");
+    if (label.attr("for") === "_") {
+        return label;
+    } else {
+        return undefined;
+    }
+}
+
+// region field key -------------------------------------------------------------------------------
+
+/** Global unique id sequence */
+let unum: number = 100;
+
+/** Generate an unique number */
+export function nextUid(): string {
+    unum = unum + 1;
+    return `00${unum % 1000}`.slice(-3);
+}
 
 /** Get field identifier: id, name, data-validate */
 export function getFieldKey(elem: JQueryApi): string | undefined {
@@ -199,27 +220,4 @@ export function ensureFieldKey(elem: JQueryApi): string {
 
     // no key where found, assign new attribute
     return getOrAssignKey(elem, "f");
-}
-
-//-----------------------------------------------------------------------------
-
-/** Search DOM tree for a parent form element  */
-export function findParentForm(elem: JQueryApi): JQueryApi | undefined {
-    const form: JQueryApi = elem.closest("form.ui.form");
-    if (form.length) {
-        return form;
-    } else {
-        return undefined;
-    }
-}
-
-/** Find the label in the the same .ui.field with for="_" */
-export function findLabelWithBlank(node: JQueryApi): JQueryApi | undefined {
-    const field: JQueryApi = node.parent().filter(".field");
-    const label: JQueryApi = field.find("label");
-    if (label.attr("for") === "_") {
-        return label;
-    } else {
-        return undefined;
-    }
 }

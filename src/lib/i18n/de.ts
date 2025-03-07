@@ -10,7 +10,15 @@
 /* eslint-disable max-len */
 
 import type { NumberSettings } from "../data/common";
-import type { CalendarSettings, CalendarText, FormPrompt, FormText } from "../data/semantic-types";
+import type {
+    ButtonTexts,
+    CalendarSettings,
+    CalendarTexts,
+    CommonProgressTexts,
+    DropdownMessages,
+    FormPrompt,
+    FormText,
+} from "../data/semantic-types";
 
 const formPrompt: FormPrompt = {
     empty: "{name} muss einen Wert haben",
@@ -43,10 +51,10 @@ const formPrompt: FormPrompt = {
     start: "{name} muss :) start with '{ruleValue}'",
     isoDate: "{name} muss :) follow the 'YYYY-MM-DD' format",
     wrappedIn: "{name} muss :) start and end with '{ruleValue}'",
-    maxValue: "// [x]",
-    minValue: "// [x]",
-    range: "// [x]",
-    size: "// [x]",
+    maxValue: "{name} muss kleiner oder gleich {ruleValue} sein",
+    minValue: "{name} muss größer oder gleich {ruleValue} sein",
+    range: "{name} muss im Bereich [{ruleValue}] liegen",
+    size: "{name} muss eine Länge zwischen {min} und {max} Zeichen haben",
 };
 
 const formText: FormText = {
@@ -56,9 +64,9 @@ const formText: FormText = {
         "Es gibt nicht gespeicherte Änderungen auf dieser Seite, die verworfen werden, wenn Sie fortfahren.",
 };
 
-const calendarText: CalendarText = {
-    dayNames: ["// [x]", "_", "_", "_", "_", "_", "_"],
-    dayNamesShort: ["// [x]", "_", "_", "_", "_", "_", "_"],
+const calendarText: CalendarTexts = {
+    dayNames: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
+    dayNamesShort: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
     days: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
     months: [
         "Januar",
@@ -114,6 +122,24 @@ const numberSettings: NumberSettings = {
     moneyPrecision: 2,
 };
 
+const dropdownTexts: DropdownMessages = {
+    addResult: "<b>{term}</b> hinzufügen",
+    count: "{count} ausgewählt",
+    maxSelections: "Maximal {maxCount} Auswahlen",
+    noResults: "Keine Ergebnisse gefunden.",
+    serverError: "Es gab einen Fehler bei der Verbindung zum Server",
+};
+
+const progressTexts: CommonProgressTexts = {
+    percent: "{percent}%",
+    ratio: "{value} von {total}",
+};
+
+const buttonTexts: ButtonTexts = {
+    ok: "Ok",
+    cancel: "Abbrechen",
+    close: "Schließen",
+};
 export default {
     form: {
         prompt: formPrompt,
@@ -125,5 +151,18 @@ export default {
     },
     number: {
         ...numberSettings,
+    },
+
+    flyout: {
+        text: buttonTexts,
+    },
+    modal: {
+        text: buttonTexts,
+    },
+    dropdown: {
+        message: dropdownTexts,
+    },
+    progress: {
+        text: progressTexts,
     },
 };

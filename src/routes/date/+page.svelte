@@ -23,8 +23,9 @@ import { isoDate, isoTime } from "../../lib/data/common";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 import ShowCode from "../show-code.svelte";
 
-// REACTIVE -------------------------------------------------------------------
-/* eslint-disable prefer-const */
+// region data ------------------------------------------------------------------------------------
+
+/* eslint-disable prefer-const */ /* reactive */
 
 let dat1: Date | undefined = $state();
 let dat2: Date | undefined = $state();
@@ -61,6 +62,8 @@ let json: string = $derived(
 );
 
 /* eslint-enable */
+
+// region init ------------------------------------------------------------------------------------
 
 $effect(() => {
     const hash: string = page.url.hash;
@@ -101,17 +104,10 @@ onMount(async () => {
 
     <!-- https://github.com/noahsalvi/svelte-use-form -->
 
-    <!--
- .8888b
- 88   "
- 88aaa  .d8888b. 88d888b. 88d8b.d8b.
- 88     88'  `88 88'  `88 88'`88'`88
- 88     88.  .88 88       88  88  88
- dP     `88888P' dP       dP  dP  dP
-
-    -->
-
     <div style:max-width="360px" style:margin="0 auto" style:text-align="left">
+        <!--
+            // region form
+        -->
         <form class="ui form">
             <InitForm
                 validateForm={active}
@@ -131,6 +127,9 @@ onMount(async () => {
                         <div class="ui message" style:font-family="monospace">
                             {json}
                         </div>
+                        <!--
+                            // region :    buttons
+                        -->
                         <button type="button" class="ui button blue" onclick={loadData}>
                             Reset
                         </button>
@@ -192,15 +191,8 @@ onMount(async () => {
             {/if}
 
             <!--
-       dP            dP
-       88            88
- .d888b88 .d8888b. d8888P .d8888b.
- 88'  `88 88'  `88   88   88ooood8
- 88.  .88 88.  .88   88   88.  ...
- `88888P8 `88888P8   dP   `88888P'
-
+                // region ex: datetime
             -->
-
             <!-- example-datetime -->
             <div class="field" id="y">
                 <label for="_"> Date-time </label>
@@ -225,6 +217,10 @@ onMount(async () => {
             <!-- example-datetime -->
 
             <div style="clear: both;"></div>
+
+            <!--
+                // region ex: date & time
+            -->
 
             <!-- example-date_and_time -->
             <div class="two fields">
@@ -281,6 +277,9 @@ onMount(async () => {
             </div>
 
             {#if showDate}
+                <!--
+                    // region ex: year first
+                -->
                 <!-- example-year_first -->
                 <div class="field">
                     <label for="_"> Year first </label>
@@ -306,15 +305,8 @@ onMount(async () => {
                 <div class="ui divider"></div>
 
                 <!--
- oo                              dP
-                                 88
- dP 88d888b. 88d888b. dP    dP d8888P
- 88 88'  `88 88'  `88 88    88   88
- 88 88    88 88.  .88 88.  .88   88
- dP dP    dP 88Y888P' `88888P'   dP
-             88
-             dP
-            -->
+                    // region ex: date input
+                -->
                 <!-- example-date_input -->
                 <div class="field">
                     <label for="z1"> Date input </label>
@@ -336,6 +328,10 @@ onMount(async () => {
 </main>
 
 <style>
+/*
+// region css
+*/
+
 form {
     padding: 0.75rem;
     background-color: #f7f7f7;

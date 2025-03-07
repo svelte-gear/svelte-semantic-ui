@@ -7,15 +7,7 @@ import type { JQueryApi, RuleDefinition } from "./semantic-types";
 import { stringify } from "./common";
 import { findParentForm, SVELTE_FORM_STORE, jQueryElem, jQueryBySelector } from "./dom-jquery";
 
-/*
- .8888b
- 88   "
- 88aaa  .d8888b. 88d888b. 88d8b.d8b.
- 88     88'  `88 88'  `88 88'`88'`88
- 88     88.  .88 88       88  88  88
- dP     `88888P' dP       dP  dP  dP
-
-*/
+// region interface -------------------------------------------------------------------------------
 
 /** FormController exposes Semantic UI form element and it's data validation.
  *  Hides implementation details of SuiFormController from the FieldController. */
@@ -51,15 +43,7 @@ export interface FormController {
     isValid(): boolean;
 }
 
-/*
- .8888b                              dP   oo
- 88   "                              88
- 88aaa  dP    dP 88d888b. .d8888b. d8888P dP .d8888b. 88d888b. .d8888b.
- 88     88    88 88'  `88 88'  `""   88   88 88'  `88 88'  `88 Y8ooooo.
- 88     88.  .88 88    88 88.  ...   88   88 88.  .88 88    88       88
- dP     `88888P' dP    dP `88888P'   dP   dP `88888P' dP    dP `88888P'
-
-*/
+// region functions -------------------------------------------------------------------------------
 
 /** Find form controller based on event target, selector, or DOM Element of the form or its child */
 export function getFormController(e: string | Element): FormController {

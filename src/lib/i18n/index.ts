@@ -32,16 +32,8 @@ import { applyAllSettings } from "../data/settings";
 
 type Register = Record<string, () => Promise<object>>;
 
-/*
- dP
- 88
- 88 .d8888b. 88d888b. .d8888b.
- 88 88'  `88 88'  `88 88'  `88
- 88 88.  .88 88    88 88.  .88
- dP `88888P8 dP    dP `8888P88
-                           .88
-                       d8888P
-*/
+//-------------------------------------------------------------------------------------------------
+// region lang
 
 const languages: string[] = [];
 const languageRegister: Register = {};
@@ -59,15 +51,8 @@ export function supportedLanguages(): string[] {
     return languages;
 }
 
-/*
- dP                            dP
- 88                            88
- 88 .d8888b. .d8888b. .d8888b. 88 .d8888b.
- 88 88'  `88 88'  `"" 88'  `88 88 88ooood8
- 88 88.  .88 88.  ... 88.  .88 88 88.  ...
- dP `88888P' `88888P' `88888P8 dP `88888P'
-
-*/
+//-------------------------------------------------------------------------------------------------
+// region locale
 
 const locales: string[] = [];
 const localeRegister: Register = {};
@@ -85,16 +70,8 @@ export function supportedLocales(): string[] {
     return locales;
 }
 
-/*
-                            dP
-                            88
- .d8888b. 88d888b. 88d888b. 88 dP    dP
- 88'  `88 88'  `88 88'  `88 88 88    88
- 88.  .88 88.  .88 88.  .88 88 88.  .88
- `88888P8 88Y888P' 88Y888P' dP `8888P88
-          88       88               .88
-          dP       dP           d8888P
-*/
+//-------------------------------------------------------------------------------------------------
+// region apply
 
 let currLocale: string = "en";
 
@@ -151,15 +128,8 @@ export async function applyLocale(locale: string): Promise<string | null> {
     return currLocale;
 }
 
-/*
- oo          oo   dP   oo          dP oo
-                  88               88
- dP 88d888b. dP d8888P dP .d8888b. 88 dP d888888b .d8888b.
- 88 88'  `88 88   88   88 88'  `88 88 88    .d8P' 88ooood8
- 88 88    88 88   88   88 88.  .88 88 88  .Y8P    88.  ...
- dP dP    dP dP   dP   dP `88888P8 dP dP d888888P `88888P'
-
-*/
+//-------------------------------------------------------------------------------------------------
+// region initialize
 
 async function noop(): Promise<object> {
     return {};

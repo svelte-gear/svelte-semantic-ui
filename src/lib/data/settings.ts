@@ -17,6 +17,9 @@ import type {
 } from "../data/semantic-types";
 import { initLog } from "../data/common";
 
+//-------------------------------------------------------------------------------------------------
+// region types
+
 export type SettingsObject = Record<string, unknown>;
 
 export type AllSettingsJson = Record<string, SettingsObject>;
@@ -30,13 +33,16 @@ type WithJQuery = {
 
 type JQuerySettings = Required<WithJQuery>["jQuery"];
 
+//-------------------------------------------------------------------------------------------------
+// region functions
+
 /** Determine if the argument is object; not primitive, Array, of function */
 function isObject(value: unknown): boolean {
     return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
 /** Recursive function to copy only matching fields. */
-export function copyFields(target: SettingsObject, source: SettingsObject, logName: string): void {
+function copyFields(target: SettingsObject, source: SettingsObject, logName: string): void {
     const sourceKeys: string[] = Object.keys(source);
     const targetKeys: string[] = Object.keys(target);
     if (sourceKeys.length === 0 || targetKeys.length === 0) {
@@ -73,6 +79,7 @@ export function copyFields(target: SettingsObject, source: SettingsObject, logNa
     });
 }
 
+/** Initialize number settings if they don't yet exist */
 function ensureNumberSettings(jQuery: JQuerySettings): void {
     if (!jQuery.fn.number) {
         jQuery.fn.number = {
@@ -87,16 +94,8 @@ function ensureNumberSettings(jQuery: JQuerySettings): void {
     }
 }
 
-/*
- dP                dP
- 88                88
- 88d888b. .d8888b. 88 88d888b. .d8888b. 88d888b.
- 88'  `88 88ooood8 88 88'  `88 88ooood8 88'  `88
- 88    88 88.  ... 88 88.  .88 88.  ... 88
- dP    dP `88888P' dP 88Y888P' `88888P' dP
-                      88
-                      dP
-*/
+//-------------------------------------------------------------------------------------------------
+// region SettingsHelper
 
 /** Provides access to Sematic UI settings for different components. */
 export class SettingsHelper<T> {
@@ -155,15 +154,8 @@ export function applyAllSettings(json: AllSettingsJson): void {
     });
 }
 
-/*
- oo          oo   dP   oo          dP oo
-                  88               88
- dP 88d888b. dP d8888P dP .d8888b. 88 dP d888888b .d8888b.
- 88 88'  `88 88   88   88 88'  `88 88 88    .d8P' 88ooood8
- 88 88    88 88   88   88 88.  .88 88 88  .Y8P    88.  ...
- dP dP    dP dP   dP   dP `88888P8 dP dP d888888P `88888P'
-
-*/
+//-------------------------------------------------------------------------------------------------
+// region initialize
 
 export const formDefaults: SettingsHelper<FormSettings> = new SettingsHelper("form");
 

@@ -28,6 +28,8 @@ function ruleToStr(rule: RuleDefinition): string {
     return isObject ? JSON.stringify(rule) : String(rule);
 }
 
+// region FormControllerImpl ----------------------------------------------------------------------
+
 /** Form validation controller. Is accessed only from `<InitForm>` component. */
 export class FormControllerImpl implements FormController {
     /** Form identifier for debug purposes */
@@ -52,17 +54,6 @@ export class FormControllerImpl implements FormController {
     /** Form validation has been triggered by markForValidation(), but not yet performed by validateIfMarked() */
     private mustValidate: boolean = false;
 
-    /*
-                      oo                     dP
-                                             88
-    88d888b. 88d888b. dP dP   .dP .d8888b. d8888P .d8888b.
-    88'  `88 88'  `88 88 88   d8' 88'  `88   88   88ooood8
-    88.  .88 88       88 88 .88'  88.  .88   88   88.  ...
-    88Y888P' dP       dP 8888P'   `88888P8   dP   `88888P'
-    88
-    dP
-
-    */
     /** Create new form controller, is used from InitForm. */
     constructor(elem: FormApi, formId: string, active: boolean, ignoreEmpty: boolean) {
         this.elem = elem;
@@ -70,6 +61,8 @@ export class FormControllerImpl implements FormController {
         this.active = active;
         this.ignoreEmpty = ignoreEmpty;
     }
+
+    // region :  private --------------------------------------------------------------------------
 
     /** Make the rule active in Semantic UI */
     private activateRule(key: string, rule: RuleDefinition): void {
@@ -128,17 +121,7 @@ export class FormControllerImpl implements FormController {
         }
     }
 
-    /*
-
-    oo                     dP
-                           88
-    dP 88d8b.d8b. 88d888b. 88
-    88 88'`88'`88 88'  `88 88
-    88 88  88  88 88.  .88 88
-    dP dP  dP  dP 88Y888P' dP
-                    88
-                    dP
-    */
+    // region :  impl -----------------------------------------------------------------------------
 
     // used from InitForm.svelte
 
@@ -198,17 +181,7 @@ export class FormControllerImpl implements FormController {
         }
     }
 
-    /*
-                      dP       dP oo
-                      88       88
-    88d888b. dP    dP 88d888b. 88 dP .d8888b.
-    88'  `88 88    88 88'  `88 88 88 88'  `""
-    88.  .88 88.  .88 88.  .88 88 88 88.  ...
-    88Y888P' `88888P' 88Y8888' dP dP `88888P'
-    88
-    dP
-
-    */
+    // region :  public ---------------------------------------------------------------------------
 
     // accessible from Field Controller and static functions
 

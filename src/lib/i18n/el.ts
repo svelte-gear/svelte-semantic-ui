@@ -8,7 +8,15 @@
  */
 
 import type { NumberSettings } from "../data/common";
-import type { CalendarSettings, CalendarText, FormPrompt, FormText } from "../data/semantic-types";
+import type {
+    ButtonTexts,
+    CalendarSettings,
+    CalendarTexts,
+    CommonProgressTexts,
+    DropdownMessages,
+    FormPrompt,
+    FormText,
+} from "../data/semantic-types";
 
 const formPrompt: FormPrompt = {
     empty: "{name} πρέπει να έχει μια τιμή",
@@ -41,10 +49,10 @@ const formPrompt: FormPrompt = {
     start: "{name} πρέπει να ξεκινά με '{ruleValue}'",
     isoDate: "{name} πρέπει να ακολουθεί τη μορφή 'ΕΕΕΕ-ΜΜ-ΗΗ'",
     wrappedIn: "{name} πρέπει να ξεκινά και να τελειώνει με '{ruleValue}'",
-    maxValue: "// [x]",
-    minValue: "// [x]",
-    range: "// [x]",
-    size: "// [x]",
+    maxValue: "{name} πρέπει να είναι μικρότερο ή ίσο του {ruleValue}",
+    minValue: "{name} πρέπει να είναι μεγαλύτερο ή ίσο του {ruleValue}",
+    range: "{name} πρέπει να βρίσκεται στην περιοχή [{ruleValue}]",
+    size: "{name} πρέπει να έχει μήκος μεταξύ {min} και {max} χαρακτήρων",
 };
 
 const formText: FormText = {
@@ -54,9 +62,9 @@ const formText: FormText = {
         "Υπάρχουν μη αποθηκευμένες αλλαγές σε αυτή τη σελίδα οι οποίες θα χαθούν αν συνεχίσετε.",
 };
 
-const calendarText: CalendarText = {
-    dayNames: ["// [x]", "_", "_", "_", "_", "_", "_"],
-    dayNamesShort: ["// [x]", "_", "_", "_", "_", "_", "_"],
+const calendarText: CalendarTexts = {
+    dayNames: ["Κυριακή", "Δευτέρα", "Τρίτη", "Τετάρτη", "Πέμπτη", "Παρασκευή", "Σάββατο"],
+    dayNamesShort: ["Κυρ", "Δευ", "Τρι", "Τετ", "Πεμ", "Παρ", "Σαβ"],
     days: ["Κυ", "Δε", "Τρ", "Τε", "Πε", "Πα", "Σα"],
     months: [
         "Ιανουάριος",
@@ -112,6 +120,25 @@ const numberSettings: NumberSettings = {
     moneyPrecision: 2,
 };
 
+const dropdownTexts: DropdownMessages = {
+    addResult: "Προσθήκη <b>{term}</b>",
+    count: "{count} επιλεγμένα",
+    maxSelections: "Μέγιστο {maxCount} επιλογές",
+    noResults: "Δεν βρέθηκαν αποτελέσματα.",
+    serverError: "Προέκυψε σφάλμα κατά την επικοινωνία με τον διακομιστή",
+};
+
+const progressTexts: CommonProgressTexts = {
+    percent: "{percent}%",
+    ratio: "{value} από {total}",
+};
+
+const buttonTexts: ButtonTexts = {
+    ok: "Οκ",
+    cancel: "Ακύρωση",
+    close: "Κλείσιμο",
+};
+
 export default {
     form: {
         prompt: formPrompt,
@@ -123,5 +150,18 @@ export default {
     },
     number: {
         ...numberSettings,
+    },
+
+    flyout: {
+        text: buttonTexts,
+    },
+    modal: {
+        text: buttonTexts,
+    },
+    dropdown: {
+        message: dropdownTexts,
+    },
+    progress: {
+        text: progressTexts,
     },
 };

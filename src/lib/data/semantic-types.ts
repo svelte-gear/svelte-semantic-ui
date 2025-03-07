@@ -12,16 +12,7 @@
 
 export type JQueryApi = JQuery<HTMLElement>;
 
-/*
-                   dP                         dP
-                   88                         88
- .d8888b. .d8888b. 88 .d8888b. 88d888b. .d888b88 .d8888b. 88d888b.
- 88'  `"" 88'  `88 88 88ooood8 88'  `88 88'  `88 88'  `88 88'  `88
- 88.  ... 88.  .88 88 88.  ... 88    88 88.  .88 88.  .88 88
- `88888P' `88888P8 dP `88888P' dP    dP `88888P8 `88888P8 dP
-
-*/
-//-----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 // region Calendar
 
 export type DateFormatFn = (d: Date | undefined, settings?: CalendarSettings) => string;
@@ -72,17 +63,10 @@ export type CalendarSettings = Omit<Partial<FomanticUI.CalendarSettings>, "onCha
     };
 };
 
-export type CalendarText = FomanticUI.Calendar.Settings.Texts;
+export type CalendarTexts = FomanticUI.Calendar.Settings.Texts;
 
-/*
- .8888b
- 88   "
- 88aaa  .d8888b. 88d888b. 88d8b.d8b.
- 88     88'  `88 88'  `88 88'`88'`88
- 88     88.  .88 88       88  88  88
- dP     `88888P' dP       dP  dP  dP
-
-*/
+//-------------------------------------------------------------------------------------------------
+// region Form
 
 /** Validation rule object: rule string and custom error prompt */
 export type RuleObj = {
@@ -168,16 +152,8 @@ export type FormPrompt = Omit<FomanticUI.Form.Settings.Prompts, "contain" | "con
 
 export type FormText = FomanticUI.Form.Settings.Texts;
 
-/*
-       dP                                  dP
-       88                                  88
- .d888b88 88d888b. .d8888b. 88d888b. .d888b88 .d8888b. dP  dP  dP 88d888b.
- 88'  `88 88'  `88 88'  `88 88'  `88 88'  `88 88'  `88 88  88  88 88'  `88
- 88.  .88 88       88.  .88 88.  .88 88.  .88 88.  .88 88.88b.88' 88    88
- `88888P8 dP       `88888P' 88Y888P' `88888P8 `88888P' 8888P Y8P  dP    dP
-                            88
-                            dP
-*/
+//-------------------------------------------------------------------------------------------------
+// region Dropdown
 
 /**
  * Dropdown initialization settings.
@@ -193,15 +169,8 @@ export type DropdownSettings = Omit<Partial<FomanticUI.DropdownSettings>, "onCha
 
 export type DropdownMessages = FomanticUI.Dropdown.Settings.Messages;
 
-/*
-
- 88d888b. 88d888b. .d8888b. .d8888b. 88d888b. .d8888b. .d8888b. .d8888b.
- 88'  `88 88'  `88 88'  `88 88'  `88 88'  `88 88ooood8 Y8ooooo. Y8ooooo.
- 88.  .88 88       88.  .88 88.  .88 88       88.  ...       88       88
- 88Y888P' dP       `88888P' `8888P88 dP       `88888P' `88888P' `88888P'
- 88                              .88
- dP                          d8888P
-*/
+//-------------------------------------------------------------------------------------------------
+// region Progress
 
 /** @see {@link https://fomantic-ui.com/modules/progress.html#/settings} */
 export type ProgressSettings = Partial<FomanticUI.ProgressSettings> & {
@@ -215,46 +184,32 @@ export type ProgressSettings = Partial<FomanticUI.ProgressSettings> & {
  * {bar} is useful to show bar names on multiple bars.
  * Names of bars are provided by text.bars in the forms of array of string. E.g. ['bar1', 'bar2'].
  */
-export type ProgressTexts = Pick<FomanticUI.Progress.Settings.Texts, "percent" | "ratio">;
-// [x]: translate ratio text, ES: "50 por ciento"
+export type CommonProgressTexts = Pick<FomanticUI.Progress.Settings.Texts, "percent" | "ratio">;
 
-/*
- .8888b dP                              dP
- 88   " 88                              88
- 88aaa  88 dP    dP .d8888b. dP    dP d8888P
- 88     88 88    88 88'  `88 88    88   88
- 88     88 88.  .88 88.  .88 88.  .88   88
- dP     dP `8888P88 `88888P' `88888P'   dP
-                .88
-            d8888P
-*/
+//-------------------------------------------------------------------------------------------------
+// region Flyout & Modal
 
-export type FlyoutTexts = {
-    ok: string; //     "Ok"
-    cancel: string; // "Cancel"
-    close: string; //  "Close"
+export type ButtonTexts = {
+    ok: string;
+    cancel: string;
+    close: string;
 };
 
 /** @see {@link https://fomantic-ui.com/modules/flyout.html#/settings} */
 export type FlyoutSettings = Partial<FomanticUI.FlyoutSettings> & {
-    text: FlyoutTexts;
+    text: ButtonTexts;
 };
 
-/*
-            dP   dP
-            88   88
- .d8888b. d8888P 88d888b. .d8888b. 88d888b.
- 88'  `88   88   88'  `88 88ooood8 88'  `88
- 88.  .88   88   88    88 88.  ... 88
- `88888P'   dP   dP    dP `88888P' dP
+/** @see {@link https://fomantic-ui.com/modules/modal.html#/settings} */
+export type ModalSettings = Partial<FomanticUI.ModalSettings> & {
+    text: ButtonTexts;
+};
 
-*/
+//-------------------------------------------------------------------------------------------------
+// region other
 
 /** @see {@link https://fomantic-ui.com/modules/checkbox.html#/settings} */
 export type CheckboxSettings = Partial<FomanticUI.CheckboxSettings>;
-
-/** @see {@link https://fomantic-ui.com/modules/modal.html#/settings} */
-export type ModalSettings = Partial<FomanticUI.ModalSettings>;
 
 /** @see {@link https://fomantic-ui.com/modules/popup.html#/settings} */
 export type PopupSettings = Partial<FomanticUI.PopupSettings>;

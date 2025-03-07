@@ -9,15 +9,8 @@ import { formDefaults } from "../data/settings";
 import { isoDate } from "../data/common";
 import { parse } from "../data/helpers";
 
-/*
-                              dP                                            dP
-                              88                                            88
- .d8888b. dP    dP .d8888b. d8888P .d8888b. 88d8b.d8b.    88d888b. dP    dP 88 .d8888b. .d8888b.
- 88'  `"" 88    88 Y8ooooo.   88   88'  `88 88'`88'`88    88'  `88 88    88 88 88ooood8 Y8ooooo.
- 88.  ... 88.  .88       88   88   88.  .88 88  88  88    88       88.  .88 88 88.  ...       88
- `88888P' `88888P' `88888P'   dP   `88888P' dP  dP  dP    dP       `88888P' dP `88888P' `88888P'
-
-*/
+//-------------------------------------------------------------------------------------------------
+// region custom rules
 
 /** Try to parse date as locale date or as any date */
 function tryToParseDate(value: string): Date | undefined {
@@ -75,15 +68,9 @@ function wrappedInFn(value: string, ruleValue: string): boolean {
     return value.startsWith(ruleValue) && value.endsWith(ruleValue);
 }
 
-/*
-                                              oo       dP
-                                                       88
- .d8888b. dP   .dP .d8888b. 88d888b. 88d888b. dP .d888b88 .d8888b. .d8888b.
- 88'  `88 88   d8' 88ooood8 88'  `88 88'  `88 88 88'  `88 88ooood8 Y8ooooo.
- 88.  .88 88 .88'  88.  ... 88       88       88 88.  .88 88.  ...       88
- `88888P' 8888P'   `88888P' dP       dP       dP `88888P8 `88888P' `88888P'
+//-------------------------------------------------------------------------------------------------
+// region overrides
 
-*/
 type CompareFn = (v1: string | number, v2: string | number) => boolean;
 
 function greaterOrEqual(v1: string | number, v2: string | number): boolean {
@@ -141,15 +128,8 @@ function maxValueFn(value: string, ruleValue: string): boolean {
     return res;
 }
 
-/*
- oo          oo   dP   oo          dP oo
-                  88               88
- dP 88d888b. dP d8888P dP .d8888b. 88 dP d888888b .d8888b.
- 88 88'  `88 88   88   88 88'  `88 88 88    .d8P' 88ooood8
- 88 88    88 88   88   88 88.  .88 88 88  .Y8P    88.  ...
- dP dP    dP dP   dP   dP `88888P8 dP dP d888888P `88888P'
-
-*/
+//-------------------------------------------------------------------------------------------------
+// region initialize
 
 export function registerRule(name: string, fn: RuleFunc, defaultPrompt: string): void {
     const def: FormSettings = formDefaults.read();
