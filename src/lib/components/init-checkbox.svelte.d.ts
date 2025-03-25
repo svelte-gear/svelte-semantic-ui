@@ -49,7 +49,7 @@ declare const InitCheckbox: Component<{
     /** Id of the Semantic UI input, takes precedence over tag position */
     forId?: string;
 
-    /** If InitDropdown is used as a parent, render the children components */
+    /** If InitCheckbox is used as a parent, render the children components */
     children?: Snippet;
 }, {}, "checked" | "group">;
 /* eslint-enable */

@@ -20,7 +20,7 @@ const FIELD_PREFIX: string = "f_calendar";
 
 interface Props {
     /** Two-way binding for setting and reading back the Calendar date, time, or datetime */
-    value: Date | undefined;
+    value: Date | null;
 
     /** Settings for Semantic UI component, see https://fomantic-ui.com/modules/calendar.html#/settings */
     settings?: CalendarSettings;
@@ -50,57 +50,58 @@ let {
 }: Props = $props();
 
 /** Invisible dom element created by this component. */
-let span: Element | undefined = undefined;
+let span: Element;
 
 /* eslint-enable */
 
 interface CalendarApi {
     calendar(settings: CalendarSettings): void;
     calendar(command: "get date"): Date | Date[];
-    calendar(command: "set date", val: Date | undefined): void;
+    calendar(command: "set date", val: Date | null): void;
     calendar(command: "focus"): void;
     calendar(command: "destroy"): void;
 }
 /** jQuery calendar component */
-let elem: (JQueryApi & CalendarApi) | undefined = undefined;
+let elem: JQueryApi & CalendarApi;
 
 /** Inner input for form validation */
-let input: JQueryApi | undefined = undefined;
+let input: JQueryApi;
 
 /** Field descriptor and validator */
-let fieldCtrl: FieldController | undefined = undefined;
+let fieldCtrl: FieldController;
 
 // region svelte -> calendar ----------------------------------------------------------------------
 
 /** Propagate prop change to UI component */
-function svelteToInput(newValue: Date | undefined): void {
-    if (!elem) {
-        // effect and svelteToInput may be called before onMount()
-        return;
-    }
+function svelteToInput(newValue: Date | null): void {
     let val: Date | Date[] = elem.calendar("get date") as Date | Date[];
     if (Array.isArray(val)) {
-        compLog.warn(`Calendar (${fieldCtrl?.key}) : GOT ARRAY`, val);
+        compLog.warn(`Calendar (${fieldCtrl.key}) : GOT ARRAY`, val);
         val = val[0];
     }
     if (!equalDates(newValue, val)) {
-        compLog.log(`Calendar (${fieldCtrl?.key}) value -> ${dateToStr(newValue)}`);
+        compLog.log(`Calendar (${fieldCtrl.key}) value -> ${dateToStr(newValue)}`);
         elem.calendar("set date", newValue);
     }
-    void fieldCtrl?.revalidate();
+    void fieldCtrl.revalidate();
 }
 
 /** The effect rune calls svelteToInput when prop value changes */
 $effect(() => {
     void value;
+    if (!elem) {
+        return; // the first 'effect' call happens before 'onMount' local variables may be not initialized
+    }
     svelteToInput(value);
 });
 
-/** Update rules when the validate value changes. Fire a change event to trigger revalidation if deemed appropriate. */
+/** Update rules when the validate value changes */
 $effect(() => {
     void validate;
-    fieldCtrl?.replaceRules(validate);
-    // elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
+    if (!elem) {
+        return; // the first 'effect' call happens before 'onMount' local variables may be not initialized
+    }
+    fieldCtrl.replaceRules(validate);
 });
 
 // region calendar -> svelte ----------------------------------------------------------------------
@@ -109,10 +110,10 @@ $effect(() => {
 function inputToSvelte(inputValue: Date): void {
     // store in the prop only if the value is different
     if (!equalDates(value, inputValue)) {
-        compLog.log(`Calendar (${fieldCtrl?.key}) : value <- ${dateToStr(inputValue)}`);
+        compLog.log(`Calendar (${fieldCtrl.key}) : value <- ${dateToStr(inputValue)}`);
         value = inputValue;
     }
-    void fieldCtrl?.revalidate();
+    void fieldCtrl.revalidate();
 }
 
 /** The callback function is calls inputToSvelte when calendar value is changed by user. */
@@ -133,20 +134,12 @@ function onCalendarHidden(this: JQueryApi): void {
     }
     // restore the value
     svelteToInput(value);
-
-    // const calendarValue: Date | Date[] = this.calendar("get date") as Date | Date[];
-    // if (Array.isArray(calendarValue)) {
-    //     compLog.warn("GOT ARRAY", calendarValue);
-    //     inputToSvelte(calendarValue[0]); // [0] = new, [1] = old
-    // } else {
-    //     inputToSvelte(calendarValue);
-    // }
 }
 
 // region init ------------------------------------------------------------------------------------
 
 function labelClick(): void {
-    elem?.calendar("focus");
+    elem.calendar("focus");
 }
 
 onMount(async () => {
@@ -169,7 +162,7 @@ onMount(async () => {
     copyParentKey(input, elem, FIELD_PREFIX);
 
     // show calendar on label click, if label for="_"
-    const label: JQueryApi | undefined = findLabelWithBlank(elem);
+    const label: JQueryApi | null = findLabelWithBlank(elem);
     if (label) {
         label.on("click", labelClick);
     }
@@ -189,7 +182,7 @@ onDestroy(() => {
     if (elem) {
         elem.calendar("destroy");
 
-        const label: JQueryApi | undefined = findLabelWithBlank(elem);
+        const label: JQueryApi | null = findLabelWithBlank(elem);
         if (label) {
             label.off("click", labelClick);
         }

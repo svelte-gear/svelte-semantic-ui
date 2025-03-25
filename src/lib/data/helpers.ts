@@ -25,39 +25,39 @@ let moneyFmt: NumberFmt | null = null;
  * Total: {fmt.money(value)}
  * ``` */
 export const fmt: {
-    date: (d: Date | undefined) => string;
-    time: (d: Date | undefined) => string;
-    int: (n: number | undefined) => string;
-    num: (n: number | undefined) => string;
-    num2: (n: number | undefined) => string;
-    num6: (n: number | undefined) => string;
-    money: (n: number | undefined) => string;
+    date: (d: Date | null) => string;
+    time: (d: Date | null) => string;
+    int: (n: number | null) => string;
+    num: (n: number | null) => string;
+    num2: (n: number | null) => string;
+    num6: (n: number | null) => string;
+    money: (n: number | null) => string;
 } = {
-    date: (d: Date | undefined): string => {
+    date: (d: Date | null): string => {
         dateFmt ??= new DateFmt({ type: "date" });
         return dateFmt.format(d);
     },
-    time: (d: Date | undefined): string => {
+    time: (d: Date | null): string => {
         timeFmt ??= new DateFmt({ type: "time" });
         return timeFmt.format(d);
     },
-    int: (n: number | undefined): string => {
+    int: (n: number | null): string => {
         intFmt ??= new NumberFmt({ type: "integer" });
         return intFmt.format(n);
     },
-    num: (n: number | undefined): string => {
+    num: (n: number | null): string => {
         numFmt ??= new NumberFmt({ type: "decimal" });
         return numFmt.format(n);
     },
-    num2: (n: number | undefined): string => {
+    num2: (n: number | null): string => {
         num2Fmt ??= new NumberFmt({ type: "decimal", precision: 2 });
         return num2Fmt.format(n);
     },
-    num6: (n: number | undefined): string => {
+    num6: (n: number | null): string => {
         num6Fmt ??= new NumberFmt({ type: "decimal", precision: 6 });
         return num6Fmt.format(n);
     },
-    money: (n: number | undefined): string => {
+    money: (n: number | null): string => {
         moneyFmt ??= new NumberFmt({ type: "money" });
         return moneyFmt.format(n);
     },
@@ -67,39 +67,39 @@ export const fmt: {
 
 /** Default parser helper. Intended to be used from code. */
 export const parse: {
-    date: (s: string) => Date | undefined;
-    time: (s: string) => Date | undefined;
-    int: (s: string) => number | undefined;
-    num: (s: string) => number | undefined;
-    num2: (s: string) => number | undefined;
-    num6: (s: string) => number | undefined;
-    money: (s: string) => number | undefined;
+    date: (s: string) => Date | null;
+    time: (s: string) => Date | null;
+    int: (s: string) => number | null;
+    num: (s: string) => number | null;
+    num2: (s: string) => number | null;
+    num6: (s: string) => number | null;
+    money: (s: string) => number | null;
 } = {
-    date: (s: string): Date | undefined => {
+    date: (s: string): Date | null => {
         dateFmt ??= new DateFmt({ type: "date" });
         return dateFmt.parse(s);
     },
-    time: (s: string): Date | undefined => {
+    time: (s: string): Date | null => {
         timeFmt ??= new DateFmt({ type: "time" });
         return timeFmt.parse(s);
     },
-    int: (s: string): number | undefined => {
+    int: (s: string): number | null => {
         intFmt ??= new NumberFmt({ type: "integer" });
         return intFmt.parse(s);
     },
-    num: (s: string): number | undefined => {
+    num: (s: string): number | null => {
         numFmt ??= new NumberFmt({ type: "decimal" });
         return numFmt.parse(s);
     },
-    num2: (s: string): number | undefined => {
+    num2: (s: string): number | null => {
         num2Fmt ??= new NumberFmt({ type: "decimal", precision: 2 });
         return num2Fmt.parse(s);
     },
-    num6: (s: string): number | undefined => {
+    num6: (s: string): number | null => {
         num6Fmt ??= new NumberFmt({ type: "decimal", precision: 6 });
         return num6Fmt.parse(s);
     },
-    money: (s: string): number | undefined => {
+    money: (s: string): number | null => {
         moneyFmt ??= new NumberFmt({ type: "money" });
         return moneyFmt.parse(s);
     },
@@ -113,6 +113,7 @@ export const parse: {
 export const rule = {
 /* eslint-disable key-spacing */
     empty:      (): string => "empty",
+    notEmpty:   (): string => "notEmpty",
     checked:    (): string => "checked",
 
     email:      (): string => "email",
@@ -122,9 +123,6 @@ export const rule = {
     number:     (): string => "number",
     creditCard: (): string => "creditCard",
     regex:      (reg: string): string => `regExp[//${reg}//]`,
-
-    // integer:    (min?: number, max?: number): string =>
-    //     min == undefined && max == undefined ? "integer" : `integer[${min}..${max}]`,
 
     is:              (val: string): string => `is[${val}]`,
     isExactly:       (val: string): string => `isExactly[${val}]`,

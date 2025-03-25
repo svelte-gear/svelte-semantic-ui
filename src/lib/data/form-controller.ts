@@ -50,7 +50,7 @@ export function getFormController(e: string | Element): FormController {
     if (!e) {
         throw new Error("Form not found: getFormController() function requires a parameter");
     }
-    let elem: JQueryApi | undefined = undefined;
+    let elem: JQueryApi | null = null;
     if (typeof e === "string") {
         elem = jQueryBySelector(e);
     } else if (e instanceof Element) {
@@ -61,7 +61,7 @@ export function getFormController(e: string | Element): FormController {
     } else if (elem.length > 1) {
         throw new Error(`Form not found: there are multiple element for ${stringify(e)}`);
     }
-    const form: JQueryApi | undefined = findParentForm(elem);
+    const form: JQueryApi | null = findParentForm(elem);
     if (!form) {
         throw new Error(`Form not found for ${stringify(elem)}, ensure it has '.ui.form' class`);
     }

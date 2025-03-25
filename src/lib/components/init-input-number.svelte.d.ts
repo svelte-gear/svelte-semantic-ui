@@ -11,11 +11,11 @@ import type { RuleDefinition } from "../data/semantic-types";
 /**
  * Svelte data binder and initializer for number input.
  *
- * Type of `value` binding is number, if an invalid text is entered into the input, value is undefined.
+ * Type of `value` binding is number, if an invalid text is entered into the input, value is null.
  *  *
  * Input have two different ways to bind data`:` <br />
  * `value` binding in the `<input>` gets raw text value and is updated immediately. <br />
- * `value` binding in `<InitNumberInput>` gets parsed number | undefined and is updated on blur.
+ * `value` binding in `<InitNumberInput>` gets parsed number | null and is updated on blur.
 ```
  * <input type="text" id="salary" />
  * <InitNumberInput bind:value={salary} settings={{ type: "money" }} />
@@ -40,9 +40,9 @@ import type { RuleDefinition } from "../data/semantic-types";
 
 /* eslint-disable @typescript-eslint/naming-convention, @typescript-eslint/ban-types */
 /* prettier-ignore */
-declare const InitDropdown: Component<{
+declare const InitNumberInput: Component<{
     /** Two-way binding for setting and reading back numeric value */
-    value?: number | undefined;
+    value: number | null;
 
     /** Settings for date formatter, see https://fomantic-ui.com/modules/calendar.html#/settings */
     settings?: NumberInputSettings;
@@ -55,7 +55,7 @@ declare const InitDropdown: Component<{
     /** In most cases you should use the default locale-aware formatter with `settings`.
     Optional custom formatter may be used to implement non-standard formats or additional parsing logic.
     It will override `settings`, don't use both at the same time. */
-    formatter?: NumberFormatter;
+    customFormatter?: NumberFormatter;
 
     /** Id of the Semantic UI input element, takes precedence over tag position */
     forId?: string;
@@ -65,4 +65,4 @@ declare const InitDropdown: Component<{
 }, {}, "value">;
 /* eslint-enable */
 
-export default InitDropdown;
+export default InitNumberInput;

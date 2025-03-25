@@ -49,11 +49,11 @@ interface Props {
      *  In most cases it should be set to false by calling doResetForm(), after form data is initialized. */
     dirty?: boolean;
 
-    /** Read-only binding indicating validation result. Is undefined if `validateForm` == false */
-    valid?: boolean;
+    /** Read-only binding indicating validation result. Is null if `validateForm` == false */
+    valid?: boolean | null;
 
-    /** Read-only binding for validation error messages. Is undefined if `validateForm` == false */
-    errors?: string[];
+    /** Read-only binding for validation error messages. Is null if `validateForm` == false */
+    errors?: string[] | null;
 
     /** Form validation settings, see https://fomantic-ui.com/behaviors/form.html#/settings */
     settings?: FormSettings;
@@ -81,17 +81,18 @@ let {
 }: Props = $props();
 
 /** Invisible dom element created by this component. */
-let span: Element | undefined = undefined;
+let span: Element;
 
 /* eslint-enable */
 
 /** jQuery form component */
-let elem: (JQueryApi & FormApi) | undefined = undefined;
+let elem: JQueryApi & FormApi;
 
+/** identifier used for debugging */
 let formId: string;
 
 /** Form controller */
-let formCtrl: FormControllerImpl | undefined = undefined;
+let formCtrl: FormControllerImpl;
 
 // amend CSS if Init is allowed as a parent wrapper
 if (getComponentInitMode().includes("parent")) {
@@ -103,30 +104,38 @@ if (getComponentInitMode().includes("parent")) {
 /** When 'active' prop changes, update the Semantic UI form controller */
 $effect(() => {
     void validateForm;
+    if (!formCtrl) {
+        // the first 'effect' call happens before the component is initialized
+        return;
+    }
     // eslint-disable-next-line eqeqeq
-    if (formCtrl && formCtrl.isActive() == false && validateForm == true) {
+    if (formCtrl.isActive() == false && validateForm == true) {
         formCtrl.setActive(true);
         return;
     }
     // eslint-disable-next-line eqeqeq
-    if (formCtrl && formCtrl.isActive() == true && validateForm == false) {
+    if (formCtrl.isActive() == true && validateForm == false) {
         formCtrl.setActive(false);
         // reset read-only bindings
-        valid = undefined;
-        errors = undefined;
+        valid = null;
+        errors = null;
     }
 });
 
 /** When 'validateEmpty' prop changes, update the Semantic UI form controller.ignoreEmpty */
 $effect(() => {
     void validateEmpty;
+    if (!formCtrl) {
+        // the first 'effect' call happens before the component is initialized
+        return;
+    }
     // eslint-disable-next-line eqeqeq
-    if (formCtrl && formCtrl.isIgnoreEmpty() == true && validateEmpty == true) {
+    if (formCtrl.isIgnoreEmpty() == true && validateEmpty == true) {
         formCtrl.setIgnoreEmpty(false);
         return;
     }
     // eslint-disable-next-line eqeqeq
-    if (formCtrl && formCtrl.isIgnoreEmpty() == false && validateEmpty == false) {
+    if (formCtrl.isIgnoreEmpty() == false && validateEmpty == false) {
         formCtrl.setIgnoreEmpty(true);
     }
 });
@@ -143,7 +152,7 @@ function changeValid(ctrlValue: boolean): void {
 
 /** When form validation messages change, modify the corresponding prop. */
 function changeErrors(ctrlValue: string[]): void {
-    if (!equalStringArrays(ctrlValue, errors)) {
+    if (errors !== undefined && !equalStringArrays(ctrlValue, errors)) {
         formLog.log(`(${formId}) : errors <- [ ${ctrlValue.join(" | ")} ]`);
         errors = ctrlValue;
     }
@@ -156,7 +165,7 @@ function onSuccessCallback(this: JQueryApi, event: Event, fields: object[]): voi
     if (settings && settings.onSuccess) {
         settings.onSuccess.call(this, event, fields);
     }
-    if (formCtrl?.isActive()) {
+    if (formCtrl.isActive()) {
         changeValid(true);
         changeErrors([]);
     }
@@ -169,7 +178,7 @@ function onFailureCallback(this: JQueryApi, formErrors: object[], fields: object
     if (settings && settings.onFailure) {
         settings.onFailure.call(this, formErrors, fields);
     }
-    if (formCtrl?.isActive()) {
+    if (formCtrl.isActive()) {
         changeValid(false);
         changeErrors(formErrors as unknown[] as string[]);
     }
@@ -199,7 +208,7 @@ onMount(async () => {
     // field will wait a tick to ensure that the form initialization is complete, no matter were InitForm is placed
 
     // Initialize Semantic component and subscribe for changes, always allow InitForm to be a child of form
-    elem = findComponent(span!, ".ui.form", forId, [...getComponentInitMode(), "child"]);
+    elem = findComponent(span, ".ui.form", forId, [...getComponentInitMode(), "child"]);
     formId = elem.attr("id") ?? `fm_${nextUid()}`;
 
     if (!elem.form) {

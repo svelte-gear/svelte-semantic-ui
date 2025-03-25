@@ -39,7 +39,7 @@ export function setComponentInitMode(modes: ComponentInitMode[]): void {
 // region jQuery ----------------------------------------------------------------------------------
 
 /** Find jQuery element by string selector. */
-export function jQueryBySelector(selector: string): JQueryApi {
+export function jQueryBySelector(selector: string): JQueryApi | null {
     type SelectorFn = (selector: string) => JQueryApi;
     type WithJQuerySelector = {
         jQuery: SelectorFn;
@@ -48,7 +48,11 @@ export function jQueryBySelector(selector: string): JQueryApi {
     if (!jQuery) {
         throw new Error("jQuery is not initialized");
     }
-    return jQuery(selector);
+    const res: JQueryApi = jQuery(selector);
+    if (res.length > 0) {
+        return res;
+    }
+    return null;
 }
 
 /** Gets jQuery element for the dom node. */
@@ -75,11 +79,11 @@ export function findComponent(
     id?: string,
     search?: ComponentInitMode[]
 ): JQueryApi {
-    let elem: JQueryApi;
+    let elem: JQueryApi | null;
     if (id) {
         // use "forId" attribute to find the element to connect to
         elem = jQueryBySelector(`#${id}`);
-        if (elem.length && elem.is(selector)) {
+        if (elem && elem.is(selector)) {
             return elem;
         }
         throw new Error(`Can't find '${selector}' component with id="${id}"`);
@@ -107,24 +111,22 @@ export function findComponent(
 }
 
 /** Search DOM tree for a parent form element  */
-export function findParentForm(elem: JQueryApi): JQueryApi | undefined {
+export function findParentForm(elem: JQueryApi): JQueryApi | null {
     const form: JQueryApi = elem.closest("form.ui.form");
-    if (form.length) {
+    if (form.length > 0) {
         return form;
-    } else {
-        return undefined;
     }
+    return null;
 }
 
 /** Find the label in the the same .ui.field with for="_" */
-export function findLabelWithBlank(node: JQueryApi): JQueryApi | undefined {
+export function findLabelWithBlank(node: JQueryApi): JQueryApi | null {
     const field: JQueryApi = node.parent().filter(".field");
     const label: JQueryApi = field.find("label");
     if (label.attr("for") === "_") {
         return label;
-    } else {
-        return undefined;
     }
+    return null;
 }
 
 // region field key -------------------------------------------------------------------------------
@@ -139,16 +141,16 @@ export function nextUid(): string {
 }
 
 /** Get field identifier: id, name, data-validate */
-export function getFieldKey(elem: JQueryApi): string | undefined {
+export function getFieldKey(elem: JQueryApi): string | null {
     if (!elem) {
-        return undefined;
+        return null;
     }
-    return elem.attr("id") ?? elem.attr("name") ?? elem.attr("data-validate");
+    return elem.attr("id") ?? elem.attr("name") ?? elem.attr("data-validate") ?? null;
 }
 
 /** Get or assign sequential field identifier: id, name, data-validate */
 export function getOrAssignKey(elem: JQueryApi, prefix: string): string {
-    let key: string | undefined = getFieldKey(elem);
+    let key: string | null = getFieldKey(elem);
     if (!key) {
         // assign new attribute
         key = `${prefix}_${nextUid()}`;
@@ -159,10 +161,10 @@ export function getOrAssignKey(elem: JQueryApi, prefix: string): string {
 
 /** If the elem doesn't have key, copy parent field identifier: id, name, data-validate; or assign a unique id. */
 export function copyParentKey(elem: JQueryApi, parent: JQueryApi, prefix: string): string {
-    let key: string | undefined = getFieldKey(elem);
+    let key: string | null = getFieldKey(elem);
     if (!key) {
         // assign new attribute
-        const parentKey: string | undefined = getFieldKey(parent);
+        const parentKey: string | null = getFieldKey(parent);
         key = `${prefix}_${parentKey ?? nextUid()}`;
         elem.attr("data-validate", key);
     }
@@ -171,11 +173,11 @@ export function copyParentKey(elem: JQueryApi, parent: JQueryApi, prefix: string
 
 /** If the elem doesn't have key, copy parent field identifier: id, name, data-validate.
  *  But only if the parent key exists. */
-function copyKeyIfExists(elem: JQueryApi, parent: JQueryApi, prefix: string): string | undefined {
-    let key: string | undefined = getFieldKey(elem);
+function copyKeyIfExists(elem: JQueryApi, parent: JQueryApi, prefix: string): string | null {
+    let key: string | null = getFieldKey(elem);
     if (!key) {
         // get parent key
-        const parentKey: string | undefined = getFieldKey(parent);
+        const parentKey: string | null = getFieldKey(parent);
         if (parentKey) {
             key = `${prefix}_${parentKey}`;
             elem.attr("data-validate", key);
@@ -186,7 +188,7 @@ function copyKeyIfExists(elem: JQueryApi, parent: JQueryApi, prefix: string): st
 
 /** Perform lookup for known parent types or .field with id, copy parent id if it can. */
 export function ensureFieldKey(elem: JQueryApi): string {
-    const key: string | undefined = getFieldKey(elem);
+    const key: string | null = getFieldKey(elem);
     if (key) {
         return key;
     }
@@ -194,20 +196,20 @@ export function ensureFieldKey(elem: JQueryApi): string {
 
     while (parent && parent.length > 0) {
         if (parent.is(".ui.calendar")) {
-            const k: string | undefined = copyKeyIfExists(elem, parent, "f_calendar");
+            const k: string | null = copyKeyIfExists(elem, parent, "f_calendar");
             if (k) return k;
         } else if (parent.is(".ui.dropdown")) {
-            const k: string | undefined = copyKeyIfExists(elem, parent, "f_dropdown");
+            const k: string | null = copyKeyIfExists(elem, parent, "f_dropdown");
             if (k) return k;
         } else if (parent.is(".ui.checkbox")) {
-            const k: string | undefined = copyKeyIfExists(elem, parent, "f_checkbox");
+            const k: string | null = copyKeyIfExists(elem, parent, "f_checkbox");
             if (k) return k;
         } else if (parent.is(".ui.slider")) {
-            const k: string | undefined = copyKeyIfExists(elem, parent, "f_slider");
+            const k: string | null = copyKeyIfExists(elem, parent, "f_slider");
             if (k) return k;
         }
         if (parent.is(".field")) {
-            const k: string | undefined = copyKeyIfExists(elem, parent, "f_field");
+            const k: string | null = copyKeyIfExists(elem, parent, "f_field");
             if (k) return k;
             break; // while
         }

@@ -51,7 +51,7 @@ let {
 }: Props = $props();
 
 /** Invisible dom element created by this component. */
-let span: Element | undefined = undefined;
+let span: Element;
 
 /* eslint-enable */
 
@@ -62,13 +62,13 @@ interface RatingApi {
     rating(command: "destroy"): void;
 }
 /** jQuery slider component */
-let elem: (JQueryApi & RatingApi) | undefined = undefined;
+let elem: JQueryApi & RatingApi;
 
 /** Hidden input for form validation */
-let input: JQueryApi | undefined = undefined;
+let input: JQueryApi;
 
 /** Field descriptor and validator */
-let fieldCtrl: FieldController | undefined = undefined;
+let fieldCtrl: FieldController;
 
 // FIXME: implement isEmpty check for rating
 
@@ -76,31 +76,31 @@ let fieldCtrl: FieldController | undefined = undefined;
 
 /** Propagate prop change to UI component */
 function svelteToInput(newValue: number, forceUpdate?: boolean): void {
-    if (!elem) {
-        // effect and svelteToInput may be called before onMount()
-        return;
-    }
     const val: number = elem.rating("get rating");
     if (newValue !== val || forceUpdate) {
-        compLog.log(`Rating (${fieldCtrl?.key}) : value -> ${newValue}`);
+        compLog.log(`Rating (${fieldCtrl.key}) : value -> ${newValue}`);
         elem.rating("set rating", newValue);
-        input!.val(`${newValue}`);
-        void fieldCtrl?.revalidate();
+        input.val(`${newValue}`);
+        void fieldCtrl.revalidate();
     }
 }
 
 /** The effect rune calls svelteToInput when prop value changes */
 $effect(() => {
-    // console.info("effect");
     void value;
+    if (!elem) {
+        return; // effect may be called before onMount
+    }
     svelteToInput(value);
-    // return () => console.info("cleanup");
 });
 
 /** Update rules when the validate value changes. Fire a change event to trigger revalidation if deemed appropriate. */
 $effect(() => {
     void validate;
-    fieldCtrl?.replaceRules(validate);
+    if (!elem) {
+        return; // effect may be called before onMount
+    }
+    fieldCtrl.replaceRules(validate);
 });
 
 // region rating -> svelte ------------------------------------------------------------------------
@@ -112,10 +112,10 @@ function inputToSvelte(inputValue: number): void {
     }
     // store in the prop only if the value is different
     if (value !== inputValue) {
-        compLog.log(`Rating (${fieldCtrl?.key}) : value <- ${inputValue}`);
+        compLog.log(`Rating (${fieldCtrl.key}) : value <- ${inputValue}`);
         value = inputValue;
         input.val(`${inputValue}`);
-        void fieldCtrl?.revalidate();
+        void fieldCtrl.revalidate();
     }
 }
 

@@ -32,7 +32,7 @@ export class FieldController {
 
         // get parent form and form controller
         if (validationRules) {
-            const form: JQueryApi | undefined = findParentForm(input);
+            const form: JQueryApi | null = findParentForm(input);
             if (!form) {
                 throw new Error(
                     `Validated field ${this.key} must be a child of a <form class="ui form">`

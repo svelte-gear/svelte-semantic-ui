@@ -15,8 +15,8 @@ export type JQueryApi = JQuery<HTMLElement>;
 //-------------------------------------------------------------------------------------------------
 // region Calendar
 
-export type DateFormatFn = (d: Date | undefined, settings?: CalendarSettings) => string;
-export type DateParseFn = (date: string | undefined, settings?: CalendarSettings) => Date | null;
+export type DateFormatFn = (d: Date | null, settings?: CalendarSettings) => string;
+export type DateParseFn = (date: string, settings?: CalendarSettings) => Date | null;
 
 /**
  * Fomantic UI Calendar settings.

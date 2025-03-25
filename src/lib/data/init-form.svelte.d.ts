@@ -60,11 +60,11 @@ declare const InitForm: Component<{
      *  In most cases it should be set to false by calling doResetForm(), after form data is initialized. */
     dirty?: boolean;
 
-    /** Read-only binding indicating validation result. Is undefined if `validateForm` == false */
-    valid?: boolean;
+    /** Read-only binding indicating validation result. Is null if `validateForm` == false */
+    valid?: boolean | null;
 
-    /** Read-only binding for validation error messages. Is undefined if `validateForm` == false */
-    errors?: string[];
+    /** Read-only binding for validation error messages. Is null if `validateForm` == false */
+    errors?: string[] | null;
 
     /** Form validation settings, see https://fomantic-ui.com/behaviors/form.html#/settings */
     settings?: FormSettings;

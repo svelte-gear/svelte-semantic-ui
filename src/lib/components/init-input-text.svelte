@@ -14,7 +14,7 @@ import type { TextFormatter } from "../data/format-text";
 import type { JQueryApi, RuleDefinition } from "../data/semantic-types";
 
 import { compLog, equalStringArrays } from "../data/common";
-import { findComponent, findLabelWithBlank, getOrAssignKey } from "../data/dom-jquery";
+import { findComponent, findLabelWithBlank, getFieldKey, getOrAssignKey } from "../data/dom-jquery";
 import { FieldController } from "../data/field-controller";
 import { TextFmt } from "../data/format-text";
 
@@ -24,7 +24,7 @@ const FIELD_PREFIX: string = "f_input";
 
 interface Props {
     /** Two-way binding for setting and reading back the text or array of text items */
-    value?: string | string[];
+    value: string | string[];
 
     /** Settings for date formatter, see https://fomantic-ui.com/modules/calendar.html#/settings */
     settings?: TextInputSettings;
@@ -36,7 +36,7 @@ interface Props {
 
     /** Optional formatter is used to implement custom formats or text processing.
     It will override `settings`, don't use both at the same time. */
-    formatter?: TextFormatter;
+    customFormatter?: TextFormatter;
 
     /** Id of the Semantic UI input element, takes precedence over tag position */
     forId?: string;
@@ -53,33 +53,32 @@ let {
     value = $bindable(),
     settings = undefined,
     validate = undefined,
-    formatter = undefined,
+    customFormatter = undefined,
     forId = undefined,
     children = undefined,
 }: Props = $props();
 
 /** Invisible dom element created by this component. */
-let span: Element | undefined = undefined; // $state();
+let span: Element; // $state();
 
 /* eslint-enable */
 
 /** jQuery input component */
-let elem: JQueryApi | undefined = undefined;
+let elem: JQueryApi;
+
+/** Formatter is supplied as prop or created based on settings */
+let formatter: TextFormatter;
 
 /** Field descriptor and validator */
-let fieldCtrl: FieldController | undefined = undefined;
+let fieldCtrl: FieldController;
 
 // region svelte -> input -------------------------------------------------------------------------
 
 function svelteToInput(newValue: string | string[]): void {
-    if (!elem || !formatter) {
-        // effect and svelteToInput may be called before onMount()
-        return;
-    }
     const formattedStr: string = formatter.format(newValue);
-    const inputText: string = `${elem?.val()}`;
+    const inputText: string = `${elem.val()}`;
     if (formattedStr !== inputText) {
-        compLog.log(`TextInput (${fieldCtrl?.key}) : value -> ${newValue}`);
+        compLog.log(`TextInput (${fieldCtrl.key}) : value -> ${newValue}`);
         elem.val(formattedStr);
         elem.get(0)!.dispatchEvent(new CustomEvent("input"));
     }
@@ -88,7 +87,7 @@ function svelteToInput(newValue: string | string[]): void {
     if (!equalStringArrays(parsedValue, value)) {
         value = parsedValue;
     }
-    void fieldCtrl?.revalidate();
+    void fieldCtrl.revalidate();
 }
 
 /** The effect rune calls svelteToInput when prop value changes */
@@ -103,16 +102,19 @@ $effect(() => {
             void value[i];
         }
     }
-    if (value !== undefined) {
-        svelteToInput(value);
+    if (!elem) {
+        return; // effect may be called before onMount
     }
+    svelteToInput(value);
 });
 
 /** Update rules when the validate value changes. Fire a change event to trigger revalidation if deemed appropriate. */
 $effect(() => {
     void validate;
-    fieldCtrl?.replaceRules(validate);
-    // elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
+    if (!elem) {
+        return; // effect may be called before onMount
+    }
+    fieldCtrl.replaceRules(validate);
 });
 
 // region input -> svelte -------------------------------------------------------------------------
@@ -120,30 +122,30 @@ $effect(() => {
 /** When input value changes, modify the svelte prop */
 function inputToSvelte(inputText: string): void {
     // store in the prop only if the value is different
-    const parsedValue: string | string[] = formatter!.parse(inputText);
+    const parsedValue: string | string[] = formatter.parse(inputText);
     if (parsedValue !== value) {
-        compLog.log(`TextInput (${fieldCtrl?.key}) : value <- ${inputText}`);
+        compLog.log(`TextInput (${fieldCtrl.key}) : value <- ${inputText}`);
         value = parsedValue;
     }
     // update input if the formatted text is different
-    const formattedStr: string = formatter!.format(parsedValue);
+    const formattedStr: string = formatter.format(parsedValue);
     if (formattedStr !== inputText) {
-        elem?.val(formattedStr);
-        elem?.get(0)!.dispatchEvent(new CustomEvent("input"));
+        elem.val(formattedStr);
+        elem.get(0)!.dispatchEvent(new CustomEvent("input"));
     }
-    void fieldCtrl?.revalidate();
+    void fieldCtrl.revalidate();
 }
 
 /** The callback function is calls inputToSvelte when input value is changed by user. */
 function onInputChange(this: JQueryApi): void {
-    const inputText: string = `${elem?.val()}`;
+    const inputText: string = `${elem.val()}`;
     inputToSvelte(inputText);
 }
 
 // region init ------------------------------------------------------------------------------------
 
 function labelClick(): void {
-    elem?.trigger("focus");
+    elem.trigger("focus");
 }
 
 onMount(async () => {
@@ -155,32 +157,29 @@ onMount(async () => {
     elem.on("change", onInputChange);
 
     // focus on label click, if label for="_"
-    const label: JQueryApi | undefined = findLabelWithBlank(elem);
+    const label: JQueryApi | null = findLabelWithBlank(elem);
     if (label) {
         label.on("click", labelClick);
     }
 
     // create a default formatter based on settings, or use supplied custom formatter
-    if (settings && formatter) {
+    if (settings && customFormatter) {
         throw new Error(
-            `TextInput(${fieldCtrl?.key}) : 'formatter' will override 'settings', don't use both at the same time`
+            // eslint-disable-next-line max-len
+            `TextInput(${getFieldKey(elem)}) : 'customFormatter' will override 'settings', don't use both at the same time`
         );
     }
     if (settings && settings.list && !settings.listSeparator) {
         settings.listSeparator = ",";
     }
-    if (!formatter) {
-        formatter = new TextFmt(settings);
-    }
+    formatter = customFormatter ? customFormatter : new TextFmt(settings);
 
     // apply validation rule if the rule is supplied in <InitTextInput >
     getOrAssignKey(elem, FIELD_PREFIX);
     fieldCtrl = new FieldController("input", elem, validate);
 
     // push initial value into the Semantic UI element
-    if (value !== undefined) {
-        svelteToInput(value);
-    }
+    svelteToInput(value);
 });
 
 /** Remove the subscription */
@@ -191,7 +190,7 @@ onDestroy(() => {
     if (elem) {
         elem.off("change", onInputChange);
 
-        const label: JQueryApi | undefined = findLabelWithBlank(elem);
+        const label: JQueryApi | null = findLabelWithBlank(elem);
         if (label) {
             label.off("click", labelClick);
         }

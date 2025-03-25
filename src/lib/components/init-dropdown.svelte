@@ -21,7 +21,7 @@ const DROPDOWN_PREVENT_CLEARING_BAD_DATA: boolean = false;
 
 interface Props {
     /** Two-way binding for setting and reading back the selected item or array of items */
-    value: string | string[] | undefined;
+    value: string | string[] | null;
 
     /** Settings for Semantic UI component, see https://fomantic-ui.com/modules/dropdown.html#/settings */
     settings?: DropdownSettings;
@@ -43,7 +43,7 @@ interface Props {
 /* eslint-disable prefer-const */
 
 let {
-    value = $bindable(),
+    value = $bindable(null),
     settings = undefined,
     validate = undefined,
     forId = undefined,
@@ -51,7 +51,7 @@ let {
 }: Props = $props();
 
 /** Invisible dom element created by this component. */
-let span: Element | undefined = undefined;
+let span: Element;
 
 /* eslint-enable */
 
@@ -68,25 +68,21 @@ interface DropdownApi {
     dropdown(command: "destroy"): void;
 }
 /** jQuery dropdown component */
-let elem: (JQueryApi & DropdownApi) | undefined = undefined;
+let elem: JQueryApi & DropdownApi;
 
 /** Inner input for form validation */
-let input: JQueryApi | undefined = undefined;
+let input: JQueryApi;
 
 /** Is this a multi-select dropdown or single-select slider */
 let multi: boolean = false;
 
 /** Field descriptor and validator */
-let fieldCtrl: FieldController | undefined = undefined;
+let fieldCtrl: FieldController;
 
 // region svelte -> dropdown ----------------------------------------------------------------------
 
 /** Propagate prop change to UI component */
-function svelteToInput(newValue: string | string[] | undefined): void {
-    if (!elem) {
-        // effect and svelteToInput may be called before onMount()
-        return;
-    }
+function svelteToInput(newValue: string | string[] | null): void {
     if (multi) {
         // multi-select
         const curValue: string[] = elem.dropdown("get values");
@@ -94,10 +90,10 @@ function svelteToInput(newValue: string | string[] | undefined): void {
             throw new Error(`Multi-value dropdown expects string[] value, got ${newValue}`);
         }
         if (!equalStringArrays(newValue, curValue)) {
-            compLog.log(`Dropdown (${fieldCtrl?.key}) : value -> ${arrayToString(newValue)}`);
+            compLog.log(`Dropdown (${fieldCtrl.key}) : value -> ${arrayToString(newValue)}`);
             // NOTE: use 'set exactly' instead of 'set selected'!!!
             elem.dropdown("set exactly", newValue);
-            void fieldCtrl?.revalidate();
+            void fieldCtrl.revalidate();
         }
     } else {
         // single-select
@@ -108,15 +104,15 @@ function svelteToInput(newValue: string | string[] | undefined): void {
             );
         }
         if (curValue !== newValue) {
-            compLog.log(`Dropdown (${fieldCtrl?.key}) : value -> ${arrayToString(newValue)}`);
+            compLog.log(`Dropdown (${fieldCtrl.key}) : value -> ${arrayToString(newValue)}`);
             const exists: unknown = elem.dropdown("get item", value as string);
             if (exists) {
                 elem.dropdown("set selected", value as string);
-                void fieldCtrl?.revalidate();
+                void fieldCtrl.revalidate();
             } else {
                 // if value is invalid - clear the dropdown
                 elem.dropdown("clear");
-                void fieldCtrl?.revalidate();
+                void fieldCtrl.revalidate();
             }
         }
     }
@@ -125,7 +121,6 @@ function svelteToInput(newValue: string | string[] | undefined): void {
 /** The effect rune calls svelteToInput when prop value changes */
 $effect(() => {
     void value;
-    // not sure if this trick will help to detect array element changes, if array wan't assigned after init
     if (Array.isArray(value)) {
         if (value.length > 0) {
             void value[0];
@@ -134,42 +129,47 @@ $effect(() => {
             void value[i];
         }
     }
+    if (!elem) {
+        return; // effect may be called before onMount
+    }
     svelteToInput(value);
 });
 
 /** Update rules when the validate value changes. Fire a change event to trigger revalidation if deemed appropriate. */
 $effect(() => {
     void validate;
-    fieldCtrl?.replaceRules(validate);
-    // elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
+    if (!elem) {
+        return; // effect may be called before onMount
+    }
+    fieldCtrl.replaceRules(validate);
 });
 
 // region dropdown -> svelte ----------------------------------------------------------------------
 
 /** When input value changes, modify the svelte prop */
-function inputToSvelte(inputValue: string | string[] | undefined): void {
+function inputToSvelte(inputValue: string | string[] | null): void {
     if (!elem) {
         throw new Error("Dropdown is not initialized");
     }
     // store in the prop only if the value is different
     if (multi) {
         if (!equalStringArrays(value as string[], inputValue as string[])) {
-            compLog.log(`Dropdown (${fieldCtrl?.key}) : value <- ${arrayToString(inputValue)}`);
+            compLog.log(`Dropdown (${fieldCtrl.key}) : value <- ${arrayToString(inputValue)}`);
             value = inputValue;
-            void fieldCtrl?.revalidate();
+            void fieldCtrl.revalidate();
         }
     } else {
         if (value !== inputValue) {
-            compLog.log(`Dropdown (${fieldCtrl?.key}) : value <- ${arrayToString(inputValue)}`);
+            compLog.log(`Dropdown (${fieldCtrl.key}) : value <- ${arrayToString(inputValue)}`);
             if (DROPDOWN_PREVENT_CLEARING_BAD_DATA) {
                 const exists: unknown = elem.dropdown("get item", inputValue as string);
                 if (exists) {
                     value = inputValue;
-                    void fieldCtrl?.revalidate();
+                    void fieldCtrl.revalidate();
                 }
             } else {
                 value = inputValue;
-                void fieldCtrl?.revalidate();
+                void fieldCtrl.revalidate();
             }
         }
     }
@@ -195,7 +195,7 @@ function onDropdownChange(
 // region init ------------------------------------------------------------------------------------
 
 function labelClick(): void {
-    elem?.dropdown("focus");
+    elem.dropdown("focus");
 }
 
 onMount(async () => {
@@ -228,7 +228,7 @@ onMount(async () => {
     input = elem.find("input,select");
 
     // show dropdown on label click, if for="_"
-    const label: JQueryApi | undefined = findLabelWithBlank(elem);
+    const label: JQueryApi | null = findLabelWithBlank(elem);
     if (label) {
         label.on("click", labelClick);
     }
@@ -248,7 +248,7 @@ onDestroy(() => {
     if (elem) {
         elem.dropdown("destroy");
 
-        const label: JQueryApi | undefined = findLabelWithBlank(elem);
+        const label: JQueryApi | null = findLabelWithBlank(elem);
         if (label) {
             label.off("click", labelClick);
         }

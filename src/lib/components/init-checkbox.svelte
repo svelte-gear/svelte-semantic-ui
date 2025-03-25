@@ -18,16 +18,18 @@ const FIELD_PREFIX: string = "f_checkbox";
 
 // region props -----------------------------------------------------------------------------------
 
+type Undetermined = null;
+
 interface Props {
     /** To-way binding for the checkbox state, null value means 'indeterminate' [-].
      *
      *  For validation purposes 'indeterminate' is treated the same as 'unchecked'. */
-    checked?: boolean | null; // FIXME: null or undefined ?
+    checked?: boolean | Undetermined;
 
     /** Two-way binding for checkbox group.
      *
      * `group` bindings overrides `checked` binding, which becomes read-only */
-    group?: string | string[]; // FIXME: can it be undefined or null
+    group?: string | string[];
 
     /** Settings for Semantic UI component, see https://fomantic-ui.com/modules/dropdown.html#/settings */
     settings?: CheckboxSettings;
@@ -40,7 +42,7 @@ interface Props {
     /** Id of the Semantic UI input element, takes precedence over tag position */
     forId?: string;
 
-    /** If InitDropdown is used as a parent, render the children components */
+    /** If InitCheckbox is used as a parent, render the children components */
     children?: Snippet;
 }
 
@@ -58,7 +60,7 @@ let {
 }: Props = $props();
 
 /** Invisible dom element created by this component. */
-let span: Element | undefined = undefined;
+let span: Element;
 
 /* eslint-enable */
 
@@ -74,20 +76,18 @@ interface CheckboxApi {
     checkbox(command: "destroy"): void;
 }
 /** jQuery dropdown component */
-let elem: (JQueryApi & CheckboxApi) | undefined = undefined;
+let elem: JQueryApi & CheckboxApi;
 
 /** Inner input for form validation */
-let input: JQueryApi | undefined = undefined;
+let input: JQueryApi;
 
 /** Field descriptor and validator */
-let fieldCtrl: FieldController | undefined = undefined;
+let fieldCtrl: FieldController;
 
 // region svelte -> checkbox ----------------------------------------------------------------------
 
-function svelteToInput(newValue: boolean | null): void {
-    if (!elem) {
-        return;
-    }
+/** // [x] */
+function svelteToInput(newValue: boolean | Undetermined): void {
     if (newValue === null) {
         elem.checkbox("set unchecked");
         elem.checkbox("set indeterminate");
@@ -99,10 +99,11 @@ function svelteToInput(newValue: boolean | null): void {
             elem.checkbox("uncheck");
         }
     }
-    compLog.log(`Checkbox (${fieldCtrl?.key}) : checked -> ${newValue}`);
-    void fieldCtrl?.revalidate();
+    compLog.log(`Checkbox (${fieldCtrl.key}) : checked -> ${newValue}`);
+    void fieldCtrl.revalidate();
 }
 
+/** // [x] */
 $effect(() => {
     void checked;
     void group;
@@ -115,10 +116,12 @@ $effect(() => {
         }
     }
     if (!elem) {
-        return; // effect may be called before onMount()
+        return; // effect may be called before onMount
     }
+
+    // TODO: move to svelteToInput()
     if (group !== undefined) {
-        const value: string = input?.val() as string;
+        const value: string = input.val() as string;
         if (Array.isArray(group)) {
             svelteToInput(group.includes(value));
         } else {
@@ -134,39 +137,41 @@ $effect(() => {
 /** Update rules when the validate value changes. Fire a change event to trigger revalidation if deemed appropriate. */
 $effect(() => {
     void validate;
-    fieldCtrl?.replaceRules(validate);
-    // elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
+    if (!elem) {
+        return; // effect may be called before onMount
+    }
+    fieldCtrl.replaceRules(validate);
 });
 
 // region checkbox -> svelte ----------------------------------------------------------------------
 
 /** When input value changes, modify the svelte prop */
-function inputToSvelte(newState: boolean | null): void {
+function inputToSvelte(newState: boolean | Undetermined): void {
     // update group binding
     if (group !== undefined) {
-        const value: string = input?.val() as string;
+        const value: string = input.val() as string;
         if (Array.isArray(group)) {
             if (newState === true && !group.includes(value)) {
-                compLog.log(`Checkbox (${fieldCtrl?.key}) : group <- (+)${value}`);
+                compLog.log(`Checkbox (${fieldCtrl.key}) : group <- (+)${value}`);
                 group.push(value);
-                void fieldCtrl?.revalidate();
+                void fieldCtrl.revalidate();
             }
             if (newState === false && group.includes(value)) {
-                compLog.log(`Checkbox (${fieldCtrl?.key}) : group <- (-)${value}`);
+                compLog.log(`Checkbox (${fieldCtrl.key}) : group <- (-)${value}`);
                 group = group.filter((val: string) => val !== value);
-                void fieldCtrl?.revalidate();
+                void fieldCtrl.revalidate();
             }
             // indeterminate checkbox doesn't change 'group' binding
         } else {
             if (newState === true && group !== value) {
-                compLog.log(`Checkbox (${fieldCtrl?.key}) : group <- ${value}`);
+                compLog.log(`Checkbox (${fieldCtrl.key}) : group <- ${value}`);
                 group = value;
-                void fieldCtrl?.revalidate();
+                void fieldCtrl.revalidate();
             }
             if (newState === false && group === value) {
-                compLog.log(`Checkbox (${fieldCtrl?.key}) : group <- ""`);
+                compLog.log(`Checkbox (${fieldCtrl.key}) : group <- ""`);
                 group = "";
-                void fieldCtrl?.revalidate();
+                void fieldCtrl.revalidate();
             }
             // indeterminate checkbox doesn't change 'group' binding
         }
@@ -174,30 +179,30 @@ function inputToSvelte(newState: boolean | null): void {
     // update checked binding
     if (checked !== undefined) {
         if (checked !== newState) {
-            compLog.log(`Checkbox (${fieldCtrl?.key}) : checked <- ${newState}`);
+            compLog.log(`Checkbox (${fieldCtrl.key}) : checked <- ${newState}`);
             checked = newState;
-            void fieldCtrl?.revalidate();
+            void fieldCtrl.revalidate();
         }
     }
     // direct svelte bindings are used
     if (group === undefined && checked === undefined) {
-        void fieldCtrl?.revalidate();
+        void fieldCtrl.revalidate();
     }
 }
 
 function onInputChange(this: JQueryApi): void {
-    // user-specified handler for this component
+    // first call user-specified event handler for this component
     if (settings && settings.onChange) {
         settings.onChange.call(this);
     }
-    let state: boolean | null = null;
-    if (elem?.checkbox("is indeterminate")) {
+    let state: boolean | Undetermined = null;
+    if (elem.checkbox("is indeterminate")) {
         state = null;
     } else {
-        if (elem?.checkbox("is checked")) {
+        if (elem.checkbox("is checked")) {
             state = true;
         }
-        if (elem?.checkbox("is unchecked")) {
+        if (elem.checkbox("is unchecked")) {
             state = false;
         }
     }
@@ -221,6 +226,9 @@ onMount(async () => {
 
     // Find inner input
     input = elem.find("input");
+    if (!input.length) {
+        throw new Error("Semantic checkbox doesn't have input");
+    }
     copyParentKey(input, elem, FIELD_PREFIX);
 
     // select is already attaching the inner label to inner input
@@ -231,7 +239,7 @@ onMount(async () => {
     void fieldCtrl.revalidate();
 
     if (group !== undefined) {
-        const value: string = input?.val() as string;
+        const value: string = input.val() as string;
         if (Array.isArray(group)) {
             svelteToInput(group.includes(value));
         } else {

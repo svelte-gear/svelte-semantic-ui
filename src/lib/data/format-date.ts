@@ -9,8 +9,8 @@ import { helperDateFormat } from "./semantic-date-format";
 
 /** Number format function, must return null if it can't parse value and doesn't want to override it. */
 export interface DateFormatter {
-    format: (val: Date | undefined) => string;
-    parse: (val: string) => Date | undefined;
+    format: (val: Date | null) => string;
+    parse: (val: string) => Date | null;
 }
 
 // region DateFmt ---------------------------------------------------------------------------------
@@ -48,16 +48,16 @@ export class DateFmt implements DateFormatter {
 
     // region :  public ---------------------------------------------------------------------------
 
-    parse(val: string): Date | undefined {
+    parse(val: string): Date | null {
         if (!val) {
-            return undefined;
+            return null;
         }
         const dateParser: DateParseFn = this.settings.parser!.date!;
-        return dateParser(val, this.settings) ?? undefined;
+        return dateParser(val, this.settings) ?? null;
     }
 
-    format(val: Date | undefined): string {
-        if (val === undefined || val === null) {
+    format(val: Date | null): string {
+        if (!val) {
             return "";
         }
         if (!(val instanceof Date)) {

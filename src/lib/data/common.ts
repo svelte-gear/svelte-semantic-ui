@@ -59,7 +59,7 @@ export interface TextInputSettings {
 // region equals ----------------------------------------------------------------------------------
 
 /** Compare two Date objects */
-export function equalDates(a1: Date | undefined, a2: Date | undefined): boolean {
+export function equalDates(a1: Date | null, a2: Date | null): boolean {
     if (a1 instanceof Date && a2 instanceof Date) {
         return a1.getTime() === a2.getTime();
     }
@@ -68,8 +68,8 @@ export function equalDates(a1: Date | undefined, a2: Date | undefined): boolean 
 
 /** Compare two string arrays or strings */
 export function equalStringArrays(
-    a1: string[] | string | undefined,
-    a2: string[] | string | undefined
+    a1: string[] | string | null,
+    a2: string[] | string | null
 ): boolean {
     if (Array.isArray(a1) && Array.isArray(a2)) {
         if (a1.length !== a2.length) {
@@ -88,8 +88,8 @@ export function equalStringArrays(
 
 /** Compare two number arrays or numbers */
 export function equalNumberArrays(
-    a1: number[] | number | undefined,
-    a2: number[] | number | undefined
+    a1: number[] | number | null,
+    a2: number[] | number | null
 ): boolean {
     if (Array.isArray(a1) && Array.isArray(a2)) {
         if (a1.length !== a2.length) {
@@ -118,7 +118,7 @@ export function pad(n: number, size: number): string {
 }
 
 /** Format Date using YYYY-MM-DD format */
-export function isoDate(d: Date | undefined): string {
+export function isoDate(d: Date | null): string {
     if (!d || !d.getDate) {
         return "";
     }
@@ -129,7 +129,7 @@ export function isoDate(d: Date | undefined): string {
 }
 
 /** Format Date as time using HH:mm format (24 hours) */
-export function isoTime(d: Date | undefined): string {
+export function isoTime(d: Date | null): string {
     if (!d || !d.getDate) {
         return "";
     }
@@ -139,7 +139,7 @@ export function isoTime(d: Date | undefined): string {
 }
 
 /** Output array as string */
-export function arrayToString(val: string | number | string[] | number[] | undefined): string {
+export function arrayToString(val: string | number | string[] | number[] | null): string {
     if (Array.isArray(val)) {
         return `[${val.join(", ")}]`;
     } else {
@@ -148,7 +148,7 @@ export function arrayToString(val: string | number | string[] | number[] | undef
 }
 
 /** Textual presentation of the date value */
-export function dateToStr(val: Date | Date[] | undefined): string {
+export function dateToStr(val: Date | Date[] | null): string {
     if (val instanceof Date) {
         return `${isoDate(val)} ${isoTime(val)}`;
     }

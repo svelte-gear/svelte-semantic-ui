@@ -35,9 +35,9 @@ import type { RuleDefinition } from "../data/semantic-types";
 
 /* eslint-disable @typescript-eslint/naming-convention, @typescript-eslint/ban-types */
 /* prettier-ignore */
-declare const InitDropdown: Component<{
+declare const InitTextInput: Component<{
     /** Two-way binding for setting and reading back the text or array of text items */
-    value?: string | string[];
+    value: string | string[];
 
     /** Settings for date formatter, see https://fomantic-ui.com/modules/calendar.html#/settings */
     settings?: TextInputSettings;
@@ -49,7 +49,7 @@ declare const InitDropdown: Component<{
 
     /** Optional formatter is used to implement custom formats or text processing.
     It will override `settings`, don't use both at the same time. */
-    formatter?: TextFormatter;
+    customFormatter?: TextFormatter;
 
     /** Id of the Semantic UI input element, takes precedence over tag position */
     forId?: string;
@@ -59,4 +59,4 @@ declare const InitDropdown: Component<{
 }, {}, "value">;
 /* eslint-enable */
 
-export default InitDropdown;
+export default InitTextInput;

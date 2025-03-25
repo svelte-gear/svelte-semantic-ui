@@ -31,8 +31,8 @@ import ShowCode from "../show-code.svelte";
 
 /* eslint-disable prefer-const */
 
-let dat: Date | undefined = $state();
-let income: number | undefined = $state();
+let dat: Date | null = $state(null);
+let income: number | null = $state(null);
 let incomeRaw: string = $state("");
 let text3: string = $state("");
 let text4: string = $state("");
@@ -64,13 +64,13 @@ let example: string = $state("");
 let active: boolean = $state(false);
 let vEmpty: boolean = $state(false);
 let dirty: boolean = $state(false);
-let valid: boolean | undefined = $state();
-let errors: string[] | undefined = $state();
+let valid: boolean | null = $state(null);
+let errors: string[] | null = $state(null);
 
 let json: string = $derived(
     JSON.stringify({
         date: isoDate(dat),
-        income: income !== undefined ? income : "",
+        income: income,
         incomeRaw: incomeRaw,
         text: text3,
         input: text4,

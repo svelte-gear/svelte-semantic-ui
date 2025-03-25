@@ -9,8 +9,8 @@ import { numberDefaults } from "../data/settings";
 
 /** Number format function, must return null if it can't parse value and doesn't want to override it. */
 export interface NumberFormatter {
-    format: (val: number | undefined) => string;
-    parse: (val: string) => number | undefined;
+    format: (val: number | null) => string;
+    parse: (val: string) => number | null;
 }
 
 /** Encode . * + ? ^ $ { } ( ) | [ ] \ to do literal match in regex */
@@ -28,15 +28,15 @@ export class NumberFmt implements NumberFormatter {
 
     settings: NumberSettings;
 
-    private prefixRegex: RegExp | undefined;
+    private prefixRegex?: RegExp;
 
-    private suffixRegex: RegExp | undefined;
+    private suffixRegex?: RegExp;
 
-    constructor(inputSettings: NumberInputSettings) {
-        if (inputSettings.type && !["integer", "decimal", "money"].includes(inputSettings.type)) {
+    constructor(inputSettings?: NumberInputSettings) {
+        if (inputSettings?.type && !["integer", "decimal", "money"].includes(inputSettings.type)) {
             throw new Error(`Unsupported number type: ${inputSettings.type}`);
         }
-        if (inputSettings.precision && Math.abs(inputSettings.precision) > 6) {
+        if (inputSettings?.precision && Math.abs(inputSettings.precision) > 6) {
             throw new Error(`Unsupported precision number ${inputSettings.precision}`);
         }
 
@@ -46,10 +46,10 @@ export class NumberFmt implements NumberFormatter {
             ...inputSettings,
         };
 
-        this.type = inputSettings.type ?? "integer";
+        this.type = inputSettings?.type ?? "integer";
 
         this.precision =
-            inputSettings.precision ?? (this.type === "money" ? this.settings.moneyPrecision : 0);
+            inputSettings?.precision ?? (this.type === "money" ? this.settings.moneyPrecision : 0);
 
         if (this.type === "money") {
             this.prefixRegex = new RegExp(`^\\s*${escapeRegExp(this.settings.moneyPrefix)}\\s*`);
@@ -59,7 +59,7 @@ export class NumberFmt implements NumberFormatter {
 
     // region :  public ---------------------------------------------------------------------------
 
-    parse(value: string): number | undefined {
+    parse(value: string): number | null {
         let val: string = value;
         if (this.type === "money") {
             val = val.replace(this.prefixRegex!, "").replace(this.suffixRegex!, "");
@@ -69,15 +69,15 @@ export class NumberFmt implements NumberFormatter {
         val = val.replace(this.settings.decimalSeparator, ".");
         const num: number = parseFloat(val);
         if (Number.isNaN(num)) {
-            return undefined;
+            return null;
         }
         const pwr: number = 10.0 ** -this.precision;
         const res: number = Math.round(num / pwr) * pwr;
         return Number(res.toFixed(6));
     }
 
-    format(val: number | undefined): string {
-        if (val === undefined) {
+    format(val: number | null): string {
+        if (val === null) {
             return "";
         }
         if (typeof val !== "number") {

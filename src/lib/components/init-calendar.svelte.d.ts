@@ -36,7 +36,7 @@ import type { CalendarSettings, RuleDefinition } from "../data/semantic-types";
 /* prettier-ignore */
 declare const InitCalendar: Component<{
     /** Two-way binding for setting and reading back the Calendar date, time, or datetime */
-    value: Date | undefined;
+    value: Date | null;
 
     /** Settings for Semantic UI component, see https://fomantic-ui.com/modules/calendar.html#/settings */
     settings?: CalendarSettings;

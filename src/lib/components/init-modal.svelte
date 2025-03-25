@@ -43,7 +43,7 @@ let {
 }: Props = $props();
 
 /** Invisible dom element created by this component. */
-let span: Element | undefined = undefined; // $state();
+let span: Element; // $state();
 
 /* eslint-enable */
 
@@ -55,16 +55,12 @@ interface ModalApi {
     modal(command: "destroy"): void;
 }
 /** jQuery modal component */
-let elem: (JQueryApi & ModalApi) | undefined = undefined;
+let elem: JQueryApi & ModalApi;
 
 // region svelte -> modal -------------------------------------------------------------------------
 
 /** Propagate prop change to UI component */
 function svelteToInput(value: boolean): void {
-    if (!elem) {
-        // effect and svelteToInput may be called before onMount()
-        return;
-    }
     if (value) {
         if (!elem.modal("is active")) {
             compLog.debug(`InitModal : show -> ${value}`);
@@ -80,6 +76,9 @@ function svelteToInput(value: boolean): void {
 
 $effect(() => {
     void show;
+    if (!elem) {
+        return; // effect may be called before onMount
+    }
     svelteToInput(show);
 });
 
@@ -138,7 +137,7 @@ onMount(async () => {
     });
 
     // IMPORTANT: the element has been moved in dom, find i't new location
-    elem = jQueryBySelector(`#${modalId}`);
+    elem = jQueryBySelector(`#${modalId}`)!;
 
     svelteToInput(show);
 });

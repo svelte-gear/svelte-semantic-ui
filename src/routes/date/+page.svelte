@@ -27,8 +27,8 @@ import ShowCode from "../show-code.svelte";
 
 /* eslint-disable prefer-const */ /* reactive */
 
-let dat1: Date | undefined = $state();
-let dat2: Date | undefined = $state();
+let dat1: Date | null = $state(null);
+let dat2: Date | null = $state(null);
 let dateText: string = $state("");
 
 /* Hide or show slider */
@@ -74,7 +74,7 @@ $effect(() => {
 
 async function loadData(): Promise<void> {
     dat1 = new Date("2022-02-01 13:00");
-    dat2 = undefined;
+    dat2 = null;
 
     // wait for fields to initialize
     await tick();

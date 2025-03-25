@@ -45,7 +45,7 @@ let {
 }: Props = $props();
 
 /** Invisible dom element created by this component. */
-let span: Element | undefined = undefined;
+let span: Element;
 
 /* eslint-enable */
 
@@ -57,7 +57,7 @@ interface ProgressApi {
     progress(command: "update progress", progressVal: number | number[]): void;
 }
 /** jQuery progress component */
-let elem: (JQueryApi & ProgressApi) | undefined = undefined;
+let elem: JQueryApi & ProgressApi;
 
 /** Does this progress have multiple bars */
 let multiple: boolean = false;
@@ -66,10 +66,6 @@ let multiple: boolean = false;
 
 /** Propagate prop change to UI component */
 function svelteToInput(newValue: number | number[], newTotal: number | undefined): void {
-    if (!elem) {
-        // effect and svelteToInput may be called before onMount()
-        return;
-    }
     const currTotal: number = elem.progress("get total");
     if (newTotal && newTotal !== currTotal) {
         elem.progress("set total", newTotal);
@@ -91,6 +87,9 @@ $effect(() => {
         for (let i: number = 0; i < value.length; i++) {
             void value[i];
         }
+    }
+    if (!elem) {
+        return; // effect may be called before onMount
     }
     svelteToInput(value, total);
 });

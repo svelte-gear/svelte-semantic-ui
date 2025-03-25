@@ -35,7 +35,7 @@ import type { DropdownSettings, RuleDefinition } from "../data/semantic-types";
 /* prettier-ignore */
 declare const InitDropdown: Component<{
     /** Two-way binding for setting and reading back the selected item or array of items */
-    value: string | string[] | undefined;
+    value: string | string[] | null;
 
     /** Settings for Semantic UI component, see https://fomantic-ui.com/modules/dropdown.html#/settings */
     settings?: DropdownSettings;

@@ -51,7 +51,7 @@ let {
 }: Props = $props();
 
 /** Invisible dom element created by this component. */
-let span: Element | undefined = undefined;
+let span: Element;
 
 /* eslint-enable */
 
@@ -64,25 +64,21 @@ interface SliderApi {
     slider(command: "destroy"): void;
 }
 /** jQuery slider component */
-let elem: (JQueryApi & SliderApi) | undefined = undefined;
+let elem: JQueryApi & SliderApi;
 
 /** Hidden input for form validation */
-let input: JQueryApi | undefined = undefined;
+let input: JQueryApi;
 
 /** Is this a range slider or simple slider */
 let range: boolean = false;
 
 /** Field descriptor and validator */
-let fieldCtrl: FieldController | undefined = undefined;
+let fieldCtrl: FieldController;
 
 // region svelte -> slider ------------------------------------------------------------------------
 
 /** Propagate prop change to UI component */
 function svelteToInput(newValue: number | number[], forceUpdate?: boolean): void {
-    if (!elem) {
-        // effect and svelteToInput may be called before onMount()
-        return;
-    }
     if (range) {
         if (!Array.isArray(newValue)) {
             throw new Error(`Ranged slider expects number[] value, got ${newValue}`);
@@ -90,10 +86,10 @@ function svelteToInput(newValue: number | number[], forceUpdate?: boolean): void
         const val1: number = elem.slider("get thumbValue", "first");
         const val2: number = elem.slider("get thumbValue", "second");
         if (newValue[0] !== val1 || newValue[1] !== val2 || forceUpdate) {
-            compLog.log(`Slider (${fieldCtrl?.key}) : value -> ${arrayToString(newValue)}`);
+            compLog.log(`Slider (${fieldCtrl.key}) : value -> ${arrayToString(newValue)}`);
             elem.slider("set rangeValue", newValue[0], newValue[1]);
-            input!.val(`${newValue.join(",")}`);
-            void fieldCtrl?.revalidate();
+            input.val(`${newValue.join(",")}`);
+            void fieldCtrl.revalidate();
         }
     } else {
         if (Array.isArray(newValue)) {
@@ -101,10 +97,10 @@ function svelteToInput(newValue: number | number[], forceUpdate?: boolean): void
         }
         const val: number = elem.slider("get value");
         if (newValue !== val || forceUpdate) {
-            compLog.log(`Slider (${fieldCtrl?.key}) : value -> ${arrayToString(newValue)}`);
+            compLog.log(`Slider (${fieldCtrl.key}) : value -> ${arrayToString(newValue)}`);
             elem.slider("set value", newValue);
-            input!.val(`${newValue}`);
-            void fieldCtrl?.revalidate();
+            input.val(`${newValue}`);
+            void fieldCtrl.revalidate();
         }
     }
 }
@@ -117,14 +113,19 @@ $effect(() => {
         void value[0];
         void value[1];
     }
+    if (!elem) {
+        return; // effect may be called before onMount
+    }
     svelteToInput(value);
 });
 
 /** Update rules when the validate value changes. Fire a change event to trigger revalidation if deemed appropriate. */
 $effect(() => {
     void validate;
-    fieldCtrl?.replaceRules(validate);
-    // elem?.get(0)!.dispatchEvent(new CustomEvent("change"));
+    if (!elem) {
+        return; // effect may be called before onMount
+    }
+    fieldCtrl.replaceRules(validate);
 });
 
 // region slider -> svelte ------------------------------------------------------------------------
@@ -136,14 +137,14 @@ function inputToSvelte(inputValue: number | number[]): void {
     }
     // store in the prop only if the value is different
     if (!equalNumberArrays(value, inputValue)) {
-        compLog.log(`Slider (${fieldCtrl?.key}) : value <- ${arrayToString(inputValue)}`);
+        compLog.log(`Slider (${fieldCtrl.key}) : value <- ${arrayToString(inputValue)}`);
         value = inputValue;
         if (range && Array.isArray(inputValue)) {
             input.val(inputValue.join(","));
         } else {
             input.val(`${inputValue}`);
         }
-        void fieldCtrl?.revalidate();
+        void fieldCtrl.revalidate();
     }
 }
 
